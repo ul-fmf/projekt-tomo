@@ -8,8 +8,7 @@ class Problem(models.Model):
     trial = models.TextField(blank=True)
 
     def __unicode__(self):
-        return u'%s' % (self.name, )
-        # return u'{0}'.format(self.name)
+        return u'{0}'.format(self.name)
 
     @models.permalink
     def get_absolute_url(self):
@@ -24,8 +23,7 @@ class Part(models.Model):
     secret = models.CharField(max_length=32)
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.problem.name, self.id)
-        # return u'{0} ({1})'.format(self.problem.name, self.id)
+        return u'{0} ({1})'.format(self.problem.name, self.id)
 
     class Meta:
         order_with_respect_to = 'problem'
@@ -40,9 +38,7 @@ class Submission(models.Model):
 
     def __unicode__(self):
         user = self.user.get_full_name() or self.user.username
-        time = self.timestamp.strftime('%H:%M, %d.%m.%y')
-        return u'%s (%s)' % (user, time)
-        # return u'{0}, {1:%H:%M, %d.%m.%y}'.format(user, self.timestamp)
+        return u'{0}, {1:%H:%M, %d.%m.%y}'.format(user, self.timestamp)
 
     class Meta:
         get_latest_by = 'timestamp'
@@ -59,10 +55,8 @@ class Solution(models.Model):
     correct = models.BooleanField()
 
     def __unicode__(self):
-        return u'%s %s) %s' % (self.part.problem.name, self.label,
+        return u'{0} {1}) {2}'.format(self.part.problem.name, self.label,
                                       self.submission)
-        # return u'{0} {1}) {2}'.format(self.part.problem.name, self.label,
-        #                               self.submission)
     
     def solution(self):
         return self.submission.source[self.start:self.end].strip()

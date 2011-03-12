@@ -57,8 +57,7 @@ def download_problem(request, object_id):
             solutions[sol.part] = sol
 
     response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename=%s.py' % (slug, )
-    # response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
+    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
     t = loader.get_template('python/problem.py')
     c = RequestContext(request, {
         'problem': problem,
@@ -91,19 +90,14 @@ def upload_solution(request, object_id):
     response = HttpResponse(mimetype='text/plain')
     response.write('Vse rešitve so shranjene.\n')
     for part in problem.parts.all():
-        label = request.POST.get('%d_label' % part.id)
-        # label = request.POST.get('{0}_label'.format(part.id))
+        label = request.POST.get('{0}_label'.format(part.id))
         if label:
-            start = request.POST['%d_start' % part.id]
-            end = request.POST['%d_end' % part.id]
-            secret = request.POST.get('%d_secret' % part.id)
-            # start = request.POST['{0}_start'.format(part.id)]
-            # end = request.POST['{0}_end'.format(part.id)]
-            # secret = request.POST.get('{0}_secret'.format(part.id))
+            start = request.POST['{0}_start'.format(part.id)]
+            end = request.POST['{0}_end'.format(part.id)]
+            secret = request.POST.get('{0}_secret'.format(part.id))
             correct = secret == part.secret
             if secret and not correct:
-                response.write('Rešitev naloge %s) je zavrnjena.' % (label, ))
-                # response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
                 response.write('Obvestite asistenta.\n')
             s = Solution(user=user, part=part, submission=submission,
                          start=start, end=end, correct=correct, label=label)

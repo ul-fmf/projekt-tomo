@@ -25,7 +25,7 @@
         {% if user.is_authenticated %}
             <li>
                 {{ user.get_full_name }}
-                <a class='button' href='{% url logout_next_page next_page=request.path %}'>Odjavite se</a>
+                <a class='button' href='{% url logout %}?next={{ request.path }}'>Odjavite se</a>
             </li>
         {% else %}
             <li><a href='{% url login %}?next={{ request.path }}'>

@@ -12,8 +12,8 @@ urlpatterns = patterns('',
     (r'^accounts/login/$', 'django.contrib.auth.views.login', {
         'template_name': 'login.html'
     }, 'login'),
-    url(r'^accounts/logout/(?P<next_page>.*)/$',
-     'django.contrib.auth.views.logout', name='logout_next_page'),
+    url(r'^accounts/logout/$',
+     'django.contrib.auth.views.logout', name='logout'),
 )
 
 urlpatterns += patterns('tomo.problem.views',
