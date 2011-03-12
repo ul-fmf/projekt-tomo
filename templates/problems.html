@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block content %}
+    {% for problem in problem_list %}
+    <article class='problem'>
+        <h2>
+            <a href='{% url show_problem problem.id %}'>
+                {{ problem.name }}
+            </a>
+        </h2>
+        {{ problem.description|pymarkdown|safe }}
+    </article>
+    {% endfor %}
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% load my_tags %}
+
+{% block title %}Projekt Tomo &mdash; {{ problem.name }}{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href='{% url problem_list %}'>
+    Začetna stran
+</a></li>
+<li>&#187;<a href='{% url show_problem problem.id %}'>
+    {{ problem.name }}
+</a></li>
+{% endblock %}
+
+
+
+{% block description %}
+    <h1>
+        {{ problem.name }}
+    </h1>
+    {{ problem.description|pymarkdown|safe }}
+    {% for part in problem.parts.all %}{% with solutions|get:part as solution %}
+        <article class='part'>
+        <h2>Naloga {{ forloop.counter }}</h2>
+        {{ part.description|pymarkdown|safe }}
+        {% if request.user.is_authenticated %}
+            <section class='solution'>
+            {% if solution.correct %}
+            <h3>Vaša rešitev</h3>
+            <pre><code>{{ solution.solution }}</code></pre>
+            {% else %}
+            <h3>Naloge še niste rešili</h3>
+            {% endif %}
+            </section>
+        {% endif %}
+        </article>
+    {% endwith %}{% endfor %}</ol>
+{% endblock %}
+
+{% block action %}
+    {% if user.is_authenticated %}
+        <p class='instructions'>
+            Shranite vzorčno datoteko ter vanjo začnite pisati svojo rešitev.
+            Vsakič, ko datoteko uspešno naložite v konzolo,
+            dobite obvestila o pravilno in napačno rešenih nalogah.
+        </p>
+        <div class='buttons'>
+            <a class='button default' href='{% url download_problem problem.id %}'>
+                Shranite vzorčno datoteko
+            </a>
+        </div>
+    {% else %}
+        <p class='instructions'>
+            Če želite reševati naloge, se morate najprej prijaviti.
+        </p>
+        {% include 'login_form.html' %}
+    {% endif %}
+{% endblock %}

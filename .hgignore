@@ -1,0 +1,7 @@
+syntax: glob
+
+.DS_Store
+database
+*.pyc
+settings.py
+static/codemirror

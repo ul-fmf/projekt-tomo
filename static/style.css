@@ -1,0 +1,215 @@
+/* DEFAULTS */
+* { margin: 0; padding: 0; }
+header, footer, article, section, hgroup, nav, figure { display: block; }
+
+body {
+  width: 54em;
+  font-size: 16px;
+  line-height: 1.5em;
+  margin: 1.5em auto;
+  font-family: 'Helvetica Neue', Helvetica, Arial, Sans-Serif;
+}
+
+.pre {
+  font-family: monospace;
+}
+
+/* COLORS */
+
+/* 'BLACK' */
+#content { color: #1e1e20;}
+body { background: #1e1e20}
+#action { border-top-color: #1e1e20; }
+header, header a { color: #1e1e20; }
+/* 'GRAY' */
+.button { background: #374140; }
+.enter_solution, .incomplete, .add_task { background-color: #374140; }
+/* 'WHITE' */
+#content { background: #d9cb9e; opacity: 0.90;  }
+.button { color: #d9cb9e; }
+footer { color: #d9cb9e; }
+/* 'WHITER' */
+pre { background: #ece4c9; }
+/*.solution, #solution { background: #ece4c9; }*/
+.round_button { color: #ece4c9; }
+/* 'RED'' */
+header { background: #dc3522; }
+a { color: #dc3522; }
+.default {	background: #dc3522; }
+.failure { color: #dc3522; }
+/* 'GREEN' */
+.congratulations { color: #1aa639; }
+.completed { background-color: #1aa639; }
+
+.errors { font-size: small; color: red; background: #d9cb9e}
+
+/* MARKDOWN */
+
+h1 {
+  font-size: 2em;
+  line-height: 3em;
+}
+
+h2 {
+  font-size: 1.5em;
+  margin-top: 1em;
+}
+
+h3 {
+  font-size: 1em;
+  margin-bottom: 0em;
+}
+
+ul, ol {
+  list-style-position: inside;
+  margin-left: 1em;
+}
+
+pre {
+  padding: 0.5em;
+}
+
+
+
+/* ROUNDED CORNERS */
+pre, textarea, .button {
+  border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+}
+
+header {
+  border-top-left-radius: 1em;
+  border-top-right-radius: 1em;
+  -moz-border-radius-topleft: 1em;
+  -moz-border-radius-topright: 1em;
+}
+
+#content {
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+    -moz-border-radius-bottomleft: 1em;
+  	-moz-border-radius-bottomright: 1em;
+}
+
+
+.round_button {
+  border-radius: 100%;
+  -moz-border-radius: 100%;
+  text-align: center;
+  font-size: 0.75em;
+  line-height: 1.5em;
+  height: 1.5em;
+  width: 1.5em;
+  vertical-align: middle;
+  font-weight: bold;
+  display: inline-block;
+}
+
+
+input, select {
+  font-size: 1em;
+}
+
+.message {
+  text-align: center;
+}
+
+header a {
+  margin: 0em 0.5em;
+}
+
+.part {
+  margin-left: 1em;
+}
+
+/* @end */
+
+/* @group Header */
+
+header {
+  padding: 0.75em 1em;
+  height: 1.5em;
+}
+
+
+
+
+#breadcrumbs {
+  float: left;
+  list-style: none;
+}
+
+#account {
+  float:  right;
+  list-style: none;
+}
+
+#breadcrumbs li, #account li {
+  display: inline;
+}
+
+/* @end */
+
+/* @group Footer */
+
+h1 .button {
+    font-size: 0.5em;
+    line-height: 1.5em;
+}
+
+#content {
+  clear: both;
+  padding: 1.5em 1.5em;
+}
+
+
+#action {
+  margin: 1.5em auto 0em;
+  padding: 1.4em 0em 0em;
+  border-top-width: 0.1em;
+  border-top-style: solid;
+}
+
+.solution {
+  margin: 1.5em;
+}
+
+.buttons {
+	margin: 1.5em 0em 0em;
+	text-align: center;
+	height: 1.5em;
+}
+
+.button {
+  vertical-align: middle;
+  border: 0;
+  padding: 0px;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1em;
+  text-shadow: 0 -1px 1px rgba(0, 0, 0, 0.5);
+  margin: 0em 0.75em;
+  padding: 0.25em 1em;
+}
+
+.CodeMirror-line-numbers {
+  width: 1em;
+  color: #aaa;
+  text-align: right;
+  padding-right: .5em;
+  font-family: monospace;
+}
+
+.instructions {
+	font-size: small;
+}
+
+
+
+
+/* FOOTER */
+footer {
+	text-align: center;
+	font-size: 0.75em;
+}
+

@@ -1,0 +1,20 @@
+<form method='post' action='{% url login %}'>
+    {% csrf_token %}
+    <label for="id_username">Uporabniško ime</label>
+    <input id="id_username" type="text" name="username" />
+    <label for="id_password">Geslo</label>
+    <input type="password" name="password" id="id_password" />
+    {% if form.errors %}
+    <span class='error'>
+        Uporabniško ime in geslo se ne ujemata. Poskusite znova.
+    </span>
+    {% endif %}
+    <p class='instructions'>
+        Uporabniško ime in geslo sta enaki tistima za študentske računalnike,
+        na primer <span class='pre'>novakj</span> in <span class='pre'>triglav.1</span>.
+    </p>
+    <div class='buttons'>
+        <input class='button default' type='submit' value='Prijavite se' >
+    </div>
+    <input type='hidden' name='next' value='{{ next|default:request.path }}' >
+</form>
