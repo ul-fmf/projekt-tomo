@@ -6,6 +6,13 @@
     <title>{% block title %}Projekt Tomo{% endblock %}</title>
     <link rel='stylesheet' href='{{ MEDIA_URL }}style.css' type='text/css'>
     <link rel='stylesheet' href="{{ MEDIA_URL }}codemirror/contrib/python/css/pythoncolors.css" type="text/css" >
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+        }
+      });
+    </script>
     <script type="text/javascript"
        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
     </script>
