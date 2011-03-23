@@ -55,5 +55,12 @@
             Če želite reševati naloge, se morate najprej prijaviti.
         </p>
         {% include 'login_form.html' %}
+        <p class='instructions'>
+            Če se ne morete prijaviti, lahko naloge rešujete kot anonimni
+            uporabnik z <a href='{% url download_anonymous_problem problem.id %}'>začasno datoteko</a>.
+            V tem primeru se vaše rešitve ne shranijo na strežnik.
+            Ko se enkrat lahko prijavite, morate vzorčno datoteko ponovno
+            shraniti ter vanjo prepisati rešitve iz začasne datoteke.
+        </p>
     {% endif %}
 {% endblock %}

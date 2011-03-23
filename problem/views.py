@@ -69,6 +69,23 @@ def download_problem(request, object_id):
     return response
 
 
+def download_anonymous_problem(request, object_id):
+    problem = get_object_or_404(Problem, id=object_id)
+    slug = slugify(problem.name)
+
+    response = HttpResponse(mimetype='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
+    t = loader.get_template('python/problem.py')
+    c = RequestContext(request, {
+        'problem': problem,
+        'username': '',
+        'signature': sign(str(problem.id)),
+        'solutions': {}
+    })
+    response.write(t.render(c))
+    return response
+
+
 @csrf_exempt
 def upload_solution(request, object_id):
     if request.method != 'POST':
@@ -81,27 +98,31 @@ def upload_solution(request, object_id):
     if not verify(username + str(problem.id), signature):
         return HttpResponseForbidden()
 
-    user = get_object_or_404(User, username=username)
-    submission = Submission(user=user, source=request.POST['source'],
-                        download_ip=request.POST['download_ip'],
-                        upload_ip=request.META['REMOTE_ADDR'])
-    submission.save()
-    
     response = HttpResponse(mimetype='text/plain')
-    response.write('Vse rešitve so shranjene.\n')
-    for part in problem.parts.all():
-        label = request.POST.get('{0}_label'.format(part.id))
-        if label:
-            start = request.POST['{0}_start'.format(part.id)]
-            end = request.POST['{0}_end'.format(part.id)]
-            secret = request.POST.get('{0}_secret'.format(part.id))
-            correct = secret == part.secret
-            if secret and not correct:
-                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
-                response.write('Obvestite asistenta.\n')
-            s = Solution(user=user, part=part, submission=submission,
-                         start=start, end=end, correct=correct, label=label)
-            s.save()
+    if username:
+        user = get_object_or_404(User, username=username)
+        submission = Submission(user=user, source=request.POST['source'],
+                            download_ip=request.POST['download_ip'],
+                            upload_ip=request.META['REMOTE_ADDR'])
+        submission.save()
+    
+        response.write('Vse rešitve so shranjene.\n')
+        for part in problem.parts.all():
+            label = request.POST.get('{0}_label'.format(part.id))
+            if label:
+                start = request.POST['{0}_start'.format(part.id)]
+                end = request.POST['{0}_end'.format(part.id)]
+                secret = request.POST.get('{0}_secret'.format(part.id))
+                correct = secret == part.secret
+                if secret and not correct:
+                    response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+                    response.write('Obvestite asistenta.\n')
+                s = Solution(user=user, part=part, submission=submission,
+                             start=start, end=end, correct=correct, label=label)
+                s.save()
+    else:
+        response.write('Naloge rešujete kot anonimni uporabnik!\n')
+        response.write('Rešitve niso bile shranjene.')
 
     return response
 
