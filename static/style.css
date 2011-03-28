@@ -20,20 +20,20 @@ body {
 #content { color: #1e1e20;}
 body { background: #1e1e20}
 #action { border-top-color: #1e1e20; }
-header, header a { color: #1e1e20; }
+#header, #header a { color: #1e1e20; }
 /* 'GRAY' */
 .button { background: #374140; }
 .enter_solution, .incomplete, .add_task { background-color: #374140; }
 /* 'WHITE' */
 #content { background: #d9cb9e; opacity: 0.90;  }
 .button { color: #d9cb9e; }
-footer { color: #d9cb9e; }
+#footer { color: #d9cb9e; }
 /* 'WHITER' */
 pre { background: #ece4c9; }
 /*.solution, #solution { background: #ece4c9; }*/
 .round_button { color: #ece4c9; }
 /* 'RED'' */
-header { background: #dc3522; }
+#header { background: #dc3522; }
 a { color: #dc3522; }
 .default {	background: #dc3522; }
 .failure { color: #dc3522; }
@@ -71,13 +71,13 @@ pre {
 
 
 
-/* ROUNDED CORNERS */
+/* ROUNDED CORNERS
 pre, textarea, .button {
   border-radius: 0.5em;
   -moz-border-radius: 0.5em;
-}
+} */
 
-header {
+#header {
   border-top-left-radius: 1em;
   border-top-right-radius: 1em;
   -moz-border-radius-topleft: 1em;
@@ -114,7 +114,7 @@ input, select {
   text-align: center;
 }
 
-header a {
+#header a {
   margin: 0em 0.5em;
 }
 
@@ -126,7 +126,7 @@ header a {
 
 /* @group Header */
 
-header {
+#header {
   padding: 0.75em 1em;
   height: 1.5em;
 }
@@ -208,7 +208,7 @@ h1 .button {
 
 
 /* FOOTER */
-footer {
+#footer {
 	text-align: center;
 	font-size: 0.75em;
 }

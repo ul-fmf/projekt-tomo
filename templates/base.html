@@ -24,7 +24,7 @@
 </head>
 
 <body>
-<header>
+<div id='header'>
     <nav>
         <ol id='breadcrumbs'>{% block breadcrumbs %}
             <li><a href='{% url problem_list %}'>
@@ -44,18 +44,18 @@
         {% endif %}
         </ul>
     </nav>
-</header>
+</div>
         
-<section id='content'>
+<div id='content'>
 {% block content %}
-<section id='description'>{% block description %}{% endblock %}</section>
-<section id='action'>{% block action %}{% endblock %}</section>
+<div id='description'>{% block description %}{% endblock %}</div>
+<div id='action'>{% block action %}{% endblock %}</div>
 {% endblock %}
-</section>
+</div>
 
-<footer>
+<div id='footer'>
    &copy; 2011 Matija Pretnar
-</footer>
+</div>
 </body>
 
 </html>

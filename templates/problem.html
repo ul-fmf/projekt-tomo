@@ -21,20 +21,20 @@
     </h1>
     {{ problem.description|pymarkdown|safe }}
     {% for part in problem.parts.all %}{% with solutions|get:part as solution %}
-        <article class='part'>
+        <div class='part'>
         <h2>Naloga {{ forloop.counter }}</h2>
         {{ part.description|pymarkdown|safe }}
         {% if request.user.is_authenticated %}
-            <section class='solution'>
+            <div class='solution'>
             {% if solution.correct %}
             <h3>Vaša rešitev</h3>
             <pre><code>{{ solution.solution }}</code></pre>
             {% else %}
             <h3>Naloge še niste rešili</h3>
             {% endif %}
-            </section>
+            </div>
         {% endif %}
-        </article>
+        </div>
     {% endwith %}{% endfor %}</ol>
 {% endblock %}
 

@@ -3,13 +3,13 @@
 
 {% block content %}
     {% for problem in problem_list %}
-    <article class='problem'>
+    <div class='problem'>
         <h2>
             <a href='{% url show_problem problem.id %}'>
                 {{ problem.name }}
             </a>
         </h2>
         {{ problem.description|pymarkdown|safe }}
-    </article>
+    </div>
     {% endfor %}
 {% endblock %}
