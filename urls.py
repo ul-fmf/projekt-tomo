@@ -23,8 +23,12 @@ urlpatterns += patterns('tomo.problem.views',
         name='download_problem'),
     url(r'^problem/(?P<object_id>\d+)/download_anonymous/$', 'download_anonymous_problem',
         name='download_anonymous_problem'),
+    url(r'^problem/(?P<object_id>\d+)/edit/$', 'edit_problem',
+        name='edit_problem'),
     url(r'^problem/(?P<object_id>\d+)/upload/$', 'upload_solution',
         name='upload_solution'),
+    url(r'^problem/(?P<object_id>\d+)/crazy_upload/$', 'upload_problem',
+        name='upload_problem'),
 )
 
 if settings.DEBUG:

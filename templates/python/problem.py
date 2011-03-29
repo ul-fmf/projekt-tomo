@@ -118,10 +118,115 @@
 # Kode pod to črto nikakor ne spreminjajte.
 ########################################################################
 
-########################################################################
-# Če se vam spodnja vrstica obarva rdeče, je napaka v zadnji vrstici
-# vaše kode. Če je ne najdete, vprašajte asistenta.
-########################################################################
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"TA VRSTICA JE PRAVILNA."
+"ČE VAM PYTHON SPOROČI, DA JE V NJEJ NAPAKA, SE MOTI."
+"NAPAKA JE NAJVERJETNEJE V ZADNJI VRSTICI VAŠE KODE."
+"ČE JE NE NAJDETE, VPRAŠAJTE ASISTENTA."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 {% include 'python/library.py' %}

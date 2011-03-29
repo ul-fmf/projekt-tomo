@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseForbidden
 from django.shortcuts import get_object_or_404, render_to_response
@@ -9,7 +10,7 @@ from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
-from tomo.problem.models import Problem, Submission, Solution
+from tomo.problem.models import Problem, Submission, Solution, Part
 from tomo.settings import SECRET_KEY
 
 
@@ -36,6 +37,7 @@ def problem(request, object_id):
 
     solutions = {}
     if request.user.is_authenticated():
+        # give the last solution for each part of the problem
         for sol in Solution.objects.filter(user=request.user, part__problem=problem).order_by('id'):
             solutions[sol.part] = sol
 
@@ -86,6 +88,24 @@ def download_anonymous_problem(request, object_id):
     return response
 
 
+@staff_member_required
+def edit_problem(request, object_id):
+    problem = get_object_or_404(Problem, id=object_id)
+    slug = slugify(problem.name)
+    username = request.user.username
+
+    response = HttpResponse(mimetype='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
+    t = loader.get_template('python/edit.py')
+    c = RequestContext(request, {
+        'problem': problem,
+        'username': username,
+        'signature': sign(username + str(problem.id))
+    })
+    response.write(t.render(c))
+    return response
+
+
 @csrf_exempt
 def upload_solution(request, object_id):
     if request.method != 'POST':
@@ -123,6 +143,56 @@ def upload_solution(request, object_id):
     else:
         response.write('Naloge rešujete kot anonimni uporabnik!\n')
         response.write('Rešitve niso bile shranjene.')
+
+    return response
+
+
+@csrf_exempt
+def upload_problem(request, object_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    problem = get_object_or_404(Problem, id=object_id)
+    username = request.POST['username']
+    signature = request.POST['signature']
+
+    if not verify(username + str(problem.id), signature):
+        print("ABC")
+        return HttpResponseForbidden()
+
+    response = HttpResponse(mimetype='text/plain')
+    user = get_object_or_404(User, username=username)
+    response.write('Vse rešitve so shranjene.\n')
+    ids = request.POST['problem_ids'].split(",")
+
+    new_parts = []
+    for id in map(int, ids):
+        part = get_object_or_404(Part, id=id) if id > 0 else Part(problem=problem)
+        part.description = request.POST['{0}_description'.format(id)]
+        part.trial = request.POST['{0}_trial'.format(id)]
+        part.solution = request.POST['{0}_solution'.format(id)]
+        part.secret = request.POST['{0}_secret'.format(id)]
+        part.save()
+        new_parts.append(part)
+    for p in problem.parts.all():
+        if p not in new_parts:
+            p.delete()
+    problem.set_part_order([part.id for part in new_parts])
+    problem.save()
+        
+#    for part in problem.parts.all():
+#        label = request.POST.get('{0}_label'.format(part.id))
+#        if label:
+#            start = request.POST['{0}_start'.format(part.id)]
+#            end = request.POST['{0}_end'.format(part.id)]
+#            secret = request.POST.get('{0}_secret'.format(part.id))
+#            correct = secret == part.secret
+#            if secret and not correct:
+#                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+#                response.write('Obvestite asistenta.\n')
+#            s = Solution(user=user, part=part, submission=submission,
+#                         start=start, end=end, correct=correct, label=label)
+#            s.save()
 
     return response
 

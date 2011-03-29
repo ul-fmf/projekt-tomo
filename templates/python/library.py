@@ -37,6 +37,17 @@ def _equal(example, expected):
     if answer != expected:
         _warn('Ukaz {0} vrne {1!r} namesto {2!r}.'.format(example, answer, expected))
 
+def check_function(name, argsnum):
+    """ Preveri, če je metoda name definirana in sprejme argsnum argumentov."""  
+    if name not in globals():
+        _warn("Funkcija {0} ni definirana.".format(name))
+        return False
+    func = eval(name)
+    if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:
+        _warn("Funkcija {2} mora namesto {0} sprejeti {1} argumentov.".format(len(inspect.getargspec(func)[0]), argsnum, name))
+        return False
+  return True
+
 def _run_trial(trial, solution):
     global _warn
     errors = []
