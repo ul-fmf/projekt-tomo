@@ -120,7 +120,7 @@ def _submit_solutions(parts, source, username, signature, download_ip):
     data['problem_ids'] = ",".join([str(i) for i in ids])
     if correct:
         print('Naloge so pravilno sestavljene.')
-        if input('Ali jih shranim na strežnik? [da/NE]') is 'da':
+        if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
             print('Shranjujem naloge...')
             post = urlencode(data)
             try:
