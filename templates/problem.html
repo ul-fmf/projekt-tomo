@@ -18,6 +18,9 @@
 {% block description %}
     <h1>
         {{ problem.name }}
+        {% if request.user.is_staff %}
+        (<a href='{% url edit_problem problem.id %}'>uredi</a>)
+        {% endif %}
     </h1>
     {{ problem.description|pymarkdown|safe }}
     {% for part in problem.parts.all %}{% with solutions|get:part as solution %}
