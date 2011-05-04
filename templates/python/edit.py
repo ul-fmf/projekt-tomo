@@ -69,6 +69,17 @@ def _equal(example, expected, message=None):
     if answer != expected:
         _warn(message.format(example, answer, expected))
 
+def check_function(name, argsnum):
+    """ Preveri, če je metoda name definirana in sprejme argsnum argumentov."""  
+    if name not in globals():
+        _warn("Funkcija {0} ni definirana.".format(name))
+        return False
+    func = eval(name)
+    if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:
+        _warn("Funkcija {2} mora namesto {0} sprejeti {1} argumentov.".format(len(inspect.getargspec(func)[0]), argsnum, name))
+        return False
+    return True
+
 
 def _run_trial(part):
     global _warn
@@ -90,6 +101,7 @@ def _submit_solutions(parts, source, username, signature, download_ip):
         'source': source
     }
     ids = []
+    correct = True
     for label, part in enumerate(parts):
         part_id = part['id'] if part['id'] else -label
         ids.append(part_id)
@@ -99,20 +111,28 @@ def _submit_solutions(parts, source, username, signature, download_ip):
         random.seed(username)
         secret, errors = _run_trial(part)
         if errors:
-            print('Naloga {0}) je napačno rešena:'.format(label + 1))
+            print('Naloga {0}) je napačno sestavljena:'.format(label + 1))
             print('- ' + '\n- '.join(errors))
+            correct = False
         else:
-            print('Naloga {0}) je pravilno rešena.'.format(label + 1))
+            print('Naloga {0}) je pravilno sestavljena.'.format(label + 1))
             data['{0}_secret'.format(part_id)] = secret
     data['problem_ids'] = ",".join([str(i) for i in ids])
-    print('Shranjujem rešitve...')
-    post = urlencode(data)
-    try:
-        r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_problem problem.id %}', post)
-        contents = r.read()
-    except HTTPError as error:
-        contents = error.read()
-    print(contents.decode())
+    if correct:
+        print('Naloge so pravilno sestavljene.')
+        if input('Ali jih shranim na strežnik? [da/NE]') is 'da':
+            print('Shranjujem naloge...')
+            post = urlencode(data)
+            try:
+                r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_problem problem.id %}', post)
+                contents = r.read()
+            except HTTPError as error:
+                contents = error.read()
+            print(contents.decode())
+        else:
+            print('Naloge niso shranjene.')
+    else:
+        print('Naloge vsebujejo napake.')
 
 _filename = os.path.abspath(sys.argv[0])
 _source, _parts = _split_file(_filename)

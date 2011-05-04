@@ -157,12 +157,11 @@ def upload_problem(request, object_id):
     signature = request.POST['signature']
 
     if not verify(username + str(problem.id), signature):
-        print("ABC")
         return HttpResponseForbidden()
 
     response = HttpResponse(mimetype='text/plain')
     user = get_object_or_404(User, username=username)
-    response.write('Vse rešitve so shranjene.\n')
+    response.write('Naloge so shranjene.\n')
     ids = request.POST['problem_ids'].split(",")
 
     new_parts = []
@@ -179,20 +178,6 @@ def upload_problem(request, object_id):
             p.delete()
     problem.set_part_order([part.id for part in new_parts])
     problem.save()
-        
-#    for part in problem.parts.all():
-#        label = request.POST.get('{0}_label'.format(part.id))
-#        if label:
-#            start = request.POST['{0}_start'.format(part.id)]
-#            end = request.POST['{0}_end'.format(part.id)]
-#            secret = request.POST.get('{0}_secret'.format(part.id))
-#            correct = secret == part.secret
-#            if secret and not correct:
-#                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
-#                response.write('Obvestite asistenta.\n')
-#            s = Solution(user=user, part=part, submission=submission,
-#                         start=start, end=end, correct=correct, label=label)
-#            s.save()
 
     return response
 
