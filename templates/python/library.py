@@ -30,12 +30,13 @@ def _split_file(filename):
     parts = [part(part_match) for part_match in part_regex.finditer(source)]
     
     return source, parts
-
-def _equal(example, expected):
+def _equal(example, expected, message=None):
     global _warn
+    if not message:
+        message = 'Ukaz {0} vrne {1!r} namesto {2!r}.'
     answer = eval(example)
     if answer != expected:
-        _warn('Ukaz {0} vrne {1!r} namesto {2!r}.'.format(example, answer, expected))
+        _warn(message.format(example, answer, expected))
 
 def check_function(name, argsnum):
     """ Preveri, če je metoda name definirana in sprejme argsnum argumentov."""  
