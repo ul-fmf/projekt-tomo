@@ -17,7 +17,7 @@
 
 {% block description %}
     <h1>
-        {{ problem.name }}
+        {{ problem.name }}{{problem.status}}
         {% if request.user.is_staff %}
         (<a href='{% url edit_problem problem.id %}'>uredi</a>)
         {% endif %}
@@ -35,6 +35,12 @@
             {% else %}
             <h3>Naloge še niste rešili</h3>
             {% endif %}
+            </div>
+        {% endif %}
+        {% if problem.status == '30' or solution.correct %}
+            <div class='solution'>
+            <h3>Uradna rešitev</h3>
+            <pre><code>{{ part.solution }}</code></pre>
             </div>
         {% endif %}
         </div>

@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'tomo.problem',
     'tagging',
+    'south'
 )
 
 # http://www.djangosnippets.org/snippets/501/

@@ -3,9 +3,15 @@ from django.db import models
 
 
 class Problem(models.Model):
+    STATUS = (
+        ('10', 'hidden'),
+        ('20', 'visible'),
+        ('30', 'revealed')
+    )
     name = models.CharField(max_length=70, unique=True)
     description = models.TextField(blank=True)
     trial = models.TextField(blank=True)
+    status = models.CharField(max_length=2, choices=STATUS, default='10')
 
     def __unicode__(self):
         return u'{0}'.format(self.name)
