@@ -3,7 +3,7 @@ from hashlib import md5
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import loader, RequestContext
 from django.template.defaultfilters import slugify
@@ -20,8 +20,15 @@ def sign(text):
 def verify(text, signature):
     return signature == sign(text)
 
+def check_problem(problem, user):
+    if problem.status == '10' and not user.is_staff:
+        raise Http404
+
 def problem_list(request):
-    problems = Problem.objects.all()
+    if request.user.is_staff:
+        problems = Problem.objects.all()
+    else:
+        problems = Problem.objects.filter(status__gt=10)
 
     solutions = {}
     if request.user.is_authenticated():
@@ -34,6 +41,7 @@ def problem_list(request):
 
 def problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
+    check_problem(problem, request.user)
 
     solutions = {}
     if request.user.is_authenticated():
@@ -50,6 +58,7 @@ def problem(request, object_id):
 @login_required
 def download_problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
+    check_problem(problem, request.user)
     slug = slugify(problem.name)
     username = request.user.username
 
@@ -73,6 +82,7 @@ def download_problem(request, object_id):
 
 def download_anonymous_problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
+    check_problem(problem, request.user)
     slug = slugify(problem.name)
 
     response = HttpResponse(mimetype='text/plain')
@@ -91,6 +101,7 @@ def download_anonymous_problem(request, object_id):
 @staff_member_required
 def edit_problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
+    check_problem(problem, request.user)
     slug = slugify(problem.name)
     username = request.user.username
 
@@ -112,6 +123,7 @@ def upload_solution(request, object_id):
         return HttpResponseNotAllowed(['POST'])
 
     problem = get_object_or_404(Problem, id=object_id)
+    check_problem(problem, request.user)
     username = request.POST['username']
     signature = request.POST['signature']
 
@@ -126,7 +138,6 @@ def upload_solution(request, object_id):
                             upload_ip=request.META['REMOTE_ADDR'])
         submission.save()
     
-        response.write('Vse rešitve so shranjene.\n')
         for part in problem.parts.all():
             label = request.POST.get('{0}_label'.format(part.id))
             if label:
@@ -140,6 +151,9 @@ def upload_solution(request, object_id):
                 s = Solution(user=user, part=part, submission=submission,
                              start=start, end=end, correct=correct, label=label)
                 s.save()
+        response.write('Vse rešitve so shranjene.\n')
+        if problem.status == '20':
+            response.write('Rešujete izpit, zato bodo vse rešitve pregledane tudi ročno.')
     else:
         response.write('Naloge rešujete kot anonimni uporabnik!\n')
         response.write('Rešitve niso bile shranjene.')

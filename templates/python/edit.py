@@ -122,7 +122,7 @@ def _submit_solutions(parts, source, username, signature, download_ip):
         print('Naloge so pravilno sestavljene.')
         if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
             print('Shranjujem naloge...')
-            post = urlencode(data)
+            post = urlencode(data).encode('utf8')
             try:
                 r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_problem problem.id %}', post)
                 contents = r.read()

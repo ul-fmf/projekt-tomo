@@ -8,6 +8,9 @@
             <a href='{% url show_problem problem.id %}'>
                 {{ problem.name }}
             </a>
+            {% if request.user.is_staff %}
+            ({{ problem.get_status_display }})
+            {% endif %}
         </h2>
         {{ problem.description|pymarkdown|safe }}
     </div>

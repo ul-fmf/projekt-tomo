@@ -84,7 +84,7 @@ def _submit_solutions(parts, source, username, signature, download_ip):
                 print('Naloga {0}) je pravilno rešena.'.format(label))
                 data['{0}_secret'.format(part_id)] = secret
     print('Shranjujem rešitve...')
-    post = urlencode(data)
+    post = urlencode(data).encode('utf8')
     try:
         r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_solution problem.id %}', post)
         contents = r.read()

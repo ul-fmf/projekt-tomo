@@ -1,6 +1,6 @@
 # Django settings for tomo project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -109,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'tomo.problem',
     'tagging',
+    'south'
 )
 
 # http://www.djangosnippets.org/snippets/501/

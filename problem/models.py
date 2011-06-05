@@ -1,12 +1,14 @@
+# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
 
 
 class Problem(models.Model):
     STATUS = (
-        ('10', 'hidden'),
-        ('20', 'visible'),
-        ('30', 'revealed')
+        ('10', 'v pripravi'),
+        ('20', 'izpit'),
+        ('30', 'vaje'),
+        ('40', 'rešitve')
     )
     name = models.CharField(max_length=70, unique=True)
     description = models.TextField(blank=True)
@@ -15,6 +17,9 @@ class Problem(models.Model):
 
     def __unicode__(self):
         return u'{0}'.format(self.name)
+
+    class Meta:
+        ordering = ['id']
 
     @models.permalink
     def get_absolute_url(self):
