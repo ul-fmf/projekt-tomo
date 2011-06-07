@@ -54,6 +54,21 @@ def problem(request, object_id):
         'solutions': solutions
     }))
 
+@staff_member_required
+def solutions(request, object_id):
+    problem = get_object_or_404(Problem, id=object_id)
+
+    solutions = {}
+    # give the last solution for each part of the problem
+    for sol in Solution.objects.filter(part__problem=problem).order_by('id'):
+        user_solutions = solutions.get(sol.user, {})
+        user_solutions[sol.part] = sol
+        solutions[sol.user] = user_solutions
+
+    return render_to_response("solutions.html", RequestContext(request, {
+        'problem': problem,
+        'solutions': solutions
+    }))
 
 @login_required
 def download_problem(request, object_id):
