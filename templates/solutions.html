@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% load my_tags %}
+
+{% block title %}Projekt Tomo &mdash; {{ problem.name }}{% endblock %}
+
+{% block breadcrumbs %}
+<li><a href='{% url problem_list %}'>
+    Začetna stran
+</a></li>
+<li>&#187;<a href='{% url show_problem problem.id %}'>
+    {{ problem.name }}
+</a></li>
+{% endblock %}
+
+
+
+{% block description %}
+    <h1>
+        {{ problem.name }} (rešitve)
+    </h1>
+    {{ problem.description|pymarkdown|safe }}
+
+    <table>
+      <tr>
+        <th></th>
+      {% for part in problem.parts.all %}
+        <th>{{ forloop.counter }}</th>
+      {% endfor %}
+     </tr>
+      {% for user, solution in solutions.items %}
+      <tr>
+        <th>{{ user.get_full_name }}</th>
+          {% for part in problem.parts.all %}{% with solution|get:part as sol %}
+          <td>
+          {% if sol %}
+             <span title="{{ sol.solution }}">{% if sol.correct %}+{% else %}?{% endif %}</span>
+           {% else %}
+             x
+           {% endif %}
+        </td>
+          {%endwith%}
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+{% endblock %}
