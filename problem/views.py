@@ -123,7 +123,6 @@ def upload_solution(request, object_id):
         return HttpResponseNotAllowed(['POST'])
 
     problem = get_object_or_404(Problem, id=object_id)
-    check_problem(problem, request.user)
     username = request.POST['username']
     signature = request.POST['signature']
 
@@ -133,6 +132,7 @@ def upload_solution(request, object_id):
     response = HttpResponse(mimetype='text/plain')
     if username:
         user = get_object_or_404(User, username=username)
+        check_problem(problem, user)
         submission = Submission(user=user, source=request.POST['source'],
                             download_ip=request.POST['download_ip'],
                             upload_ip=request.META['REMOTE_ADDR'])

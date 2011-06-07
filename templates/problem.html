@@ -29,17 +29,21 @@
         {{ part.description|pymarkdown|safe }}
         {% if request.user.is_authenticated %}
             <div class='solution'>
-            {% if solution.correct %}
-            <h3>Vaša rešitev</h3>
-            <pre><code>{{ solution.solution }}</code></pre>
+            {% if solution %}
+                {% if solution.correct %}
+                <h3>Naloga je pravilno rešena. Vaša rešitev:</h3>
+                {% else %}
+                <h3>Naloga ni pravilno rešena. Zadnji poskus:</h3>
+                {% endif %}
+                <pre><code>{{ solution.solution }}</code></pre>
             {% else %}
-            <h3>Naloge še niste rešili</h3>
+            <h3>Naloge še niste reševali</h3>
             {% endif %}
             </div>
         {% endif %}
         {% if problem.status == '40' or solution.correct and problem.status == '30' %}
             <div class='solution'>
-            <h3>Uradna rešitev</h3>
+            <h3>Uradna rešitev:</h3>
             <pre><code>{{ part.solution }}</code></pre>
             </div>
         {% endif %}
