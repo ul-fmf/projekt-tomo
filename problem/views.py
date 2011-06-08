@@ -67,7 +67,8 @@ def solutions(request, object_id):
 
     return render_to_response("solutions.html", RequestContext(request, {
         'problem': problem,
-        'solutions': solutions
+        'solutions': solutions,
+        'parts': list(problem.parts.all())
     }))
 
 @login_required
