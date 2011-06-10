@@ -60,7 +60,7 @@ def solutions(request, object_id):
 
     solutions = {}
     # give the last solution for each part of the problem
-    for sol in Solution.objects.filter(part__problem=problem).order_by('id'):
+    for sol in Solution.objects.filter(part__problem=problem).select_related('submission__source').order_by('id'):
         user_solutions = solutions.get(sol.user, {})
         user_solutions[sol.part] = sol
         solutions[sol.user] = user_solutions
