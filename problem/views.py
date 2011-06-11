@@ -86,21 +86,23 @@ def solutions(request, object_id):
     part0sols = Solution.objects.filter(part__id=part0.id)
     users = part0sols.values('user').annotate(latest_submission=Max('submission__id')).values_list('latest_submission', flat=True)
     sols = Solution.objects.filter(submission__id__in=users).select_related('submission', 'user')
+    subs = Submission.objects.filter(id__in=users).select_related('user')
     solutions = {}
-    
+
+    submissions = {}
+    submissions = dict([(s.user, s) for s in subs])
     # all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
     for s in sols:
         user_solutions = solutions.get(s.user, {})
         user_solutions[s.part_id] = (s.correct, s.solution())
         solutions[s.user] = user_solutions
 
-    print solutions
-
     # for sol in all_solutions:
 
     return render_to_response("solutions.html", RequestContext(request, {
         'problem': problem,
         'solutions': solutions,
+        'submissions': submissions,
         'parts': list(problem.parts.all())
     }))
 
@@ -129,6 +131,26 @@ def download_problem(request, object_id):
     response.write(t.render(c))
     return response
 
+@staff_member_required
+def download_user_solutions(request, object_id, user_id):
+    problem = get_object_or_404(Problem, id=object_id)
+    user = get_object_or_404(User, id=user_id)
+    slug = slugify(problem.name + "-" + user.get_full_name())
+    solutions = {}
+    for sol in Solution.objects.filter(user=user, part__problem=problem).order_by('id'):
+        solutions[sol.part] = sol
+
+    response = HttpResponse(mimetype='text/plain')
+    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
+    t = loader.get_template('python/problem.py')
+    c = RequestContext(request, {
+        'problem': problem,
+        'username': "",
+        'signature': "",
+        'solutions': solutions
+    })
+    response.write(t.render(c))
+    return response
 
 def download_anonymous_problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)

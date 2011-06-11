@@ -27,10 +27,13 @@
       {% for part in parts %}
         <th>{{ forloop.counter }}</th>
       {% endfor %}
+        <th>datoteka</th>
+        <th>IP</th>
+        <th>čas oddaje</th>
      </tr>
       {% for user, solution in solutions.items %}
       <tr>
-        <th>{{ user.get_full_name }}</th>
+        <th>{{ user.get_full_name|default:user.username }}</th>
           {% for part in parts %}{% with solution|get:part.id as sol %}
           <td>
           {% if sol %}
@@ -41,6 +44,16 @@
         </td>
           {%endwith%}
         {% endfor %}
+        <td>
+          <a href='{% url download_user_solutions problem.id user.id %}'>poberi</a>
+        </td>
+        {% with submissions|get:user as subm %}
+        <td>{% if subm.download_ip != subm.upload_ip %}
+          {{ subm.download_ip }} /
+          {% endif %}
+          {{ subm.upload_ip }}</td>
+        <td>{{ subm.timestamp|date:"H:i, j.n.y" }}</td>
+        {% endwith %}
       </tr>
       {% endfor %}
     </table>
