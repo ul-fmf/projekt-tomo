@@ -57,22 +57,53 @@ def problem(request, object_id):
 
 import datetime
 
+# @staff_member_required
+# def solutions(request, object_id):
+#     problem = get_object_or_404(Problem, id=object_id)
+
+#     solutions = {}
+#     all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
+#     for sol in all_solutions:
+#         user_solutions = solutions.get(sol.user_id, {})
+#         user_solutions[sol.part_id] = sol
+#         solutions[sol.user_id] = user_solutions
+
+#     return render_to_response("solutions.html", RequestContext(request, {
+#         'problem': problem,
+#         'solutions': solutions,
+#         'parts': list(problem.parts.all())
+#     }))
+
+
 @staff_member_required
 def solutions(request, object_id):
+    from django.db.models import Max
     problem = get_object_or_404(Problem, id=object_id)
 
+    parts = list(problem.parts.select_related('solutions').all())
+    part0 = parts[0]
+
+    part0sols = Solution.objects.filter(part__id=part0.id)
+    users = part0sols.values('user').annotate(latest_submission=Max('submission__id')).values_list('latest_submission', flat=True)
+    sols = Solution.objects.filter(submission__id__in=users).select_related('submission')
     solutions = {}
-    all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
-    for sol in all_solutions:
-        user_solutions = solutions.get(sol.user_id, {})
-        user_solutions[sol.part_id] = sol
-        solutions[sol.user_id] = user_solutions
+    
+    # all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
+    for s in sols:
+        user_solutions = solutions.get(s.user_id, {})
+        user_solutions[s.part_id] = (s.correct, s.solution())
+        solutions[s.user_id] = user_solutions
+
+    print solutions
+
+    # for sol in all_solutions:
 
     return render_to_response("solutions.html", RequestContext(request, {
         'problem': problem,
         'solutions': solutions,
         'parts': list(problem.parts.all())
     }))
+
 
 @login_required
 def download_problem(request, object_id):

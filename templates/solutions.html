@@ -34,7 +34,7 @@
           {% for part in parts %}{% with solution|get:part.id as sol %}
           <td>
           {% if sol %}
-             <span title="{{ sol.solution }}">{% if sol.correct %}+{% else %}?{% endif %}</span>
+             <span title="{{ sol.1 }}">{% if sol.0 %}+{% else %}?{% endif %}</span>
            {% else %}
              x
            {% endif %}
