@@ -85,14 +85,14 @@ def solutions(request, object_id):
 
     part0sols = Solution.objects.filter(part__id=part0.id)
     users = part0sols.values('user').annotate(latest_submission=Max('submission__id')).values_list('latest_submission', flat=True)
-    sols = Solution.objects.filter(submission__id__in=users).select_related('submission')
+    sols = Solution.objects.filter(submission__id__in=users).select_related('submission', 'user')
     solutions = {}
     
     # all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
     for s in sols:
-        user_solutions = solutions.get(s.user_id, {})
+        user_solutions = solutions.get(s.user, {})
         user_solutions[s.part_id] = (s.correct, s.solution())
-        solutions[s.user_id] = user_solutions
+        solutions[s.user] = user_solutions
 
     print solutions
 
