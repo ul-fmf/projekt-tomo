@@ -31,7 +31,7 @@
       {% for user, solution in solutions.items %}
       <tr>
         <th>{{ user.get_full_name }}</th>
-          {% for part in parts %}{% with solution|get:part as sol %}
+          {% for part in parts %}{% with solution|get:part.id as sol %}
           <td>
           {% if sol %}
              <span title="{{ sol.solution }}">{% if sol.correct %}+{% else %}?{% endif %}</span>

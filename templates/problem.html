@@ -23,7 +23,7 @@
         {% endif %}
     </h1>
     {{ problem.description|pymarkdown|safe }}
-    {% for part in problem.parts.all %}{% with solutions|get:part as solution %}
+    {% for part_id in part_ids %}{% with solutions|get:part_id as solution %}
         <div class='part'>
         <h2>Naloga {{ forloop.counter }}</h2>
         {{ part.description|pymarkdown|safe }}

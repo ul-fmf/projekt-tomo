@@ -26,14 +26,14 @@ def check_problem(problem, user):
 
 def problem_list(request):
     if request.user.is_staff:
-        problems = Problem.objects.all()
+        problems = Problem.objects.select_related('parts').all()
     else:
-        problems = Problem.objects.filter(status__gt=10)
+        problems = Problem.objects.select_related('parts').filter(status__gt=10)
 
-    solutions = {}
-    if request.user.is_authenticated():
-        for sol in Solution.objects.filter(user=request.user).order_by('id'):
-            solutions[sol.part] = sol
+    # solutions = {}
+    # if request.user.is_authenticated():
+    #     for sol in Solution.objects.filter(user=request.user).order_by('id'):
+    #         solutions[sol.part] = sol
 
     return render_to_response("problems.html", RequestContext(request, {
         'problem_list': problems
@@ -46,24 +46,27 @@ def problem(request, object_id):
     solutions = {}
     if request.user.is_authenticated():
         # give the last solution for each part of the problem
-        for sol in Solution.objects.filter(user=request.user, part__problem=problem).order_by('id'):
-            solutions[sol.part] = sol
+        for sol in Solution.objects.filter(user=request.user, part__problem=problem).select_related('submission').order_by('id'):
+            solutions[sol.part_id] = sol
 
     return render_to_response("problem.html", RequestContext(request, {
         'problem': problem,
+        'part_ids': problem.parts.values_list('id', flat=True),
         'solutions': solutions
     }))
+
+import datetime
 
 @staff_member_required
 def solutions(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
 
     solutions = {}
-    # give the last solution for each part of the problem
-    for sol in Solution.objects.filter(part__problem=problem).select_related(depth=1).order_by('id'):
-        user_solutions = solutions.get(sol.user, {})
-        user_solutions[sol.part] = sol
-        solutions[sol.user] = user_solutions
+    all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
+    for sol in all_solutions:
+        user_solutions = solutions.get(sol.user_id, {})
+        user_solutions[sol.part_id] = sol
+        solutions[sol.user_id] = user_solutions
 
     return render_to_response("solutions.html", RequestContext(request, {
         'problem': problem,
