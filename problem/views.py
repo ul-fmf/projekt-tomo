@@ -51,7 +51,7 @@ def problem(request, object_id):
 
     return render_to_response("problem.html", RequestContext(request, {
         'problem': problem,
-        'part_ids': problem.parts.values_list('id', flat=True),
+        'parts': problem.parts.all(),
         'solutions': solutions
     }))
 
@@ -252,7 +252,10 @@ def upload_problem(request, object_id):
 
     new_parts = []
     for id in map(int, ids):
-        part = get_object_or_404(Part, id=id) if id > 0 else Part(problem=problem)
+        try:
+            part = Part.objects.get(id=id) if id > 0 else Part(problem=problem)
+        except Part.DoesNotExist:
+            part = Part(problem=problem, id=id)
         part.description = request.POST['{0}_description'.format(id)]
         part.trial = request.POST['{0}_trial'.format(id)]
         part.solution = request.POST['{0}_solution'.format(id)]

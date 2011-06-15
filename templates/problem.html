@@ -23,12 +23,13 @@
         {% endif %}
     </h1>
     {{ problem.description|pymarkdown|safe }}
-    {% for part_id in part_ids %}{% with solutions|get:part_id as solution %}
+    {% for part in parts %}
         <div class='part'>
         <h2>Naloga {{ forloop.counter }}</h2>
         {{ part.description|pymarkdown|safe }}
         {% if request.user.is_authenticated %}
             <div class='solution'>
+            {% with solutions|get:part.id as solution %}
             {% if solution %}
                 {% if solution.correct %}
                 <h3>Naloga je pravilno rešena. Vaša rešitev:</h3>
@@ -39,6 +40,7 @@
             {% else %}
             <h3>Naloge še niste reševali</h3>
             {% endif %}
+            {% endwith %}
             </div>
         {% endif %}
         {% if problem.status == '40' or solution.correct and problem.status == '30' %}
@@ -48,7 +50,7 @@
             </div>
         {% endif %}
         </div>
-    {% endwith %}{% endfor %}</ol>
+    {% endfor %}</ol>
 {% endblock %}
 
 {% block action %}
