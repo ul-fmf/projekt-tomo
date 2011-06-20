@@ -5,12 +5,8 @@
 {% block title %}Projekt Tomo &mdash; {{ problem.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<li><a href='{% url problem_list %}'>
-    Začetna stran
-</a></li>
-<li>&#187;<a href='{% url show_problem problem.id %}'>
-    {{ problem.name }}
-</a></li>
+<li><a href='{% url problem_list %}'>Začetna stran</a></li>
+<li>&#187;<a href='{% url show_problem problem.id %}'>{{ problem.name }}</a></li>
 {% endblock %}
 
 
