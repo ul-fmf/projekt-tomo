@@ -34,7 +34,7 @@ def migrate_database(destination):
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
             manage(destination, 'syncdb')
-            # sudo('./manage.py migrate')
+            manage(destination, 'migrate')
 
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
