@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from tomo.problem.models import Problem, Part, Solution, Submission
+from tomo.problem.models import Collection, Problem, Part, Solution, Submission
 
 
 class PartInline(admin.StackedInline):
@@ -17,4 +17,4 @@ class SubmissionAdmin(admin.ModelAdmin):
 
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Submission, SubmissionAdmin)
-
+admin.site.register(Collection)
