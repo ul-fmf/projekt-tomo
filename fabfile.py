@@ -45,7 +45,7 @@ def restart_apache():
     sudo('apache2ctl graceful')
 
 def get_dump():
-    dumps = ['auth.User', 'katalog.Kategorija', 'katalog.Oznaka', 'katalog.Gradivo']
+    dumps = ['problem.Problem', 'problem.Part']
     with cd('/srv/tomo/'):
         with prefix('source virtualenv/bin/activate'):
             for dump in dumps:
@@ -58,4 +58,5 @@ def reset_local():
     local('touch tomo.db')
     local('rm tomo.db')
     local('./manage.py syncdb --noinput')
+    local('./manage.py migrate')
     local('./manage.py loaddata fixtures/*.json')
