@@ -31,10 +31,10 @@ class Part(models.Model):
     description = models.TextField(blank=True)
     trial = models.TextField(blank=True)
     solution = models.TextField(blank=True)
-    secret = models.CharField(max_length=32)
+    answers = models.TextField(blank=True)
 
     def __unicode__(self):
-        return u'{0} ({1})'.format(self.problem.name, self.id)
+        return u'{0} ({1})'.format(self.problem.name, self._order + 1)
 
     class Meta:
         order_with_respect_to = 'problem'
