@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 from hashlib import md5
+import json
 
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseForbidden, Http404
 from django.shortcuts import get_object_or_404, render_to_response
-from django.template import loader, RequestContext
+from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
@@ -19,6 +21,20 @@ def sign(text):
 
 def verify(text, signature):
     return signature == sign(text)
+
+def render_to_file(name, template, context):
+    if settings.DEBUG:
+        response = HttpResponse(mimetype='text/html; charset=utf-8')
+        response.write("<body><pre>")
+        t = loader.get_template(template)
+        response.write(t.render(context))
+        response.write("</pre></body>")
+    else:
+        response = HttpResponse(mimetype='text/plain; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
+        t = loader.get_template(template)
+        response.write(t.render(context))
+    return response
 
 def check_collection(collection, user):
     if collection.status == '10' and not user.is_staff:
@@ -39,15 +55,18 @@ def collection_list(request):
         'collections': collections
     }))
 
-def collection(request, object_id):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
-    check_collection(collection, request.user)
-
+def attach_solutions(collection):
     collection.modified_problems = collection.problems.all()
     for problem in collection.modified_problems:
         problem.modified_parts = problem.parts.all()
         for part in problem.modified_parts:
             part.user_solution = "neumna resitev"
+
+
+def collection(request, object_id):
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
+    check_collection(collection, request.user)
+    attach_solutions(collection)
 
     # if request.user.is_authenticated():
     #     # give the last solution for each part of the problem
@@ -111,28 +130,19 @@ def solutions(request, object_id):
 
 
 @login_required
-def download_problem(request, object_id):
-    problem = get_object_or_404(Problem, id=object_id)
-    check_problem(problem, request.user)
-    slug = slugify(problem.name)
+def download_collection(request, object_id):
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
+    check_collection(collection, request.user)
+    attach_solutions(collection)
+    filename = slugify(collection.name) + ".py"
     username = request.user.username
-
-    solutions = {}
-    if request.user.is_authenticated():
-        for sol in Solution.objects.filter(user=request.user, part__problem=problem).order_by('id'):
-            solutions[sol.part] = sol
-
-    response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
-    t = loader.get_template('python/problem.py')
-    c = RequestContext(request, {
-        'problem': problem,
+    context = Context({
+        'collection': collection,
         'username': username,
-        'signature': sign(username + str(problem.id)),
-        'solutions': solutions
+        'signature': sign(username + str(collection.id))
     })
-    response.write(t.render(c))
-    return response
+
+    return render_to_file(filename, "python/collection.py", context)
 
 @staff_member_required
 def download_user_solutions(request, object_id, user_id):

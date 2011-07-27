@@ -1,19 +1,28 @@
-{% load my_tags %}#####################################################################@@#
-# {{ problem.name }} {% if problem.description %}
+####################################################################@@@#
+# {{ collection.name }} {% if collection.description %}
+# 
+{{ collection.description|safe }}{% endif %}
+####################################################################@@@#
+
+{% for problem in collection.modified_problems %}
+#####################################################################@@#
+# {{ forloop.counter }}. {{ problem.name }} {% if problem.description %}
 # 
 {{ problem.description|safe }}{% endif %}
 #####################################################################@@#
-
-
-{% for part in problem.parts.all %}
+{% for part in problem.modified_parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
-# Naloga {{ forloop.counter }}) {% if part.description %}
-# 
+# {{ forloop.parentloop.counter }}.{{ forloop.counter }}. {% if part.description %}
 {{ part.description|safe }}{% endif %}
 ################################################################{{ part.id|stringformat:'06d'}}@#
-{% with solutions|get:part as solution %}{{ solution.solution|safe }}
-{% endwith %}
+{{ part.user_solution|safe }}
+
 {% endfor %}
+{% endfor %}
+
+
+
+
 
 
 
@@ -247,7 +256,7 @@ def _submit_solutions(parts, source, username, signature, download_ip):
     print('Shranjujem rešitve...')
     post = urlencode(data).encode('utf8')
     try:
-        r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_solution problem.id %}', post)
+        r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_solution collection.id %}', post)
         contents = r.read()
     except HTTPError as error:
         contents = error.read()
