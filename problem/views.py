@@ -180,20 +180,14 @@ def download_anonymous_collection(request, object_id):
 @staff_member_required
 def edit_problem(request, object_id):
     problem = get_object_or_404(Problem, id=object_id)
-    check_problem(problem, request.user)
-    slug = slugify(problem.name)
     username = request.user.username
-
-    response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
-    t = loader.get_template('python/edit.py')
-    c = RequestContext(request, {
+    filename = slugify(problem.name) + ".py"
+    context = RequestContext(request, {
         'problem': problem,
         'username': username,
         'signature': sign(username + str(problem.id))
     })
-    response.write(t.render(c))
-    return response
+    return render_to_file(filename, 'python/edit.py', context)
 
 
 @csrf_exempt
@@ -265,7 +259,7 @@ def upload_problem(request, object_id):
         except Part.DoesNotExist:
             part = Part(problem=problem, id=id)
         part.description = request.POST['{0}_description'.format(id)]
-        part.trial = request.POST['{0}_trial'.format(id)]
+        part.secret = 'secret'
         part.solution = request.POST['{0}_solution'.format(id)]
         part.secret = request.POST['{0}_secret'.format(id)]
         part.save()
