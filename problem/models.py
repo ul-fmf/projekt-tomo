@@ -38,7 +38,7 @@ class Problem(models.Model):
         return u'{0}'.format(self.name)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['name']
 
     @models.permalink
     def get_absolute_url(self):
@@ -85,8 +85,8 @@ class Solution(models.Model):
     correct = models.BooleanField()
 
     def __unicode__(self):
-        return u'{0} {1}) {2}'.format(self.part.problem.name, self.label,
-                                      self.submission)
+        username = self.user.get_full_name() or self.user.username
+        return u'{0} vs. {1}'.format(username, self.part)
     
     def solution(self):
         return self.submission.source[self.start:self.end].strip()

@@ -20,23 +20,37 @@ def sign(text):
 def verify(text, signature):
     return signature == sign(text)
 
-def check_problem(problem, user):
-    if problem.status == '10' and not user.is_staff:
+def check_collection(collection, user):
+    if collection.status == '10' and not user.is_staff:
         raise Http404
 
-def problem_list(request):
-    if request.user.is_staff:
-        problems = Problem.objects.select_related('parts').all()
+def render_to_file(name, template, context):
+    if True:
+        response = HttpResponse(mimetype='text/html; charset=utf-8')
+        response.write("<body><pre>")
+        t = loader.get_template(template)
+        response.write(t.render(context))
+        response.write("</pre></body>")
     else:
-        problems = Problem.objects.select_related('parts').filter(status__gt=10)
+        response = HttpResponse(mimetype='text/plain; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
+        t = loader.get_template(template)
+        response.write(t.render(context))
+    return response
+
+def collection_list(request):
+    if request.user.is_staff:
+        collections = Problem.objects.select_related().all()
+    else:
+        collections = Problem.objects.select_related().filter(status__gt=10)
 
     # solutions = {}
     # if request.user.is_authenticated():
     #     for sol in Solution.objects.filter(user=request.user).order_by('id'):
     #         solutions[sol.part] = sol
 
-    return render_to_response("problems.html", RequestContext(request, {
-        'problem_list': problems
+    return render_to_response("collections.html", RequestContext(request, {
+        'collections': collections
     }))
 
 def problem(request, object_id):

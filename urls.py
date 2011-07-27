@@ -17,7 +17,7 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('tomo.problem.views',
-    url(r'^$', 'problem_list', name='problem_list'),
+    url(r'^$', 'collection_list', name='collection_list'),
     url(r'^problem/(?P<object_id>\d+)/$', 'problem', name='show_problem'),
     url(r'^problem/(?P<object_id>\d+)/download/$', 'download_problem',
         name='download_problem'),
