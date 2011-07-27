@@ -55,18 +55,18 @@ def collection_list(request):
         'collections': collections
     }))
 
-def attach_solutions(collection):
+def attach_solutions(collection, solution):
     collection.modified_problems = collection.problems.all()
     for problem in collection.modified_problems:
         problem.modified_parts = problem.parts.all()
         for part in problem.modified_parts:
-            part.user_solution = "neumna resitev"
+            part.user_solution = solution
 
 
 def collection(request, object_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     check_collection(collection, request.user)
-    attach_solutions(collection)
+    attach_solutions(collection, '"user\'s displayed solution"')
 
     # if request.user.is_authenticated():
     #     # give the last solution for each part of the problem
@@ -133,7 +133,7 @@ def solutions(request, object_id):
 def download_collection(request, object_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     check_collection(collection, request.user)
-    attach_solutions(collection)
+    attach_solutions(collection, "user\'s python solution")
     filename = slugify(collection.name) + ".py"
     username = request.user.username
     context = Context({
@@ -146,41 +146,35 @@ def download_collection(request, object_id):
 
 @staff_member_required
 def download_user_solutions(request, object_id, user_id):
-    problem = get_object_or_404(Problem, id=object_id)
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     user = get_object_or_404(User, id=user_id)
-    slug = slugify(problem.name + "-" + user.get_full_name())
-    solutions = {}
-    for sol in Solution.objects.filter(user=user, part__problem=problem).order_by('id'):
-        solutions[sol.part] = sol
-
-    response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
-    t = loader.get_template('python/problem.py')
-    c = RequestContext(request, {
-        'problem': problem,
-        'username': "",
-        'signature': "",
-        'solutions': solutions
-    })
-    response.write(t.render(c))
-    return response
-
-def download_anonymous_problem(request, object_id):
-    problem = get_object_or_404(Problem, id=object_id)
-    check_problem(problem, request.user)
-    slug = slugify(problem.name)
-
-    response = HttpResponse(mimetype='text/plain')
-    response['Content-Disposition'] = 'attachment; filename={0}.py'.format(slug)
-    t = loader.get_template('python/problem.py')
-    c = RequestContext(request, {
-        'problem': problem,
+    username = user.get_full_name() or user.username
+    check_collection(collection, user)
+    attach_solutions(collection, '"{0}\'s solutions"'.format(username))
+    filename = "{0}-{1}.py".format(slugify(collection.name), slugify(username))
+    username = request.user.username
+    context = Context({
+        'collection': collection,
         'username': '',
-        'signature': sign(str(problem.id)),
-        'solutions': {}
+        'signature': ''
     })
-    response.write(t.render(c))
-    return response
+
+    return render_to_file(filename, "python/collection.py", context)
+
+
+def download_anonymous_collection(request, object_id):
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
+    check_collection(collection, request.user)
+    attach_solutions(collection, '"anonymous solutions"')
+    filename = slugify(collection.name) + ".py"
+    username = request.user.username
+    context = Context({
+        'collection': collection,
+        'username': '',
+        'signature': sign(str(collection.id))
+    })
+
+    return render_to_file(filename, "python/collection.py", context)
 
 
 @staff_member_required
