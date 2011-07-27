@@ -10,7 +10,7 @@ from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
-from tomo.problem.models import Problem, Submission, Solution, Part
+from tomo.problem.models import Problem, Submission, Solution, Part, Collection
 from tomo.settings import SECRET_KEY
 
 
@@ -24,25 +24,11 @@ def check_collection(collection, user):
     if collection.status == '10' and not user.is_staff:
         raise Http404
 
-def render_to_file(name, template, context):
-    if True:
-        response = HttpResponse(mimetype='text/html; charset=utf-8')
-        response.write("<body><pre>")
-        t = loader.get_template(template)
-        response.write(t.render(context))
-        response.write("</pre></body>")
-    else:
-        response = HttpResponse(mimetype='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
-        t = loader.get_template(template)
-        response.write(t.render(context))
-    return response
-
 def collection_list(request):
     if request.user.is_staff:
-        collections = Problem.objects.select_related().all()
+        collections = Collection.objects.select_related().all()
     else:
-        collections = Problem.objects.select_related().filter(status__gt=10)
+        collections = Collection.objects.select_related().filter(status__gt=10)
 
     # solutions = {}
     # if request.user.is_authenticated():
@@ -53,20 +39,23 @@ def collection_list(request):
         'collections': collections
     }))
 
-def problem(request, object_id):
-    problem = get_object_or_404(Problem, id=object_id)
-    check_problem(problem, request.user)
+def collection(request, object_id):
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
+    check_collection(collection, request.user)
 
-    solutions = {}
-    if request.user.is_authenticated():
-        # give the last solution for each part of the problem
-        for sol in Solution.objects.filter(user=request.user, part__problem=problem).select_related('submission').order_by('id'):
-            solutions[sol.part_id] = sol
+    collection.modified_problems = collection.problems.all()
+    for problem in collection.modified_problems:
+        problem.modified_parts = problem.parts.all()
+        for part in problem.modified_parts:
+            part.user_solution = "neumna resitev"
 
-    return render_to_response("problem.html", RequestContext(request, {
-        'problem': problem,
-        'parts': problem.parts.all(),
-        'solutions': solutions
+    # if request.user.is_authenticated():
+    #     # give the last solution for each part of the problem
+    #     for sol in Solution.objects.filter(user=request.user, part__problem=problem).select_related('submission').order_by('id'):
+    #         solutions[sol.part_id] = sol
+
+    return render_to_response("collection.html", RequestContext(request, {
+        'collection': collection
     }))
 
 import datetime

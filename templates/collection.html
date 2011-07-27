@@ -2,51 +2,54 @@
 {% load markup %}
 {% load my_tags %}
 
-{% block title %}Projekt Tomo &mdash; {{ problem.name }}{% endblock %}
+{% block title %}Projekt Tomo &mdash; {{ collection.name }}{% endblock %}
 
 {% block breadcrumbs %}
-<li><a href='{% url problem_list %}'>Začetna stran</a></li>
-<li>&#187;<a href='{% url show_problem problem.id %}'>{{ problem.name }}</a></li>
+<li><a href='{% url collection_list %}'>Začetna stran</a></li>
+<li>&#187;<a href='{% url show_collection collection.id %}'>{{ collection.name }}</a></li>
 {% endblock %}
 
 
 
 {% block description %}
     <h1>
-        {{ problem.name }}
+        {{ collection.name }}
+    </h1>
+    {{ collection.description|pymarkdown|safe }}
+    {% for problem in collection.modified_problems %}
         {% if request.user.is_staff %}
         (<a href='{% url edit_problem problem.id %}'>uredi</a>)
         {% endif %}
-    </h1>
-    {{ problem.description|pymarkdown|safe }}
-    {% for part in parts %}
-        <div class='part'>
         <h2>Naloga {{ forloop.counter }}</h2>
+        {{ problem.description|pymarkdown|safe }}
+        {% for part in problem.modified_parts %}
+        <div class='part'>
+        <h3>Naloga {{ forloop.parentloop.counter }}.{{ forloop.counter }}.</h3>
         {{ part.description|pymarkdown|safe }}
         {% if request.user.is_authenticated %}
             <div class='solution'>
-            {% with solutions|get:part.id as solution %}
+            {% with part.user_solution|safe as solution %}
             {% if solution %}
-                {% if solution.correct %}
+                {% if 3 == 3 %}
                 <h3>Naloga je pravilno rešena. Vaša rešitev:</h3>
                 {% else %}
                 <h3>Naloga ni pravilno rešena. Zadnji poskus:</h3>
                 {% endif %}
-                <pre><code>{{ solution.solution }}</code></pre>
+                <pre><code>{{ solution }}</code></pre>
             {% else %}
             <h3>Naloge še niste reševali</h3>
             {% endif %}
             {% endwith %}
             </div>
         {% endif %}
-        {% if problem.status == '40' or solution.correct and problem.status == '30' %}
+        {% if problem.status == '40' %}
             <div class='solution'>
             <h3>Uradna rešitev:</h3>
             <pre><code>{{ part.solution }}</code></pre>
             </div>
         {% endif %}
         </div>
-    {% endfor %}</ol>
+    {% endfor %}{% endfor %}</ol>
 {% endblock %}
 
 {% block action %}
@@ -57,7 +60,7 @@
             dobite obvestila o pravilno in napačno rešenih nalogah.
         </p>
         <div class='buttons'>
-            <a class='button default' href='{% url download_problem problem.id %}'>
+            <a class='button default' href='{% url download_problem collection.id %}'>
                 Shranite vzorčno datoteko
             </a>
         </div>
@@ -68,7 +71,7 @@
         {% include 'login_form.html' %}
         <p class='instructions'>
             Če se ne morete prijaviti, lahko naloge rešujete kot anonimni
-            uporabnik z <a href='{% url download_anonymous_problem problem.id %}'>začasno datoteko</a>.
+            uporabnik z <a href='{% url download_anonymous_problem collection.id %}'>začasno datoteko</a>.
             V tem primeru se vaše rešitve ne shranijo na strežnik.
             Ko se enkrat lahko prijavite, morate vzorčno datoteko ponovno
             shraniti ter vanjo prepisati rešitve iz začasne datoteke.
