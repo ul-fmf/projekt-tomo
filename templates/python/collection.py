@@ -191,10 +191,18 @@
 
 
 {% include 'python/library.py' %}
+_trials = {}
+{% for problem in collection.problems.all %}
+{{ problem.preamble|safe }}
+{% for part in problem.parts.all %}
+{{ part.trial|safe }}
+# XXX THIS COUNTER IS NOT GOOD
+_trials[{{ part.id }}] = trial
+{% endfor %}
+{% endfor %}
 
-
-def _split_file(filename):
-    with open(filename) as f:
+def _submit_solutions():
+    with open(os.path.abspath(sys.argv[0])) as f:
         source = f.read()
 
     part_regex = re.compile(
@@ -205,57 +213,48 @@ def _split_file(filename):
         r'(?=#{50,}@)',   # beginning of next part
         flags=re.DOTALL|re.MULTILINE
     )
-    def part(part_match):
-        start = part_match.start() + len(part_match.group(1))
-        end = part_match.end()
-        return {
-            'id': int(part_match.group(2)),
-            'label': 'label',
-            'start': start,
-            'end': end,
-            'solution': part_match.group(0),
-            'attempted': bool(source[start:end].strip())
-        }
+    username = '{{ username }}'
+    solutions = {}
 
-    parts = [part(part_match) for part_match in part_regex.finditer(source)]
-    
-    return source, parts
+    def _run_trial(trial, solution):
+        global _warn
+        errors = []
+        h = md5()
+        _warn = lambda msg: errors.append(msg)
+        for x in trial(solution):
+            h.update(str(x).encode('utf-8'))
+        return h.hexdigest(), errors
 
-def _run_trial(trial, solution):
-    global _warn
-    errors = []
-    h = md5()
-    _warn = lambda msg: errors.append(msg)
-    for x in trial(solution):
-        h.update(str(x).encode('utf-8'))
-    return h.hexdigest(), errors
-
-def _submit_solutions(parts, source, username, signature, download_ip):
-    data = {
-        'username': username,
-        'signature': signature,
-        'download_ip': download_ip,
-        'source': source
-    }
-    for part in parts:
-        label = part['label']
-        if not part['attempted']:
-            print('Naloga {0}) je brez rešitve.'.format(label))
+    for part_match in part_regex.finditer(source):
+        part_id = int(part_match.group(2))
+        solution = part_match.group(3).strip()
+        if not solution:
+            print('Naloga je brez rešitve.')
         else:
-            part_id = part['id'] if part['id'] else -i
-            data['{0}_label'.format(part_id)] = part['label']
-            data['{0}_start'.format(part_id)] = part['start']
-            data['{0}_end'.format(part_id)] = part['end']
             random.seed(username)
-            secret, errors = _run_trial(part['trial'], part['solution'])
+            secret, errors = _run_trial(_trials[part_id], solution)
             if errors:
-                print('Naloga {0}) je napačno rešena:'.format(label))
+                print('Naloga je napačno rešena')
                 print('- ' + '\n- '.join(errors))
             else:
-                print('Naloga {0}) je pravilno rešena.'.format(label))
-                data['{0}_secret'.format(part_id)] = secret
+                print('Naloga je pravilno rešena.')
+        solutions[part_id] = {
+            'label': 'label',
+            'start': part_match.start() + len(part_match.group(1)),
+            'end': part_match.end(),
+            'solution': solution,
+            'attempted': bool(solution),
+            'secret': secret
+        }
+
     print('Shranjujem rešitve...')
-    post = urlencode(data).encode('utf8')
+    post = urlencode({
+        'username': username,
+        'signature': '{{ signature }}',
+        'download_ip': '{{ request.META.REMOTE_ADDR }}',
+        'source': source,
+        'solutions': json.dumps(solutions)
+    }).encode('utf8')
     try:
         r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_solution collection.id %}', post)
         contents = r.read()
@@ -263,22 +262,6 @@ def _submit_solutions(parts, source, username, signature, download_ip):
         contents = error.read()
     print(contents.decode())
 
+_submit_solutions()
 
-_filename = os.path.abspath(sys.argv[0])
-_source, _parts = _split_file(_filename)
-
-{% for problem in collection.problems.all %}
-{{ problem.preamble|safe }}
-{% for part in problem.parts.all %}
-{{ part.trial|safe }}
-# XXX THIS COUNTER IS NOT GOOD
-_parts[{{ forloop.counter0 }}]['trial'] = trial
-{% endfor %}
-{% endfor %}
-
-_submit_solutions(_parts,
-                  source=_source,
-                  username='{{ username }}',
-                  signature='{{ signature }}',
-                  download_ip='{{ request.META.REMOTE_ADDR }}')
 #####################################################################@@#

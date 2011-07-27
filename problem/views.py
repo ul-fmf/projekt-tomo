@@ -192,7 +192,6 @@ def edit_problem(request, object_id):
 
 @csrf_exempt
 def upload_solution(request, object_id):
-    print "Juhu"
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -211,20 +210,19 @@ def upload_solution(request, object_id):
                             download_ip=request.POST['download_ip'],
                             upload_ip=request.META['REMOTE_ADDR'])
         submission.save()
-    
-        for problem in collection.problems.all():
-            for part in problem.parts.all():
-                label = request.POST.get('{0}_label'.format(part.id))
-                if label:
-                    start = request.POST['{0}_start'.format(part.id)]
-                    end = request.POST['{0}_end'.format(part.id)]
-                    correct = True # Check trials at this point.
-                    if not correct:
-                        response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
-                        response.write('Obvestite asistenta.\n')
-                    s = Solution(user=user, part=part, submission=submission,
-                                 start=start, end=end, correct=correct, label=label)
-                    s.save()
+
+        solutions = json.loads(request.POST['solutions'])
+        part_ids = solutions.keys()
+        parts = Part.objects.filter(id__in=part_ids).select_related()
+        for part in parts:
+            solution = solutions[str(part.id)]
+            correct = True # Check trials at this point.
+            if not correct:
+                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+                response.write('Obvestite asistenta.\n')
+            s = Solution(user=user, part=part, submission=submission,
+                         start=solution['start'], end=solution['end'], correct=correct, label=solution['label'])
+            s.save()
         response.write('Vse rešitve so shranjene.\n')
         if collection.status == '20':
             response.write('Rešujete izpit, zato bodo vse rešitve pregledane tudi ročno.')
