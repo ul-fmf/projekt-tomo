@@ -116,7 +116,7 @@ def solutions(request, object_id):
     # all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
     for s in sols:
         user_solutions = solutions.get(s.user, {})
-        user_solutions[s.part_id] = (s.correct, s.solution())
+        user_solutions[s.part_id] = (s.correct, s.solution)
         solutions[s.user] = user_solutions
 
     # for sol in all_solutions:
@@ -218,10 +218,9 @@ def upload_solution(request, object_id):
             solution = solutions[str(part.id)]
             correct = True # Check trials at this point.
             if not correct:
-                response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+                response.write('Rešitev naloge {0}) je zavrnjena.'.solution['label'])
                 response.write('Obvestite asistenta.\n')
-            s = Solution(user=user, part=part, submission=submission,
-                         start=solution['start'], end=solution['end'], correct=correct, label=solution['label'])
+            s = Solution(user=user, part=part, submission=submission, correct=correct)
             s.save()
         response.write('Vse rešitve so shranjene.\n')
         if collection.status == '20':

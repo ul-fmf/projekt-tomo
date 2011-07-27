@@ -228,21 +228,20 @@ def _submit_solutions():
     for part_match in part_regex.finditer(source):
         part_id = int(part_match.group(2))
         solution = part_match.group(3).strip()
+        label = "12.34"
         if not solution:
-            print('Naloga je brez rešitve.')
+            print('Naloga {0} je brez rešitve.'.format(label))
         else:
             random.seed(username)
             secret, errors = _run_trial(_trials[part_id], solution)
             if errors:
-                print('Naloga je napačno rešena')
+                print('Naloga {0} je napačno rešena'.format(label))
                 print('- ' + '\n- '.join(errors))
             else:
-                print('Naloga je pravilno rešena.')
+                print('Naloga {0} je pravilno rešena.'.format(label))
         solutions[part_id] = {
-            'label': 'label',
-            'start': part_match.start() + len(part_match.group(1)),
-            'end': part_match.end(),
             'solution': solution,
+            'label': label,
             'attempted': bool(solution),
             'secret': secret
         }

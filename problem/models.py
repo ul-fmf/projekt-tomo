@@ -68,17 +68,12 @@ class Solution(models.Model):
     user = models.ForeignKey(User, related_name='solutions')
     part = models.ForeignKey(Part, related_name='solutions')
     submission = models.ForeignKey(Submission, related_name='solutions')
-    start = models.IntegerField(editable=False)
-    end = models.IntegerField(editable=False)
-    label = models.CharField(max_length=32, blank=True)
+    solution = models.TextField(blank=True)
     correct = models.BooleanField()
 
     def __unicode__(self):
         username = self.user.get_full_name() or self.user.username
         return u'{0} vs. {1}'.format(username, self.part)
-    
-    def solution(self):
-        return self.submission.source[self.start:self.end].strip()
     
     class Meta:
         order_with_respect_to = 'submission'
