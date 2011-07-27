@@ -4,7 +4,7 @@
 {{ problem.description|safe }}{% endif %}
 #####################################################################@@#
 
-{{ problem.trial|safe }}
+{{ problem.preamble|safe }}
 
 {% for part in problem.parts.all %}
 ################################################################@{{ part.id|stringformat:'06d'}}#

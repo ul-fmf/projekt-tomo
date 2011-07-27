@@ -23,16 +23,9 @@ class Collection(models.Model):
 
 
 class Problem(models.Model):
-    STATUS = (
-        ('10', 'v pripravi'),
-        ('20', 'izpit'),
-        ('30', 'vaje'),
-        ('40', 'rešitve')
-    )
     name = models.CharField(max_length=70, unique=True)
     description = models.TextField(blank=True)
-    trial = models.TextField(blank=True)
-    status = models.CharField(max_length=2, choices=STATUS, default='10')
+    preamble = models.TextField(blank=True)
 
     def __unicode__(self):
         return u'{0}'.format(self.name)

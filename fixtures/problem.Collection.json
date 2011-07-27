@@ -1,0 +1,254 @@
+[
+  {
+    "pk": 1, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        1
+      ], 
+      "name": "Risanje smre\u010dic", 
+      "description": "# Na primeru risanja smre\u010dic bomo spoznali:\r\n#\r\n# 1. ukaz print, ki izpi\u0161e niz na zaslon,\r\n# 2. osnovne operacije na nizih,\r\n# 3. prireditvene stavke."
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        3
+      ], 
+      "name": "Operacije", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        4
+      ], 
+      "name": "Funkcije", 
+      "description": "# Na dana\u0161njih vajah bomo pilili znanje metod.\r\n"
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        5
+      ], 
+      "name": "Pogojni stavek", 
+      "description": "# S pomo\u010djo spodnjih nalog se bomo nau\u010dili koncept pogojnega stavka v pythonu."
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        6
+      ], 
+      "name": "Zanke", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        7
+      ], 
+      "name": "Nizi", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        8
+      ], 
+      "name": "Seznami", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        9
+      ], 
+      "name": "Format", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        10
+      ], 
+      "name": "\u0160e o zankah; izpeljani seznami", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        11
+      ], 
+      "name": "Nabori, mno\u017eice, slovarji", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        12
+      ], 
+      "name": "Standardna knji\u017enica", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "40", 
+      "problems": [
+        13
+      ], 
+      "name": "Datoteke", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        14
+      ], 
+      "name": "2. kolokvij (fin, pon)", 
+      "description": "# Drugi kolokvij, finan\u010dna matematika, ponedeljek od 8h do 10h"
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "20", 
+      "problems": [
+        15
+      ], 
+      "name": "Testni kolokvij", 
+      "description": "# Drugi kolokvij"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        16
+      ], 
+      "name": "2. kolokvij (mat, sre)", 
+      "description": "# Drugi kolokvij, matematika, sreda"
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        17
+      ], 
+      "name": "2. kolokvij (ped, sre 13-15)", 
+      "description": "# Drugi kolokvij, pedagogi, sreda od 13h-15h"
+    }
+  }, 
+  {
+    "pk": 17, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        18
+      ], 
+      "name": "2. kolokvij (ped, sre 15-17)", 
+      "description": "# Drugi kolokvij, pedagogi, sreda od 15h-17h"
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        19
+      ], 
+      "name": "2. kolokvij (mat, \u010det)", 
+      "description": "# Drugi kolokvij, matematika, \u010detrtek"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        20
+      ], 
+      "name": "2. kolokvij (fin, pet, 8-10)", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        21
+      ], 
+      "name": "2. kolokvij (fin, pet, 13-15)", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "problem.collection", 
+    "fields": {
+      "status": "10", 
+      "problems": [
+        22
+      ], 
+      "name": "1. izpit", 
+      "description": ""
+    }
+  }
+]

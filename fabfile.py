@@ -54,6 +54,11 @@ def get_dump():
         get('*.json', 'fixtures/')
         sudo('rm *.json')
 
+def save_dump():
+    dumps = ['problem.Problem', 'problem.Part', 'problem.Collection']
+    for dump in dumps:
+        local('./manage.py dumpdata --indent=2 {0} > fixtures/{0}.json'.format(dump))
+
 def reset_local():
     local('touch tomo.db')
     local('rm tomo.db')

@@ -1,121 +1,28 @@
 [
   {
-    "pk": 1, 
+    "pk": 22, 
     "model": "problem.problem", 
     "fields": {
-      "status": "40", 
-      "trial": "def izpis(source):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    exec(source)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef preveriSmrecico(smrecica, levi, desni, dovoljeni):\r\n    vrstice = smrecica.splitlines()\r\n    if len(vrstice) != 8:\r\n        _warn(\"Smre\u010dica nima osmih vrstic.\")\r\n    for i in range(1, min(8, len(vrstice))):\r\n        vrstica = vrstice[i]\r\n        if not vrstica.startswith((levi[i] - 1) * \" \"):\r\n            _warn(\"{0}. vrstica se ne za\u010dne na {1}. znaku.\".format(i + 1, levi[i]))\r\n        if len(vrstica.rstrip()) != desni[i]:\r\n            _warn(\"{0}. vrstica se ne kon\u010da na {1}. znaku.\".format(i + 1, desni[i]))\r\n        znaki = vrstica.replace(\" \", \"\")\r\n        if len(znaki) != i + 1:\r\n            _warn(\"{0}. vrstica ni sestavljena iz {0} znakov\".format(i + 1))\r\n        if any(znak not in dovoljeni for znak in znaki):\r\n            _warn(\"{0}. vrstica vsebuje nedovoljene znake.\".format(i + 1))\r\n    if len([znak for znak in dovoljeni if znak in smrecica]) > 1:\r\n        _warn(\"Smre\u010dica je sestavljena iz razli\u010dnih dovoljenih znakov.\")\r\n\r\ndovoljeni = \"*.#$@oO+=\"\r\nznak = \"*\"", 
-      "name": "Risanje smre\u010dic", 
-      "description": "# Na primeru risanja smre\u010dic bomo spoznali:\r\n#\r\n# 1. ukaz print, ki izpi\u0161e niz na zaslon,\r\n# 2. osnovne operacije na nizih,\r\n# 3. prireditvene stavke."
-    }
-  }, 
-  {
-    "pk": 3, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import random\r\nimport math\r\n\r\ndef izvedi(source, d):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    exec(source, d)\r\n    sys.stdout = old_stdout\r\n    return (d, new_stdout.getvalue())\r\n\r\n", 
-      "name": "Operacije", 
+      "preamble": "def _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass", 
+      "name": "1. izpit", 
       "description": ""
     }
   }, 
   {
-    "pk": 4, 
+    "pk": 21, 
     "model": "problem.problem", 
     "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nfrom math import *\r\nimport random\r\n\r\ndef izpis(f,n,a,b,c):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(n,a,b,c)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()", 
-      "name": "Funkcije", 
-      "description": "# Na dana\u0161njih vajah bomo pilili znanje metod.\r\n"
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n", 
-      "name": "Pogojni stavek", 
-      "description": "# S pomo\u010djo spodnjih nalog se bomo nau\u010dili koncept pogojnega stavka v pythonu."
-    }
-  }, 
-  {
-    "pk": 6, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n\r\ndef _equal(example, expected):\r\n    global _warn\r\n    answer = eval(example)\r\n    if round(answer, 6) != round(expected, 6):\r\n        _warn('Ukaz {0} vrne {1!r} namesto {2!r}.'.format(example, answer, expected))\r\n", 
-      "name": "Zanke", 
+      "preamble": "def _makefile0(fname, ime, vrednost):\r\n    with open(fname, \"w\") as f:\r\n        print(ime, file=f)\r\n        print(vrednost, file=f)\r\n\r\ndef _makefile1(fname):\r\n    with open(fname, \"w\") as f:\r\n        print(\"a\", file=f)\r\n        print(\"0\", file=f)\r\n        print(\"b\", file=f)\r\n        print(\"1\", file=f)\r\n        print(\"c\", file=f)\r\n        print(\"2\", file=f)\r\n\r\n\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"2,35,18,5,78\", file=f)\r\n        print(\"13,20\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"15,84,2,4,5,16,78,44,21\", file=f)\r\n        print(\"10,5,50,40\", file=f)\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"138\", file=f)\r\n        print(\"33\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"269\", file=f)\r\n        print(\"105\", file=f)\r\n\r\n\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:                                                                                                                                                                     \r\n        print(\"1 28\", file=f)\r\n        print(\"2 16\", file=f)\r\n        print(\"3 8\", file=f)\r\n        print(\"4 30\", file=f)\r\n        print(\"5 26\", file=f)\r\n        print(\"22\", file=f)\r\n\r\n\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n\r\n\r\n", 
+      "name": "2. kolokvij (fin, pet, 13-15)", 
       "description": ""
     }
   }, 
   {
-    "pk": 7, 
+    "pk": 20, 
     "model": "problem.problem", 
     "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n", 
-      "name": "Nizi", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "", 
-      "name": "Seznami", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 9, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nfrom math import sin\r\nimport random\r\n\r\ndef izpis(f,a,b,k):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(a,b,k)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef izpis2(f,f2,a,b,k):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(f2,a,b,k)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n", 
-      "name": "Format", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 10, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "", 
-      "name": "\u0160e o zankah; izpeljani seznami", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 11, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import inspect\r\nimport random", 
-      "name": "Nabori, mno\u017eice, slovarji", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 12, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "import random\r\nfrom time import clock\r\nimport inspect\r\n\r\nkarte=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','\u0161kis','H1','H2','H3','H4','HJ','HC','HQ','HK','D1','D2','D3','D4','DJ','DC','DQ','DK','C7','C8','C9','C10','CJ','CC','CQ','CK','S7','S8','S9','S10','SJ','SC','SQ','SK']\r\n\r\ndef unija(s):\r\n    x=set()\r\n    for i in s:\r\n        x=x.union(i)\r\n    return x\r\n\r\ndef jeenakomerna(f,a,b):\r\n    '''Preveri, da f vraca enakomerno porazdeljene vrednosti na intervalu [a,b)'''\r\n    s=[f(a,b) for i in range(1000)]\r\n    M=sum(s)/1000\r\n    V=sum([(x-M)**2/1000 for x in s])\r\n    # Povprecje enakomerno porazdeljene spr. je (a+b)/2, varianca je (b-a)^2/12\r\n    if abs((M-(a+b)/2))>0.1 or abs(V-(b-a)**2/12)>0.2:\r\n        return False\r\n    else:\r\n        return True\r\n\r\ndef nakljucna(f,*args):\r\n    random.seed(1)\r\n    return [f(*args) for i in range(10)]\r\n\r\ndef izpis(f,*args):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    random.seed(1)\r\n    sys.stdout = new_stdout\r\n    f(*args)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()", 
-      "name": "Standardna knji\u017enica", 
-      "description": ""
-    }
-  }, 
-  {
-    "pk": 13, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "40", 
-      "trial": "def rnds(S):\r\n    if abs(sum(S) -1) > 0.0001:\r\n        raise ValueError('Vsota verjetnosti ni 1!!!')\r\n    y=random.random()\r\n    F=0\r\n    for i in range(len(S)+1):\r\n        if F >= y:\r\n            break\r\n        F+=S[i]\r\n    return i-1 if i > 0 else 0\r\n\r\ndef rndd(S):\r\n    if abs(sum(S.values()) -1) > 0.0001:\r\n        raise ValueError('Vsota verjetnosti ni 1!!!')\r\n    y=random.random()\r\n    F=0\r\n    for x in S:\r\n        F+=S[x]\r\n        if F >= y:\r\n            break\r\n    return x", 
-      "name": "Datoteke", 
+      "preamble": "def _makefile0(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"2,35,18,5,78\", file=f)\r\n        print(\"13,20\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"15,84,2,4,5,16,78,44,21\", file=f)\r\n        print(\"10,5,50,40\", file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"138\", file=f)\r\n        print(\"33\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"269\", file=f)\r\n        print(\"105\", file=f)\r\n\r\n\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:                                                                                                                                                                     \r\n        print(\"28\", file=f)\r\n        print(\"16\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"30\", file=f)\r\n        print(\"26\", file=f)\r\n        print(\"22\", file=f)\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n", 
+      "name": "2. kolokvij (fin, pet, 8-10)", 
       "description": ""
     }
   }, 
@@ -123,38 +30,34 @@
     "pk": 14, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "", 
+      "preamble": "", 
       "name": "2. kolokvij (fin, pon)", 
       "description": "# Drugi kolokvij, finan\u010dna matematika, ponedeljek od 8h do 10h"
-    }
-  }, 
-  {
-    "pk": 15, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "20", 
-      "trial": "", 
-      "name": "Testni kolokvij", 
-      "description": "# Drugi kolokvij"
     }
   }, 
   {
     "pk": 16, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "_prijatelji={'Jernej': ['Janez', 'Joze', 'Miha', 'Franc'], 'Joze': ['Miha'], 'Miha': ['Jernej', 'Franc']}\r\n_prijatelji2={'Jernej': ['Joze', 'Miha', 'Franc'], 'Joze': ['Jernej', 'Franc'], 'Miha': ['Jernej'], 'Franc': ['Jernej', 'Joze']}\r\n\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"% komentar\", file=f)\r\n        print(\"ni komentarja %ja pa je\", file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa % pa ta tudi\", file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja %ja pa je\", file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa % pa ta tudi\", file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\\", end='',file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\\", end='', file=f)\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa \", end='', file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\\", end='', file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\\", end='', file=f)\r\n        \r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass", 
+      "preamble": "_prijatelji={'Jernej': ['Janez', 'Joze', 'Miha', 'Franc'], 'Joze': ['Miha'], 'Miha': ['Jernej', 'Franc']}\r\n_prijatelji2={'Jernej': ['Joze', 'Miha', 'Franc'], 'Joze': ['Jernej', 'Franc'], 'Miha': ['Jernej'], 'Franc': ['Jernej', 'Joze']}\r\n\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"% komentar\", file=f)\r\n        print(\"ni komentarja %ja pa je\", file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa % pa ta tudi\", file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja %ja pa je\", file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa % pa ta tudi\", file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\\", end='',file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\\", end='', file=f)\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\%Ta pa \", end='', file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\%ze spet\", file=f)\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"ni komentarja \", end='', file=f)\r\n        print(\"A ta tudi? \\\\% ne ne, \\\\\\\\\", end='', file=f)\r\n        print(\"Mucno s temi \\\\ \\\\\\\\\\\\% ne ne, \\\\\\\\\\\\\\\\\", end='', file=f)\r\n        \r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass", 
       "name": "2. kolokvij (mat, sre)", 
       "description": "# Drugi kolokvij, matematika, sreda"
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "def izpis(f,*args):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(*args)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('Sami \"nizi\" in \"nenizi\"', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('\"celotna vrstica en sam niz\"', file=f)\r\n        print('\"niz na zacetku\" in \"na koncu\"', file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('Sami \"nizi\" in \\\\\"nenizi\\\\\", pa \"do\\\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en \"kratek\\\\\"', file=f)\r\n        print('spet \\\\\"niz na zacetku', file=f)\r\n        print('in \"na koncu\"spet\\\\\"', file=f)\r\n        print('in \"niz\"\"do niza\" pa \\\\\"\"kratek\"\\\\\"', file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi\\nnenizi\\\\\\ndo\\\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\\nkratek\\\\', file=f)\r\n        print('niz na zacetku', file=f)\r\n        print('in \\nspet\\\\', file=f)\r\n        print('niz\\ndo niza\\n\\\\', file=f)\r\n        \r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi', file=f)\r\n        print('do\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en ', file=f)\r\n        print('na koncu\\nniz\\ndo niza\\nkratek', file=f)\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi', file=f)\r\n        print('do\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en ', file=f)\r\n        print('na koncu\\nniz\"do niza\\nkratek', file=f)\r\n        \r\ndef _istedatoteke(ena,dva,original=None):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        n1=f1.read().strip()\r\n        n2=f2.read().strip()\r\n        if n1 != n2:\r\n            if original != None:\r\n                print(\"Vhodna datoteka:\\n\"+'-'*50)\r\n                with open(original) as f3:\r\n                    print(f3.read())\r\n                print('-'*50)\r\n            print(\"Rezultat tvoje funkcije:\")\r\n            print(n1)\r\n            print(\"=\"*50+\"\\nPravilno:\")\r\n            print(n2)\r\n            return False\r\n        return True\r\n\r\ndef _jeblizu(a, b, eps=.1):\r\n    if b == 0:\r\n        return abs(a) < eps\r\n    else:\r\n        return abs(1-a/b) < eps\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass\r\n\r\nfrom random import randint", 
+      "name": "2. kolokvij (mat, \u010det)", 
+      "description": "# Drugi kolokvij, matematika, \u010detrtek"
     }
   }, 
   {
     "pk": 17, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "_slovar = {'\u010c': 'K', 'A': 'O', 'C': 'Z', 'B': 'M', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': '\u0160', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': '\u010c', 'V': 'N', 'Z': '\u017d', '\u0160': 'S', '\u017d': 'D'}\r\n_neslovar = {'\u010c': 'A', 'A': 'O', 'C': 'Z', 'B': 'N', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': '\u0160', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': '\u010c', 'V': 'N', 'Z': '\u017d', '\u0160': 'S', '\u017d': 'D'}\r\n_neslovar2 = {'X': 'K', 'A': 'O', 'C': 'Z', 'B': 'M', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': 'W', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': 'X', 'V': 'N', 'Z': 'Y', 'W': 'S', 'Y': 'D'}\r\n\r\n\r\ndef _preveriinverz(a, b):\r\n    try:\r\n        for x in a:\r\n            if b[a[x]] != x:\r\n                return False\r\n        return True\r\n    except:\r\n        return False\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Janez Novak,1,3,3,2,1,0,0,2,0,3,2,1\", file=f)\r\n        print(\"Ena A,0,1,3,2,6,2,0,5,6,3,2,1\", file=f)\r\n        print(\"Dober Clovek,3,0,1,2,0,1,5,4,3,7,8,1\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Janez Novak,18\", file=f)\r\n        print(\"Ena A,31\", file=f)\r\n        print(\"Dober Clovek,35\", file=f)\r\n\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Ena A,0,1,3,2,6,2,0,5,6,3,2,1,31\", file=f)\r\n        print(\"Dober Clovek,3,0,1,2,0,1,5,4,3,7,8,1,35\", file=f)\r\n        print(\"Janez Novak,1,3,3,2,1,0,0,2,0,3,2,1,18\", file=f)\r\n        print(\"Povprecen Student,1.33,1.33,2.33,2.0,2.33,1.0,1.67,3.67,3.0,4.33,4.0,1.0,28.0\", file=f)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)", 
+      "preamble": "_slovar = {'\u010c': 'K', 'A': 'O', 'C': 'Z', 'B': 'M', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': '\u0160', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': '\u010c', 'V': 'N', 'Z': '\u017d', '\u0160': 'S', '\u017d': 'D'}\r\n_neslovar = {'\u010c': 'A', 'A': 'O', 'C': 'Z', 'B': 'N', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': '\u0160', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': '\u010c', 'V': 'N', 'Z': '\u017d', '\u0160': 'S', '\u017d': 'D'}\r\n_neslovar2 = {'X': 'K', 'A': 'O', 'C': 'Z', 'B': 'M', 'E': 'V', 'D': 'C', 'G': 'P', 'F': 'E', 'I': 'B', 'H': 'F', 'K': 'I', 'J': 'A', 'M': 'U', 'L': 'H', 'O': 'R', 'N': 'W', 'P': 'J', 'S': 'T', 'R': 'L', 'U': 'G', 'T': 'X', 'V': 'N', 'Z': 'Y', 'W': 'S', 'Y': 'D'}\r\n\r\n\r\ndef _preveriinverz(a, b):\r\n    try:\r\n        for x in a:\r\n            if b[a[x]] != x:\r\n                return False\r\n        return True\r\n    except:\r\n        return False\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Janez Novak,1,3,3,2,1,0,0,2,0,3,2,1\", file=f)\r\n        print(\"Ena A,0,1,3,2,6,2,0,5,6,3,2,1\", file=f)\r\n        print(\"Dober Clovek,3,0,1,2,0,1,5,4,3,7,8,1\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Janez Novak,18\", file=f)\r\n        print(\"Ena A,31\", file=f)\r\n        print(\"Dober Clovek,35\", file=f)\r\n\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Ena A,0,1,3,2,6,2,0,5,6,3,2,1,31\", file=f)\r\n        print(\"Dober Clovek,3,0,1,2,0,1,5,4,3,7,8,1,35\", file=f)\r\n        print(\"Janez Novak,1,3,3,2,1,0,0,2,0,3,2,1,18\", file=f)\r\n        print(\"Povprecen Student,1.33,1.33,2.33,2.0,2.33,1.0,1.67,3.67,3.0,4.33,4.0,1.0,28.0\", file=f)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)", 
       "name": "2. kolokvij (ped, sre 13-15)", 
       "description": "# Drugi kolokvij, pedagogi, sreda od 13h-15h"
     }
@@ -163,49 +66,125 @@
     "pk": 18, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "def _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Luka,Jaka\", file=f)\r\n        print(\"Luka\", file=f)\r\n        print(\"Miha\", file=f)\r\n        print(\"Miha\", file=f)\r\n        print(\"Miha\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Miha 3\", file=f)\r\n        print(\"Luka 2\", file=f)\r\n        print(\"Jaka 1\", file=f)\r\n\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n", 
+      "preamble": "def _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Luka,Jaka\", file=f)\r\n        print(\"Luka\", file=f)\r\n        print(\"Miha\", file=f)\r\n        print(\"Miha\", file=f)\r\n        print(\"Miha\", file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"Miha 3\", file=f)\r\n        print(\"Luka 2\", file=f)\r\n        print(\"Jaka 1\", file=f)\r\n\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n", 
       "name": "2. kolokvij (ped, sre 15-17)", 
       "description": "# Drugi kolokvij, pedagogi, sreda od 15h-17h"
     }
   }, 
   {
-    "pk": 19, 
+    "pk": 13, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "def izpis(f,*args):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(*args)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef _makefile(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('Sami \"nizi\" in \"nenizi\"', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('\"celotna vrstica en sam niz\"', file=f)\r\n        print('\"niz na zacetku\" in \"na koncu\"', file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('Sami \"nizi\" in \\\\\"nenizi\\\\\", pa \"do\\\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en \"kratek\\\\\"', file=f)\r\n        print('spet \\\\\"niz na zacetku', file=f)\r\n        print('in \"na koncu\"spet\\\\\"', file=f)\r\n        print('in \"niz\"\"do niza\" pa \\\\\"\"kratek\"\\\\\"', file=f)\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi\\nnenizi\\\\\\ndo\\\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\\nkratek\\\\', file=f)\r\n        print('niz na zacetku', file=f)\r\n        print('in \\nspet\\\\', file=f)\r\n        print('niz\\ndo niza\\n\\\\', file=f)\r\n        \r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi', file=f)\r\n        print('do\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en ', file=f)\r\n        print('na koncu\\nniz\\ndo niza\\nkratek', file=f)\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:\r\n        print('nizi', file=f)\r\n        print('do\\lgi', file=f)\r\n        print('Vrstica brez nizov', file=f)\r\n        print('en sam niz\\\\\" nizi. \\\\Pa en ', file=f)\r\n        print('na koncu\\nniz\"do niza\\nkratek', file=f)\r\n        \r\ndef _istedatoteke(ena,dva,original=None):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        n1=f1.read().strip()\r\n        n2=f2.read().strip()\r\n        if n1 != n2:\r\n            if original != None:\r\n                print(\"Vhodna datoteka:\\n\"+'-'*50)\r\n                with open(original) as f3:\r\n                    print(f3.read())\r\n                print('-'*50)\r\n            print(\"Rezultat tvoje funkcije:\")\r\n            print(n1)\r\n            print(\"=\"*50+\"\\nPravilno:\")\r\n            print(n2)\r\n            return False\r\n        return True\r\n\r\ndef _jeblizu(a, b, eps=.1):\r\n    if b == 0:\r\n        return abs(a) < eps\r\n    else:\r\n        return abs(1-a/b) < eps\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass\r\n\r\nfrom random import randint", 
-      "name": "2. kolokvij (mat, \u010det)", 
-      "description": "# Drugi kolokvij, matematika, \u010detrtek"
-    }
-  }, 
-  {
-    "pk": 20, 
-    "model": "problem.problem", 
-    "fields": {
-      "status": "10", 
-      "trial": "def _makefile0(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"2,35,18,5,78\", file=f)\r\n        print(\"13,20\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"15,84,2,4,5,16,78,44,21\", file=f)\r\n        print(\"10,5,50,40\", file=f)\r\n\r\ndef _makefile1(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"138\", file=f)\r\n        print(\"33\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"269\", file=f)\r\n        print(\"105\", file=f)\r\n\r\n\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:                                                                                                                                                                     \r\n        print(\"28\", file=f)\r\n        print(\"16\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"30\", file=f)\r\n        print(\"26\", file=f)\r\n        print(\"22\", file=f)\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n", 
-      "name": "2. kolokvij (fin, pet, 8-10)", 
+      "preamble": "def rnds(S):\r\n    if abs(sum(S) -1) > 0.0001:\r\n        raise ValueError('Vsota verjetnosti ni 1!!!')\r\n    y=random.random()\r\n    F=0\r\n    for i in range(len(S)+1):\r\n        if F >= y:\r\n            break\r\n        F+=S[i]\r\n    return i-1 if i > 0 else 0\r\n\r\ndef rndd(S):\r\n    if abs(sum(S.values()) -1) > 0.0001:\r\n        raise ValueError('Vsota verjetnosti ni 1!!!')\r\n    y=random.random()\r\n    F=0\r\n    for x in S:\r\n        F+=S[x]\r\n        if F >= y:\r\n            break\r\n    return x", 
+      "name": "Datoteke", 
       "description": ""
     }
   }, 
   {
-    "pk": 21, 
+    "pk": 9, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "def _makefile0(fname, ime, vrednost):\r\n    with open(fname, \"w\") as f:\r\n        print(ime, file=f)\r\n        print(vrednost, file=f)\r\n\r\ndef _makefile1(fname):\r\n    with open(fname, \"w\") as f:\r\n        print(\"a\", file=f)\r\n        print(\"0\", file=f)\r\n        print(\"b\", file=f)\r\n        print(\"1\", file=f)\r\n        print(\"c\", file=f)\r\n        print(\"2\", file=f)\r\n\r\n\r\n\r\ndef _makefile2(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"2,35,18,5,78\", file=f)\r\n        print(\"13,20\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"15,84,2,4,5,16,78,44,21\", file=f)\r\n        print(\"10,5,50,40\", file=f)\r\n\r\ndef _makefile3(ime):\r\n    with open(ime, \"w\") as f:\r\n        print(\"138\", file=f)\r\n        print(\"33\", file=f)\r\n        print(\"8\", file=f)\r\n        print(\"269\", file=f)\r\n        print(\"105\", file=f)\r\n\r\n\r\n\r\ndef _makefile4(ime):\r\n    with open(ime, \"w\") as f:                                                                                                                                                                     \r\n        print(\"1 28\", file=f)\r\n        print(\"2 16\", file=f)\r\n        print(\"3 8\", file=f)\r\n        print(\"4 30\", file=f)\r\n        print(\"5 26\", file=f)\r\n        print(\"22\", file=f)\r\n\r\n\r\n\r\ndef _istevseenodatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = [l.strip() for l in f1.readlines()]\r\n        vrste1.sort()\r\n        vrste2 = [l.strip() for l in f2.readlines()]\r\n        vrste2.sort()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n\r\ndef _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        vrste1 = f1.read().strip()\r\n        vrste2 = f2.read().strip()\r\n        if vrste1 == vrste2:\r\n            return True\r\n        else:\r\n            print(\"Izhodna datoteka vsebuje naslednje vrstice: \")\r\n            print(vrste1)\r\n            print(\"Morala pa bi vsebovati naslednje vrstice: \")\r\n            print(vrste2)\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime: os.remove(i)\r\n\r\n\r\n", 
-      "name": "2. kolokvij (fin, pet, 13-15)", 
+      "preamble": "import inspect\r\nfrom math import sin\r\nimport random\r\n\r\ndef izpis(f,a,b,k):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(a,b,k)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef izpis2(f,f2,a,b,k):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(f2,a,b,k)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n", 
+      "name": "Format", 
       "description": ""
     }
   }, 
   {
-    "pk": 22, 
+    "pk": 4, 
     "model": "problem.problem", 
     "fields": {
-      "status": "10", 
-      "trial": "def _istedatoteke(ena,dva):\r\n    with open(ena) as f1, open(dva) as f2:\r\n        return f1.read().strip() == f2.read().strip()\r\n\r\n    \r\ndef _removefiles(*ime):\r\n    import os\r\n    for i in ime:\r\n        try:\r\n            os.remove(i)\r\n        except:\r\n            pass", 
-      "name": "1. izpit", 
+      "preamble": "import inspect\r\nfrom math import *\r\nimport random\r\n\r\ndef izpis(f,n,a,b,c):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    f(n,a,b,c)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()", 
+      "name": "Funkcije", 
+      "description": "# Na dana\u0161njih vajah bomo pilili znanje metod.\r\n"
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import inspect\r\nimport random", 
+      "name": "Nabori, mno\u017eice, slovarji", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n", 
+      "name": "Nizi", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import random\r\nimport math\r\n\r\ndef izvedi(source, d):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    exec(source, d)\r\n    sys.stdout = old_stdout\r\n    return (d, new_stdout.getvalue())\r\n\r\n", 
+      "name": "Operacije", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n", 
+      "name": "Pogojni stavek", 
+      "description": "# S pomo\u010djo spodnjih nalog se bomo nau\u010dili koncept pogojnega stavka v pythonu."
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "def izpis(source):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    sys.stdout = new_stdout\r\n    exec(source)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()\r\n\r\ndef preveriSmrecico(smrecica, levi, desni, dovoljeni):\r\n    vrstice = smrecica.splitlines()\r\n    if len(vrstice) != 8:\r\n        _warn(\"Smre\u010dica nima osmih vrstic.\")\r\n    for i in range(1, min(8, len(vrstice))):\r\n        vrstica = vrstice[i]\r\n        if not vrstica.startswith((levi[i] - 1) * \" \"):\r\n            _warn(\"{0}. vrstica se ne za\u010dne na {1}. znaku.\".format(i + 1, levi[i]))\r\n        if len(vrstica.rstrip()) != desni[i]:\r\n            _warn(\"{0}. vrstica se ne kon\u010da na {1}. znaku.\".format(i + 1, desni[i]))\r\n        znaki = vrstica.replace(\" \", \"\")\r\n        if len(znaki) != i + 1:\r\n            _warn(\"{0}. vrstica ni sestavljena iz {0} znakov\".format(i + 1))\r\n        if any(znak not in dovoljeni for znak in znaki):\r\n            _warn(\"{0}. vrstica vsebuje nedovoljene znake.\".format(i + 1))\r\n    if len([znak for znak in dovoljeni if znak in smrecica]) > 1:\r\n        _warn(\"Smre\u010dica je sestavljena iz razli\u010dnih dovoljenih znakov.\")\r\n\r\ndovoljeni = \"*.#$@oO+=\"\r\nznak = \"*\"", 
+      "name": "Risanje smre\u010dic", 
+      "description": "# Na primeru risanja smre\u010dic bomo spoznali:\r\n#\r\n# 1. ukaz print, ki izpi\u0161e niz na zaslon,\r\n# 2. osnovne operacije na nizih,\r\n# 3. prireditvene stavke."
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "", 
+      "name": "Seznami", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 12, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import random\r\nfrom time import clock\r\nimport inspect\r\n\r\nkarte=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI','XVII','XVIII','XIX','XX','XXI','\u0161kis','H1','H2','H3','H4','HJ','HC','HQ','HK','D1','D2','D3','D4','DJ','DC','DQ','DK','C7','C8','C9','C10','CJ','CC','CQ','CK','S7','S8','S9','S10','SJ','SC','SQ','SK']\r\n\r\ndef unija(s):\r\n    x=set()\r\n    for i in s:\r\n        x=x.union(i)\r\n    return x\r\n\r\ndef jeenakomerna(f,a,b):\r\n    '''Preveri, da f vraca enakomerno porazdeljene vrednosti na intervalu [a,b)'''\r\n    s=[f(a,b) for i in range(1000)]\r\n    M=sum(s)/1000\r\n    V=sum([(x-M)**2/1000 for x in s])\r\n    # Povprecje enakomerno porazdeljene spr. je (a+b)/2, varianca je (b-a)^2/12\r\n    if abs((M-(a+b)/2))>0.1 or abs(V-(b-a)**2/12)>0.2:\r\n        return False\r\n    else:\r\n        return True\r\n\r\ndef nakljucna(f,*args):\r\n    random.seed(1)\r\n    return [f(*args) for i in range(10)]\r\n\r\ndef izpis(f,*args):\r\n    import io, sys\r\n    old_stdout = sys.stdout\r\n    new_stdout = io.StringIO()\r\n    random.seed(1)\r\n    sys.stdout = new_stdout\r\n    f(*args)\r\n    sys.stdout = old_stdout\r\n    return new_stdout.getvalue()", 
+      "name": "Standardna knji\u017enica", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "", 
+      "name": "Testni kolokvij", 
+      "description": "# Drugi kolokvij"
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "import inspect\r\nimport math\r\nimport random\r\n\r\n\r\ndef check_function(name, argsnum):\r\n  \"\"\" Preveri, \u010de je metoda name definirana in sprejme argsnum argumentov.\"\"\"  \r\n  if name not in globals():\r\n    _warn(\"Funkcija {0} ni definirana.\".format(name))\r\n    return False\r\n  func = eval(name)\r\n  if argsnum != -1 and len(inspect.getargspec(func)[0]) != argsnum:\r\n    _warn(\"Funkcija {2} mora namesto {0} sprejeti {1} argumentov.\".format(len(inspect.getargspec(func)[0]), argsnum, name))\r\n    return False\r\n  return True\r\n\r\ndef _equal(example, expected):\r\n    global _warn\r\n    answer = eval(example)\r\n    if round(answer, 6) != round(expected, 6):\r\n        _warn('Ukaz {0} vrne {1!r} namesto {2!r}.'.format(example, answer, expected))\r\n", 
+      "name": "Zanke", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "problem.problem", 
+    "fields": {
+      "preamble": "", 
+      "name": "\u0160e o zankah; izpeljani seznami", 
       "description": ""
     }
   }

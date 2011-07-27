@@ -268,7 +268,7 @@ _filename = os.path.abspath(sys.argv[0])
 _source, _parts = _split_file(_filename)
 
 {% for problem in collection.problems.all %}
-{{ problem.trial|safe }}
+{{ problem.preamble|safe }}
 {% for part in problem.parts.all %}
 {{ part.trial|safe }}
 # XXX THIS COUNTER IS NOT GOOD
