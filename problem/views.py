@@ -133,10 +133,10 @@ def solutions(request, object_id):
 def download_collection(request, object_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     check_collection(collection, request.user)
-    attach_solutions(collection, "user\'s python solution")
+    attach_solutions(collection, '"user\'s python solution"')
     filename = slugify(collection.name) + ".py"
     username = request.user.username
-    context = Context({
+    context = RequestContext(request, {
         'collection': collection,
         'username': username,
         'signature': sign(username + str(collection.id))
@@ -198,40 +198,41 @@ def edit_problem(request, object_id):
 
 @csrf_exempt
 def upload_solution(request, object_id):
+    print "Juhu"
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    problem = get_object_or_404(Problem, id=object_id)
+    collection = get_object_or_404(Collection, id=object_id)
     username = request.POST['username']
     signature = request.POST['signature']
 
-    if not verify(username + str(problem.id), signature):
+    if not verify(username + str(collection.id), signature):
         return HttpResponseForbidden()
 
     response = HttpResponse(mimetype='text/plain')
     if username:
         user = get_object_or_404(User, username=username)
-        check_problem(problem, user)
+        check_collection(collection, user)
         submission = Submission(user=user, source=request.POST['source'],
                             download_ip=request.POST['download_ip'],
                             upload_ip=request.META['REMOTE_ADDR'])
         submission.save()
     
-        for part in problem.parts.all():
-            label = request.POST.get('{0}_label'.format(part.id))
-            if label:
-                start = request.POST['{0}_start'.format(part.id)]
-                end = request.POST['{0}_end'.format(part.id)]
-                secret = request.POST.get('{0}_secret'.format(part.id))
-                correct = secret == part.secret
-                if secret and not correct:
-                    response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
-                    response.write('Obvestite asistenta.\n')
-                s = Solution(user=user, part=part, submission=submission,
-                             start=start, end=end, correct=correct, label=label)
-                s.save()
+        for problem in collection.problems.all():
+            for part in problem.parts.all():
+                label = request.POST.get('{0}_label'.format(part.id))
+                if label:
+                    start = request.POST['{0}_start'.format(part.id)]
+                    end = request.POST['{0}_end'.format(part.id)]
+                    correct = True # Check trials at this point.
+                    if not correct:
+                        response.write('Rešitev naloge {0}) je zavrnjena.'.format(label))
+                        response.write('Obvestite asistenta.\n')
+                    s = Solution(user=user, part=part, submission=submission,
+                                 start=start, end=end, correct=correct, label=label)
+                    s.save()
         response.write('Vse rešitve so shranjene.\n')
-        if problem.status == '20':
+        if collection.status == '20':
             response.write('Rešujete izpit, zato bodo vse rešitve pregledane tudi ročno.')
     else:
         response.write('Naloge rešujete kot anonimni uporabnik!\n')

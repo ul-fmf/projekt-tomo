@@ -199,9 +199,10 @@ def _split_file(filename):
 
     part_regex = re.compile(
         r'(#{50,}@(\d+)#' # beginning of header
-        r'.*?Naloga (.+?)\)' # part label
-        r'.*?#{50,}\2@#)' # end of header
-        r'(.*?)(?=#{50,}@)', # body
+        r'.*?'            # header
+        r'#{50,}\2@#)'    # end of header
+        r'(.*?)'          # solution
+        r'(?=#{50,}@)',   # beginning of next part
         flags=re.DOTALL|re.MULTILINE
     )
     def part(part_match):
@@ -209,7 +210,7 @@ def _split_file(filename):
         end = part_match.end()
         return {
             'id': int(part_match.group(2)),
-            'label': part_match.group(3),
+            'label': 'label',
             'start': start,
             'end': end,
             'solution': part_match.group(0),
@@ -266,10 +267,13 @@ def _submit_solutions(parts, source, username, signature, download_ip):
 _filename = os.path.abspath(sys.argv[0])
 _source, _parts = _split_file(_filename)
 
+{% for problem in collection.problems.all %}
 {{ problem.trial|safe }}
 {% for part in problem.parts.all %}
 {{ part.trial|safe }}
+# XXX THIS COUNTER IS NOT GOOD
 _parts[{{ forloop.counter0 }}]['trial'] = trial
+{% endfor %}
 {% endfor %}
 
 _submit_solutions(_parts,

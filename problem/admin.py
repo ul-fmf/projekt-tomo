@@ -18,3 +18,4 @@ class SubmissionAdmin(admin.ModelAdmin):
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Submission, SubmissionAdmin)
 admin.site.register(Collection)
+admin.site.register(Solution)
