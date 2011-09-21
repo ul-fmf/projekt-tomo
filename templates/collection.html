@@ -16,19 +16,19 @@
         {{ collection.name }}
     </h1>
     {{ collection.description|pymarkdown|safe }}
-    {% for problem in collection.modified_problems %}
+    {% for problem in collection.problems.all %}
         {% if request.user.is_staff %}
         (<a href='{% url edit_problem problem.id %}'>uredi</a>)
         {% endif %}
         <h2>Naloga {{ forloop.counter }}</h2>
         {{ problem.description|pymarkdown|safe }}
-        {% for part in problem.modified_parts %}
+        {% for part in problem.parts.all.select_related %}
         <div class='part'>
         <h3>Naloga {{ forloop.parentloop.counter }}.{{ forloop.counter }}.</h3>
         {{ part.description|pymarkdown|safe }}
         {% if request.user.is_authenticated %}
             <div class='solution'>
-            {% with part.user_solution|safe as solution %}
+            {% with solutions|get:part.id as solution %}
             {% if solution %}
                 {% if 3 == 3 %}
                 <h3>Naloga je pravilno rešena. Vaša rešitev:</h3>
@@ -71,7 +71,7 @@
         {% include 'login_form.html' %}
         <p class='instructions'>
             Če se ne morete prijaviti, lahko naloge rešujete kot anonimni
-            uporabnik z <a href='{% url download_anonymous_collection collection.id %}'>začasno datoteko</a>.
+            uporabnik z <a href='{% url download_collection collection.id %}'>začasno datoteko</a>.
             V tem primeru se vaše rešitve ne shranijo na strežnik.
             Ko se enkrat lahko prijavite, morate vzorčno datoteko ponovno
             shraniti ter vanjo prepisati rešitve iz začasne datoteke.

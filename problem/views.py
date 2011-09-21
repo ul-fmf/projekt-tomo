@@ -55,26 +55,33 @@ def collection_list(request):
         'collections': collections
     }))
 
-def attach_solutions(collection, solution):
+
+def attach_solutions(object_id, solutions):
+    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     collection.modified_problems = collection.problems.all()
     for problem in collection.modified_problems:
         problem.modified_parts = problem.parts.all()
         for part in problem.modified_parts:
-            part.user_solution = solution
+            part.attached_solution = solutions.get(part.id)
+
+
+def user_solutions(user, collection):
+    solutions = {}
+    if user.is_valid:
+        submission = user.submissions.filter(collection=collection).latest()
+        for solution in submission.solutions.all():
+            solutions[solution.part_id] = solution.solution
+    return solutions
 
 
 def collection(request, object_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     check_collection(collection, request.user)
-    attach_solutions(collection, '"user\'s displayed solution"')
-
-    # if request.user.is_authenticated():
-    #     # give the last solution for each part of the problem
-    #     for sol in Solution.objects.filter(user=request.user, part__problem=problem).select_related('submission').order_by('id'):
-    #         solutions[sol.part_id] = sol
+    solutions = user_solutions(request.user, collection)
 
     return render_to_response("collection.html", RequestContext(request, {
-        'collection': collection
+        'collection': collection,
+        'solutions': solutions
     }))
 
 import datetime
@@ -100,8 +107,20 @@ import datetime
 @staff_member_required
 def solutions(request, object_id):
     from django.db.models import Max
-    problem = get_object_or_404(Problem, id=object_id)
+    collection = get_object_or_404(Collection, id=collection_id)
+    latest_submission_ids = \
+        collection.\
+        submissions.\
+        values('user').\
+        annotate(latest_submission=Max('submission__id')).\
+        values_list('latest_submission', flat=True)
+    solutions = \
+        Solution.\
+        objects.\
+        filter(submission__id__in=latest_submission_ids).\
+        select_related('submission')
 
+    solutions = {}
     parts = list(problem.parts.select_related('solutions').all())
     part0 = parts[0]
 
@@ -133,13 +152,14 @@ def solutions(request, object_id):
 def download_collection(request, object_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     check_collection(collection, request.user)
-    attach_solutions(collection, '"user\'s python solution"')
+    solutions = user_solutions(request.user, collection)
     filename = slugify(collection.name) + ".py"
     username = request.user.username
     context = RequestContext(request, {
         'collection': collection,
         'username': username,
-        'signature': sign(username + str(collection.id))
+        'signature': sign(username + str(collection.id)),
+        'solutions': solutions
     })
 
     return render_to_file(filename, "python/collection.py", context)
@@ -149,10 +169,8 @@ def download_user_solutions(request, object_id, user_id):
     collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
-    check_collection(collection, user)
-    attach_solutions(collection, '"{0}\'s solutions"'.format(username))
+    solutions = user_solutions(user, collection)
     filename = "{0}-{1}.py".format(slugify(collection.name), slugify(username))
-    username = request.user.username
     context = Context({
         'collection': collection,
         'username': '',
@@ -161,20 +179,6 @@ def download_user_solutions(request, object_id, user_id):
 
     return render_to_file(filename, "python/collection.py", context)
 
-
-def download_anonymous_collection(request, object_id):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
-    check_collection(collection, request.user)
-    attach_solutions(collection, '"anonymous solutions"')
-    filename = slugify(collection.name) + ".py"
-    username = request.user.username
-    context = Context({
-        'collection': collection,
-        'username': '',
-        'signature': sign(str(collection.id))
-    })
-
-    return render_to_file(filename, "python/collection.py", context)
 
 
 @staff_member_required
@@ -220,7 +224,7 @@ def upload_solution(request, object_id):
             if not correct:
                 response.write('Rešitev naloge {0}) je zavrnjena.'.solution['label'])
                 response.write('Obvestite asistenta.\n')
-            s = Solution(user=user, part=part, submission=submission, correct=correct)
+            s = Solution(part=part, submission=submission, correct=correct, solution=solution['solution'])
             s.save()
         response.write('Vse rešitve so shranjene.\n')
         if collection.status == '20':
