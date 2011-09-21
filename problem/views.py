@@ -67,7 +67,7 @@ def attach_solutions(object_id, solutions):
 
 def user_solutions(user, collection):
     solutions = {}
-    if user.is_valid:
+    if user.is_authenticated():
         submission = user.submissions.filter(collection=collection).latest()
         for solution in submission.solutions.all():
             solutions[solution.part_id] = solution.solution

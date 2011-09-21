@@ -104,7 +104,6 @@ INSTALLED_APPS = (
     'tomo.problem',
     'tagging',
     'debug_toolbar',
-    'south'
 )
 
 # A sample logging configuration. The only tangible logging

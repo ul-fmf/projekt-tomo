@@ -34,7 +34,7 @@ def migrate_database(destination):
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
             manage(destination, 'syncdb')
-            manage(destination, 'migrate')
+            # manage(destination, 'migrate')
 
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
@@ -63,5 +63,5 @@ def reset_local():
     local('touch tomo.db')
     local('rm tomo.db')
     local('./manage.py syncdb --noinput')
-    local('./manage.py migrate')
+    # local('./manage.py migrate')
     local('./manage.py loaddata fixtures/*.json')
