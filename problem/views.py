@@ -1,26 +1,48 @@
 # -*- coding: utf-8 -*-
-from hashlib import md5
-import json
+import hashlib, json, random, time
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseNotAllowed, HttpResponseForbidden, Http404
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseNotAllowed, Http404
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
-from tomo.problem.models import Problem, Submission, Solution, Part, Collection
-from tomo.settings import SECRET_KEY
+from tomo.problem.models import Problem, Part, Submission, Attempt
 
 
 def sign(text):
-    return md5(text + SECRET_KEY).hexdigest()
+    sig = hashlib.md5(text + settings.SECRET_KEY).hexdigest()
+    print(text)
+    print(sig)
+    return sig
+def pack(data):
+    text = json.dumps(data)
+    return (text, sign(text))
+def verify(test):
+    if not test: raise PermissionDenied
+def unpack(text, sig):
+    verify(sign(text) == sig)
+    return json.loads(text)
 
-def verify(text, signature):
-    return signature == sign(text)
+def get_problem(problem_id, user):
+    problem = get_object_or_404(Problem, id=problem_id)
+    if problem.revealed or user is problem.author:
+        return problem
+    else:
+        raise Http404
+def get_attempts(problem, user):
+    if user.is_authenticated():
+        attempts = Attempt.objects.filter(part__problem=problem,
+                                      submission__user=user, active=True)
+        return dict([
+            (attempt.part_id, attempt) for attempt in attempts
+        ])
+    else:
+        return {}
 
 def render_to_file(name, template, context):
     if settings.DEBUG:
@@ -36,240 +58,133 @@ def render_to_file(name, template, context):
         response.write(t.render(context))
     return response
 
-def check_collection(collection, user):
-    if collection.status == '10' and not user.is_staff:
-        raise Http404
-
-def collection_list(request):
-    if request.user.is_staff:
-        collections = Collection.objects.select_related().all()
-    else:
-        collections = Collection.objects.select_related().filter(status__gt=10)
-
-    # solutions = {}
-    # if request.user.is_authenticated():
-    #     for sol in Solution.objects.filter(user=request.user).order_by('id'):
-    #         solutions[sol.part] = sol
-
-    return render_to_response("collections.html", RequestContext(request, {
-        'collections': collections
-    }))
-
-
-def attach_solutions(object_id, solutions):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
-    collection.modified_problems = collection.problems.all()
-    for problem in collection.modified_problems:
-        problem.modified_parts = problem.parts.all()
-        for part in problem.modified_parts:
-            part.attached_solution = solutions.get(part.id)
-
-
-def user_solutions(user, collection):
+def download(request, problem_id):
+    problem = get_problem(problem_id, request.user)
     solutions = {}
-    if user.is_authenticated():
-        submission = user.submissions.filter(collection=collection).latest()
-        for solution in submission.solutions.all():
-            solutions[solution.part_id] = solution.solution
-    return solutions
-
-
-def collection(request, object_id):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
-    check_collection(collection, request.user)
-    solutions = user_solutions(request.user, collection)
-
-    return render_to_response("collection.html", RequestContext(request, {
-        'collection': collection,
-        'solutions': solutions
-    }))
-
-import datetime
-
-# @staff_member_required
-# def solutions(request, object_id):
-#     problem = get_object_or_404(Problem, id=object_id)
-
-#     solutions = {}
-#     all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
-#     for sol in all_solutions:
-#         user_solutions = solutions.get(sol.user_id, {})
-#         user_solutions[sol.part_id] = sol
-#         solutions[sol.user_id] = user_solutions
-
-#     return render_to_response("solutions.html", RequestContext(request, {
-#         'problem': problem,
-#         'solutions': solutions,
-#         'parts': list(problem.parts.all())
-#     }))
-
-
-@staff_member_required
-def solutions(request, object_id):
-    from django.db.models import Max
-    collection = get_object_or_404(Collection, id=collection_id)
-    latest_submission_ids = \
-        collection.\
-        submissions.\
-        values('user').\
-        annotate(latest_submission=Max('submission__id')).\
-        values_list('latest_submission', flat=True)
-    solutions = \
-        Solution.\
-        objects.\
-        filter(submission__id__in=latest_submission_ids).\
-        select_related('submission')
-
-    solutions = {}
-    parts = list(problem.parts.select_related('solutions').all())
-    part0 = parts[0]
-
-    part0sols = Solution.objects.filter(part__id=part0.id)
-    users = part0sols.values('user').annotate(latest_submission=Max('submission__id')).values_list('latest_submission', flat=True)
-    sols = Solution.objects.filter(submission__id__in=users).select_related('submission', 'user')
-    subs = Submission.objects.filter(id__in=users).select_related('user')
-    solutions = {}
-
-    submissions = {}
-    submissions = dict([(s.user, s) for s in subs])
-    # all_solutions = Solution.objects.filter(part__problem=problem).select_related('submission').order_by('-id')
-    for s in sols:
-        user_solutions = solutions.get(s.user, {})
-        user_solutions[s.part_id] = (s.correct, s.solution)
-        solutions[s.user] = user_solutions
-
-    # for sol in all_solutions:
-
-    return render_to_response("solutions.html", RequestContext(request, {
-        'problem': problem,
-        'solutions': solutions,
-        'submissions': submissions,
-        'parts': list(problem.parts.all())
-    }))
-
-
-@login_required
-def download_collection(request, object_id):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
-    check_collection(collection, request.user)
-    solutions = user_solutions(request.user, collection)
-    filename = slugify(collection.name) + ".py"
-    username = request.user.username
-    context = RequestContext(request, {
-        'collection': collection,
-        'username': username,
-        'signature': sign(username + str(collection.id)),
-        'solutions': solutions
+    for part_id, attempt in get_attempts(problem, request.user).items():
+        solutions[part_id] = attempt.solution
+    data, signature = pack({
+        'user': request.user.id,
+        'problem': problem.id,
     })
-
-    return render_to_file(filename, "python/collection.py", context)
+    context = RequestContext(request, {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'solutions': solutions,
+        'data': data,
+        'signature': signature,
+        'authenticated': request.user.is_authenticated()
+    })
+    filename = "{0}.py".format(slugify(problem.title))
+    return render_to_file(filename, "python/download.py", context)
 
 @staff_member_required
-def download_user_solutions(request, object_id, user_id):
-    collection = get_object_or_404(Collection.objects.select_related(), id=object_id)
+def download_user(request, problem_id, user_id):
+    problem = get_problem(problem_id, request.user)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
-    solutions = user_solutions(user, collection)
-    filename = "{0}-{1}.py".format(slugify(collection.name), slugify(username))
+    solutions = {}
+    for part_id, attempt in get_attempts(problem, request.user).items():
+        solutions[part_id] = attempt.solution
     context = Context({
-        'collection': collection,
-        'username': '',
-        'signature': ''
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'solutions': solutions,
+        'authenticated': False
     })
+    filename = "{0}-{1}.py".format(slugify(problem.title), slugify(username))
+    return render_to_file(filename, "python/download.py", context)
 
-    return render_to_file(filename, "python/collection.py", context)
 
+@csrf_exempt
+def upload(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    download = unpack(request.POST['data'], request.POST['signature'])
+    user = get_object_or_404(User, id=download['user'])
+    problem = get_problem(download['problem'], user)
 
+    submission = Submission(user=user, problem=problem,
+                            source=request.POST['source'])
+    submission.save()
+    attempts = json.loads(request.POST['attempts'])
+    old_attempts = get_attempts(problem, user)
+    incorrect = []
+
+    for i, part in enumerate(problem.parts.all()):
+        attempt = attempts[i]
+        solution = attempt['solution']
+        errors = json.dumps(attempt.get('errors', []))
+        challenge = attempt.get('challenge', '')
+        if solution:
+            correct = challenge == part.challenge
+            if not errors and not correct: incorrect.append(i + 1)
+            old = old_attempts.get(part.id, None)
+            new = Attempt(part=part, submission=submission,
+                          solution=solution, errors=errors, correct=correct,
+                          active=True)
+            if old and (old.correct != correct or old.solution != solution):
+                old.active = False
+                old.save()
+                new.save()
+            elif not old:
+                new.save()
+
+    from django.db import connection
+    for q in connection.queries:
+        print (q['sql'][:100], q['duration'])
+    return render_to_response("response.txt", Context({'incorrect': incorrect}))
 
 @staff_member_required
-def edit_problem(request, object_id):
-    problem = get_object_or_404(Problem, id=object_id)
-    username = request.user.username
-    filename = slugify(problem.name) + ".py"
+def edit(request, problem_id=None):
+    if problem_id:
+        problem = get_problem(problem_id, request.user)
+    else:
+        problem = Problem(author=request.user)
+        problem.save()
+    data, signature = pack({
+        'user': request.user.id,
+        'problem': problem.id,
+    })
     context = RequestContext(request, {
         'problem': problem,
-        'username': username,
-        'signature': sign(username + str(problem.id))
+        'parts': problem.parts.all(),
+        'data': data,
+        'signature': signature,
     })
-    return render_to_file(filename, 'python/edit.py', context)
-
-
-@csrf_exempt
-def upload_solution(request, object_id):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    collection = get_object_or_404(Collection, id=object_id)
-    username = request.POST['username']
-    signature = request.POST['signature']
-
-    if not verify(username + str(collection.id), signature):
-        return HttpResponseForbidden()
-
-    response = HttpResponse(mimetype='text/plain')
-    if username:
-        user = get_object_or_404(User, username=username)
-        check_collection(collection, user)
-        submission = Submission(user=user, source=request.POST['source'],
-                            download_ip=request.POST['download_ip'],
-                            upload_ip=request.META['REMOTE_ADDR'])
-        submission.save()
-
-        solutions = json.loads(request.POST['solutions'])
-        part_ids = solutions.keys()
-        parts = Part.objects.filter(id__in=part_ids).select_related()
-        for part in parts:
-            solution = solutions[str(part.id)]
-            correct = True # Check trials at this point.
-            if not correct:
-                response.write('Rešitev naloge {0}) je zavrnjena.'.solution['label'])
-                response.write('Obvestite asistenta.\n')
-            s = Solution(part=part, submission=submission, correct=correct, solution=solution['solution'])
-            s.save()
-        response.write('Vse rešitve so shranjene.\n')
-        if collection.status == '20':
-            response.write('Rešujete izpit, zato bodo vse rešitve pregledane tudi ročno.')
-    else:
-        response.write('Naloge rešujete kot anonimni uporabnik!\n')
-        response.write('Rešitve niso bile shranjene.')
-
-    return response
-
+    filename = "{0}.py".format(slugify(problem.title))
+    return render_to_file(filename, "python/edit.py", context)
 
 @csrf_exempt
-def upload_problem(request, object_id):
+def update(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-
-    problem = get_object_or_404(Problem, id=object_id)
-    username = request.POST['username']
-    signature = request.POST['signature']
-
-    if not verify(username + str(problem.id), signature):
-        return HttpResponseForbidden()
-
-    response = HttpResponse(mimetype='text/plain')
-    user = get_object_or_404(User, username=username)
-    response.write('Naloge so shranjene.\n')
-    ids = request.POST['problem_ids'].split(",")
-
+    edit = unpack(request.POST['data'], request.POST['signature'])
+    user = get_object_or_404(User, id=edit['user'])
+    problem = get_problem(edit['problem'], user)
+    parts = json.loads(request.POST['parts'])
+    old_parts = problem.parts.all()
     new_parts = []
-    for id in map(int, ids):
+
+    problem.title = request.POST['title']
+    problem.description = request.POST['description']
+    problem.preamble = request.POST['preamble']
+
+    for part in parts:
         try:
-            part = Part.objects.get(id=id) if id > 0 else Part(problem=problem)
+            new = Part.objects.get(id=part['part']) if part['part'] else Part(problem=problem)
         except Part.DoesNotExist:
-            part = Part(problem=problem, id=id)
-        part.description = request.POST['{0}_description'.format(id)]
-        part.secret = 'secret'
-        part.solution = request.POST['{0}_solution'.format(id)]
-        part.secret = request.POST['{0}_secret'.format(id)]
-        part.save()
-        new_parts.append(part)
-    for p in problem.parts.all():
+            new = Part(problem=problem, id=part['part'])
+        new.description = part['description']
+        new.solution = part['solution']
+        new.validation = part['validation']
+        new.challenge = part.get('challenge', '')
+        new.save()
+        new_parts.append(new)
+    for p in old_parts:
         if p not in new_parts:
             p.delete()
     problem.set_part_order([part.id for part in new_parts])
     problem.save()
 
-    return response
-
+    return HttpResponse('Vse naloge so shranjene.')

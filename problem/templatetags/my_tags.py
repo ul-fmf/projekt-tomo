@@ -12,7 +12,7 @@ def pymarkdown(source):
     output = ""
     strbuff = ""
     in_comment = True
-    
+
     for line in source.splitlines():
         if line.startswith("#") and not line.startswith("#    "):
             if not in_comment:
@@ -38,13 +38,13 @@ def pymarkdown(source):
     return output
 
 @register.filter
-def get(h, key):
-    return h.get(key)
+@stringfilter
+def indent(source, n):
+    return ("\n" + n * " ").join(source.splitlines())
 
 @register.filter
-def alpha(i):
-    if 1 <= i <= 26:
-        return chr(96 + i)
+def get(h, key):
+    return h.get(key)
 
 # @register.filter
 # @stringfilter

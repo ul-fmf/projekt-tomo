@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% load my_tags %}
+
+{% block title %}Projekt Tomo &mdash; {{ problem.title }}{% endblock %}
+
+{% block header %}
+    {{ problem.title }}
+{% endblock %}
+
+{% block content %}
+  <div>
+    {{ problem.description|pymarkdown|safe }}
+
+        <a href="{% url download problem.id %}"><button class="btn primary">Shrani datoteko</button></a>&nbsp;
+        {% if request.user.is_staff %}
+        <a href="{% url edit problem.id %}"><button class="btn">Uredi</button></a>
+        {% endif %}
+</div>
+<div>
+    {% for part in problem.parts.all %}
+        <h4>Naloga {{ forloop.counter }}</h4>
+        {{ part.description|pymarkdown|safe }}
+        {{ part.solution|pymarkdown|safe }}
+    {% endfor %}
+    </div>
+{% endblock %}
+

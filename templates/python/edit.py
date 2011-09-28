@@ -1,114 +1,76 @@
-{% load my_tags %}#####################################################################@@#
-# {{ problem.name }} {% if problem.description %}
-# 
+{% load my_tags %}{% include 'python/check.py' %}
+with open(os.path.abspath(sys.argv[0])) as f:
+    source = f.read()
+
+Check.initialize([
+    {
+        'part': int(match.group(1)),
+        'description': match.group(2).strip(),
+        'solution': match.group(3).strip(),
+        'validation': match.group(4).strip(),
+    } for match in re.compile(
+        r'#{50,}@(\d+)#'    # beginning of header
+        r'(.*?)'            # description
+        r'\n#+\1@#'         # end of header
+        r'(.*?)'            # solution
+        r'Check\.part\(\)'  # beginning of validation
+        r'(.*?)'            # validation
+        r'(?=#{50,}@)',     # beginning of next part
+        flags=re.DOTALL|re.MULTILINE
+    ).finditer(source)
+])
+
+problem_match = re.search(
+    r'#{50,}@@#'        # beginning of header
+    r'\n#(.*?)\n#'      # title
+    r'(.*?)'            # description
+    r'#{50,}@@#'        # end of header
+    r'(.*?)'            # preamble
+    r'(?=#{50,}@)',     # beginning of first part
+    source, flags=re.DOTALL|re.MULTILINE)
+title = problem_match.group(1).strip()
+description = problem_match.group(2).strip()
+preamble = problem_match.group(3).strip()
+################################################################@@#
+# {{ problem.title }} {% if problem.description %}
+#
 {{ problem.description|safe }}{% endif %}
-#####################################################################@@#
+################################################################@@#
 
 {{ problem.preamble|safe }}
 
-{% for part in problem.parts.all %}
+{% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
 {{ part.description|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
 {{ part.solution|safe }}
 
-{{ part.trial|safe }}
+Check.part()
+{{ part.validation|safe }}
 
 {% endfor %}
 
-
 #####################################################################@@#
-# Kode pod to črto nikakor ne spreminjajte.
-########################################################################
 
-{% include 'python/library.py' %}
-
-import hashlib, inspect, os, re, random, sys
-from urllib.error import HTTPError
-from urllib.parse import urlencode
-from urllib.request import urlopen
-
-def _split_file(filename):
-    with open(filename) as f:
-        source = f.read()
-
-    part_regex = re.compile(
-        r'#+@(\d+|\?)#' # beginning of header
-        r'(.*?)' # description
-        r'\n#+\1@#' # end of header
-        r'(.*?)' # solution
-        r'(def trial.+?)' # trial
-        r'(?=#+@)', # body
-        flags=re.DOTALL|re.MULTILINE
-    )
-    def part(part_match):
-        return {
-            'id': int(part_match.group(1)) if part_match.group(1) != "?" else None,
-            'description': part_match.group(2).strip(),
-            'solution': part_match.group(3).strip(),
-            'trial': part_match.group(4).strip()
-        }
-
-    parts = [part(part_match) for part_match in part_regex.finditer(source)]
-    
-    return source, parts
-
-
-def _run_trial(part):
-    global _warn
-    env = {}
-    exec(part['trial'], globals(), env)
-    errors = []
-    h = hashlib.md5()
-    _warn = lambda msg: errors.append(msg)
-    for x in env['trial'](part['solution']):
-        h.update(str(x).encode('utf-8'))
-    return h.hexdigest(), errors
-    
-
-def _submit_solutions(parts, source, username, signature, download_ip):
-    data = {
-        'username': username,
-        'signature': signature,
-        'download_ip': download_ip,
-        'source': source
-    }
-    ids = []
-    correct = True
-    for label, part in enumerate(parts):
-        part_id = part['id'] if part['id'] else -label
-        ids.append(part_id)
-        data['{0}_description'.format(part_id)] = part['description']
-        data['{0}_solution'.format(part_id)] = part['solution']
-        data['{0}_trial'.format(part_id)] = part['trial']
-        random.seed(username)
-        secret, errors = _run_trial(part)
-        if errors:
-            print('Naloga {0}) je napačno sestavljena:'.format(label + 1))
-            print('- ' + '\n- '.join(errors))
-            correct = False
-        else:
-            print('Naloga {0}) je pravilno sestavljena.'.format(label + 1))
-            data['{0}_secret'.format(part_id)] = secret
-    data['problem_ids'] = ",".join([str(i) for i in ids])
-    if correct:
-        print('Naloge so pravilno sestavljene.')
-        if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
-            print('Shranjujem naloge...')
-            post = urlencode(data).encode('utf8')
-            try:
-                r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload_problem problem.id %}', post)
-                contents = r.read()
-            except HTTPError as error:
-                contents = error.read()
-            print(contents.decode())
-        else:
-            print('Naloge niso shranjene.')
+Check.summarize()
+if all('errors' not in part or not part['errors'] for part in Check.parts):
+    print('Naloge so pravilno sestavljene.')
+    if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
+        print('Shranjujem naloge...')
+        post = urlencode({
+            'data': '{{ data|safe }}',
+            'signature': '{{ signature }}',
+            'title': title,
+            'description': description,
+            'preamble': preamble,
+            'parts': Check.dump(),
+        }).encode()
+        try:
+            r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
+            print(r.read().decode())
+        except HTTPError:
+            print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:
-        print('Naloge vsebujejo napake.')
-
-_filename = os.path.abspath(sys.argv[0])
-_source, _parts = _split_file(_filename)
-
-_submit_solutions(_parts, _source, '{{ username }}', '{{ signature }}', '')
-
+        print('Naloge niso bile shranjene.')
+else:
+    print('Naloge so napačno sestavljene.')
