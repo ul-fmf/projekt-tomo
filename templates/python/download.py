@@ -1,11 +1,12 @@
-{% load my_tags %}# {{ problem.title }} {% if problem.description %}
+{% load my_tags %}################################################################@@#
+# {{ problem.title }} {% if problem.description %}
 #
-{{ problem.description|safe }}{% endif %}
+# {{ problem.description|markdown2py|safe }}{% endif %}
+################################################################@@#
 
 {% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
-# {{ forloop.counter }})
-{{ part.description|safe }}
+# {{ forloop.counter }}) {{ part.description|markdown2py|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
 {% with solutions|get:part.id as solution %}{% if solution %}{{ solution|safe }}{% endif %}{% endwith %}
 
@@ -201,10 +202,10 @@ def _check():
         ).finditer(source)
     ])
 
-    {{ problem.preamble|indent:4|safe }}
+    {{ problem.preamble|indent:"    "|safe }}
     {% for part in parts %}
     if Check.part():
-        {{ part.validation|indent:8|safe }}
+        {{ part.validation|indent:"        "|safe }}
     {% endfor %}
 
     Check.summarize()

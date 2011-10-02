@@ -2,7 +2,7 @@
 <html lang="si">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}Projekt Tomo{% endblock %}</title>
+    <title>{% block title %}Tomo{% endblock %}</title>
     <meta name="description" content="">
     <meta name="author" content="Matija Pretnar">
 
@@ -13,6 +13,7 @@
 
     <!-- Le styles -->
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap.css">
+    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.1/styles/default.min.css">
     <style type="text/css">
       /* Override some defaults */
       html, body {
@@ -27,7 +28,6 @@
       .container {
         width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
       }
-
       /* The white background content wrapper */
       .content {
         background-color: #fff;
@@ -40,26 +40,85 @@
            -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
                 box-shadow: 0 1px 2px rgba(0,0,0,.15);
       }
-
       /* Page header tweaks */
       .page-header {
         background-color: #f5f5f5;
         padding: 20px 20px 10px;
         margin: -20px -20px 20px;
       }
-
       .topbar .btn {
         border: 0;
       }
 
+      .my-actions > a {
+        margin-right: 10px;
+        color: #bfbfbf;
+      }
+      .my-actions > a:hover {
+        margin-right: 10px;
+        color: #77f;
+      }
+
+      .inline {
+        margin-bottom: 10px;
+      }
+
+      .stats {
+        padding: 0px;
+        color: #404040;
+        background-color: #f0f0f0;
+        font-size: 9.75px;
+        -webkit-border-radius: 3px;
+        -moz-border-radius: 3px;
+        border-radius: 3px;
+        width: 48px;
+        height: 48px;
+        text-align: center;
+        position: relative;
+        bottom: -5px;
+      }
+
+      .success {
+        background-color: #bfe7bf;
+        color: #46a546;
+      }
+      .warning {
+        background-color: #fceec1;
+        color: #f89406;
+      }
+      .error {
+        background-color: #fbc7c6;
+        color: #c43c35;
+      }
+      .info {
+        background-color: #ddf4fb;
+        border-color: #c6edf9;
+      }
+      .stats-contents {
+        position: absolute;
+        bottom: 5px;
+        width: 100%;
+      }
+      .stats {
+        font-size: 180%;
+        font-weight: bold;
+        padding: 0px;
+      }
+      .stats small {
+         display: block;
+         font-size: 42%;
+         line-height: 8px;
+         margin: 4px 0px;
+      }
+      .alert-message.block-message.default {
+        color: #404040;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+        background-color: #f0f0f0;
+        border-color: #ddd;
+      }
     </style>
 
-    <!-- Le fav and touch icons -->
-    <!-- <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
-    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.1/styles/default.min.css">
+    <!-- Le javascript -->
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         tex2jax: {
@@ -69,10 +128,27 @@
     </script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="{{ STATIC_URL }}jquery.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap-dropdown.js">
+    <script src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-modal.js"></script>
+    <script type='text/javascript'>
+      $(document).ready(
+        function() {
+          $('pre code').each(
+            function() {
+              $(this).addClass('python');
+            }
+          );
+        }
+      );
     </script>
     <script type="text/javascript" src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
+
+    <!-- Le fav and touch icons -->
+    <!-- <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
   </head>
 
   <body>
@@ -80,47 +156,49 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="#">Projekt Tomo</a>
-          <!--
-          <ul class="nav">
-            <li class="active"><a href="#">Naloge</a></li>
-            <li><a href="#settings">Nastavitve</a></li>
-            <li><a href="#help">Pomoč</a></li>
-          </ul>
-          -->
+          <a class="brand" href="/">Tomo</a>
+          <ul class="nav secondary-nav">
           {% if user.is_authenticated %}
-              <form method='get' action="{% url django.contrib.auth.views.logout %}" class="pull-right">
-                Prijavljeni ste kot <a>{{ user.get_full_name }}</a>
-                <button class="btn" type="submit">Odjavite se</button>
-              </form>
+            <li class="dropdown" data-dropdown="dropdown">
+              <a href="#" class="dropdown-toggle">{{ user.get_full_name }}</a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
+              </ul>
+            </li>
           {% else %}
             <form method='post' action="{% url django.contrib.auth.views.login %}" class="pull-right">
               {% csrf_token %}
-              <input class="input-small" id="id_username" name="username" type="text" placeholder="novakj">
+              <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
               <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">
               <input type='hidden' name='next' value='{{ next|default:request.path }}' >
               <button class="btn" type="submit">Prijavite se</button>
             </form>
           {% endif %}
+          </ul>
         </div>
       </div>
     </div>
 
     <div class="container">
-
       <div class="content">
-        <div class="page-header">
-          <h1>
-            {% block header %}
-            {% endblock %}
-            <small>
-              {% block subheader %}
-              {% endblock %}
-            </small>
-          </h1>
-        </div>
         <div class="row">
           <div class="span14">
+            <div class="page-header">
+              {% if form.errors %}
+              <div class="alert-message error fade in" data-alert="alert" >
+                <p><strong>Napaka ob prijavi!</strong>
+                Uporabite enako uporabniško ime in geslo kot ju na študentskih računalnikih, na primer <code>NovakJ</code> in <code>Triglav.1</code>.
+              </div>
+              {% endif %}
+
+              <ul class="breadcrumb">
+                {% block breadcrumbs %}{% endblock %}
+              </ul>
+
+              <h1>{% block heading %}{% endblock %}</h1>
+
+              {% block header %}{% endblock %}
+            </div>
             {% block content %}
             {% endblock %}
           </div>
@@ -135,7 +213,6 @@
         <p>
         <p>&copy; Matija Pretnar 2011</p>
       </footer>
-
     </div> <!-- /container -->
 
   </body>

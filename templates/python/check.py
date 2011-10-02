@@ -33,12 +33,17 @@ class Check:
         Check.current['challenge'] += str(x)
 
     @staticmethod
-    def equal(example, expected, message=None):
+    def equal(example, expected, message=None, clean=lambda x: x):
         if not message:
             message = 'Ukaz {0} vrne {1!r} namesto {2!r}.'
         answer = eval(example)
-        if answer != expected:
+        if clean(answer) != clean(expected):
             Check.error(message.format(example, answer, expected))
+
+    @staticmethod
+    def num_equal(example, expected, digits=6):
+        Check.equal(example, expected, clean=lambda x: round(x, digits))
+
 
     @staticmethod
     def summarize():

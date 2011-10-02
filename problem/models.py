@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -7,14 +6,25 @@ class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
     preamble = models.TextField(blank=True)
-    revealed = models.BooleanField()
+    problem_set = models.ForeignKey('course.ProblemSet', related_name='problems')
 
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
+    def unsolved(self, user):
+        all_parts = self.parts.count()
+        if user.is_authenticated():
+            solved_parts = Attempt.objects.filter(submission__user=user,
+                                                  part__problem=self, active=True,
+                                                  correct=True).count()
+        else:
+            solved_parts = 0
+        return (all_parts, solved_parts)
+
     class Meta:
-        ordering = ['title']
+        order_with_respect_to = 'problem_set'
 
 
 class Part(models.Model):
@@ -22,7 +32,7 @@ class Part(models.Model):
     description = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
-    challenge = models.TextField(default='')
+    challenge = models.TextField(blank=True)
 
     def __unicode__(self):
         return u'#{0}'.format(self._order + 1)
@@ -35,6 +45,7 @@ class Submission(models.Model):
     user = models.ForeignKey(User, related_name='submissions')
     problem = models.ForeignKey(Problem, related_name='submissions')
     timestamp = models.DateTimeField(auto_now_add=True)
+    preamble = models.TextField(blank=True)
     source = models.TextField(blank=True)
 
     class Meta:

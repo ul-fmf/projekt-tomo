@@ -103,6 +103,7 @@ INSTALLED_APPS = (
     'django.contrib.markup',
     'django.contrib.messages',
     'tomo.problem',
+    'tomo.course',
     'tagging',
     'debug_toolbar',
 )

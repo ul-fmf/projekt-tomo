@@ -55,7 +55,7 @@ def get_dump():
         sudo('rm *.json')
 
 def save_dump():
-    dumps = ['problem.Problem', 'problem.Part', 'problem.Collection']
+    dumps = ['problem.Problem', 'problem.Part', 'course.Course', 'course.ProblemSet']
     for dump in dumps:
         local('./manage.py dumpdata --indent=2 {0} > fixtures/{0}.json'.format(dump))
 

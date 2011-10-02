@@ -5,22 +5,22 @@ from tomo.problem.models import Problem, Part, Submission, Attempt
 
 class PartInline(admin.StackedInline):
     model = Part
-    readonly_fields = ("problem", )
     extra = 0
 
 class ProblemAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
-            'fields': (('title', 'revealed', 'author'), 'description')
+            'fields': (('problem_set', 'title', 'author'), 'description')
         }),
         ('Source', {
             'classes': ('collapse', ),
             'fields': ('preamble', )
-        })
+        }),
     )
+    date_hierarchy = 'timestamp'
     inlines = [PartInline]
-    list_display = ('title', 'revealed', 'author')
-    list_filter = ('revealed', )
+    list_display = ('title', 'problem_set', 'author')
+    list_editable = ('problem_set', 'author')
     save_on_top = True
     search_fields = ('author__username', 'title', 'description')
 

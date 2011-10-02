@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-import hashlib, json, random, time
+import hashlib, json
+import os, tempfile, zipfile
+from django.core.servers.basehttp import FileWrapper
+
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
@@ -13,88 +16,92 @@ from django.contrib.auth.models import User, AnonymousUser
 
 from tomo.problem.models import Problem, Part, Submission, Attempt
 
-
+def verify(cond):
+    if not cond: raise PermissionDenied
 def sign(text):
-    sig = hashlib.md5(text + settings.SECRET_KEY).hexdigest()
-    print(text)
-    print(sig)
-    return sig
+    return hashlib.md5(text + settings.SECRET_KEY).hexdigest()
 def pack(data):
     text = json.dumps(data)
     return (text, sign(text))
-def verify(test):
-    if not test: raise PermissionDenied
 def unpack(text, sig):
     verify(sign(text) == sig)
     return json.loads(text)
 
 def get_problem(problem_id, user):
     problem = get_object_or_404(Problem, id=problem_id)
-    if problem.revealed or user is problem.author:
-        return problem
-    else:
-        raise Http404
+    verify(problem.problem_set.visible or user is problem.author)
+    return problem
+
 def get_attempts(problem, user):
     if user.is_authenticated():
-        attempts = Attempt.objects.filter(part__problem=problem,
+        return Attempt.objects.filter(part__problem=problem,
                                       submission__user=user, active=True)
+    else:
+        return Attempt.objects.none()
+
+def get_solutions(problem, user):
+    if user.is_authenticated():
+        attempts = get_attempts(problem, user)
+        Attempt.objects.filter(part__problem=problem,
+                                          submission__user=user, active=True)
         return dict([
-            (attempt.part_id, attempt) for attempt in attempts
+            (attempt.part_id, attempt.solution) for attempt in attempts
         ])
     else:
         return {}
 
-def render_to_file(name, template, context):
-    if settings.DEBUG:
-        response = HttpResponse(mimetype='text/html; charset=utf-8')
-        response.write("<body><pre>")
-        t = loader.get_template(template)
-        response.write(t.render(context))
-        response.write("</pre></body>")
-    else:
-        response = HttpResponse(mimetype='text/plain; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
-        t = loader.get_template(template)
-        response.write(t.render(context))
+
+def download_file(name, contents):
+    response = HttpResponse(mimetype='text/plain; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
+    response.write(contents)
     return response
+
+def download_contents(request, problem, user, authenticated):
+    context = {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'solutions': get_solutions(problem, request.user),
+        'authenticated': authenticated
+    }
+    if authenticated:
+        context['data'], context['signature'] = pack({
+            'user': user.id,
+            'problem': problem.id,
+        })
+    t = loader.get_template("python/download.py")
+    return t.render(RequestContext(request, context))
 
 def download(request, problem_id):
     problem = get_problem(problem_id, request.user)
-    solutions = {}
-    for part_id, attempt in get_attempts(problem, request.user).items():
-        solutions[part_id] = attempt.solution
-    data, signature = pack({
-        'user': request.user.id,
-        'problem': problem.id,
-    })
-    context = RequestContext(request, {
-        'problem': problem,
-        'parts': problem.parts.all(),
-        'solutions': solutions,
-        'data': data,
-        'signature': signature,
-        'authenticated': request.user.is_authenticated()
-    })
     filename = "{0}.py".format(slugify(problem.title))
-    return render_to_file(filename, "python/download.py", context)
+    contents = download_contents(request, problem, request.user,
+                                 request.user.is_authenticated())
+    return download_file(filename, contents)
+
+def download_zipfile(request, problems, user, authenticated, archivename):
+    temp = tempfile.TemporaryFile()
+    archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
+    for problem in problems:
+        filename = "{0}.py".format(slugify(problem.title)) # Select your files here.
+        archive.writestr(filename, download_contents(request, problem, user, authenticated).encode('utf-8'))
+    archive.close()
+    wrapper = FileWrapper(temp)
+    response = HttpResponse(wrapper, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(archivename)
+    response['Content-Length'] = temp.tell()
+    temp.seek(0)
+    return response
+
 
 @staff_member_required
 def download_user(request, problem_id, user_id):
     problem = get_problem(problem_id, request.user)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
-    solutions = {}
-    for part_id, attempt in get_attempts(problem, request.user).items():
-        solutions[part_id] = attempt.solution
-    context = Context({
-        'problem': problem,
-        'parts': problem.parts.all(),
-        'solutions': solutions,
-        'authenticated': False
-    })
     filename = "{0}-{1}.py".format(slugify(problem.title), slugify(username))
-    return render_to_file(filename, "python/download.py", context)
-
+    contents = download_contents(request, problem, user, False)
+    return download_file(filename, contents)
 
 @csrf_exempt
 def upload(request):
@@ -108,21 +115,23 @@ def upload(request):
                             source=request.POST['source'])
     submission.save()
     attempts = json.loads(request.POST['attempts'])
-    old_attempts = get_attempts(problem, user)
+    old_attempts = dict((attempt.part_id, attempt)
+                        for attempt in get_attempts(problem, user))
     incorrect = []
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts[i]
         solution = attempt['solution']
-        errors = json.dumps(attempt.get('errors', []))
+        errors = attempt.get('errors', [])
         challenge = attempt.get('challenge', '')
         if solution:
             correct = challenge == part.challenge
-            if not errors and not correct: incorrect.append(i + 1)
+            if not errors and not correct:
+                incorrect.append(i + 1)
             old = old_attempts.get(part.id, None)
             new = Attempt(part=part, submission=submission,
-                          solution=solution, errors=errors, correct=correct,
-                          active=True)
+                          solution=solution, errors=json.dumps(errors),
+                          correct=correct, active=True)
             if old and (old.correct != correct or old.solution != solution):
                 old.active = False
                 old.save()
@@ -130,9 +139,6 @@ def upload(request):
             elif not old:
                 new.save()
 
-    from django.db import connection
-    for q in connection.queries:
-        print (q['sql'][:100], q['duration'])
     return render_to_response("response.txt", Context({'incorrect': incorrect}))
 
 @staff_member_required
@@ -153,7 +159,9 @@ def edit(request, problem_id=None):
         'signature': signature,
     })
     filename = "{0}.py".format(slugify(problem.title))
-    return render_to_file(filename, "python/edit.py", context)
+    t = loader.get_template("python/edit.py")
+    contents = t.render(RequestContext(request, context))
+    return download_file(filename, contents)
 
 @csrf_exempt
 def update(request):
@@ -171,8 +179,10 @@ def update(request):
     problem.preamble = request.POST['preamble']
 
     for part in parts:
+        if part['id']:
+            Part.objects.get_or_create(**part)
         try:
-            new = Part.objects.get(id=part['part']) if part['part'] else Part(problem=problem)
+            new = Part.objects.get(id=part['id']) if part['id'] else Part(problem=problem)
         except Part.DoesNotExist:
             new = Part(problem=problem, id=part['part'])
         new.description = part['description']

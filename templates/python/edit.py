@@ -5,13 +5,13 @@ with open(os.path.abspath(sys.argv[0])) as f:
 Check.initialize([
     {
         'part': int(match.group(1)),
-        'description': match.group(2).strip(),
+        'description': "\n".join(s[2:] for s in match.group(2).strip().splitlines()),
         'solution': match.group(3).strip(),
         'validation': match.group(4).strip(),
     } for match in re.compile(
-        r'#{50,}@(\d+)#'    # beginning of header
+        r'#+@(\d+)#'        # beginning of header
         r'(.*?)'            # description
-        r'\n#+\1@#'         # end of header
+        r'#+\1@#'           # end of header
         r'(.*?)'            # solution
         r'Check\.part\(\)'  # beginning of validation
         r'(.*?)'            # validation
@@ -22,26 +22,26 @@ Check.initialize([
 
 problem_match = re.search(
     r'#{50,}@@#'        # beginning of header
-    r'\n#(.*?)\n#'      # title
+    r'\n#(.*?)\n'       # title
     r'(.*?)'            # description
     r'#{50,}@@#'        # end of header
     r'(.*?)'            # preamble
     r'(?=#{50,}@)',     # beginning of first part
     source, flags=re.DOTALL|re.MULTILINE)
 title = problem_match.group(1).strip()
-description = problem_match.group(2).strip()
+description = "\n".join(s[2:] for s in problem_match.group(2).strip().splitlines())
 preamble = problem_match.group(3).strip()
 ################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
-{{ problem.description|safe }}{% endif %}
+# {{ problem.description|indent:"# "|safe }}{% endif %}
 ################################################################@@#
 
 {{ problem.preamble|safe }}
 
 {% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
-{{ part.description|safe }}
+# {{ part.description|indent:"# "|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
 {{ part.solution|safe }}
 

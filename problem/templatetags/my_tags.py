@@ -8,47 +8,17 @@ md = Markdown()
 
 @register.filter
 @stringfilter
-def pymarkdown(source):
-    output = ""
-    strbuff = ""
-    in_comment = True
-
-    for line in source.splitlines():
-        if line.startswith("#") and not line.startswith("#    "):
-            if not in_comment:
-                output += "</code></pre>\n"
-                in_comment = True
-            strbuff += line[1:] + "\n"
-        else:
-            if in_comment:
-                output += md.convert(strbuff)
-                strbuff = ""
-                output += "<pre><code>"
-                in_comment = False
-            if line.startswith("#    "):
-                output += line[4:] + "\n"
-            else:
-                output += line + "\n"
-
-    if in_comment:
-        output += md.convert(strbuff)
-    else:
-        output += "</code></pre>\n"
-
-    return output
+def markdown2py(source):
+    lines = source.splitlines()
+    lines = [line[4:] if line.startswith("    ") else line for line in lines]
+    lines = [line.replace('`', '') for line in lines]
+    return "\n# ".join(lines)
 
 @register.filter
 @stringfilter
-def indent(source, n):
-    return ("\n" + n * " ").join(source.splitlines())
+def indent(source, indent):
+    return ("\n" + indent).join(source.splitlines())
 
 @register.filter
 def get(h, key):
     return h.get(key)
-
-# @register.filter
-# @stringfilter
-# def pymarkdown(source):
-#     source = re.sub('`', '', source)
-#     return source
-
