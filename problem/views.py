@@ -55,7 +55,7 @@ def download_contents(request, problem, user, authenticated):
         'parts': problem.parts.all(),
         'attempts': get_attempts(problem, request.user),
         'authenticated': authenticated,
-        'server': request.META['REMOTE_ADDR'],
+        'server': 'http://tyrion.fmf.uni-lj.si/tomo/',
         'port': request.META['SERVER_PORT'],
     }
     if authenticated:
