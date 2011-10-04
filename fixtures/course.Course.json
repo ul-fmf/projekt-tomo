@@ -1,0 +1,47 @@
+[
+  {
+    "pk": 2, 
+    "model": "course.course", 
+    "fields": {
+      "students": [
+        1
+      ], 
+      "shortname": "FM-PRO1", 
+      "teachers": [
+        1
+      ], 
+      "name": "Programiranje 1 (finan\u010dna matematika)", 
+      "description": "R"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "course.course", 
+    "fields": {
+      "students": [
+        1
+      ], 
+      "shortname": "MAT-PRO1", 
+      "teachers": [
+        1
+      ], 
+      "name": "Programiranje 1 (matematika)", 
+      "description": "Python, _Mathematica_ in \u0161e kaj za drugi letnik matematikov."
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "course.course", 
+    "fields": {
+      "students": [
+        1
+      ], 
+      "shortname": "UVP", 
+      "teachers": [
+        1
+      ], 
+      "name": "Uvod v programiranje", 
+      "description": ""
+    }
+  }
+]

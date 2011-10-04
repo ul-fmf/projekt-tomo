@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from tomo.problem.models import Problem, Part, Submission, Attempt
-
+from tomo.problem.models import Language, Problem, Part, Submission, Attempt
 
 class PartInline(admin.StackedInline):
     model = Part
@@ -19,8 +18,9 @@ class ProblemAdmin(admin.ModelAdmin):
     )
     date_hierarchy = 'timestamp'
     inlines = [PartInline]
-    list_display = ('title', 'problem_set', 'author')
-    list_editable = ('problem_set', 'author')
+    list_display = ('title', 'problem_set', 'author', 'language')
+    list_editable = ('problem_set', 'author', 'language')
+    list_filter = ('author', 'language', 'problem_set')
     save_on_top = True
     search_fields = ('author__username', 'title', 'description')
 
@@ -37,7 +37,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         }),
         ('Source', {
             'classes': ('collapse', ),
-            'fields': ('source', )
+            'fields': ('preamble', 'source', )
         })
     )
     inlines = [AttemptInline]
@@ -47,5 +47,6 @@ class SubmissionAdmin(admin.ModelAdmin):
     search_fields = ['user__username', 'problem__title']
 
 
+admin.site.register(Language)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Submission, SubmissionAdmin)

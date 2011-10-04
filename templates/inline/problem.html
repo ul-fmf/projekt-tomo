@@ -1,0 +1,91 @@
+{% extends "inline/base.html" %}
+{% load markup %}
+{% load my_tags %}
+
+{% block stats-class %}{% spaceless %}
+    {% if request.user.is_authenticated %}
+    {% with all_sol=unsolved|get:problem.id %}
+    {% if all_sol.1 == all_sol.0 %}success{% else %}{% if all_sol.1 == 0 %}error{% else %}warning{% endif %}{% endif %}
+    {% endwith %}
+    {% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block stats %}{% spaceless %}
+    {% if request.user.is_authenticated %}
+    {% with all_sol=unsolved|get:problem.id %}{% with count=all_sol.1 %}
+    {{ count }}
+    <small>
+    {% if count == 0 %}
+       rešenih
+    {% endif %}
+    {% if count == 1 %}
+       rešena
+    {% endif %}
+    {% if count == 2 %}
+       rešeni
+    {% endif %}
+    {% if count == 3 or count == 4 %}
+       rešene
+    {% endif %}
+    {% if count >= 5 %}
+       rešenih
+    {% endif %}
+    </small>
+    {% endwith %}{% endwith %}
+        {% else %}
+        {% with count=problem.parts.count %}
+        {{ count }}
+        <small>
+        {% if count == 0 %}
+           nalog
+        {% endif %}
+        {% if count == 1 %}
+           naloga
+        {% endif %}
+        {% if count == 2 %}
+           nalogi
+        {% endif %}
+        {% if count == 3 or count == 4 %}
+           naloge
+        {% endif %}
+        {% if count >= 5 %}
+           nalog
+        {% endif %}
+        </small>
+        {% endwith %}{% endif %}
+{% endspaceless %}{% endblock %}
+
+
+{% block title %}
+    Naloga {{ forloop.counter }}{% if problem.title %} &mdash; {{ problem.title }}{% endif %}
+{% endblock %}
+
+{% block actions %}
+    {% if user.is_authenticated %}
+        <a href="{% url download problem.id %}">Prenesi nalogo</a>
+        {% if request.user.is_staff %}
+        <a href="{% url edit problem.id %}">Uredi datoteko</a>
+        <a href="{% url admin:problem_problem_change problem.id %}">Uredi nalogo</a>
+        <a href="{% url admin:problem_problem_delete problem.id %}">Pobriši nalogo</a>
+        {% endif %}
+    {% else %}
+      <div id="modal-from-dom-{{ problem.id }}" class="modal hide fade">
+        <div class="modal-header">
+          <a href="#" class="close">&times;</a>
+          <h3>Za reševanje se najprej prijavite.</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            Če se ne morete prijaviti, lahko nalogo rešujete z začasno datoteko.
+            V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
+            Ko se boste lahko spet prijavili, boste nalogo morali ponovno prenesti ter vanje prepisati začasno rešitev.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url download problem.id %}" class="btn secondary">Prenesite začasno datoteko</a>
+        </div>
+      </div>
+
+      <a data-controls-modal="modal-from-dom-{{ problem.id }}" data-backdrop="true" data-keyboard="true" href="#">Prenesi nalogo</a>
+    {% endif %}{% endblock %}
+

@@ -2,8 +2,18 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Language(models.Model):
+    name = models.CharField(max_length=70)
+    download_file = models.CharField(max_length=70)
+    edit_file = models.CharField(max_length=70)
+    extension = models.CharField(max_length=4)
+
+    def __unicode__(self):
+        return u'{0}'.format(self.name)
+
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
+    language = models.ForeignKey(Language, related_name='problems')
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)

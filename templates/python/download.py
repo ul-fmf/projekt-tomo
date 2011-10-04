@@ -1,14 +1,14 @@
-{% load my_tags %}################################################################@@#
+{% load my_tags %}#####################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
 # {{ problem.description|markdown2py|safe }}{% endif %}
-################################################################@@#
+#####################################################################@@#
 
 {% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) {{ part.description|markdown2py|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
-{% with solutions|get:part.id as solution %}{% if solution %}{{ solution|safe }}{% endif %}{% endwith %}
+{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% endif %}{% endwith %}
 
 {% endfor %}
 

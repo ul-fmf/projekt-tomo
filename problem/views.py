@@ -29,23 +29,15 @@ def unpack(text, sig):
 
 def get_problem(problem_id, user):
     problem = get_object_or_404(Problem, id=problem_id)
-    verify(problem.problem_set.visible or user is problem.author)
+    verify(problem.problem_set.visible or user.is_staff())
     return problem
 
 def get_attempts(problem, user):
     if user.is_authenticated():
-        return Attempt.objects.filter(part__problem=problem,
-                                      submission__user=user, active=True)
-    else:
-        return Attempt.objects.none()
-
-def get_solutions(problem, user):
-    if user.is_authenticated():
-        attempts = get_attempts(problem, user)
-        Attempt.objects.filter(part__problem=problem,
+        attempts = Attempt.objects.filter(part__problem=problem,
                                           submission__user=user, active=True)
         return dict([
-            (attempt.part_id, attempt.solution) for attempt in attempts
+            (attempt.part_id, attempt) for attempt in attempts
         ])
     else:
         return {}
@@ -61,7 +53,7 @@ def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
-        'solutions': get_solutions(problem, request.user),
+        'attempts': get_attempts(problem, request.user),
         'authenticated': authenticated
     }
     if authenticated:
@@ -69,12 +61,12 @@ def download_contents(request, problem, user, authenticated):
             'user': user.id,
             'problem': problem.id,
         })
-    t = loader.get_template("python/download.py")
+    t = loader.get_template(problem.language.download_file)
     return t.render(RequestContext(request, context))
 
 def download(request, problem_id):
     problem = get_problem(problem_id, request.user)
-    filename = "{0}.py".format(slugify(problem.title))
+    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     contents = download_contents(request, problem, request.user,
                                  request.user.is_authenticated())
     return download_file(filename, contents)
@@ -83,7 +75,7 @@ def download_zipfile(request, problems, user, authenticated, archivename):
     temp = tempfile.TemporaryFile()
     archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
     for problem in problems:
-        filename = "{0}.py".format(slugify(problem.title)) # Select your files here.
+        filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension) # Select your files here.
         archive.writestr(filename, download_contents(request, problem, user, authenticated).encode('utf-8'))
     archive.close()
     wrapper = FileWrapper(temp)
@@ -99,7 +91,7 @@ def download_user(request, problem_id, user_id):
     problem = get_problem(problem_id, request.user)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
-    filename = "{0}-{1}.py".format(slugify(problem.title), slugify(username))
+    filename = "{0}-{1}.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
     contents = download_contents(request, problem, user, False)
     return download_file(filename, contents)
 
@@ -114,30 +106,34 @@ def upload(request):
     submission = Submission(user=user, problem=problem,
                             source=request.POST['source'])
     submission.save()
-    attempts = json.loads(request.POST['attempts'])
-    old_attempts = dict((attempt.part_id, attempt)
-                        for attempt in get_attempts(problem, user))
+    print(json.loads(request.POST['attempts']))
+    attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
+    old_attempts = get_attempts(problem, user)
     incorrect = []
 
     for i, part in enumerate(problem.parts.all()):
-        attempt = attempts[i]
-        solution = attempt['solution']
-        errors = attempt.get('errors', [])
-        challenge = attempt.get('challenge', '')
-        if solution:
-            correct = challenge == part.challenge
-            if not errors and not correct:
-                incorrect.append(i + 1)
-            old = old_attempts.get(part.id, None)
-            new = Attempt(part=part, submission=submission,
-                          solution=solution, errors=json.dumps(errors),
-                          correct=correct, active=True)
-            if old and (old.correct != correct or old.solution != solution):
-                old.active = False
-                old.save()
-                new.save()
-            elif not old:
-                new.save()
+        attempt = attempts.get(part.id, None)
+        if attempt:
+            solution = attempt['solution']
+            errors = attempt.get('errors', [])
+            challenge = attempt.get('challenge', '')
+            if solution:
+                correct = challenge == part.challenge
+                if not correct:
+                    print(challenge)
+                    print(part.challenge)
+                if not errors and not correct:
+                    incorrect.append(i + 1)
+                old = old_attempts.get(part.id, None)
+                new = Attempt(part=part, submission=submission,
+                              solution=solution, errors=json.dumps(errors),
+                              correct=correct, active=True)
+                if old and (old.correct != correct or old.solution != solution):
+                    old.active = False
+                    old.save()
+                    new.save()
+                elif not old:
+                    new.save()
 
     return render_to_response("response.txt", Context({'incorrect': incorrect}))
 
@@ -158,8 +154,8 @@ def edit(request, problem_id=None):
         'data': data,
         'signature': signature,
     })
-    filename = "{0}.py".format(slugify(problem.title))
-    t = loader.get_template("python/edit.py")
+    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
+    t = loader.get_template(problem.language.edit_file)
     contents = t.render(RequestContext(request, context))
     return download_file(filename, contents)
 

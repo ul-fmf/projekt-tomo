@@ -244,11 +244,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "# Sestavite funkcijo `praviDelitelji(n)`, ki vrne seznam vseh pravih\r\n# deliteljev \u0161tevila `n`.", 
-      "challenge": "[]", 
-      "solution": "def praviDelitelji(n):\r\n    return [i for i in range(1, n) if n % i == 0]", 
+      "description": "Sestavite funkcijo `praviDelitelji(n)`, ki vrne seznam vseh pravih\ndeliteljev \u0161tevila `n`.", 
+      "challenge": "", 
+      "solution": "def praviDelitelji(n):\n    return [i for i in range(1, n) if n % i == 0]", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('praviDelitelji', 1):\r\n        _equal('praviDelitelji(19)', [1])\r\n        _equal('praviDelitelji(28)', [1, 2, 4, 7, 14])\r\n        _equal('praviDelitelji(42)', [1, 2, 3, 6, 7, 14, 21])\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('praviDelitelji', 1):\n        _equal('praviDelitelji(19)', [1])\n        _equal('praviDelitelji(28)', [1, 2, 4, 7, 14])\n        _equal('praviDelitelji(42)', [1, 2, 3, 6, 7, 14, 21])\n    yield"
     }
   }, 
   {
@@ -256,11 +256,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "# Sestavite funkcijo `ravninskaRazdalja(x1, y1, x2, y2)`, ki vrne razdaljo med\n# to\u010dkama $(x_1, y_1)$ in $(x_2, y_2)$.\n#     >>> ravninskaRazdalja(1, 2, 3, 4)\n#     2.82842712475", 
+      "description": "Sestavite funkcijo `ravninskaRazdalja($x1$, $y1$, $x2$, $y2$)`, ki vrne razdaljo med\r\nto\u010dkama $(x_1, y_1)$ in $(x_2, y_2)$.\r\n\r\n    >>> ravninskaRazdalja(1, 2, 3, 4)\r\n    2.82842712475", 
       "challenge": "2.23606797749979", 
-      "solution": "def ravninskaRazdalja(x1, y1, x2, y2):\n    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)", 
+      "solution": "def ravninskaRazdalja(x1, y1, x2, y2):\r\n    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)", 
       "problem": 23, 
-      "validation": "Check.num_equal('ravninskaRazdalja(1, 2, 3, 4)', 2.82842712475, 6)\nCheck.num_equal('ravninskaRazdalja(0, 0, 3, 4)', 5, 6)\nCheck.challenge(ravninskaRazdalja(1, 4, 2, 6))"
+      "validation": "Check.num_equal('ravninskaRazdalja(1, 2, 3, 4)', 2.82842712475, 6)\r\nCheck.num_equal('ravninskaRazdalja(0, 0, 3, 4)', 5, 6)\r\nCheck.challenge(ravninskaRazdalja(1, 4, 2, 6))"
     }
   }, 
   {
@@ -508,11 +508,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "# Sestavite funkcijo `nepopolnost(n)`, ki vrne absolutno razliko med\r\n# \u0161tevilom `n` in vsoto vseh njegovih pravih deliteljev.", 
-      "challenge": "[]", 
-      "solution": "def nepopolnost(n):\r\n    return abs(n - sum(praviDelitelji(n)))", 
+      "description": "Sestavite funkcijo `nepopolnost(n)`, ki vrne absolutno razliko med\n\u0161tevilom `n` in vsoto vseh njegovih pravih deliteljev.", 
+      "challenge": "", 
+      "solution": "def nepopolnost(n):\n    return abs(n - sum(praviDelitelji(n)))", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('nepopolnost', 1):\r\n        _equal('nepopolnost(19)', 18)\r\n        _equal('nepopolnost(28)', 0)\r\n        _equal('nepopolnost(42)', 12)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('nepopolnost', 1):\n        _equal('nepopolnost(19)', 18)\n        _equal('nepopolnost(28)', 0)\n        _equal('nepopolnost(42)', 12)\n    yield"
     }
   }, 
   {
@@ -520,11 +520,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "# Sestavite funkcijo `polarnaRazdalja(r1, fi1, r2, fi2)`, ki vrne razdaljo med\n# to\u010dkama $(r_1, \\\\phi_1)$ in $(r_2, \\\\phi_2)$ v ravnini, pri \u010demer so\n# koordinate v polarnem zapisu, koti pa so izra\u017eeni v stopinjah.\n#     >>> razdaljaPolarna(1, 30, 4, 90)\n#     3.60555127546", 
+      "description": "Sestavite funkcijo `polarnaRazdalja(r1, fi1, r2, fi2)`, ki vrne razdaljo med\r\nto\u010dkama $(r_1, \\\\phi_1)$ in $(r_2, \\\\phi_2)$ v ravnini, pri \u010demer so\r\nkoordinate v polarnem zapisu, koti pa so izra\u017eeni v stopinjah.\r\n\r\n    >>> razdaljaPolarna(1, 30, 4, 90)\r\n    3.60555127546", 
       "challenge": "1.0012176046812287", 
-      "solution": "import math\ndef polarnaRazdalja(r1, fi1, r2, fi2):\n    fi1 *= math.pi / 180\n    fi2 *= math.pi / 180\n    return ravninskaRazdalja(r1 * math.cos(fi1), r1 * math.sin(fi1),\n                             r2 * math.cos(fi2), r2 * math.sin(fi2))", 
+      "solution": "import math\r\ndef polarnaRazdalja(r1, fi1, r2, fi2):\r\n    fi1 *= math.pi / 180\r\n    fi2 *= math.pi / 180\r\n    return ravninskaRazdalja(r1 * math.cos(fi1), r1 * math.sin(fi1),\r\n                             r2 * math.cos(fi2), r2 * math.sin(fi2))", 
       "problem": 23, 
-      "validation": "Check.num_equal('polarnaRazdalja(1, 30, 4, 90)', 3.60555127546, 6)\nCheck.num_equal('polarnaRazdalja(1, 0, 1, 90)', 1.414213562373095, 6)\nCheck.challenge(polarnaRazdalja(1, 4, 2, 6))"
+      "validation": "Check.num_equal('polarnaRazdalja(1, 30, 4, 90)', 3.60555127546, 6)\r\nCheck.num_equal('polarnaRazdalja(1, 0, 1, 90)', 1.414213562373095, 6)\r\nCheck.challenge(polarnaRazdalja(1, 4, 2, 6))"
     }
   }, 
   {
@@ -748,11 +748,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 2, 
-      "description": "# \u0160tevilo je simetri\u010dno nepopolno, kadar je njegova nepopolnost enaka\r\n# nepopolnosti \u0161tevila, obrnjenega na glavo.\r\n# Na primer, vsa palindromna \u0161tevila so simetri\u010dno nepopolna, prav tako\r\n# pa je nepopolno \u0161tevilo 24, saj je njegova nepopolnost enaka\r\n# $|24 - (1 + 2 + 3 + 4 + 6 + 8 + 12)| = 12$, kar je prav tako\r\n# nepopolnost \u0161tevila 42.\r\n#\r\n# Sestavite funkcijo `simetricnoNepopolna(n)`, ki vrne seznam vseh\r\n# simetri\u010dno nepopolnih \u0161tevil med 1 in `n`.", 
-      "challenge": "[]", 
-      "solution": "def simetricnoNepopolna(n):\r\n    def simetricnoNepopolno(i):\r\n        return nepopolnost(i) == nepopolnost(int(str(i)[::-1]))\r\n    return [i for i in range(1, n + 1) if simetricnoNepopolno(i)]", 
+      "description": "\u0160tevilo je simetri\u010dno nepopolno, kadar je njegova nepopolnost enaka\nnepopolnosti \u0161tevila, obrnjenega na glavo.\nNa primer, vsa palindromna \u0161tevila so simetri\u010dno nepopolna, prav tako\npa je nepopolno \u0161tevilo 24, saj je njegova nepopolnost enaka\n$|24 - (1 + 2 + 3 + 4 + 6 + 8 + 12)| = 12$, kar je prav tako\nnepopolnost \u0161tevila 42.\n\nSestavite funkcijo `simetricnoNepopolna(n)`, ki vrne seznam vseh\nsimetri\u010dno nepopolnih \u0161tevil med 1 in `n`.", 
+      "challenge": "", 
+      "solution": "def simetricnoNepopolna(n):\n    def simetricnoNepopolno(i):\n        return nepopolnost(i) == nepopolnost(int(str(i)[::-1]))\n    return [i for i in range(1, n + 1) if simetricnoNepopolno(i)]", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('simetricnoNepopolna', 1):\r\n        _equal('simetricnoNepopolna(19)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])\r\n        _equal('simetricnoNepopolna(28)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24])\r\n        _equal('simetricnoNepopolna(42)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33, 42])\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('simetricnoNepopolna', 1):\n        _equal('simetricnoNepopolna(19)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])\n        _equal('simetricnoNepopolna(28)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24])\n        _equal('simetricnoNepopolna(42)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33, 42])\n    yield"
     }
   }, 
   {
@@ -760,11 +760,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 2, 
-      "description": "# Sestavite funkcijo `vektorskaRazdalja(x1, x2)`, ki vrne razdaljo med\n# to\u010dkama $x_1$ in $x_2$, podanima s seznamom koordinat.\n#     >>> vektorskaRazdalja([0, 0, 1], [2, 1, 3])\n#     3", 
+      "description": "Sestavite funkcijo `vektorskaRazdalja(x1, x2)`, ki vrne razdaljo med\r\nto\u010dkama $x_1$ in $x_2$, podanima s seznamom koordinat.\r\n\r\n    >>> vektorskaRazdalja([0, 0, 1], [2, 1, 3])\r\n    3", 
       "challenge": "10.954451150103322", 
-      "solution": "import math\ndef vektorskaRazdalja(x1, x2):\n    return (sum((k1 - k2) ** 2 for (k1, k2) in zip(x1, x2))) ** (1 / 2)", 
+      "solution": "import math\r\ndef vektorskaRazdalja(x1, x2):\r\n    return (sum((k1 - k2) ** 2 for (k1, k2) in zip(x1, x2))) ** (1 / 2)", 
       "problem": 23, 
-      "validation": "Check.num_equal('vektorskaRazdalja([0, 0, 1], [2, 1, 3])', 3, 6)\nCheck.num_equal('vektorskaRazdalja([0], [3])', 3, 6)\nCheck.num_equal('vektorskaRazdalja([1, 2], [3, 4])', 2.82842712475, 6)\nCheck.challenge(vektorskaRazdalja([1, 2, 3, 4, 5], [9, 8, 7, 6, 5]))"
+      "validation": "Check.num_equal('vektorskaRazdalja([0, 0, 1], [2, 1, 3])', 3, 6)\r\nCheck.num_equal('vektorskaRazdalja([0], [3])', 3, 6)\r\nCheck.num_equal('vektorskaRazdalja([1, 2], [3, 4])', 2.82842712475, 6)\r\nCheck.challenge(vektorskaRazdalja([1, 2, 3, 4, 5], [9, 8, 7, 6, 5]))"
     }
   }, 
   {
@@ -976,11 +976,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 3, 
-      "description": "# \u0160tevilo je popolnomaNepopolno, kadar je njegova nepopolnost ve\u010dja od\r\n# njega samega.\r\n#\r\n# Sestavite funkcijo `popolnomaNepopolno(n)`, ki vrne prvo popolnoma\r\n# nepopolno \u0161tevilo, ve\u010dje ali enako `n`.", 
-      "challenge": "[]", 
-      "solution": "def popolnomaNepopolno(n):\r\n    while(nepopolnost(n) <= n):\r\n        n += 1\r\n    return n", 
+      "description": "\u0160tevilo je popolnomaNepopolno, kadar je njegova nepopolnost ve\u010dja od\nnjega samega.\n\nSestavite funkcijo `popolnomaNepopolno(n)`, ki vrne prvo popolnoma\nnepopolno \u0161tevilo, ve\u010dje ali enako `n`.", 
+      "challenge": "", 
+      "solution": "def popolnomaNepopolno(n):\n    while(nepopolnost(n) <= n):\n        n += 1\n    return n", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('popolnomaNepopolno', 1):\r\n        _equal('popolnomaNepopolno(0)', 180)\r\n        _equal('popolnomaNepopolno(181)', 240)\r\n        _equal('popolnomaNepopolno(241)', 360)\r\n        _equal('popolnomaNepopolno(361)', 420)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('popolnomaNepopolno', 1):\n        _equal('popolnomaNepopolno(0)', 180)\n        _equal('popolnomaNepopolno(181)', 240)\n        _equal('popolnomaNepopolno(241)', 360)\n        _equal('popolnomaNepopolno(361)', 420)\n    yield"
     }
   }, 
   {
@@ -1192,11 +1192,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 4, 
-      "description": "# Lojzku je dolg\u010das, zato se igra z velikimi praznimi \u0161katlami, ki se\r\n# nahajajo v skladi\u0161\u010du, v katerem dela. Dimenzije \u0161katel so shranjene v\r\n# seznamu  trojic. Na primer, trojica `(50, 100, 100)` predstavlja\r\n# \u0161katlo, ki je visoka 50 cm ter \u0161iroka in dolga 100 cm.\r\n#\r\n# Sestavite funkcijo `stolp(skatle)`, ki vrne vi\u0161ino najvi\u0161jega\r\n# stolpa, ki ga lahko sestavimo iz \u0161katel, ne da bi jih obra\u010dali.\r\n# Pri tem ni treba paziti na stabilnost stolpa.\r\n# Na primer, najvi\u0161ji tak stolp iz \u0161katel z dimenzijami (50, 100, 100),\r\n# (60, 50, 50) in (40, 40, 40) bi imel vi\u0161ino 150 cm.", 
-      "challenge": "[]", 
-      "solution": "def stolp(skatle):\r\n    return sum(v for v, _, _ in skatle)", 
+      "description": "Lojzku je dolg\u010das, zato se igra z velikimi praznimi \u0161katlami, ki se\nnahajajo v skladi\u0161\u010du, v katerem dela. Dimenzije \u0161katel so shranjene v\nseznamu  trojic. Na primer, trojica `(50, 100, 100)` predstavlja\n\u0161katlo, ki je visoka 50 cm ter \u0161iroka in dolga 100 cm.\n\nSestavite funkcijo `stolp(skatle)`, ki vrne vi\u0161ino najvi\u0161jega\nstolpa, ki ga lahko sestavimo iz \u0161katel, ne da bi jih obra\u010dali.\nPri tem ni treba paziti na stabilnost stolpa.\nNa primer, najvi\u0161ji tak stolp iz \u0161katel z dimenzijami (50, 100, 100),\n(60, 50, 50) in (40, 40, 40) bi imel vi\u0161ino 150 cm.", 
+      "challenge": "", 
+      "solution": "def stolp(skatle):\n    return sum(v for v, _, _ in skatle)", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('stolp', 1):\r\n        _equal('stolp([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 150)\r\n        _equal('stolp([(50, 100, 100), (60, 50, 50), (40, 40, 40)])', 150)\r\n        _equal('stolp([(60, 30, 50), (40, 40, 40)])', 100)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('stolp', 1):\n        _equal('stolp([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 150)\n        _equal('stolp([(50, 100, 100), (60, 50, 50), (40, 40, 40)])', 150)\n        _equal('stolp([(60, 30, 50), (40, 40, 40)])', 100)\n    yield"
     }
   }, 
   {
@@ -1408,11 +1408,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 5, 
-      "description": "# Sestavite funkcijo `najvisjiStolp(skatle)`, ki vrne vi\u0161ino najvi\u0161jega\r\n# stolpa, ki ga lahko sestavimo iz \u0161katel, \u010de jih lahko obra\u010damo.\r\n# Pri tem \u0161e vedno ni treba paziti na stabilnost stolpa.\r\n# Na primer, najvi\u0161ji tak stolp iz \u0161katel z dimenzijami (50, 100, 100),\r\n# (60, 50, 50) in (40, 40, 40) bi imel vi\u0161ino 200 cm, saj bi prvo \u0161katlo\r\n# prevrnili na bok.", 
-      "challenge": "[]", 
-      "solution": "def najvisjiStolp(skatle):\r\n    return sum(max(v, s, d) for v, s, d in skatle)", 
+      "description": "Sestavite funkcijo `najvisjiStolp(skatle)`, ki vrne vi\u0161ino najvi\u0161jega\nstolpa, ki ga lahko sestavimo iz \u0161katel, \u010de jih lahko obra\u010damo.\nPri tem \u0161e vedno ni treba paziti na stabilnost stolpa.\nNa primer, najvi\u0161ji tak stolp iz \u0161katel z dimenzijami (50, 100, 100),\n(60, 50, 50) in (40, 40, 40) bi imel vi\u0161ino 200 cm, saj bi prvo \u0161katlo\nprevrnili na bok.", 
+      "challenge": "", 
+      "solution": "def najvisjiStolp(skatle):\n    return sum(max(v, s, d) for v, s, d in skatle)", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('najvisjiStolp', 1):\r\n        _equal('najvisjiStolp([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 200)\r\n        _equal('najvisjiStolp([(50, 100, 100), (60, 50, 50), (40, 40, 40)])', 200)\r\n        _equal('najvisjiStolp([(60, 30, 50), (40, 40, 40)])', 100)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('najvisjiStolp', 1):\n        _equal('najvisjiStolp([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 200)\n        _equal('najvisjiStolp([(50, 100, 100), (60, 50, 50), (40, 40, 40)])', 200)\n        _equal('najvisjiStolp([(60, 30, 50), (40, 40, 40)])', 100)\n    yield"
     }
   }, 
   {
@@ -1600,11 +1600,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 6, 
-      "description": "# Sestavite funkcijo `greNotri(skatla1, skatla2)`, ki vrne `True`, \u010de\r\n# \u0161katlo `skatla1` lahko obrnemo tako, da gre v \u0161katlo `skatla2`, torej\r\n# da so dimenzije prve \u0161katle strogo manj\u0161e od dimenzij druge \u0161katle.", 
-      "challenge": "[]", 
-      "solution": "def greNotri(skatla1, skatla2):\r\n    skatla1 = list(skatla1)\r\n    skatla2 = list(skatla2)\r\n    skatla1.sort()\r\n    skatla2.sort()\r\n    \r\n    return skatla1[0] < skatla2[0] and \\\r\n           skatla1[1] < skatla2[1] and \\\r\n           skatla1[2] < skatla2[2]", 
+      "description": "Sestavite funkcijo `greNotri(skatla1, skatla2)`, ki vrne `True`, \u010de\n\u0161katlo `skatla1` lahko obrnemo tako, da gre v \u0161katlo `skatla2`, torej\nda so dimenzije prve \u0161katle strogo manj\u0161e od dimenzij druge \u0161katle.", 
+      "challenge": "", 
+      "solution": "def greNotri(skatla1, skatla2):\n    skatla1 = list(skatla1)\n    skatla2 = list(skatla2)\n    skatla1.sort()\n    skatla2.sort()\n\n    return skatla1[0] < skatla2[0] and \\\n           skatla1[1] < skatla2[1] and \\\n           skatla1[2] < skatla2[2]", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('greNotri', 2):\r\n        _equal('greNotri((30, 40, 50), (40, 50, 60))', True)\r\n        _equal('greNotri((30, 40, 50), (40, 50, 30))', False)\r\n        _equal('greNotri((30, 40, 50), (50, 50, 25))', False)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('greNotri', 2):\n        _equal('greNotri((30, 40, 50), (40, 50, 60))', True)\n        _equal('greNotri((30, 40, 50), (40, 50, 30))', False)\n        _equal('greNotri((30, 40, 50), (50, 50, 25))', False)\n    yield"
     }
   }, 
   {
@@ -1756,11 +1756,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 7, 
-      "description": "# Sestavite funkcijo `babuska(skatle)`, ki vrne najve\u010dje \u0161tevilo \u0161katel,\r\n# ki jih lahko zlo\u017eimo eno v drugo, \u010de za\u010dnemo s prvo \u0161katlo s seznama,\r\n# vanjo vstavimo drugo, v drugo tretjo in tako naprej.", 
-      "challenge": "[]", 
-      "solution": "def babuska(skatle):\r\n    stevilo = 1\r\n    zadnja = skatle[0]\r\n    \r\n    for skatla in skatle[1:]:\r\n        if greNotri(skatla, zadnja):\r\n            zadnja = skatla\r\n            stevilo += 1\r\n        else:\r\n            return stevilo\r\n    return stevilo", 
+      "description": "Sestavite funkcijo `babuska(skatle)`, ki vrne najve\u010dje \u0161tevilo \u0161katel,\nki jih lahko zlo\u017eimo eno v drugo, \u010de za\u010dnemo s prvo \u0161katlo s seznama,\nvanjo vstavimo drugo, v drugo tretjo in tako naprej.", 
+      "challenge": "", 
+      "solution": "def babuska(skatle):\n    stevilo = 1\n    zadnja = skatle[0]\n\n    for skatla in skatle[1:]:\n        if greNotri(skatla, zadnja):\n            zadnja = skatla\n            stevilo += 1\n        else:\n            return stevilo\n    return stevilo", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('babuska', 1):\r\n        _equal('babuska([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 2)\r\n        _equal('babuska([(60, 100, 100), (60, 50, 50), (40, 40, 40)])', 3)\r\n        _equal('babuska([(60, 30, 50), (40, 40, 40)])', 1)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('babuska', 1):\n        _equal('babuska([(50, 100, 100), (60, 30, 50), (40, 40, 40)])', 2)\n        _equal('babuska([(60, 100, 100), (60, 50, 50), (40, 40, 40)])', 3)\n        _equal('babuska([(60, 30, 50), (40, 40, 40)])', 1)\n    yield"
     }
   }, 
   {
@@ -1852,11 +1852,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 8, 
-      "description": "# Usmerjeni graf lahko predstavimo s slovarjem, v katerem so klju\u010di\r\n# vozli\u0161\u010da, pripadajo\u010de vrednosti pa so mno\u017eice vozli\u0161\u010d, v katera\r\n# vodijo povezave iz izbranega vozli\u0161\u010da.\r\n#\r\n# Na primer, graf z vozli\u0161\u010di 1, 2, 3 in s povezavami 1->3, 2->1, 2->3\r\n# bi predstavili s slovarjem `{1: {3}, 2: {1, 3}, 3: set()}`.\r\n#\r\n# Vozli\u0161\u010di sta sosednji, \u010de med njima obstaja povezava vsaj v eno smer.\r\n# Sestavite funkcijo `sosednji(g, v1, v2)`, ki vrne `True`, kadar sta\r\n# vozli\u0161\u010di `v1` in `v2` v grafu `g` sosednji, in `False` sicer.", 
-      "challenge": "[]", 
-      "solution": "def sosednji(g, v1, v2):\r\n    return v1 in g[v2] or v2 in g[v1]", 
+      "description": "Usmerjeni graf lahko predstavimo s slovarjem, v katerem so klju\u010di\nvozli\u0161\u010da, pripadajo\u010de vrednosti pa so mno\u017eice vozli\u0161\u010d, v katera\nvodijo povezave iz izbranega vozli\u0161\u010da.\n\nNa primer, graf z vozli\u0161\u010di 1, 2, 3 in s povezavami 1->3, 2->1, 2->3\nbi predstavili s slovarjem `{1: {3}, 2: {1, 3}, 3: set()}`.\n\nVozli\u0161\u010di sta sosednji, \u010de med njima obstaja povezava vsaj v eno smer.\nSestavite funkcijo `sosednji(g, v1, v2)`, ki vrne `True`, kadar sta\nvozli\u0161\u010di `v1` in `v2` v grafu `g` sosednji, in `False` sicer.", 
+      "challenge": "", 
+      "solution": "def sosednji(g, v1, v2):\n    return v1 in g[v2] or v2 in g[v1]", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('sosednji', 3):\r\n        _equal('sosednji({1: {3}, 2: {1, 3}, 3: set()}, 1, 3)', True)\r\n        _equal('sosednji({1: {3}, 2: {1, 3}, 3: set()}, 3, 1)', True)\r\n        _equal('sosednji({1: {3}, 2: {1}, 3: set()}, 2, 3)', False)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('sosednji', 3):\n        _equal('sosednji({1: {3}, 2: {1, 3}, 3: set()}, 1, 3)', True)\n        _equal('sosednji({1: {3}, 2: {1, 3}, 3: set()}, 3, 1)', True)\n        _equal('sosednji({1: {3}, 2: {1}, 3: set()}, 2, 3)', False)\n    yield"
     }
   }, 
   {
@@ -1948,11 +1948,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 9, 
-      "description": "# Sestavite funkcijo `najvecIzhodnih(g)`, ki vrne tisto vozli\u0161\u010de\r\n# usmerjenega grafa `g`, iz katerega vodi najve\u010d povezav.\r\n# \u010ce je takih vozli\u0161\u010d ve\u010d, lahko funkcija vrne poljubno izmed njih.", 
-      "challenge": "[]", 
-      "solution": "def najvecIzhodnih(g):\r\n    max_izhodna = max(len(p) for p in g.values())\r\n    for v, p in g.items():\r\n        if len(p) == max_izhodna:\r\n            return v", 
+      "description": "Sestavite funkcijo `najvecIzhodnih(g)`, ki vrne tisto vozli\u0161\u010de\nusmerjenega grafa `g`, iz katerega vodi najve\u010d povezav.\n\u010ce je takih vozli\u0161\u010d ve\u010d, lahko funkcija vrne poljubno izmed njih.", 
+      "challenge": "", 
+      "solution": "def najvecIzhodnih(g):\n    max_izhodna = max(len(p) for p in g.values())\n    for v, p in g.items():\n        if len(p) == max_izhodna:\n            return v", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('najvecIzhodnih', 1):\r\n        _equal('najvecIzhodnih({1: {3}, 2: {1, 3}, 3: set()})', 2)\r\n        _equal('najvecIzhodnih({1: {3}, 2: set(), 3: set()})', 1)\r\n        _equal('najvecIzhodnih({1: {3, 2}, 2: {1}, 3: {1}})', 1)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('najvecIzhodnih', 1):\n        _equal('najvecIzhodnih({1: {3}, 2: {1, 3}, 3: set()})', 2)\n        _equal('najvecIzhodnih({1: {3}, 2: set(), 3: set()})', 1)\n        _equal('najvecIzhodnih({1: {3, 2}, 2: {1}, 3: {1}})', 1)\n    yield"
     }
   }, 
   {
@@ -2044,11 +2044,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 10, 
-      "description": "# Sestavite funkcijo `najvecVhodnih(g)`, ki vrne tisto vozli\u0161\u010de\r\n# usmerjenega grafa `g`, v katero vodi najve\u010d povezav.\r\n# \u010ce je takih vozli\u0161\u010d ve\u010d, lahko funkcija vrne poljubno izmed njih.", 
-      "challenge": "[]", 
-      "solution": "def najvecVhodnih(g):\r\n    vozlisca = list(g.keys())\r\n    vse_vhodne = []\r\n    for p in g.values():\r\n        vse_vhodne += list(p)\r\n    stopnje = [vse_vhodne.count(v) for v in vozlisca]\r\n    return vozlisca[stopnje.index(max(stopnje))]\r\n    # lahko pa uporabimo rezultat naslednje naloge:\r\n    # return najvecIzhodnih(obrni(g))", 
+      "description": "Sestavite funkcijo `najvecVhodnih(g)`, ki vrne tisto vozli\u0161\u010de\nusmerjenega grafa `g`, v katero vodi najve\u010d povezav.\n\u010ce je takih vozli\u0161\u010d ve\u010d, lahko funkcija vrne poljubno izmed njih.", 
+      "challenge": "", 
+      "solution": "def najvecVhodnih(g):\n    vozlisca = list(g.keys())\n    vse_vhodne = []\n    for p in g.values():\n        vse_vhodne += list(p)\n    stopnje = [vse_vhodne.count(v) for v in vozlisca]\n    return vozlisca[stopnje.index(max(stopnje))]\n    # lahko pa uporabimo rezultat naslednje naloge:\n    # return najvecIzhodnih(obrni(g))", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('najvecVhodnih', 1):\r\n        _equal('najvecVhodnih({1: {3}, 2: {1, 3}, 3: set()})', 3)\r\n        _equal('najvecVhodnih({1: {3}, 2: set(), 3: set()})', 3)\r\n        _equal('najvecVhodnih({1: {3, 2}, 2: {1}, 3: {1}})', 1)\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('najvecVhodnih', 1):\n        _equal('najvecVhodnih({1: {3}, 2: {1, 3}, 3: set()})', 3)\n        _equal('najvecVhodnih({1: {3}, 2: set(), 3: set()})', 3)\n        _equal('najvecVhodnih({1: {3, 2}, 2: {1}, 3: {1}})', 1)\n    yield"
     }
   }, 
   {
@@ -2140,11 +2140,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 11, 
-      "description": "# Sestavite funkcijo `obrni(g)`, ki vrne slovar, ki predstavlja isti\r\n# graf kot `g`, le da vse povezave v njem ka\u017eejo v drugo smer.", 
-      "challenge": "[]", 
-      "solution": "def obrni(g):\r\n    obrnjen = dict((v, set()) for v in g.keys())\r\n    for v, p in g.items():\r\n        for w in p:\r\n            obrnjen[w].add(v)\r\n    return obrnjen", 
+      "description": "Sestavite funkcijo `obrni(g)`, ki vrne slovar, ki predstavlja isti\ngraf kot `g`, le da vse povezave v njem ka\u017eejo v drugo smer.", 
+      "challenge": "", 
+      "solution": "def obrni(g):\n    obrnjen = dict((v, set()) for v in g.keys())\n    for v, p in g.items():\n        for w in p:\n            obrnjen[w].add(v)\n    return obrnjen", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('obrni', 1):\r\n        _equal('obrni({1: {3}, 2: {1, 3}, 3: set()})', {1: {2}, 2: set(), 3: {1, 2}})\r\n        _equal('obrni({1: {3}, 2: set(), 3: set()})', {1: set(), 2: set(), 3: {1}})\r\n        _equal('obrni({1: {3, 2}, 2: {1}, 3: {1}})', {1: {2, 3}, 2: {1}, 3: {1}})\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('obrni', 1):\n        _equal('obrni({1: {3}, 2: {1, 3}, 3: set()})', {1: {2}, 2: set(), 3: {1, 2}})\n        _equal('obrni({1: {3}, 2: set(), 3: set()})', {1: set(), 2: set(), 3: {1}})\n        _equal('obrni({1: {3, 2}, 2: {1}, 3: {1}})', {1: {2, 3}, 2: {1}, 3: {1}})\n    yield"
     }
   }, 
   {
@@ -2236,11 +2236,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 12, 
-      "description": "# Simon in Greta sta mlad zaljubljen par, ki pri\u010dakuje svojega prvega\r\n# otroka. Skrbni sorodniki jima po elektronski po\u0161ti po\u0161iljajo datoteke,\r\n# v katerih jima pi\u0161ejo, kaj vse NUJNO rabita.\r\n# Vsaka datoteka je sestavljena iz vrstic, v katerih pi\u0161e: ime predmeta,\r\n# cena predmeta (zaokro\u017eeno na evre), nujnost (od 1 do 10, kjer je 10\r\n# najbolj nujno).\r\n#\r\n# Primer nekaj vrstic:\r\n#     avtomati\u010dno brisalo ritke,231,10\r\n#     ljubezen,0,1\r\n#     ortopedsko oblikovana duda,15,7\r\n# Predpostavite lahko, da v imenu ni vejic, da okoli vejic ni\r\n# presledkov, ter da sta v vsaki vrstici natanko dve vejici.\r\n#\r\n# Sestavite funkcijo `pretvori(vrstica)`, ki iz dane vrstice ustvari\r\n# trojico `(ime, cena, nujnost)`, pri \u010demer naj bosta `cena` in\r\n# `nujnost` \u0161tevili.", 
-      "challenge": "[]", 
-      "solution": "def pretvori(vrstica):\r\n    besede = vrstica.split(\",\")\r\n    return (besede[0], int(besede[1]), int(besede[2]))", 
+      "description": "Simon in Greta sta mlad zaljubljen par, ki pri\u010dakuje svojega prvega\notroka. Skrbni sorodniki jima po elektronski po\u0161ti po\u0161iljajo datoteke,\nv katerih jima pi\u0161ejo, kaj vse NUJNO rabita.\nVsaka datoteka je sestavljena iz vrstic, v katerih pi\u0161e: ime predmeta,\ncena predmeta (zaokro\u017eeno na evre), nujnost (od 1 do 10, kjer je 10\nnajbolj nujno).\n\nPrimer nekaj vrstic:\n    avtomati\u010dno brisalo ritke,231,10\n    ljubezen,0,1\n    ortopedsko oblikovana duda,15,7\nPredpostavite lahko, da v imenu ni vejic, da okoli vejic ni\npresledkov, ter da sta v vsaki vrstici natanko dve vejici.\n\nSestavite funkcijo `pretvori(vrstica)`, ki iz dane vrstice ustvari\ntrojico `(ime, cena, nujnost)`, pri \u010demer naj bosta `cena` in\n`nujnost` \u0161tevili.", 
+      "challenge": "", 
+      "solution": "def pretvori(vrstica):\n    besede = vrstica.split(\",\")\n    return (besede[0], int(besede[1]), int(besede[2]))", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    if check_function('pretvori', 1):\r\n        _equal('pretvori(\"avtomati\u010dno brisalo ritke,231,10\")', (\"avtomati\u010dno brisalo ritke\", 231, 10))\r\n        _equal('pretvori(\"ljubezen,0,1\")', (\"ljubezen\", 0, 1))\r\n        _equal('pretvori(\"ortopedsko oblikovana duda,15,7\")', (\"ortopedsko oblikovana duda\", 15, 7))\r\n    yield"
+      "validation": "def trial(source):\n    if check_function('pretvori', 1):\n        _equal('pretvori(\"avtomati\u010dno brisalo ritke,231,10\")', (\"avtomati\u010dno brisalo ritke\", 231, 10))\n        _equal('pretvori(\"ljubezen,0,1\")', (\"ljubezen\", 0, 1))\n        _equal('pretvori(\"ortopedsko oblikovana duda,15,7\")', (\"ortopedsko oblikovana duda\", 15, 7))\n    yield"
     }
   }, 
   {
@@ -2332,11 +2332,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 13, 
-      "description": "# Sestavite funkcijo `preberi(imeDatoteke)`, ki vrstice datoteke\r\n# pretvori v ustrezen seznam trojic.\r\n# Na primer, iz zgornje datoteke bi dobili seznam:\r\n# `[(\"avtomati\u010dno brisalo ritke\", 231, 10), (\"ljubezen\", 0, 1), (\"ortopedsko oblikovana duda\", 15, 7)]`", 
-      "challenge": "[]", 
-      "solution": "def preberi(imeDatoteke):\r\n    seznam = []\r\n    with open(imeDatoteke) as f:\r\n        for vrstica in f:\r\n            seznam.append(pretvori(vrstica))\r\n    return seznam", 
+      "description": "Sestavite funkcijo `preberi(imeDatoteke)`, ki vrstice datoteke\npretvori v ustrezen seznam trojic.\nNa primer, iz zgornje datoteke bi dobili seznam:\n`[(\"avtomati\u010dno brisalo ritke\", 231, 10), (\"ljubezen\", 0, 1), (\"ortopedsko oblikovana duda\", 15, 7)]`", 
+      "challenge": "", 
+      "solution": "def preberi(imeDatoteke):\n    seznam = []\n    with open(imeDatoteke) as f:\n        for vrstica in f:\n            seznam.append(pretvori(vrstica))\n    return seznam", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    import os\r\n    if check_function('preberi', 1):\r\n        with open(\"_seznam.txt\", \"w\") as f:\r\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\r\n            print(\"ljubezen,0,1\", file=f)\r\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\r\n        _equal('preberi(\"_seznam.txt\")', [(\"avtomati\u010dno brisalo ritke\", 231, 10), (\"ljubezen\", 0, 1), (\"ortopedsko oblikovana duda\", 15, 7)])\r\n        os.remove(\"_seznam.txt\")\r\n    yield"
+      "validation": "def trial(source):\n    import os\n    if check_function('preberi', 1):\n        with open(\"_seznam.txt\", \"w\") as f:\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\n            print(\"ljubezen,0,1\", file=f)\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\n        _equal('preberi(\"_seznam.txt\")', [(\"avtomati\u010dno brisalo ritke\", 231, 10), (\"ljubezen\", 0, 1), (\"ortopedsko oblikovana duda\", 15, 7)])\n        os.remove(\"_seznam.txt\")\n    yield"
     }
   }, 
   {
@@ -2428,11 +2428,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 14, 
-      "description": "# Sestavite funkcijo `sestej(imeDatoteke)`, ki iz datoteke prebere vrstice,\r\n# nato pa izra\u010duna vsoto vrednosti vseh predmetov. Pozor: nekateri predmeti se\r\n# lahko pojavijo ve\u010dkrat, z razli\u010dnimi cenami. V tem primeru upo\u0161tevajte\r\n# najni\u017ejo ceno. Funkcija naj vrne vsoto.\r\n#\r\n# Na primer, iz datoteke\r\n#     ortopedsko oblikovana duda,18,7\r\n#     avtomati\u010dno brisalo ritke,231,10\r\n#     ortopedsko oblikovana duda,15,7\r\n#     ljubezen,0,1\r\n#     ortopedsko oblikovana duda,21,7\r\n#     ljubezen,1,1\r\n# bi dobili vsoto `246` (231+15+0).", 
-      "challenge": "[]", 
-      "solution": "def sestej(imeDatoteke):\r\n    seznam=preberi(imeDatoteke)\r\n    predmeti=dict()\r\n    for el in seznam:\r\n        v=predmeti.get(el[0])\r\n        if v!= None:\r\n            if el[1] >= v: continue\r\n        predmeti[el[0]]=el[1]\r\n    \r\n    return sum(predmeti.values())", 
+      "description": "Sestavite funkcijo `sestej(imeDatoteke)`, ki iz datoteke prebere vrstice,\nnato pa izra\u010duna vsoto vrednosti vseh predmetov. Pozor: nekateri predmeti se\nlahko pojavijo ve\u010dkrat, z razli\u010dnimi cenami. V tem primeru upo\u0161tevajte\nnajni\u017ejo ceno. Funkcija naj vrne vsoto.\n\nNa primer, iz datoteke\n    ortopedsko oblikovana duda,18,7\n    avtomati\u010dno brisalo ritke,231,10\n    ortopedsko oblikovana duda,15,7\n    ljubezen,0,1\n    ortopedsko oblikovana duda,21,7\n    ljubezen,1,1\nbi dobili vsoto `246` (231+15+0).", 
+      "challenge": "", 
+      "solution": "def sestej(imeDatoteke):\n    seznam=preberi(imeDatoteke)\n    predmeti=dict()\n    for el in seznam:\n        v=predmeti.get(el[0])\n        if v!= None:\n            if el[1] >= v: continue\n        predmeti[el[0]]=el[1]\n\n    return sum(predmeti.values())", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    import os\r\n    if check_function('sestej', 1):\r\n        with open(\"_seznam.txt\", \"w\") as f:\r\n            print(\"ortopedsko oblikovana duda,18,4\", file=f)\r\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\r\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\r\n            print(\"ljubezen,0,1\", file=f)\r\n            print(\"ortopedsko oblikovana duda,21,5\", file=f)\r\n            print(\"ljubezen,1,1\", file=f)\r\n        _equal('sestej(\"_seznam.txt\")', 246)\r\n        _removefiles(\"_seznam.txt\")\r\n    yield"
+      "validation": "def trial(source):\n    import os\n    if check_function('sestej', 1):\n        with open(\"_seznam.txt\", \"w\") as f:\n            print(\"ortopedsko oblikovana duda,18,4\", file=f)\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\n            print(\"ljubezen,0,1\", file=f)\n            print(\"ortopedsko oblikovana duda,21,5\", file=f)\n            print(\"ljubezen,1,1\", file=f)\n        _equal('sestej(\"_seznam.txt\")', 246)\n        _removefiles(\"_seznam.txt\")\n    yield"
     }
   }, 
   {
@@ -2524,11 +2524,11 @@
     "model": "problem.part", 
     "fields": {
       "_order": 15, 
-      "description": "# Sestavite funkcijo `poSkupinah(vhod,izhod)`, ki iz datoteke `vhod`\r\n# prebere vrstice (kot v prej\u0161njih nalogah), nato pa izra\u010duna vsoto\r\n# vrednosti predmetov posamezne nujnosti. Podobno kot prej se\r\n# nekateri predmeti lahko pojavijo ve\u010dkrat, z razli\u010dnimi cenami in razli\u010dnimi\r\n# nujnostmi. Kot prej upo\u0161tevajte najni\u017ejo ceno. \u010ce je takih ve\u010d, vzemite\r\n# najvi\u0161jo nujnost. V datoteko izhod nato zapi\u0161ite rezultate `nujnost,vsota`,\r\n# urejene padajo\u010de po nujnosti.\r\n#\r\n# Na primer, iz datoteke\r\n#     ortopedsko oblikovana duda,18,7\r\n#     avtomati\u010dno brisalo ritke,231,10\r\n#     ortopedsko oblikovana duda,15,4\r\n#     ljubezen,0,1\r\n#     ortopedsko oblikovana duda,15,7\r\n#     ljubezen,1,1\r\n#     plenice,17,7\r\n# bi v izhodni datoteki dobili vrstice\r\n#     10,231\r\n#     7,32\r\n#     1,0", 
-      "challenge": "[]", 
-      "solution": "def poSkupinah(vhod,izhod):\r\n    seznam=preberi(vhod)\r\n    predmeti=dict()\r\n    for el in seznam:\r\n        v=predmeti.get(el[0])\r\n        if v!=None:\r\n            if el[1] > v[0]: continue\r\n            elif el[1] == v[0] and el[2]<=v[1]: continue\r\n        predmeti[el[0]]=(el[1],el[2])\r\n    nujnosti=dict()\r\n    for (c,n) in predmeti.values():\r\n        nujnosti[n]=nujnosti.get(n,0)+c\r\n    sNujnosti=list(nujnosti.keys())\r\n    sNujnosti.sort(reverse=True)\r\n    with open(izhod,\"w\") as f:\r\n        for x in sNujnosti:\r\n            print(\"{0},{1}\".format(x,nujnosti[x]),file=f)", 
+      "description": "Sestavite funkcijo `poSkupinah(vhod,izhod)`, ki iz datoteke `vhod`\nprebere vrstice (kot v prej\u0161njih nalogah), nato pa izra\u010duna vsoto\nvrednosti predmetov posamezne nujnosti. Podobno kot prej se\nnekateri predmeti lahko pojavijo ve\u010dkrat, z razli\u010dnimi cenami in razli\u010dnimi\nnujnostmi. Kot prej upo\u0161tevajte najni\u017ejo ceno. \u010ce je takih ve\u010d, vzemite\nnajvi\u0161jo nujnost. V datoteko izhod nato zapi\u0161ite rezultate `nujnost,vsota`,\nurejene padajo\u010de po nujnosti.\n\nNa primer, iz datoteke\n    ortopedsko oblikovana duda,18,7\n    avtomati\u010dno brisalo ritke,231,10\n    ortopedsko oblikovana duda,15,4\n    ljubezen,0,1\n    ortopedsko oblikovana duda,15,7\n    ljubezen,1,1\n    plenice,17,7\nbi v izhodni datoteki dobili vrstice\n    10,231\n    7,32\n    1,0", 
+      "challenge": "", 
+      "solution": "def poSkupinah(vhod,izhod):\n    seznam=preberi(vhod)\n    predmeti=dict()\n    for el in seznam:\n        v=predmeti.get(el[0])\n        if v!=None:\n            if el[1] > v[0]: continue\n            elif el[1] == v[0] and el[2]<=v[1]: continue\n        predmeti[el[0]]=(el[1],el[2])\n    nujnosti=dict()\n    for (c,n) in predmeti.values():\n        nujnosti[n]=nujnosti.get(n,0)+c\n    sNujnosti=list(nujnosti.keys())\n    sNujnosti.sort(reverse=True)\n    with open(izhod,\"w\") as f:\n        for x in sNujnosti:\n            print(\"{0},{1}\".format(x,nujnosti[x]),file=f)", 
       "problem": 22, 
-      "validation": "def trial(source):\r\n    import os\r\n    if check_function('poSkupinah', 2):\r\n        with open(\"_seznam.txt\", \"w\") as f:\r\n            print(\"ortopedsko oblikovana duda,18,7\", file=f)\r\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\r\n            print(\"ortopedsko oblikovana duda,15,4\", file=f)\r\n            print(\"ljubezen,0,1\", file=f)\r\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\r\n            print(\"ljubezen,1,1\", file=f)\r\n            print(\"plenice,17,7\", file=f)\r\n        with open(\"_seznam1.txt\",\"w\") as f:\r\n            print(\"10,231\",file=f)\r\n            print(\"7,32\",file=f)\r\n            print(\"1,0\",file=f)\r\n        poSkupinah(\"_seznam.txt\",\"_seznam2.txt\")\r\n        try:\r\n            _equal('_istedatoteke(\"_seznam1.txt\",\"_seznam2.txt\")',True,\"Napa\u010dna izhodna datoteka\")\r\n        except:\r\n            _equal('False',True,\"Napaka pri preverjanju izhodne datoteke\")\r\n        _removefiles(\"_seznam.txt\",\"_seznam1.txt\",\"_seznam2.txt\")\r\n    yield"
+      "validation": "def trial(source):\n    import os\n    if check_function('poSkupinah', 2):\n        with open(\"_seznam.txt\", \"w\") as f:\n            print(\"ortopedsko oblikovana duda,18,7\", file=f)\n            print(\"avtomati\u010dno brisalo ritke,231,10\", file=f)\n            print(\"ortopedsko oblikovana duda,15,4\", file=f)\n            print(\"ljubezen,0,1\", file=f)\n            print(\"ortopedsko oblikovana duda,15,7\", file=f)\n            print(\"ljubezen,1,1\", file=f)\n            print(\"plenice,17,7\", file=f)\n        with open(\"_seznam1.txt\",\"w\") as f:\n            print(\"10,231\",file=f)\n            print(\"7,32\",file=f)\n            print(\"1,0\",file=f)\n        poSkupinah(\"_seznam.txt\",\"_seznam2.txt\")\n        try:\n            _equal('_istedatoteke(\"_seznam1.txt\",\"_seznam2.txt\")',True,\"Napa\u010dna izhodna datoteka\")\n        except:\n            _equal('False',True,\"Napaka pri preverjanju izhodne datoteke\")\n        _removefiles(\"_seznam.txt\",\"_seznam1.txt\",\"_seznam2.txt\")\n    yield"
     }
   }
 ]

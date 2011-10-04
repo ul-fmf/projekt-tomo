@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load markup %}
+{% load my_tags %}
+
+{% block title %}
+  Tomo &mdash; {{ problem_set.course.name }} &mdash; {{ problem_set.title }}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <li><a href="/">Začetna stran</a> <span class="divider">/</span></li>
+  <li><a href="{% url course problem_set.course.id %}">{{ problem_set.course.name }}</a> <span class="divider">/</span></li>
+  <li class="active">{{ problem_set.title }}</li>
+{% endblock %}
+
+{% block heading %}
+  {{ problem_set.title }}
+{% endblock %}
+
+{% block header %}
+    {{ problem_set.description|markdown }}
+
+    {% if user.is_authenticated %}
+      <a href="{% url download_problem_set problem_set.id %}"><button class="btn primary">Prenesi naloge</button></a>&nbsp;
+      {% if request.user.is_staff %}
+      <a href=""><button class="btn">Uredi datoteke</button></a>&nbsp;
+      <a href="{% url admin:course_problemset_change problem_set.id %}"><button class="btn">Uredi sklop</button></a>&nbsp;
+      <a href="{% url admin:course_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši sklop</button></a>
+      {% endif %}
+    {% else %}
+      <div id="modal-from-dom" class="modal hide fade">
+        <div class="modal-header">
+          <a href="#" class="close">&times;</a>
+          <h3>Za reševanje se najprej prijavite.</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            Če se ne morete prijaviti, lahko naloge rešujete z začasnimi datotekami.
+            V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
+            Ko se boste lahko spet prijavili, boste naloge morali ponovno prenesti ter vanje prepisati začasne rešitve.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url download_problem_set problem_set.id %}" class="btn secondary">Prenesite začasne datoteke</a>
+        </div>
+      </div>
+
+      <button data-controls-modal="modal-from-dom" data-backdrop="true" data-keyboard="true" class="btn primary">Prenesi naloge</button>
+    {% endif %}
+
+    {% if not request.user.is_staff %}
+    <span class='help-block'>
+      Z zgornjim gumbom na svoj računalnik prenesete arhiv, ki vsebuje datoteke z nalogami.<br />
+      Navodila za reševanje so zapisana v datotekah.
+    </span>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% for problem in problem_set.problems.all %}
+        {% include 'inline/problem.html' %}
+        <div class='row'>
+          <div class='span12 offset1'>
+            {{ problem.description|markdown }}
+
+            {% for part in problem.parts.all %}
+              <div class='alert-message block-message {% cycle 'default' 'warning' 'success' %}'>
+                {{ part.description|markdown }}
+
+                <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;
+">
+                  <div class="modal-header">
+                    <a href="#" class="close">&times;</a>
+                    <h3>Naloga {{ forloop.parentloop.counter }}.{{ forloop.counter }})</h3>
+                  </div>
+                  <div class="modal-body">
+                    {% with attempts|get:part.id as attempt %}
+                    <h4>Vaša rešitev</h4>
+                    {% if attempt.solution %}
+                    <pre><code>{{ attempt.solution }}</code></pre>
+                    {% else %}
+                    <p>Naloge še niste reševali.</p>
+                    {% endif %}
+                    <h4>Uradna rešitev</h4>
+                    {% if problem_set.solution_visibility == 'vidne' %}
+                      <pre><code>{{ part.solution }}</code></pre>
+                    {% endif %}
+                    {% if problem_set.solution_visibility == 'pogojno' and attempt.correct %}
+                      <pre><code>{{ part.solution }}</code></pre>
+                    {% endif %}
+                    {% if problem_set.solution_visibility == 'pogojno' and not attempt.correct %}
+                      <p>Uradno rešitev boste lahko videli šele takrat, ko boste nalogo pravilno rešili.</p>
+                    {% endif %}
+                    {% if problem_set.solution_visibility == 'skrite' %}
+                      <p>Uradne rešitve so skrite.</p>
+                    {% endif %}
+                    {% endwith %}
+                  </div>
+                </div>
+                <div class='my-actions'>
+                  <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#">Poglej rešitev</a>
+                </div>
+              </div>
+
+            {% endfor %}
+          </div>
+        </div>
+      {% if not forloop.last %}<hr />{% endif %}
+    {% endfor %}
+{% endblock %}
+
