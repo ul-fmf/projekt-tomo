@@ -173,8 +173,6 @@ postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
         accept <- "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
     if(missing(accept.language))
         accept.language <- "de,de-de;q=0.8,en-us;q=0.5,en;q=0.3"
-    if(missing(accept.encoding))
-        accept.encoding <- "gzip,deflate"
     if(missing(accept.charset))
         accept.charset <- "ISO-8859-1,utf-8;q=0.7,*;q=0.7"
     if(missing(contenttype))
@@ -202,8 +200,6 @@ postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
     header <- c(header,paste("User-Agent: ", ua, "\r\n", sep=""))
     header <- c(header,paste("Accept: ", accept, "\r\n", sep=""))
     header <- c(header,paste("Accept-Language: ", accept.language,
-        "\r\n", sep=""))
-    header <- c(header,paste("Accept-Encoding: ", accept.encoding,
         "\r\n", sep=""))
     header <- c(header,paste("Accept-Charset: ", accept.charset,
         "\r\n", sep=""))
@@ -328,7 +324,7 @@ source <- paste(readLines(path), collapse="\n")
             data='{{ data|safe }}',
             signature='{{ signature }}'
             )
-  response <- postToHost('http://tyrion.fmf.uni-lj.si', '/tomo/problem/upload/', data, port=80)
+  response <- postToHost('tyrion.fmf.uni-lj.si', '/tomo/problem/upload/', data, port=80)
   response <- sub('.*charset=utf-8', replacement='', response)
   response <- gsub("^\\s+|\\s+$", "", response)
   cat(response)
