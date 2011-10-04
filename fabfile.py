@@ -34,6 +34,7 @@ def migrate_database(destination):
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
             manage(destination, 'syncdb')
+            manage(destination, 'loaddata fixtures/auth.json')
             # manage(destination, 'migrate')
 
 def reset_staging_database():
