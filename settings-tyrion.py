@@ -7,8 +7,8 @@ from tomo.settings import *
 # http://www.djangosnippets.org/snippets/501/
 ### ACTIVE DIRECTORY SETTINGS
 
-# AD_DNS_NAME should set to the AD DNS name of the domain (ie; example.com)  
-# If you are not using the AD server as your DNS, it can also be set to 
+# AD_DNS_NAME should set to the AD DNS name of the domain (ie; example.com)
+# If you are not using the AD server as your DNS, it can also be set to
 # FQDN or IP of the AD server.
 
 AD_DNS_NAME = 'warpout.fmf.uni-lj.si'
@@ -44,6 +44,8 @@ DATABASES = {
 
 MEDIA_ROOT = '/srv/tomo/static/'
 MEDIA_URL = '/tomo/static/'
+STATIC_ROOT = '/srv/tomo/static/'
+STATIC_URL = '/tomo/static/'
 ADMIN_MEDIA_PREFIX = '/tomo/media/'
 TEMPLATE_DIRS = (
     '/srv/tomo/templates',
