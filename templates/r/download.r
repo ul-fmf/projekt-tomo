@@ -325,8 +325,8 @@ source <- paste(readLines(path), collapse="\n")
             signature='{{ signature }}'
             )
   response <- postToHost('tyrion.fmf.uni-lj.si', '/tomo/problem/upload/', data, port=80)
-  response <- sub('.*charset=utf-8', replacement='', response)
-  response <- gsub("^\\s+|\\s+$", "", response)
+  response <- sub('(?ms).*(?=Rešitve so shranjene.)', replacement='', response, perl=TRUE)
+  response <- gsub("^\\s+|(\\s*0\\s*)$", "", response)
   cat(response)
     {% else %}
     cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
