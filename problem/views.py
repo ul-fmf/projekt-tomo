@@ -54,12 +54,14 @@ def download_contents(request, problem, user, authenticated):
         'problem': problem,
         'parts': problem.parts.all(),
         'attempts': get_attempts(problem, request.user),
-        'authenticated': authenticated
+        'authenticated': authenticated,
+        'server': request.META['REMOTE_ADDR'],
+        'port': request.META['SERVER_PORT'],
     }
     if authenticated:
         context['data'], context['signature'] = pack({
             'user': user.id,
-            'problem': problem.id,
+            'problem': problem.id
         })
     t = loader.get_template(problem.language.download_file)
     return t.render(RequestContext(request, context))

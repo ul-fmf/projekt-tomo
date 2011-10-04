@@ -328,7 +328,7 @@ source <- paste(readLines(path), collapse="\n")
             data='{{ data|safe }}',
             signature='{{ signature }}'
             )
-  response <- postToHost('127.0.0.1', '/problem/upload/', data, port=8000)
+  response <- postToHost('{{ server }}', '/problem/upload/', data, port={{ port }})
   response <- sub('.*charset=utf-8', replacement='', response)
   response <- gsub("^\\s+|\\s+$", "", response)
   cat(response)

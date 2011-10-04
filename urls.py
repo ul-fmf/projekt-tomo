@@ -36,7 +36,7 @@ urlpatterns = patterns('',
     ))),
     (r'^accounts/', include(patterns('django.contrib.auth.views',
         (r'^login/$', 'login', {'template_name': 'home.html', 'extra_context': {'courses': Course.objects, 'solved': collections.defaultdict(int)}}),
-        (r'^logout/$', 'logout', {'next_page': '/'}),
+        (r'^logout/$', 'logout', {'next_page': settings.ROOT_URL}),
     )))
 )
 
