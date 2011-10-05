@@ -40,7 +40,7 @@ def migrate_database(destination):
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
     sudo('''su -c "psql --dbname=tomo --command='DROP DATABASE tomodev;'" postgres''')
-    sudo('''su -c "psql --dbname=tomo --command='CREATE DATABASE tomodev;'" postgres''')
+    sudo('''su -c "psql --dbname=tomo --command='CREATE DATABASE tomodev WITH TEMPLATE tomo;'" postgres''')
 
 def restart_apache():
     sudo('apache2ctl graceful')

@@ -82,7 +82,11 @@ invisible("TA VRSTICA JE PRAVILNA.")
 "NAPAKA JE NAJVERJETNEJE V ZADNJI VRSTICI VAŠE KODE."
 "ČE JE NE NAJDETE, VPRAŠAJTE ASISTENTA."
 
-path <- Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE)
+if (length(showConnections()) > 1) {
+    path <- showConnections()[1, "description"]
+} else {
+    path <- Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE)
+}
 split <- function() {
 toJSON <- function( x )
 {
@@ -325,7 +329,7 @@ source <- paste(readLines(path), collapse="\n")
             signature='{{ signature }}'
             )
   response <- postToHost('tyrion.fmf.uni-lj.si', '/tomo/problem/upload/', data, port=80)
-  response <- sub('(?ms).*(?=Rešitve so shranjene.)', replacement='', response, perl=TRUE)
+  response <- sub('(?ms).*(?=Shranjeno.)', replacement='', response, perl=TRUE)
   response <- gsub("^\\s+|(\\s*0\\s*)$", "", response)
   cat(response)
     {% else %}

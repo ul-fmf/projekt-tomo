@@ -1,13 +1,13 @@
-Rešitve so shranjene.
+Shranjeno.
 {% spaceless %}
     {% if incorrect %}POZOR: {% spaceless %}
     {% if incorrect|length_is:"1" %}
-        Rešitev naloge {{ incorrect|first }} je zavrnjena.
+        Naloga {{ incorrect|first }} je zavrnjena.
     {% endif %}
     {% if incorrect|length_is:"2" %}
-        Rešitvi nalog {{ incorrect|first }} in {{ incorrect|last }} sta zavrnjeni.
+        Nalogi {{ incorrect|first }} in {{ incorrect|last }} sta zavrnjeni.
     {% endif %}
     {% if incorrect|length > 2 %}
-        Rešitve nalog {{ incorrect|slice:":-1"|join:", " }} in {{ incorrect|last }} so zavrnjene.
+        Naloge {{ incorrect|slice:":-1"|join:", " }} in {{ incorrect|last }} so zavrnjene.
     {% endif %}{% endspaceless %} Obvestite asistenta.
 {% endif %}{% endspaceless %}
