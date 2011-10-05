@@ -1,6 +1,8 @@
 {% extends "inline/base.html" %}
 {% load my_tags %}
 
+{% block style %}{% if not problem_set.visible %}hidn{% endif %}{% endblock %}
+
 {% block stats-class %}{% spaceless %}
     {% if request.user.is_authenticated %}
     {% with count=solved|get:problem_set.id %}
@@ -43,9 +45,6 @@
     <a href="{% url problem_set problem_set.id %}">
         {{ problem_set.title }}
     </a>
-    {% if not problem_set.visible %}
-        (skrit)
-    {% endif %}
 {% endblock %}
 
 {% block actions %}
