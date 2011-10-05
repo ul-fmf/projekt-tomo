@@ -63,7 +63,8 @@
             {{ problem.description|markdown }}
 
             {% for part in problem.parts.all %}
-              <div class='alert-message block-message {% cycle 'default' 'warning' 'success' %}'>
+              {% with attempts|get:part.id as attempt %}
+              <div class='alert-message block-message {% if attempt.correct %}success{% else %}{% if attempt.solution %}error{% else %}default{% endif %}{% endif %}'>
                 {{ part.description|markdown }}
 
                 <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;
@@ -73,7 +74,6 @@
                     <h3>Naloga {{ forloop.parentloop.counter }}.{{ forloop.counter }})</h3>
                   </div>
                   <div class="modal-body">
-                    {% with attempts|get:part.id as attempt %}
                     <h4>Vaša rešitev</h4>
                     {% if attempt.solution %}
                     <pre><code>{{ attempt.solution }}</code></pre>
@@ -93,7 +93,6 @@
                     {% if problem_set.solution_visibility == 'skrite' %}
                       <p>Uradne rešitve so skrite.</p>
                     {% endif %}
-                    {% endwith %}
                   </div>
                 </div>
                 <div class='my-actions'>
@@ -101,6 +100,7 @@
                 </div>
               </div>
 
+            {% endwith %}
             {% endfor %}
           </div>
         </div>
