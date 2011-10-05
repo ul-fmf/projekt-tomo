@@ -174,13 +174,13 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="/">Tomo</a>
+          <a class="brand" href="{% url homepage %}">Tomo</a>
           <ul class="nav secondary-nav">
           {% if user.is_authenticated %}
             <li class="dropdown" data-dropdown="dropdown">
               <a href="#" class="dropdown-toggle">{{ user.get_full_name }}</a>
               <ul class="dropdown-menu">
-                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
+                <li><a href="{% url django.contrib.auth.views.logout next_page=request.path %}">Odjavite se</a></li>
               </ul>
             </li>
           {% else %}

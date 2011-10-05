@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block breadcrumbs %}
-  <li><a href="/">Začetna stran</a> <span class="divider">/</span></li>
+  <li><a href="{% url homepage %}">Začetna stran</a> <span class="divider">/</span></li>
   <li><a href="{% url course problem_set.course.id %}">{{ problem_set.course.name }}</a> <span class="divider">/</span></li>
   <li class="active">{{ problem_set.title }}</li>
 {% endblock %}

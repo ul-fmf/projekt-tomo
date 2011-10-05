@@ -42,7 +42,6 @@ DATABASES = {
     }
 }
 
-ROOT_URL = '/dev/tomo/'
 MEDIA_ROOT = '/srv/dev/tomo/static/'
 MEDIA_URL = '/dev/tomo/static/'
 STATIC_ROOT = '/srv/dev/tomo/static/'

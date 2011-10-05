@@ -328,7 +328,7 @@ source <- paste(readLines(path), collapse="\n")
             data='{{ data|safe }}',
             signature='{{ signature }}'
             )
-  response <- postToHost('tyrion.fmf.uni-lj.si', '/tomo/problem/upload/', data, port=80)
+  response <- postToHost('{{ request.META.SERVER_NAME }}', '{% url upload %}', data, port={{ request.META.SERVER_PORT }})
   response <- sub('(?ms).*(?=Shranjeno.)', replacement='', response, perl=TRUE)
   response <- gsub("^\\s+|(\\s*0\\s*)$", "", response)
   cat(response)
