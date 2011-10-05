@@ -42,12 +42,12 @@ DATABASES = {
     }
 }
 
-ROOT_URL = '/tomo/'
+ROOT_URL = '/'
 MEDIA_ROOT = '/srv/tomo/static/'
-MEDIA_URL = '/tomo/static/'
+MEDIA_URL = '/static/'
 STATIC_ROOT = '/srv/tomo/static/'
-STATIC_URL = '/tomo/static/'
-ADMIN_MEDIA_PREFIX = '/tomo/media/'
+STATIC_URL = '/static/'
+ADMIN_MEDIA_PREFIX = '/media/'
 TEMPLATE_DIRS = (
     '/srv/tomo/templates',
 )
