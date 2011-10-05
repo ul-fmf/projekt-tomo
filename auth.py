@@ -8,7 +8,7 @@ class ActiveDirectoryBackend:
 
   def authenticate(self,username=None,password=None):
     if username:
-      username = username.tolower()
+      username = username.lower()
     if not self.is_valid(username,password):
       return None
     try:
@@ -59,7 +59,7 @@ class ActiveDirectoryBackend:
     if password == None or password == '':
       return False
     if username:
-      username = username.tolower()
+      username = username.lower()
     binddn = '%s@%s' % (username,settings.AD_NT4_DOMAIN)
     try:
       l = ldap.initialize(settings.AD_LDAP_URL)
