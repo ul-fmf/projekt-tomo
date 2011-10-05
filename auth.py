@@ -7,6 +7,8 @@ import ldap
 class ActiveDirectoryBackend:
 
   def authenticate(self,username=None,password=None):
+    if username:
+      username = username.tolower()
     if not self.is_valid(username,password):
       return None
     try:
@@ -16,7 +18,7 @@ class ActiveDirectoryBackend:
       binddn = '%s@%s' % (username,settings.AD_NT4_DOMAIN)
       # l.simple_bind_s(username,password)
       l.simple_bind_s(binddn,password)
-      result = l.search_ext_s(settings.AD_SEARCH_DN,ldap.SCOPE_SUBTREE, 
+      result = l.search_ext_s(settings.AD_SEARCH_DN,ldap.SCOPE_SUBTREE,
                'sAMAccountName=%s' % username,settings.AD_SEARCH_FIELDS)[0][1]
       l.unbind_s()
 
@@ -56,6 +58,8 @@ class ActiveDirectoryBackend:
     ## as per comment: http://www.djangosnippets.org/snippets/501/#c868
     if password == None or password == '':
       return False
+    if username:
+      username = username.tolower()
     binddn = '%s@%s' % (username,settings.AD_NT4_DOMAIN)
     try:
       l = ldap.initialize(settings.AD_LDAP_URL)
