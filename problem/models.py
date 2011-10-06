@@ -23,15 +23,15 @@ class Problem(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
-    def unsolved(self, user):
+    def solved(self, user):
         all_parts = self.parts.count()
-        if user.is_authenticated():
+        if all_parts > 0 and user.is_authenticated():
             solved_parts = Attempt.objects.filter(submission__user=user,
                                                   part__problem=self, active=True,
                                                   correct=True).count()
+            return int(100 * solved_parts / all_parts)
         else:
-            solved_parts = 0
-        return (all_parts, solved_parts)
+            return 0
 
     class Meta:
         order_with_respect_to = 'problem_set'

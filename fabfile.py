@@ -46,7 +46,7 @@ def restart_apache():
     sudo('apache2ctl graceful')
 
 def get_dump():
-    dumps = ['problem.Problem', 'problem.Part']
+    dumps = ['problem', 'course']
     with cd('/srv/tomo/'):
         with prefix('source virtualenv/bin/activate'):
             for dump in dumps:

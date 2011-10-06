@@ -177,12 +177,13 @@ def update(request):
     problem.preamble = request.POST['preamble']
 
     for part in parts:
-        if part['id']:
-            Part.objects.get_or_create(**part)
-        try:
-            new = Part.objects.get(id=part['id']) if part['id'] else Part(problem=problem)
-        except Part.DoesNotExist:
-            new = Part(problem=problem, id=part['part'])
+        if part['part']:
+            try:
+                new = Part.objects.get(id=part['part']) if part['part'] else Part(problem=problem)
+            except Part.DoesNotExist:
+                new = Part(problem=problem, id=part['part'])
+        else:
+            new = Part(problem=problem)
         new.description = part['description']
         new.solution = part['solution']
         new.validation = part['validation']

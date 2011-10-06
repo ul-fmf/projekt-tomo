@@ -78,6 +78,13 @@
         position: relative;
         bottom: -5px;
       }
+      .stats.small {
+         width: 32px;
+         height: 32px;
+         margin: -12px 8px 8px 8px;
+         background-color: #fff;
+         font-size: 24px;
+      }
 
       .success {
         background-color: #bfe7bf;
@@ -180,7 +187,7 @@
             <li class="dropdown" data-dropdown="dropdown">
               <a href="#" class="dropdown-toggle">{{ user.get_full_name }}</a>
               <ul class="dropdown-menu">
-                <li><a href="{% url django.contrib.auth.views.logout next_page=request.path %}">Odjavite se</a></li>
+                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
               </ul>
             </li>
           {% else %}

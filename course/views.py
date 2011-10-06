@@ -31,12 +31,12 @@ def view_course(request, course_id):
 
 def view_problem_set(request, problem_set_id):
     problem_set = get_problem_set(problem_set_id, request.user)
-    unsolved = dict((problem.id, problem.unsolved(request.user))
+    solved = dict((problem.id, problem.solved(request.user))
                     for problem in problem_set.problems.all())
     attempts = get_attempts(problem_set, request.user)
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
-        'unsolved': unsolved,
+        'solved': solved,
         'attempts': attempts,
     })
 

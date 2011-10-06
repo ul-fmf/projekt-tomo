@@ -4,52 +4,37 @@
 
 {% block stats-class %}{% spaceless %}
     {% if request.user.is_authenticated %}
-    {% with all_sol=unsolved|get:problem.id %}
-    {% if all_sol.1 == all_sol.0 %}success{% else %}{% if all_sol.1 == 0 %}error{% else %}warning{% endif %}{% endif %}
+    {% with count=solved|get:problem.id %}
+    {% if count == 100 %}success{% endif %}
+    {% if count < 100 and count >= 50 %}warning{% endif %}
+    {% if count < 50 %}error{% endif %}
     {% endwith %}
     {% endif %}
 {% endspaceless %}{% endblock %}
 
 {% block stats %}{% spaceless %}
     {% if request.user.is_authenticated %}
-    {% with all_sol=unsolved|get:problem.id %}{% with count=all_sol.1 %}
-    {{ count }}
-    <small>
-    {% if count == 0 %}
-       rešenih
-    {% endif %}
-    {% if count == 1 %}
-       rešena
-    {% endif %}
-    {% if count == 2 %}
-       rešeni
-    {% endif %}
-    {% if count == 3 or count == 4 %}
-       rešene
-    {% endif %}
-    {% if count >= 5 %}
-       rešenih
-    {% endif %}
-    </small>
-    {% endwith %}{% endwith %}
-        {% else %}
+        {% with count=solved|get:problem.id %}
+        {{ count }}<small>%</small>
+        {% endwith %}
+    {% else %}
         {% with count=problem.parts.count %}
         {{ count }}
         <small>
         {% if count == 0 %}
-           nalog
+           podnalog
         {% endif %}
         {% if count == 1 %}
-           naloga
+           podnaloga
         {% endif %}
         {% if count == 2 %}
-           nalogi
+           podnalogi
         {% endif %}
         {% if count == 3 or count == 4 %}
-           naloge
+           podnaloge
         {% endif %}
         {% if count >= 5 %}
-           nalog
+           podnalog
         {% endif %}
         </small>
         {% endwith %}{% endif %}
