@@ -1,0 +1,65 @@
+[
+  {
+    "pk": 1, 
+    "model": "course.course", 
+    "fields": {
+      "students": [], 
+      "shortname": "FM-PRO1", 
+      "teachers": [
+        1
+      ], 
+      "name": "Programiranje 1 (finan\u010dna matematika)", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "course.course", 
+    "fields": {
+      "students": [], 
+      "shortname": "MAT-PRO1", 
+      "teachers": [
+        19, 
+        1
+      ], 
+      "name": "Programiranje 1 (matematika)", 
+      "description": ""
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Uvod v R", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Ponovitev Pythona", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 3, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Funkcije", 
+      "visible": false, 
+      "course": 1
+    }
+  }
+]
