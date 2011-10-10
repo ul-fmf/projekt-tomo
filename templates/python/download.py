@@ -218,7 +218,7 @@ def _check():
         'source': source,
     }).encode()
     try:
-        r = urlopen('http://{{ request.META.HTTP_HOST }}{% url upload %}', post)
+        r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url upload %}', post)
         print(r.read().decode())
     except HTTPError:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')

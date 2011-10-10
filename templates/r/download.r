@@ -88,28 +88,15 @@ if (length(showConnections()) > 1) {
     path <- Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE)
 }
 split <- function() {
+
+    # Auxillary functions
+    # extract solutions
+    # perform tests
+    # prepare json
+    # submit data
+    # print result
 toJSON <- function( x )
 {
-  #convert factors to characters
-    if( is.factor( x ) == TRUE ) {
-        tmp_names <- names( x )
-        x = as.character( x )
-        names( x ) <- tmp_names
-    }
-
-    if( !is.vector(x) && !is.null(x) && !is.list(x) ) {
-        x <- as.list( x )
-        warning("JSON only supports vectors and lists - But I'll try anyways")
-    }
-
-    if( is.null(x) )
-        return( "null" )
-
-    #treat named vectors as lists
-    if( is.null( names( x ) ) == FALSE ) {
-        x <- as.list( x )
-    }
-
     #named lists only
     if( is.list(x) && !is.null(names(x)) ) {
         if( any(duplicated(names(x))) )
@@ -144,18 +131,6 @@ toJSON <- function( x )
         return( str )
     }
 
-    if( is.nan(x) )
-        return( "\"NaN\"" )
-
-    if( is.na(x) )
-        return( "\"NA\"" )
-
-    if( is.infinite(x) )
-        return( ifelse( x == Inf, "\"Inf\"", "\"-Inf\"" ) )
-
-    if( is.logical(x) )
-        return( ifelse(x, "true", "false") )
-
     if( is.character(x) )
         return( gsub("\\/", "\\\\/", deparse(x)) )
 
@@ -167,26 +142,9 @@ toJSON <- function( x )
 postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
   accept.language, accept.encoding, accept.charset, contenttype, cookie)
 {
-    if(missing(path))
-        path <- "/"
-    if(missing(ua))
-        ua <- "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.1.5) Gecko/20070719 Iceweasel/2.0.0.5 (Debian-2.0.0.5-2)"
-    if(missing(referer))
-        referer <- NULL
-    if(missing(accept))
-        accept <- "text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5"
-    if(missing(accept.language))
-        accept.language <- "de,de-de;q=0.8,en-us;q=0.5,en;q=0.3"
-    if(missing(accept.charset))
-        accept.charset <- "ISO-8859-1,utf-8;q=0.7,*;q=0.7"
-    if(missing(contenttype))
-        contenttype <- "application/octet-stream"
-    if(missing(cookie))
-        cookie <- NULL
-    if(missing(data.to.send))
-        stop("No data to send provided")
-    if(!inherits(data.to.send,"list"))
-        stop("Data to send have to be a list")
+    host <- host
+    port <- port
+    path <- path
 
     dc <- 0; #counter for strings
     #make border
@@ -196,23 +154,8 @@ postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
 
     header <- NULL
     header <- c(header,paste("POST ", path, " HTTP/1.1\r\n", sep=""))
-    if (port==80)
-        header <- c(header,paste("Host: ", host, "\r\n", sep=""))
-    else
-        header <- c(header,paste("Host: ", host, ":", port,
-            "\r\n", sep=""))
-    header <- c(header,paste("User-Agent: ", ua, "\r\n", sep=""))
-    header <- c(header,paste("Accept: ", accept, "\r\n", sep=""))
-    header <- c(header,paste("Accept-Language: ", accept.language,
-        "\r\n", sep=""))
-    header <- c(header,paste("Accept-Charset: ", accept.charset,
-        "\r\n", sep=""))
-
+    header <- c(header,paste("Host: ", host, ":", port, "\r\n", sep=""))
     header <- c(header,"Connection: close\r\n")
-    if (!is.null(referer))
-        header <- c(header,paste("Referer: ", referer, "\r\n", sep=""))
-    if (!is.null(cookie))
-        header <- c(header,paste("Cookie: ", cookie, "\r\n", sep=""))
     header <- c(header,paste("Content-Type: multipart/form-data; boundary=",substring(bo,3),"\r\n",sep=""))
 
     mcontent <- NULL # keeps the content.
@@ -220,11 +163,7 @@ postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
     for(x in 1:length(data.to.send)) {
         val <- data.to.send[[x]]
         key <- names(data.to.send)[x]
-        if (typeof(val)=="list") {
-            ds <- c(charToRaw(sprintf("%s\r\nContent-Disposition: form-data; name=\"%s\"; filename=\"%s\"\r\nContent-Type: %s\r\n\r\n", bo, key, val$filename, contenttype)), val$object, charToRaw("\r\n"))
-        } else {
-            ds <- charToRaw(sprintf("%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n", bo,as.character(key),as.character(val)))
-        }
+        ds <- charToRaw(sprintf("%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n", bo,as.character(key),as.character(val)))
         dc <- dc + length(ds)
         mcontent <- c(mcontent,ds)
     }
@@ -250,64 +189,79 @@ postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
     close(scon)
     return(output)
 }
-source <- paste(readLines(path), collapse="\n")
-  header_pattern <- paste(
-    '(?sm)',          # dot-all and multi-line
-    '#{50,}@(\\d+)#', # beginning of header
-    '.*',             # header
-    '#{50,}\\1@#',    # end of header
-    sep=""
-  )
-  attempt_pattern <- paste(
-    header_pattern,  # header
-    '.*?',           # solution
-    '(?=#{50,}@)',   # beginning of next part
-    sep=""
-  )
-  matches <- gregexpr(attempt_pattern, source, perl=TRUE)[[1]]
-  matches <- mapply(function(start, end) {substr(source, start, end)}, matches, matches + attr(matches, "match.length") - 1)
-  extract_solution <- function(match) {
-    solution <- sub(header_pattern, replacement='', match, perl=TRUE)
-    solution <- gsub("^\\s+|\\s+$", "", solution)
-    solution
-  }
-  extract_part <- function(match) {
-    part_match <- gregexpr('(?<=@)\\d+(?=#\n)', match, perl=TRUE)[[1]]
-    part <- as.numeric(substr(match, part_match, part_match + attr(part_match, "match.length") - 1))
-    part
-  }
-  attempts <- data.frame(
-    part=sapply(matches, extract_part),
-    solution=sapply(matches, extract_solution),
-    challenge='',
-    row.names=1:length(matches),
-    stringsAsFactors=FALSE
-  )
-  for (solution in attempts$solution) {
-    eval(parse(text=solution))
-  }
-  attempts$errors <- list(list())
-  current_part <- 0
-  part <- function() {
-    current_part <<- current_part + 1
-    nchar(attempts$solution[current_part]) > 0
-  }
-  check_equal <- function(example, expected) {
-    example <- substitute(example)
-    answer <- try(eval(example), silent = TRUE)
-    if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
-      error <- paste("Ukaz ", deparse(example), " vrne ", answer, " namesto ", expected, ".", sep="")
-      attempts$errors[[current_part]] <<- c(attempts$errors[[current_part]], error)
+regex_break <- function(whole_regex, regexes, source) {
+    whole_matches <- gregexpr(paste("(?sm)", whole_regex, sep=""), source, perl=TRUE)[[1]]
+    whole_matches <- mapply(
+        function(start, end) substr(source, start, end),
+        whole_matches,
+        whole_matches + attr(whole_matches, "match.length") - 1
+    )
+    m <- length(whole_matches)
+    n <- length(regexes)
+    matches <- matrix("", nrow=m, ncol=n)
+    for (i in 1:m) {
+        whole <- whole_matches[i]
+        for (j in 1:length(regexes)) {
+            rest_regex <- paste(regexes[-(1 : j)], collapse="")
+            part_regex <- paste("(?sm)\\A", regexes[j], "(?=", rest_regex, "\\Z)", sep="")
+            match <- regexpr(part_regex, whole, perl=TRUE)
+            end <- attr(match, "match.length")
+            matches[i, j] <- substr(whole, 1, end)
+            whole <- substr(whole, end + 1, nchar(whole))
+        }
     }
-  }
-  check_challenge <- function(x) {
-      attempts$challenge[current_part] <<- paste(attempts$challenge[current_part], as.character(x), sep="")
-  }
-  {% for part in parts %}
-    if (part()) {
+    matches
+}
+    source <- paste(readLines(path), collapse="\n")
+    whole_regex <- paste(
+        '#{50,}@',
+        '(\\d+)',
+        '#.*#{50,}\\1@#', # header
+        '.*?', #solution
+        '(?=#{50,}@)',   # beginning of next part
+        sep=""
+    )
+    regexes <- c(
+        '#{50,}@',
+        '(\\d+)',
+        '#.*#{50,}(\\d+)@#', # header
+        '.*?' #solution
+    )
+    matches <- regex_break(whole_regex, regexes, source)
+    trim <- function(str) gsub("^\\s+|\\s+$", "", str)
+    attempts <- data.frame(
+      part=apply(matches, 1, function(match) as.numeric(match[2])),
+      solution=apply(matches, 1, function(match) trim(match[4])),
+      challenge='',
+      row.names=1:nrow(matches),
+      stringsAsFactors=FALSE
+    )
+    for (solution in attempts$solution) {
+        eval(parse(text=solution))
+    }
+    attempts$errors <- list(list())
+    check <- list()
+    check$current_part <- 0
+    check$part <- function() {
+      check$current_part <<- check$current_part + 1
+      nchar(attempts$solution[check$current_part]) > 0
+    }
+    check$equal <- function(example, expected) {
+      example <- substitute(example)
+      answer <- try(eval(example), silent = TRUE)
+      if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
+        error <- paste("Ukaz ", deparse(example), " vrne ", answer, " namesto ", expected, ".", sep="")
+        attempts$errors[[check$current_part]] <<- c(attempts$errors[[check$current_part]], error)
+      }
+    }
+    check$challenge <- function(x) {
+      attempts$challenge[check$current_part] <<- paste(attempts$challenge[check$current_part], as.character(x), sep="")
+    }
+    {% for part in parts %}
+    if (check$part()) {
         {{ part.validation|indent:"        "|safe }}
     }
-  {% endfor %}
+    {% endfor %}
 
   for (i in 1:length(attempts$solution)) {
     cat('Naloga ', i, ') je', sep='', end=' ')
@@ -321,8 +275,8 @@ source <- paste(readLines(path), collapse="\n")
     }
   }
 {% if authenticated %}
-    cat('Shranjujem rešitve...\n')
- attempts <- paste('[', paste(apply(attempts, 1, toJSON), collapse=', '), ']',  sep='')
+  cat('Shranjujem rešitve...\n')
+  attempts <- paste('[', paste(apply(attempts, 1, toJSON), collapse=', '), ']',  sep='')
   data <- list(
             attempts=attempts, source=source,
             data='{{ data|safe }}',
@@ -332,8 +286,8 @@ source <- paste(readLines(path), collapse="\n")
   response <- sub('(?ms).*(?=Shranjeno.)', replacement='', response, perl=TRUE)
   response <- gsub("^\\s+|(\\s*0\\s*)$", "", response)
   cat(response)
-    {% else %}
-    cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
-    {% endif %}
+{% else %}
+  cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
+{% endif %}
 }
 split()

@@ -22,6 +22,7 @@
     {% if user.is_authenticated %}
       <a href="{% url download_problem_set problem_set.id %}"><button class="btn primary">Prenesi naloge</button></a>&nbsp;
       {% if request.user.is_staff %}
+      <a href="{% url view_statistics problem_set.id %}"><button class="btn">Poglej statistiko</button></a>&nbsp;
       <a href=""><button class="btn">Uredi datoteke</button></a>&nbsp;
       <a href="{% url admin:course_problemset_change problem_set.id %}"><button class="btn">Uredi sklop</button></a>&nbsp;
       <a href="{% url admin:course_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši sklop</button></a>
@@ -56,7 +57,7 @@
 {% endblock %}
 
 {% block content %}
-    {% for problem in problem_set.problems.all %}
+    {% for problem in problems.all %}
         {% include 'inline/problem.html' %}
         <div class='row'>
           <div class='span12 offset1'>
@@ -64,7 +65,9 @@
           </div>
         </div>
         {% for part in problem.parts.all %}
+          {% with attempts|get:part.id as attempt %}
             {% include 'inline/part.html' %}
+          {% endwith %}
         {% endfor %}
       {% if not forloop.last %}<hr />{% endif %}
     {% endfor %}

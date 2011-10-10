@@ -14,6 +14,10 @@ class Course(models.Model):
     def recent(self):
         return self.problem_sets.all()[:3]
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('course', [str(self.id)])
+
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.shortname)
 
@@ -45,6 +49,9 @@ class ProblemSet(models.Model):
         else:
             return 0
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('problem_set', [str(self.id)])
 
     def __unicode__(self):
         return u'{0}'.format(self.title)

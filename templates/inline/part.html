@@ -2,12 +2,11 @@
 {% load my_tags %}
 {% load markup %}
 
-{% block stats-class %}{% with attempts|get:part.id as attempt %}
-small {% if attempt.solution %}{% if attempt.correct %}success{% else %}error{% endif %}{% endif %}{% endwith %}{% endblock %}
+{% block stats-class %}small {% if attempt.solution %}{% if attempt.correct %}success{% else %}error{% endif %}{% endif %}{% endblock %}
 
-{% block stats %}{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{% if attempt.correct %}+{% else %}–{% endif %}{% else %}?{% endif %}{% endwith %}{% endblock %}
+{% block stats %}{% if attempt.solution %}{% if attempt.correct %}+{% else %}–{% endif %}{% else %}?{% endif %}{% endblock %}
 
-{% block contents %}{% with attempts|get:part.id as attempt %}
+{% block contents %}
 {% filter markdown %}
 **{{ forloop.counter }})** {{ part.description|safe }}
 {% endfilter %}
@@ -43,5 +42,4 @@ small {% if attempt.solution %}{% if attempt.correct %}success{% else %}error{% 
 <div class='my-actions'>
   <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#">Poglej rešitev</a>
 </div>
-{% endwith %}
 {% endblock %}

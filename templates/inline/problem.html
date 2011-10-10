@@ -14,11 +14,10 @@
 
 {% block stats %}{% spaceless %}
     {% if request.user.is_authenticated %}
-        {% with count=solved|get:problem.id %}
-        {{ count }}<small>%</small>
-        {% endwith %}
+        {{ solved|get:problem.id|default_if_none:0 }}
+        <small>%</small>
     {% else %}
-        {% with count=problem.parts.count %}
+        {% with count=parts_count|get:problem.id %}
         {{ count }}
         <small>
         {% if count == 0 %}

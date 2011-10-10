@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
 import hashlib, json
-import os, tempfile, zipfile
-from django.core.servers.basehttp import FileWrapper
-
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseNotAllowed, Http404
+from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User, AnonymousUser
 
 from tomo.problem.models import Problem, Part, Submission, Attempt
 
@@ -29,7 +26,7 @@ def unpack(text, sig):
 
 def get_problem(problem_id, user):
     problem = get_object_or_404(Problem, id=problem_id)
-    verify(problem.problem_set.visible or user.is_staff())
+    verify(problem.problem_set.visible or user.is_staff)
     return problem
 
 def get_attempts(problem, user):
@@ -54,9 +51,7 @@ def download_contents(request, problem, user, authenticated):
         'problem': problem,
         'parts': problem.parts.all(),
         'attempts': get_attempts(problem, request.user),
-        'authenticated': authenticated,
-        'server': 'http://tyrion.fmf.uni-lj.si/tomo/',
-        'port': request.META['SERVER_PORT'],
+        'authenticated': authenticated
     }
     if authenticated:
         context['data'], context['signature'] = pack({
@@ -72,20 +67,6 @@ def download(request, problem_id):
     contents = download_contents(request, problem, request.user,
                                  request.user.is_authenticated())
     return download_file(filename, contents)
-
-def download_zipfile(request, problems, user, authenticated, archivename):
-    temp = tempfile.TemporaryFile()
-    archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
-    for problem in problems:
-        filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension) # Select your files here.
-        archive.writestr(filename, download_contents(request, problem, user, authenticated).encode('utf-8'))
-    archive.close()
-    wrapper = FileWrapper(temp)
-    response = HttpResponse(wrapper, content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(archivename)
-    response['Content-Length'] = temp.tell()
-    temp.seek(0)
-    return response
 
 
 @staff_member_required

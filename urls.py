@@ -10,22 +10,23 @@ urlpatterns = patterns('',
     (r'^$', 'tomo.views.homepage', {}, 'homepage'),
     (r'^admin/', include(admin.site.urls)),
     (r'^course/', include(patterns('tomo.course.views',
-        url(r'^(?P<course_id>\d+)/', 'view_course', name='course'),
+        url(r'^(?P<course_id>\d+)/$', 'view_course', name='course'),
     ))),
     (r'^problem_set/', include(patterns('tomo.course.views',
-        url(r'^(?P<problem_set_id>\d+)/zip/', 'download_problem_set',
-            name='download_problem_set'),
-        url(r'^(?P<problem_set_id>\d+)/', 'view_problem_set',
-            name='problem_set'),
+        (r'^(?P<problem_set_id>\d+)/', include(patterns('tomo.course.views',
+            url(r'^$', 'view_problem_set', name='problem_set'),
+            url(r'^zip/$', 'download_problem_set', name='download_problem_set'),
+            url(r'^stats/$', 'view_statistics', name='view_statistics'),
+        ))),
     ))),
     (r'^problem/', include(patterns('tomo.problem.views',
         (r'^(?P<problem_id>\d+)/', include(patterns('tomo.problem.views',
             # Download the file used to solve a problem
-            (r'^(?P<user_id>\d+)/', 'download_user', {}, 'download_user'),
-            # Download the file used to solve a problem
-            (r'^edit/', 'edit', {}, 'edit'),
-            # Download the file used to solve a problem
             (r'^$', 'download', {}, 'download'),
+            # Download the file used to solve a problem
+            (r'^(?P<user_id>\d+)/$', 'download_user', {}, 'download_user'),
+            # Download the file used to solve a problem
+            (r'^edit/$', 'edit', {}, 'edit'),
         ))),
         # Respond to a challenge
         (r'^upload/$', 'upload', {}, 'upload'),
@@ -35,7 +36,10 @@ urlpatterns = patterns('',
         (r'^update/$', 'update', {}, 'update'),
     ))),
     (r'^accounts/', include(patterns('django.contrib.auth.views',
-        (r'^login/$', 'login', {'template_name': 'home.html', 'extra_context': {'courses': Course.objects, 'solved': collections.defaultdict(int)}}),
+        (r'^login/$', 'login', {
+            'template_name': 'home.html',
+            'extra_context': { 'courses': Course.objects }
+        }),
         (r'^logout/$', 'logout', {'next_page': '/'}),
     )))
 )

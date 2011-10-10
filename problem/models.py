@@ -45,7 +45,7 @@ class Part(models.Model):
     challenge = models.TextField(blank=True)
 
     def __unicode__(self):
-        return u'#{0}'.format(self._order + 1)
+        return u'#{0} ({1})'.format(self._order + 1, self.id)
 
     class Meta:
         order_with_respect_to = 'problem'

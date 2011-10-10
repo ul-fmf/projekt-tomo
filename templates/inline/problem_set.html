@@ -15,7 +15,7 @@
 
 {% block stats %}{% spaceless %}
     {% if request.user.is_authenticated %}
-        {% with count=solved|get:problem_set.id %}
+        {% with count=solved|get:problem_set.id|default_if_none:0 %}
         {{ count }}<small>%</small>
         {% endwith %}
     {% else %}

@@ -22,3 +22,7 @@ def indent(source, indent):
 @register.filter
 def get(h, key):
     return h.get(key)
+
+@register.filter
+def get_default(h, key):
+    return h.get(key, None)
