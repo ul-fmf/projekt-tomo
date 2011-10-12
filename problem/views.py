@@ -102,9 +102,6 @@ def upload(request):
             challenge = attempt.get('challenge', '')
             if solution:
                 correct = challenge == part.challenge
-                if not correct:
-                    print(challenge)
-                    print(part.challenge)
                 if not errors and not correct:
                     incorrect.append(i + 1)
                 old = old_attempts.get(part.id, None)
