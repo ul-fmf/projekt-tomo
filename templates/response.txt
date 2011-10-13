@@ -12,4 +12,6 @@ Shranjeno.
         Naloge {{ incorrect|slice:":-1"|join:", " }} in {{ incorrect|last }} so zavrnjene.
     {% endif %}{% endspaceless %} Obvestite asistenta.
 {% endif %}{% endwith %}{% endspaceless %}{% for wrong, right in incorrect.values %}
-{{ wrong }} != {{ right }}{% endfor %}
+{{ wrong }}
+!=
+{{ right }}{% endfor %}
