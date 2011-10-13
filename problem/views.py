@@ -92,7 +92,8 @@ def upload(request):
     print(json.loads(request.POST['attempts']))
     attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
     old_attempts = get_attempts(problem, user)
-    incorrect = []
+    incorrect = {}
+    challenges = []
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
@@ -103,7 +104,7 @@ def upload(request):
             if solution:
                 correct = challenge == part.challenge
                 if not errors and not correct:
-                    incorrect.append(i + 1)
+                    incorrect[i + 1] = (challenge, part.challenge)
                 old = old_attempts.get(part.id, None)
                 new = Attempt(part=part, submission=submission,
                               solution=solution, errors=json.dumps(errors),

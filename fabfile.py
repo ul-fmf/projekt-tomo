@@ -16,7 +16,7 @@ def stage():
         sudo('mv _virtualenv tomo/virtualenv')
         sudo('rm tomo.tgz')
     migrate_database(staging)
-    restart_apache()
+    restart(staging)
 
 def deploy():
     intermediate = '/srv/dev/_tomo/'
@@ -24,26 +24,30 @@ def deploy():
     sudo('rm -r {0}'.format(production))
     sudo('mv {0} {1}'.format(intermediate, production))
     migrate_database(production)
-    restart_apache()
+    restart(production)
 
-def manage(destination, command):
+def manage(destination, command, options=""):
     settings = 'settings-tyrion' if destination == production else 'settings-dev'
-    sudo('./manage.py {1} --settings={0}'.format(settings, command))
-
-def migrate_database(destination):
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
-            manage(destination, 'syncdb')
-            manage(destination, 'loaddata fixtures/auth.json')
-            # manage(destination, 'migrate')
+            sudo('./manage.py {1} --settings={0} {2}'.format(settings, command, options))
+
+def dump(destination, application):
+    manage(destination, 'dumpdata', '--indent=2 {0}'.format(application))
+
+def migrate_database(destination):
+    manage(destination, 'syncdb')
+    manage(destination, 'loaddata fixtures/auth.json')
+    # manage(destination, 'migrate')
 
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
     sudo('''su -c "psql --dbname=tomo --command='DROP DATABASE tomodev;'" postgres''')
     sudo('''su -c "psql --dbname=tomo --command='CREATE DATABASE tomodev WITH TEMPLATE tomo;'" postgres''')
 
-def restart_apache():
+def restart(destination):
     sudo('apache2ctl graceful')
+
 
 def get_dump():
     dumps = ['problem', 'course', 'auth']

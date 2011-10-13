@@ -1,5 +1,6 @@
 Shranjeno.
 {% spaceless %}
+    {% with incorrect.keys as incorrect %}
     {% if incorrect %}POZOR: {% spaceless %}
     {% if incorrect|length_is:"1" %}
         Naloga {{ incorrect|first }} je zavrnjena.
@@ -10,4 +11,5 @@ Shranjeno.
     {% if incorrect|length > 2 %}
         Naloge {{ incorrect|slice:":-1"|join:", " }} in {{ incorrect|last }} so zavrnjene.
     {% endif %}{% endspaceless %} Obvestite asistenta.
-{% endif %}{% endspaceless %}
+{% endif %}{% endwith %}{% endspaceless %}{% for wrong, right in incorrect.values %}
+{{ wrong }} != {{ right }}{% endfor %}
