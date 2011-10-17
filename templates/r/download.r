@@ -250,7 +250,7 @@ regex_break <- function(whole_regex, regexes, source) {
       example <- substitute(example)
       answer <- try(eval(example), silent = TRUE)
       if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
-        error <- paste("Ukaz ", deparse(example), " vrne ", answer, " namesto ", expected, ".", sep="")
+        error <- paste("Ukaz ", deparse(example), " vrne ", toString(answer), " namesto ", toString(expected), ".", sep="")
         attempts$errors[[check$current_part]] <<- c(attempts$errors[[check$current_part]], error)
       }
     }
