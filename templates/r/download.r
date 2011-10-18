@@ -236,15 +236,14 @@ regex_break <- function(whole_regex, regexes, source) {
       row.names=1:nrow(matches),
       stringsAsFactors=FALSE
     )
-    for (solution in attempts$solution) {
-        eval(parse(text=solution))
-    }
     attempts$errors <- list(list())
     check <- list()
     check$current_part <- 0
     check$part <- function() {
       check$current_part <<- check$current_part + 1
-      nchar(attempts$solution[check$current_part]) > 0
+      solution <- attempts$solution[check$current_part]
+      eval(parse(text=solution))
+      return(nchar(solution) > 0)
     }
     check$equal <- function(example, expected) {
       example <- substitute(example)
