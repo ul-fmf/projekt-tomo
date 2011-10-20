@@ -36,7 +36,7 @@ class Check:
     def equal(example, expected, message=None, clean=lambda x: x, env={}):
         if not message:
             message = 'Ukaz {0} vrne {1!r} namesto {2!r}.'
-        answer = eval(example, globals(), locals() + env)
+        answer = eval(example, globals(), locals().update(env))
         if clean(answer) != clean(expected):
             Check.error(message.format(example, answer, expected))
 
