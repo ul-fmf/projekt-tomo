@@ -12,7 +12,7 @@ class Course(models.Model):
     teachers = models.ManyToManyField(User, related_name='taught_courses', blank=True)
 
     def recent(self):
-        return reverse(self.problem_sets.all()[:3])
+        return self.problem_sets.reverse()[:3]
 
     @models.permalink
     def get_absolute_url(self):
