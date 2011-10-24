@@ -38,7 +38,7 @@ def deploy():
     restart(production)
 
 def manage(destination, command, options=""):
-    settings = 'settings-tyrion' if destination == production else 'settings-dev'
+    settings = 'settings-tyrion' if destination == production else 'settings.dev'
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
             sudo('./manage.py {1} --settings={0} {2}'.format(settings, command, options))
