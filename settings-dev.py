@@ -43,10 +43,10 @@ DATABASES = {
 }
 
 MEDIA_ROOT = '/srv/dev/tomo/static/'
-MEDIA_URL = '/dev/tomo/static/'
+MEDIA_URL = '/dev/static/'
 STATIC_ROOT = '/srv/dev/tomo/static/'
-STATIC_URL = '/dev/tomo/static/'
-ADMIN_MEDIA_PREFIX = '/dev/tomo/media/'
+STATIC_URL = '/dev/static/'
+ADMIN_MEDIA_PREFIX = '/dev/media/'
 TEMPLATE_DIRS = (
     '/srv/dev/tomo/templates',
 )
