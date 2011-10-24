@@ -38,7 +38,7 @@ def deploy():
     restart(production)
 
 def manage(destination, command, options=""):
-    settings = 'settings-tyrion' if destination == production else 'settings.dev'
+    settings = 'settings.production' if destination == production else 'settings.dev'
     with cd(destination):
         with prefix('source virtualenv/bin/activate'):
             sudo('./manage.py {1} --settings={0} {2}'.format(settings, command, options))
@@ -65,7 +65,7 @@ def get_dump():
     with cd('/srv/tomo/'):
         with prefix('source virtualenv/bin/activate'):
             for dump in dumps:
-                sudo('./manage.py dumpdata --settings=settings-tyrion '
+                sudo('./manage.py dumpdata --settings=settings.production '
                      '--indent=2 {0} > {0}.json'.format(dump))
         get('*.json', 'fixtures/')
         sudo('rm *.json')
