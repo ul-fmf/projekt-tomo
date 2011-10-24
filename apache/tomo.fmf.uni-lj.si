@@ -1,0 +1,15 @@
+<VirtualHost 193.2.67.32>
+  ServerName tomo.fmf.uni-lj.si
+  DocumentRoot /srv/tomo/static
+
+  ErrorLog /var/log/apache2/tomo-error.log
+  CustomLog /var/log/apache2/tomo-access.log combined
+
+  WSGIScriptAlias /dev /srv/dev/tomo/apache/tomo-dev.wsgi
+  Alias /dev/static /srv/dev/tomo/static
+  Alias /dev/media /srv/dev/tomo/virtualenv/lib/python2.6/site-packages/django/contrib/admin/media
+
+  WSGIScriptAlias / /srv/tomo/apache/tomo.wsgi
+  Alias /static /srv/tomo/static
+  Alias /media /srv/tomo/virtualenv/lib/python2.6/site-packages/django/contrib/admin/media
+</VirtualHost>

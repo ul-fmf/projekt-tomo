@@ -11,6 +11,9 @@ class Language(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.name)
 
+    class Meta:
+        ordering = ['name']
+
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
     language = models.ForeignKey(Language, related_name='problems')
@@ -32,6 +35,9 @@ class Problem(models.Model):
             return int(100 * solved_parts / all_parts)
         else:
             return 0
+
+    def get_absolute_url(self):
+        return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
 
     class Meta:
         order_with_respect_to = 'problem_set'

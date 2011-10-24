@@ -30,8 +30,10 @@ urlpatterns = patterns('',
         ))),
         # Respond to a challenge
         (r'^upload/$', 'upload', {}, 'upload'),
-        # Download the file used to edit a newly created problem
-        (r'^create/$', 'edit', {}, 'create'),
+        # Download the file used to edit a problem
+        (r'^edit/$', 'edit', {}, 'edit'),
+        # Create a problem
+        (r'^create/$', 'create', {}, 'create'),
         # Update the problem
         (r'^update/$', 'update', {}, 'update'),
     ))),

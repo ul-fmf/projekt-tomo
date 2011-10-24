@@ -41,7 +41,7 @@
 
 
 {% block title %}
-    Naloga {{ forloop.counter }}{% if problem.title %} &mdash; {{ problem.title }}{% endif %}
+    <span id="problem-{{ problem.id }}">Naloga {{ forloop.counter }}{% if problem.title %} &mdash; {{ problem.title }}{% endif %}</span>
 {% endblock %}
 
 {% block actions %}

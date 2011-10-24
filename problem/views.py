@@ -6,12 +6,13 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404, render_to_response, redirect
 from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 
-from tomo.problem.models import Problem, Part, Submission, Attempt
+from tomo.problem.models import Problem, Part, Submission, Attempt, Language
+from tomo.course.models import ProblemSet
 
 def verify(cond):
     if not cond: raise PermissionDenied
@@ -117,6 +118,20 @@ def upload(request):
                     new.save()
 
     return render_to_response("response.txt", Context({'incorrect': incorrect}))
+
+@staff_member_required
+def create(request):
+    verify(request.method == 'POST')
+    problem_set = get_object_or_404(ProblemSet, id=request.POST['problem_set'])
+    language = get_object_or_404(Language, id=request.POST['language'])
+    problem = Problem(
+        author=request.user,
+        problem_set=problem_set,
+        language=language,
+        title=request.POST['title']
+    )
+    problem.save()
+    return redirect(problem)
 
 @staff_member_required
 def edit(request, problem_id=None):

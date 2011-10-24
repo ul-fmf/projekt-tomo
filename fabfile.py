@@ -5,6 +5,17 @@ env.hosts = ['matija@tyrion.fmf.uni-lj.si']
 production = '/srv/tomo/'
 staging = '/srv/dev/tomo/'
 
+fixtures = [
+    'auth',
+    'course.Course',
+    'course.ProblemSet',
+    'problem.Language',
+    'problem.Problem',
+    'problem.Part',
+    'problem.Submission',
+    'problem.Attempt',
+]
+
 def stage():
     local('hg archive tomo.tgz')
     put('tomo.tgz', '/srv/dev/', use_sudo=True)

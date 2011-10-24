@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render
 from django.template.defaultfilters import slugify
 
 from tomo.course.models import Course, ProblemSet
-from tomo.problem.models import Attempt, Problem
+from tomo.problem.models import Attempt, Problem, Language
 from tomo.problem.views import verify, download_contents
 
 def get_problem_set(problem_set_id, user):
@@ -56,12 +56,15 @@ def view_problem_set(request, problem_set_id):
         for problem, correct in solved.items():
             solved[problem] = (100 * correct) / parts_count[problem]
     attempts = get_attempts(problem_set, request.user)
+    default_language = problems.all()[0].language if problems else None
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
         'parts_count': parts_count,
         'problems': problems,
         'solved': solved,
         'attempts': attempts,
+        'languages': Language.objects,
+        'default_language': default_language,
     })
 
 @staff_member_required
