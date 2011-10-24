@@ -42,6 +42,12 @@ DATABASES = {
     }
 }
 
+
+INTERNAL_IPS = ('193.2.67.32',)
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False
+}
+
 MEDIA_ROOT = '/srv/dev/tomo/static/'
 MEDIA_URL = '/dev/static/'
 STATIC_ROOT = '/srv/dev/tomo/static/'
