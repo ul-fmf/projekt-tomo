@@ -7,7 +7,7 @@
 {% block stats %}{% if attempt.solution %}{% if attempt.correct %}+{% else %}–{% endif %}{% else %}?{% endif %}{% endblock %}
 
 {% block contents %}
-{% filter markdown %}
+{% filter markdown:"mathjax" %}
 **{{ forloop.counter }})** {{ part.description|safe }}
 {% endfilter %}
 

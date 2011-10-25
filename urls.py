@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.conf.urls.defaults import *
 from django.contrib import admin
-import collections
 from tomo.course.models import Course
 
 admin.autodiscover()

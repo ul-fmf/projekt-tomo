@@ -83,6 +83,7 @@ def download_user(request, problem_id, user_id):
 def upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
+
     download = unpack(request.POST['data'], request.POST['signature'])
     user = get_object_or_404(User, id=download['user'])
     problem = get_problem(download['problem'], user)
@@ -90,7 +91,7 @@ def upload(request):
     submission = Submission(user=user, problem=problem,
                             source=request.POST['source'])
     submission.save()
-    print(json.loads(request.POST['attempts']))
+
     attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
     old_attempts = get_attempts(problem, user)
     incorrect = {}
