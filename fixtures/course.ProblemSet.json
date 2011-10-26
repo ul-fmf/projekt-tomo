@@ -1,0 +1,122 @@
+[
+  {
+    "pk": 1, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Uvod v R", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Ponovitev Pythona", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "Naloge v tem sklopu predpostavljajo osnovno znanje programiranja. Namenjene so predvsem spoznavanju programskega jezika Python. Pri re\u0161evanju nalog si pomagajte z naslednjimi viri:\r\n\r\n* [Dokumentacija za Python](http://docs.python.org/py3k/)\r\n* [Python tutorial](http://docs.python.org/py3k/tutorial/index.html)\r\n* [Python cheat sheets](http://devcheatsheet.com/tag/python/)\r\n\r\nPozor, te naloge so za Python 3. \u010ce uporabljate Python 2, boste naleteli na te\u017eave.", 
+      "solution_visibility": "pogojno", 
+      "title": "Uvod v Python", 
+      "visible": false, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "title": "Osnove R-ja", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "Algoritmov za urejanje tabel je malo morje. Na teh vajah bomo implementirali urejanje z vstavljanjem in urejanje\r\nz zlivanjem. Vsaka naloga je opremljena tudi z video lekcijo, splo\u0161ni uvod na temo urejanja podatkov pa najdete\r\nv videolekciji [PRO1-2011-10-17-01 Urejanje tabel](http://vimeo.com/30660945).", 
+      "solution_visibility": "pogojno", 
+      "title": "Urejanje tabel", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Bisekcija in k-ti element", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "Osnovna podatkovna struktura v R-ju so vektorji.\r\nTi predstavljajo sezname elementov enakega tipa, na primer seznam samih \u0161tevil ali samih nizov.", 
+      "solution_visibility": "pogojno", 
+      "title": "Vektorji", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 11, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "Matrika $A$ je *redka*, \u010de vsebuje prete\u017eno ni\u010dle. V tem sklopu nalog bomo implementirali u\u010dinkovito predstavitev redkih matrik in osnovne operacije z njimi.", 
+      "solution_visibility": "pogojno", 
+      "title": "Redke matrike", 
+      "visible": false, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Matrike in razporeditve", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "course.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "title": "Funkcijsko programiranje", 
+      "visible": false, 
+      "course": 1
+    }
+  }
+]
