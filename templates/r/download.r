@@ -95,100 +95,10 @@ split <- function() {
     # prepare json
     # submit data
     # print result
-toJSON <- function( x )
-{
-    #named lists only
-    if( is.list(x) && !is.null(names(x)) ) {
-        if( any(duplicated(names(x))) )
-            stop( "A JSON list must have unique names" );
-        str = "{"
-        first_elem = TRUE
-        for( n in names(x) ) {
-            if( first_elem )
-                first_elem = FALSE
-            else
-                str = paste(str, ',', sep="")
-            str = paste(str, deparse(n), ":", toJSON(x[[n]]), sep="")
-        }
-        str = paste( str, "}", sep="" )
-        return( str )
-    }
 
-    #treat lists without names as JSON array
-    if( length(x) != 1 || is.list(x) ) {
-        if( !is.null(names(x)) )
-            return( toJSON(as.list(x)) ) #vector with names - treat as JSON list
-        str = "["
-        first_elem = TRUE
-        for( val in x ) {
-            if( first_elem )
-                first_elem = FALSE
-            else
-                str = paste(str, ',', sep="")
-            str = paste(str, toJSON(val), sep="")
-        }
-        str = paste( str, "]", sep="" )
-        return( str )
-    }
+    {% include 'r/json.r' %}
+    {% include 'r/http.r' %}
 
-    if( is.character(x) )
-        return( gsub("\\/", "\\\\/", deparse(x)) )
-
-    if( is.numeric(x) )
-        return( as.character(x) )
-
-    stop( "shouldnt make it here - unhandled type not caught" )
-}
-postToHost <- function(host, path, data.to.send, referer, port=80, ua, accept,
-  accept.language, accept.encoding, accept.charset, contenttype, cookie)
-{
-    host <- host
-    port <- port
-    path <- path
-
-    dc <- 0; #counter for strings
-    #make border
-    xx <- as.integer(runif(29, min=0, max=9))
-    bo <- paste(xx, collapse="")
-    bo <- paste(paste(rep("-", 29), collapse=""), bo, sep="")
-
-    header <- NULL
-    header <- c(header,paste("POST ", path, " HTTP/1.1\r\n", sep=""))
-    header <- c(header,paste("Host: ", host, ":", port, "\r\n", sep=""))
-    header <- c(header,"Connection: close\r\n")
-    header <- c(header,paste("Content-Type: multipart/form-data; boundary=",substring(bo,3),"\r\n",sep=""))
-
-    mcontent <- NULL # keeps the content.
-
-    for(x in 1:length(data.to.send)) {
-        val <- data.to.send[[x]]
-        key <- names(data.to.send)[x]
-        ds <- charToRaw(sprintf("%s\r\nContent-Disposition: form-data; name=\"%s\"\r\n\r\n%s\r\n", bo,as.character(key),as.character(val)))
-        dc <- dc + length(ds)
-        mcontent <- c(mcontent,ds)
-    }
-
-    dc <- dc + length(strsplit(bo,"")[[1]])+4;
-    header <- c(header,paste("Content-Length: ",dc,"\r\n\r\n",sep=""))
-    mypost <- c(charToRaw(paste(header, collapse="")),mcontent,
-        charToRaw(paste(bo,"--\r\n",sep="")))
-    rm(header,mcontent)
-
-    scon <- socketConnection(host=host,port=port,open="a+b",blocking=TRUE)
-    writeBin(mypost, scon, size=1)
-
-    output <- character(0)
-    #start <- proc.time()[3]
-    repeat{
-        ss <- rawToChar(readBin(scon, "raw", 2048))
-        output <- paste(output,ss,sep="")
-        if(regexpr("\r\n0\r\n\r\n",ss)>-1) break()
-        if(ss == "") break()
-        #if(proc.time()[3] > start+timeout) break()
-    }
-    close(scon)
-    return(output)
-}
 regex_break <- function(whole_regex, regexes, source) {
     whole_matches <- gregexpr(paste("(?sm)", whole_regex, sep=""), source, perl=TRUE)[[1]]
     whole_matches <- mapply(
@@ -245,12 +155,24 @@ regex_break <- function(whole_regex, regexes, source) {
       eval(parse(text=solution))
       return(nchar(solution) > 0)
     }
+    my.print <- function(x) {
+      output <- capture.output(
+        if(length(dim(x)) <= 1) cat(x) else print(x)
+      )
+      if(length(output) == 0) {
+        return("NULL")
+      } else if(length(output) == 1) {
+        return(output)
+      } else {
+        return(paste("    ", c("", output, ""), collapse="\n"))
+      }
+    }
     check$equal <- function(example, expected) {
       example <- substitute(example)
       answer <- try(eval(example), silent = TRUE)
       if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
-        error <- paste("Ukaz ", deparse(example), " vrne ", toString(answer), " namesto ", toString(expected), ".", sep="")
-        attempts$errors[[check$current_part]] <<- c(attempts$errors[[check$current_part]], error)
+        error <- paste("Ukaz ", deparse(example), " vrne ", my.print(answer), " namesto ", my.print(expected), sep="")
+        parts$errors[[check$current_part]] <<- c(parts$errors[[check$current_part]], error)
       }
     }
     check$challenge <- function(x) {

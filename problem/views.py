@@ -171,12 +171,18 @@ def update(request):
     problem.description = request.POST['description']
     problem.preamble = request.POST['preamble']
 
+    response = ['Vse naloge so shranjene.']
     for part in parts:
         if part['part']:
             try:
-                new = Part.objects.get(id=part['part']) if part['part'] else Part(problem=problem)
+                new = Part.objects.get(id=part['part'])
+                if new.id in new_parts:
+                    response.append("Podnaloga z id-jem {0} se ponavlja.".format(new.id))
+                if new.problem != problem:
+                    response.append("Podnaloga z id-jem {0} se pojavlja v drugi nalogi.".format(new.id))
+                    continue
             except Part.DoesNotExist:
-                new = Part(problem=problem, id=part['part'])
+                new = Part(problem=problem)
         else:
             new = Part(problem=problem)
         new.description = part['description']
@@ -184,11 +190,11 @@ def update(request):
         new.validation = part['validation']
         new.challenge = part.get('challenge', '')
         new.save()
-        new_parts.append(new)
+        new_parts.append(new.id)
     for p in old_parts:
-        if p not in new_parts:
-            p.delete()
-    problem.set_part_order([part.id for part in new_parts])
+        if p.id not in new_parts:
+            response.append("Podnaloge z id-jem {0} ni v datoteki.".format(p.id))
+    problem.set_part_order(new_parts)
     problem.save()
 
-    return HttpResponse('Vse naloge so shranjene.')
+    return HttpResponse("\n".join(response))

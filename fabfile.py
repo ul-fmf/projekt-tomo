@@ -6,14 +6,14 @@ production = '/srv/tomo/'
 staging = '/srv/dev/tomo/'
 
 fixtures = [
-    'auth',
+    # 'auth.User',
     'course.Course',
     'course.ProblemSet',
     'problem.Language',
     'problem.Problem',
     'problem.Part',
-    'problem.Submission',
-    'problem.Attempt',
+    # 'problem.Submission',
+    # 'problem.Attempt',
 ]
 
 def stage():
@@ -26,7 +26,7 @@ def stage():
         sudo('tar -xzf tomo.tgz')
         sudo('mv _virtualenv tomo/virtualenv')
         sudo('rm tomo.tgz')
-    migrate_database(staging)
+    # migrate_database(staging)
     restart(staging)
 
 def deploy():
@@ -34,7 +34,7 @@ def deploy():
     sudo('cp -r {0} {1}'.format(staging, intermediate))
     sudo('rm -r {0}'.format(production))
     sudo('mv {0} {1}'.format(intermediate, production))
-    migrate_database(production)
+    # migrate_database(production)
     restart(production)
 
 def manage(destination, command, options=""):
@@ -61,14 +61,14 @@ def restart(destination):
 
 
 def get_dump():
-    dumps = ['problem', 'course', 'auth']
     with cd('/srv/tomo/'):
         with prefix('source virtualenv/bin/activate'):
-            for dump in dumps:
-                sudo('./manage.py dumpdata --settings=settings.production '
-                     '--indent=2 {0} > {0}.json'.format(dump))
-        get('*.json', 'fixtures/')
-        sudo('rm *.json')
+            for fixture in fixtures:
+                with hide('stdout'):
+                    json = run('./manage.py dumpdata --settings=settings.production '
+                         '--indent=2 {0}'.format(fixture))
+                with open('fixtures/{0}.json'.format(fixture), 'w') as f:
+                    f.write(json)
 
 def save_dump():
     dumps = ['problem.Language', 'problem.Problem', 'problem.Part', 'course.Course', 'course.ProblemSet']
