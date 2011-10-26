@@ -1,38 +1,50 @@
 [
   {
-    "pk": 68, 
+    "pk": 79, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "Sestavite vektor `otoki`, ki vsebuje iste podatke kot vektor `islands`,\nle da so povr\u0161ine izra\u017eene v kvadratnih kilometrih.\nV vektor `otoki` dodajte \u0161e Blejski otok.", 
-      "challenge": "29800 14245 43999 7687 41 477 60 725 218 189 65 111 54 212 9700 2176 34 78 78 231 104 85 127 36 109 588 41 93 75 39 793 114 150 111 24320 83 34 75 17599 41 39 474 36 67 49 34 31 212 0", 
-      "solution": "otoki <- 1.609344^2 * islands\notoki[\"Blejski otok\"] <- 0.0082", 
-      "problem": 23, 
-      "validation": "check$equal(round(otoki['Java'], 3), 126.909)\ncheck$equal(round(otoki['Britain'], 3), 217.559)\ncheck$equal(otoki['Blejski otok'], 0.0082)\ncheck$challenge(paste(round(otoki), collapse=\" \"))"
+      "description": "\nDan je spisek oseb, urejen po abecedi (najprej po priimkih, nato po imenih):\n\n* Ana Ban\n* Mojca Ban\n* Bine Bobi\u010d\n* Alen Drenik\n* Janko Kova\u010d\n* Ervin Lu\u017ear\n* ...\n\nSpisek predstavimo z dvema tabelama, ena vsebuje imena in druga priimke:\n\n    ime = ['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin', ...]\n    priimek = ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear', ...]\n\nTako lahko dobimo ime in priimek k-te osebe v spisku z `ime[k], priimek[k]`.\n\nSestavi funkcijo `najdi(ime, priimek, i, p)`, ki sprejme tak\u0161ni tabeli imen in\npriimkov ime in priimek, ter vrne *indeks*, na katerem se pojavlja oseba z\nimenom `i` in priimkom `p`. Kaj vrne metoda, \u010de take osebe ni? Primer uporabe:\n\n    >>> ime = ['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin']\n    >>> priimek = ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear']\n    >>> najdi(ime, priimek, 'Mojca', 'Ban')\n    1\n", 
+      "challenge": "NoneNone19", 
+      "solution": "def najdi(ime, priimek, i, p):\n    assert (len(ime) == len(priimek)) # preverimo, da sta dolzini tabel enaki\n    u = 0\n    v = len(ime)\n    while u < v:\n        w = (u + v) // 2\n        if priimek[w] == p and ime[w] == i: return w\n        elif priimek[w] < p or (priimek[w] == p and ime[w] < i):\n            u = w + 1\n        else:\n            v = w - 1\n    return None", 
+      "problem": 36, 
+      "validation": "Check.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'Mojca', 'Ban')\"\"\", 1)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'Ervin', 'Lu\u017ear')\"\"\", 5)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     '', '')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'mojca', 'ban')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     '\u017diga', '\u017digon')\"\"\", None)\nCheck.equal(\"\"\"najdi([], [], 'Josip', 'Broz')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Josip'], ['Broz'], 'Josip', 'Broz')\"\"\", 0)\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'Matej', 'Aleksandrov'))\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'MATEJ', 'Aleksandrov'))\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'Ziva', 'Kralj'))"
     }
   }, 
   {
-    "pk": 8, 
+    "pk": 71, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "Sestavite funkcijo `praviDelitelji(n)`, ki vrne seznam vseh pravih\r\ndeliteljev \u0161tevila `n`.", 
-      "challenge": "[1, 2, 3, 5, 6, 10, 15]", 
-      "solution": "def praviDelitelji(n):\r\n    return [i for i in range(1, n) if n % i == 0]", 
-      "problem": 8, 
-      "validation": "Check.equal('praviDelitelji(19)', [1])\r\nCheck.equal('praviDelitelji(28)', [1, 2, 4, 7, 14])\r\nCheck.equal('praviDelitelji(42)', [1, 2, 3, 6, 7, 14, 21])\r\nCheck.challenge(praviDelitelji(30))\r\n"
+      "description": "Sestavite funkcijo `uredi_z_vstavljanjem`, ki na mestu uredi\ntabelo z vstavljanem.", 
+      "challenge": "[0, 0, 0, 0, 8, 8, 8, 8, 10, 10, 10, 10, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 18, 18, 18, 18, 20, 20, 20, 20, 28, 28, 28, 28, 30, 30, 30, 30, 38, 38, 38, 38, 40, 40, 40, 40, 48, 48, 48, 48, 50, 50, 50, 50, 58, 58, 58, 58, 60, 60, 60, 60, 68, 68, 68, 68, 70, 70, 70, 70, 78, 78, 78, 78, 80, 80, 80, 80, 88, 88, 88, 88, 90, 90, 90, 90, 98, 98, 98, 98, 100, 100, 100, 100, 108, 108, 108, 108, 110, 110, 110, 110, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 118, 118, 118, 118, 120, 120, 120, 120, 128, 128, 128, 128, 130, 130, 130, 130, 138, 138, 138, 138, 140, 140, 140, 140, 148, 148, 148, 148, 150, 150, 150, 150, 158, 158, 158, 158, 160, 160, 160, 160, 168, 168, 168, 168, 170, 170, 170, 170, 178, 178, 178, 178, 180, 180, 180, 180, 188, 188, 188, 188, 190, 190, 190, 190, 198, 198, 198, 198, 200, 200, 200, 200, 208, 208, 208, 208, 210, 210, 210, 210, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 218, 218, 218, 218, 220, 220, 220, 220, 228, 228, 228, 228, 230, 230, 230, 230, 238, 238, 238, 238, 240, 240, 240, 240, 248, 248, 248, 248, 250, 250, 250, 250, 258, 258, 258, 258, 260, 260, 260, 260, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 268, 268, 268, 268, 270, 270, 270, 270, 278, 278, 278, 278, 280, 280, 280, 280, 288, 288, 288, 288, 290, 290, 290, 290, 298, 298, 298, 298, 300, 300, 300, 300, 308, 308, 308, 308, 310, 310, 310, 310, 318, 318, 318, 318, 320, 320, 320, 320, 328, 328, 328, 328, 330, 330, 330, 330, 338, 338, 338, 338, 340, 340, 340, 340, 348, 348, 348, 348, 350, 350, 350, 350, 358, 358, 358, 358, 360, 360, 360, 360, 364, 364, 364, 364, 364, 364, 364, 364, 364, 364, 368, 368, 368, 368, 370, 370, 370, 370, 378, 378, 378, 378, 380, 380, 380, 380, 388, 388, 388, 388, 390, 390, 390, 390, 398, 398, 398, 398, 400, 400, 400, 400, 408, 408, 408, 408, 410, 410, 410, 410, 418, 418, 418, 418, 420, 420, 420, 420, 428, 428, 428, 428, 430, 430, 430, 430, 438, 438, 438, 438, 440, 440, 440, 440, 448, 448, 448, 448, 450, 450, 450, 450, 458, 458, 458, 458, 460, 460, 460, 460, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 468, 468, 468, 468, 470, 470, 470, 470, 478, 478, 478, 478, 480, 480, 480, 480, 488, 488, 488, 488, 490, 490, 490, 490, 498, 498, 498, 498, 500, 500, 500, 500, 508, 508, 508, 508, 510, 510, 510, 510, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 518, 518, 518, 518, 520, 520, 520, 520, 528, 528, 528, 528, 530, 530, 530, 530, 538, 538, 538, 538, 540, 540, 540, 540, 548, 548, 548, 548, 550, 550, 550, 550, 558, 558, 558, 558, 560, 560, 560, 560, 568, 568, 568, 568, 570, 570, 570, 570, 578, 578, 578, 578, 580, 580, 580, 580, 588, 588, 588, 588, 590, 590, 590, 590, 598, 598, 598, 598, 600, 600, 600, 600, 608, 608, 608, 608, 610, 610, 610, 610, 614, 614, 614, 614, 614, 614, 614, 614, 614, 614, 618, 618, 618, 618, 620, 620, 620, 620, 628, 628, 628, 628, 630, 630, 630, 630, 638, 638, 638, 638, 640, 640, 640, 640, 648, 648, 648, 648, 650, 650, 650, 650, 658, 658, 658, 658, 660, 660, 660, 660, 668, 668, 668, 668, 670, 670, 670, 670, 678, 678, 678, 678, 680, 680, 680, 680, 688, 688, 688, 688, 690, 690, 690, 690, 698, 698, 698, 698, 700, 700, 700, 700, 708, 708, 708, 708, 710, 710, 710, 710, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 718, 718, 718, 718, 720, 720, 720, 720, 728, 728, 728, 728, 730, 730, 730, 730, 738, 738, 738, 738, 740, 740, 740, 740, 748, 748, 748, 748, 750, 750, 750, 750, 758, 758, 758, 758, 760, 760, 760, 760, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 768, 768, 768, 768, 770, 770, 770, 770, 778, 778, 778, 778, 780, 780, 780, 780, 788, 788, 788, 788, 790, 790, 790, 790, 798, 798, 798, 798, 800, 800, 800, 800, 808, 808, 808, 808, 810, 810, 810, 810, 818, 818, 818, 818, 820, 820, 820, 820, 828, 828, 828, 828, 830, 830, 830, 830, 838, 838, 838, 838, 840, 840, 840, 840, 848, 848, 848, 848, 850, 850, 850, 850, 858, 858, 858, 858, 860, 860, 860, 860, 864, 864, 864, 864, 864, 864, 864, 864, 864, 864, 868, 868, 868, 868, 870, 870, 870, 870, 878, 878, 878, 878, 880, 880, 880, 880, 888, 888, 888, 888, 890, 890, 890, 890, 898, 898, 898, 898, 900, 900, 900, 900, 908, 908, 908, 908, 910, 910, 910, 910, 918, 918, 918, 918, 920, 920, 920, 920, 928, 928, 928, 928, 930, 930, 930, 930, 938, 938, 938, 938, 940, 940, 940, 940, 948, 948, 948, 948, 950, 950, 950, 950, 958, 958, 958, 958, 960, 960, 960, 960, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 968, 968, 968, 968, 970, 970, 970, 970, 978, 978, 978, 978, 980, 980, 980, 980, 988, 988, 988, 988, 990, 990, 990, 990, 998, 998, 998, 998]", 
+      "solution": "def uredi_z_vstavljanjem(a):\n    for i in range(1, len(a)):\n        j = i - 1\n        k = a[i]\n        while j >= 0 and a[j] > k:\n            a[j+1] = a[j]\n            j = j - 1\n        a[j+1] = k", 
+      "problem": 26, 
+      "validation": "a_orig = [2,5,6,1,4,7,3,9,8]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = [42]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = [1,0]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = []\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\nb = [(i * i + 17 * i + 30) % 1000 for i in range(0,1000)]\nuredi_z_vstavljanjem(b)\nCheck.challenge(b)"
     }
   }, 
   {
-    "pk": 15, 
+    "pk": 78, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "Sestavite funkcijo `limona(n)`, ki za parameter dobi naravno \u0161tevilo `n`\nin vrne niz oblike `\"Ima\u0161 n limon.\"', pri \u010demer mora biti seveda vse\npravilno sklanjano.", 
-      "challenge": "Ima\u0161 1 limono.Ima\u0161 2 limoni.Ima\u0161 3 limone.Ima\u0161 4 limone.Ima\u0161 5 limon.Ima\u0161 6 limon.Ima\u0161 7 limon.Ima\u0161 8 limon.Ima\u0161 9 limon.Ima\u0161 10 limon.Ima\u0161 11 limon.Ima\u0161 12 limon.Ima\u0161 13 limon.Ima\u0161 14 limon.Ima\u0161 15 limon.Ima\u0161 16 limon.Ima\u0161 17 limon.Ima\u0161 18 limon.Ima\u0161 19 limon.Ima\u0161 20 limon.Ima\u0161 21 limon.Ima\u0161 22 limon.Ima\u0161 23 limon.Ima\u0161 24 limon.Ima\u0161 25 limon.Ima\u0161 26 limon.Ima\u0161 27 limon.Ima\u0161 28 limon.Ima\u0161 29 limon.Ima\u0161 30 limon.Ima\u0161 31 limon.Ima\u0161 32 limon.Ima\u0161 33 limon.Ima\u0161 34 limon.Ima\u0161 35 limon.Ima\u0161 36 limon.Ima\u0161 37 limon.Ima\u0161 38 limon.Ima\u0161 39 limon.Ima\u0161 40 limon.Ima\u0161 41 limon.Ima\u0161 42 limon.Ima\u0161 43 limon.Ima\u0161 44 limon.Ima\u0161 45 limon.Ima\u0161 46 limon.Ima\u0161 47 limon.Ima\u0161 48 limon.Ima\u0161 49 limon.", 
-      "solution": "def limona(n):\n    ostanek = n % 100\n    if ostanek == 1:\n        koncnica = 'o'\n    elif ostanek == 2:\n        koncnica = 'i'\n    elif ostanek == 3 or ostanek == 4:\n        koncnica = 'e'\n    else:\n        koncnica = ''\n    return \"Ima\u0161 {0} limon{1}.\".format(n, koncnica)", 
-      "problem": 10, 
-      "validation": "Check.equal('limona(1)', 'Ima\u0161 1 limono.')\nCheck.equal('limona(2)', 'Ima\u0161 2 limoni.')\nCheck.equal('limona(3)', 'Ima\u0161 3 limone.')\nCheck.equal('limona(12)', 'Ima\u0161 12 limon.')\nCheck.equal('limona(13)', 'Ima\u0161 13 limon.')\nCheck.equal('limona(14)', 'Ima\u0161 14 limon.')\nCheck.equal('limona(101)', 'Ima\u0161 101 limono.')\nCheck.equal('limona(103)', 'Ima\u0161 103 limone.')\nCheck.equal('limona(105)', 'Ima\u0161 105 limon.')\nfor i in range(1, 50):\n    Check.challenge(limona(i))"
+      "description": "Sestavite funkcijo `diagonalna(n, d, i)`, ki vrne matriko velikosti\r\n`n` \u00d7 `n` z vektorjem `d` na diagonali ter \u0161tevilom `i` izven \r\ndiagonale.", 
+      "challenge": "30, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 29, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 28, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 27, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 26, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 25, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 24, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 23, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 22, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 21, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 19, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 18, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 17, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 16, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 14, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 13, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 12, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 11, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1", 
+      "solution": "diagonalna <- function(n, d, i) {\r\n  matrika <- matrix(i, n, n)\r\n  matrika[row(matrika) == col(matrika)] <- d\r\n  return(matrika)\r\n}", 
+      "problem": 33, 
+      "validation": "check$equal(dim(diagonalna(123, 45, 67)), c(123, 123))\r\ncheck$equal(diagonalna(3, c(4, 5, 6), 2), matrix(c(4, 2, 2, 2, 5, 2, 2, 2, 6), 3))\r\ncheck$challenge(toString(diagonalna(30, 30 : 1, 5)))"
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `zlij`, ki sprejme urejeni tabeli ter ju zlije\nv urejeno tabelo, ki jo vrne.", 
+      "challenge": "[3, 7, 8, 11, 16, 20, 23, 32, 37, 43, 54, 56, 71, 71, 88, 88, 105, 122, 139, 156, 173, 190, 207, 224, 241, 258, 275, 292, 309, 326, 343, 360, 377, 394, 411, 428, 445, 462, 479, 496, 513, 530, 547, 564, 581, 598, 615, 632, 649, 666, 683, 700, 717, 734, 751, 768, 785, 802, 819, 836][7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]", 
+      "solution": "def zlij(u,v):\n    \"\"\"Zlij urejeni tabeli u in v in vrni novo urejeno tabelo.\"\"\"\n    m = len(u)\n    n = len(v)\n    w = [0] * (m + n)\n    i = 0\n    j = 0\n    k = 0\n    while k < m + n:\n        if i < m and (j >= n or u[i] < v[j]):\n            w[k] = u[i]\n            i = i + 1\n        else:\n            w[k] = v[j]\n            j = j + 1\n        k = k + 1\n    return w", 
+      "problem": 27, 
+      "validation": "Check.equal(\"zlij([1,2,3],[4,5,6,7])\", [1,2,3,4,5,6,7])\nCheck.equal(\"zlij([2,4,6,8], [1,3,5,7])\", [1,2,3,4,5,6,7,8])\nCheck.equal(\"zlij([], [2,5,10])\", [2,5,10])\nCheck.equal(\"zlij([1], [])\", [1])\nCheck.equal(\"zlij([1,2,3], [1,2,3])\", [1,1,2,2,3,3])\nCheck.equal(\"zlij([1,1,2,3,4,4], [2,3])\", [1,1,2,2,3,3,4,4])\n\nCheck.challenge(zlij([i * i + 7 for i in range(0,10)], [17 * j + 3 for j in range(0,50)]))\nCheck.challenge(zlij([7] * 13, [7] * 15))"
     }
   }, 
   {
@@ -60,87 +72,15 @@
     }
   }, 
   {
-    "pk": 71, 
+    "pk": 8, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "Sestavite funkcijo `uredi_z_vstavljanjem`, ki na mestu uredi\ntabelo z vstavljanem.", 
-      "challenge": "[0, 0, 0, 0, 8, 8, 8, 8, 10, 10, 10, 10, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 14, 18, 18, 18, 18, 20, 20, 20, 20, 28, 28, 28, 28, 30, 30, 30, 30, 38, 38, 38, 38, 40, 40, 40, 40, 48, 48, 48, 48, 50, 50, 50, 50, 58, 58, 58, 58, 60, 60, 60, 60, 68, 68, 68, 68, 70, 70, 70, 70, 78, 78, 78, 78, 80, 80, 80, 80, 88, 88, 88, 88, 90, 90, 90, 90, 98, 98, 98, 98, 100, 100, 100, 100, 108, 108, 108, 108, 110, 110, 110, 110, 114, 114, 114, 114, 114, 114, 114, 114, 114, 114, 118, 118, 118, 118, 120, 120, 120, 120, 128, 128, 128, 128, 130, 130, 130, 130, 138, 138, 138, 138, 140, 140, 140, 140, 148, 148, 148, 148, 150, 150, 150, 150, 158, 158, 158, 158, 160, 160, 160, 160, 168, 168, 168, 168, 170, 170, 170, 170, 178, 178, 178, 178, 180, 180, 180, 180, 188, 188, 188, 188, 190, 190, 190, 190, 198, 198, 198, 198, 200, 200, 200, 200, 208, 208, 208, 208, 210, 210, 210, 210, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 214, 218, 218, 218, 218, 220, 220, 220, 220, 228, 228, 228, 228, 230, 230, 230, 230, 238, 238, 238, 238, 240, 240, 240, 240, 248, 248, 248, 248, 250, 250, 250, 250, 258, 258, 258, 258, 260, 260, 260, 260, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 264, 268, 268, 268, 268, 270, 270, 270, 270, 278, 278, 278, 278, 280, 280, 280, 280, 288, 288, 288, 288, 290, 290, 290, 290, 298, 298, 298, 298, 300, 300, 300, 300, 308, 308, 308, 308, 310, 310, 310, 310, 318, 318, 318, 318, 320, 320, 320, 320, 328, 328, 328, 328, 330, 330, 330, 330, 338, 338, 338, 338, 340, 340, 340, 340, 348, 348, 348, 348, 350, 350, 350, 350, 358, 358, 358, 358, 360, 360, 360, 360, 364, 364, 364, 364, 364, 364, 364, 364, 364, 364, 368, 368, 368, 368, 370, 370, 370, 370, 378, 378, 378, 378, 380, 380, 380, 380, 388, 388, 388, 388, 390, 390, 390, 390, 398, 398, 398, 398, 400, 400, 400, 400, 408, 408, 408, 408, 410, 410, 410, 410, 418, 418, 418, 418, 420, 420, 420, 420, 428, 428, 428, 428, 430, 430, 430, 430, 438, 438, 438, 438, 440, 440, 440, 440, 448, 448, 448, 448, 450, 450, 450, 450, 458, 458, 458, 458, 460, 460, 460, 460, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 464, 468, 468, 468, 468, 470, 470, 470, 470, 478, 478, 478, 478, 480, 480, 480, 480, 488, 488, 488, 488, 490, 490, 490, 490, 498, 498, 498, 498, 500, 500, 500, 500, 508, 508, 508, 508, 510, 510, 510, 510, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 514, 518, 518, 518, 518, 520, 520, 520, 520, 528, 528, 528, 528, 530, 530, 530, 530, 538, 538, 538, 538, 540, 540, 540, 540, 548, 548, 548, 548, 550, 550, 550, 550, 558, 558, 558, 558, 560, 560, 560, 560, 568, 568, 568, 568, 570, 570, 570, 570, 578, 578, 578, 578, 580, 580, 580, 580, 588, 588, 588, 588, 590, 590, 590, 590, 598, 598, 598, 598, 600, 600, 600, 600, 608, 608, 608, 608, 610, 610, 610, 610, 614, 614, 614, 614, 614, 614, 614, 614, 614, 614, 618, 618, 618, 618, 620, 620, 620, 620, 628, 628, 628, 628, 630, 630, 630, 630, 638, 638, 638, 638, 640, 640, 640, 640, 648, 648, 648, 648, 650, 650, 650, 650, 658, 658, 658, 658, 660, 660, 660, 660, 668, 668, 668, 668, 670, 670, 670, 670, 678, 678, 678, 678, 680, 680, 680, 680, 688, 688, 688, 688, 690, 690, 690, 690, 698, 698, 698, 698, 700, 700, 700, 700, 708, 708, 708, 708, 710, 710, 710, 710, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 714, 718, 718, 718, 718, 720, 720, 720, 720, 728, 728, 728, 728, 730, 730, 730, 730, 738, 738, 738, 738, 740, 740, 740, 740, 748, 748, 748, 748, 750, 750, 750, 750, 758, 758, 758, 758, 760, 760, 760, 760, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 764, 768, 768, 768, 768, 770, 770, 770, 770, 778, 778, 778, 778, 780, 780, 780, 780, 788, 788, 788, 788, 790, 790, 790, 790, 798, 798, 798, 798, 800, 800, 800, 800, 808, 808, 808, 808, 810, 810, 810, 810, 818, 818, 818, 818, 820, 820, 820, 820, 828, 828, 828, 828, 830, 830, 830, 830, 838, 838, 838, 838, 840, 840, 840, 840, 848, 848, 848, 848, 850, 850, 850, 850, 858, 858, 858, 858, 860, 860, 860, 860, 864, 864, 864, 864, 864, 864, 864, 864, 864, 864, 868, 868, 868, 868, 870, 870, 870, 870, 878, 878, 878, 878, 880, 880, 880, 880, 888, 888, 888, 888, 890, 890, 890, 890, 898, 898, 898, 898, 900, 900, 900, 900, 908, 908, 908, 908, 910, 910, 910, 910, 918, 918, 918, 918, 920, 920, 920, 920, 928, 928, 928, 928, 930, 930, 930, 930, 938, 938, 938, 938, 940, 940, 940, 940, 948, 948, 948, 948, 950, 950, 950, 950, 958, 958, 958, 958, 960, 960, 960, 960, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 964, 968, 968, 968, 968, 970, 970, 970, 970, 978, 978, 978, 978, 980, 980, 980, 980, 988, 988, 988, 988, 990, 990, 990, 990, 998, 998, 998, 998]", 
-      "solution": "def uredi_z_vstavljanjem(a):\n    for i in range(1, len(a)):\n        j = i - 1\n        k = a[i]\n        while j >= 0 and a[j] > k:\n            a[j+1] = a[j]\n            j = j - 1\n        a[j+1] = k", 
-      "problem": 26, 
-      "validation": "a_orig = [2,5,6,1,4,7,3,9,8]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = [42]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = [1,0]\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\na_orig = []\na = a_orig[:]\nCheck.equal(\"uredi_z_vstavljanjem(a)\", None, env=locals(),\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a))\nCheck.equal(\"a\", sorted(a_orig), env=locals(),\n            message=\"\u010ce je a = {0},\\n  je po klicu uredi_z_vstavljanjem(a),\\n  tabela a enaka {{1}}\\n  morala pa bi biti {{2}}\".format(a_orig))\n\nb = [(i * i + 17 * i + 30) % 1000 for i in range(0,1000)]\nuredi_z_vstavljanjem(b)\nCheck.challenge(b)"
-    }
-  }, 
-  {
-    "pk": 74, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Sestavite funkcijo `zlij`, ki sprejme urejeni tabeli ter ju zlije\nv urejeno tabelo, ki jo vrne.", 
-      "challenge": "[3, 7, 8, 11, 16, 20, 23, 32, 37, 43, 54, 56, 71, 71, 88, 88, 105, 122, 139, 156, 173, 190, 207, 224, 241, 258, 275, 292, 309, 326, 343, 360, 377, 394, 411, 428, 445, 462, 479, 496, 513, 530, 547, 564, 581, 598, 615, 632, 649, 666, 683, 700, 717, 734, 751, 768, 785, 802, 819, 836][7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7]", 
-      "solution": "def zlij(u,v):\n    \"\"\"Zlij urejeni tabeli u in v in vrni novo urejeno tabelo.\"\"\"\n    m = len(u)\n    n = len(v)\n    w = [0] * (m + n)\n    i = 0\n    j = 0\n    k = 0\n    while k < m + n:\n        if i < m and (j >= n or u[i] < v[j]):\n            w[k] = u[i]\n            i = i + 1\n        else:\n            w[k] = v[j]\n            j = j + 1\n        k = k + 1\n    return w", 
-      "problem": 27, 
-      "validation": "Check.equal(\"zlij([1,2,3],[4,5,6,7])\", [1,2,3,4,5,6,7])\nCheck.equal(\"zlij([2,4,6,8], [1,3,5,7])\", [1,2,3,4,5,6,7,8])\nCheck.equal(\"zlij([], [2,5,10])\", [2,5,10])\nCheck.equal(\"zlij([1], [])\", [1])\nCheck.equal(\"zlij([1,2,3], [1,2,3])\", [1,1,2,2,3,3])\nCheck.equal(\"zlij([1,1,2,3,4,4], [2,3])\", [1,1,2,2,3,3,4,4])\n\nCheck.challenge(zlij([i * i + 7 for i in range(0,10)], [17 * j + 3 for j in range(0,50)]))\nCheck.challenge(zlij([7] * 13, [7] * 15))"
-    }
-  }, 
-  {
-    "pk": 34, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Sestavite funkcijo `slika(permutacija, x)`, vrne pa sliko \u0161tevila `x`\r\ns podano permutacijo.\r\nPredpostavite lahko, da je dano \u0161tevilo v domeni permutacije.\r\n\r\n    >>> slika([3, 2, 1], 3)\r\n    1", 
-      "challenge": "979695949392919089888786858483828180797877767574737271706968676665646362616059585756555453525150494847464544434241", 
-      "solution": "def slika(permutacija, x):\r\n    return permutacija[x - 1]", 
-      "problem": 19, 
-      "validation": "Check.equal('slika([3, 4, 2, 1], 1)', 3)\r\nCheck.equal('slika([3, 4, 2, 1], 2)', 4)\r\nCheck.equal('slika([3, 4, 2, 1], 3)', 2)\r\nCheck.equal('slika([3, 4, 2, 1], 4)', 1)\r\n\r\nfor i in range(3, 60):\r\n    Check.challenge(slika(_perm, i))"
-    }
-  }, 
-  {
-    "pk": 5, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Sestavite funkcijo `ravninskaRazdalja(x1, y1, x2, y2)`, ki vrne razdaljo med\r\nto\u010dkama (`x1`, `y1`) in (`x2`, `y2`).\r\n\r\n    >>> ravninskaRazdalja(1, 2, 3, 4)\r\n    2.82842712475", 
-      "challenge": "2.236068", 
-      "solution": "def ravninskaRazdalja(x1, y1, x2, y2):\r\n    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)", 
-      "problem": 4, 
-      "validation": "Check.num_equal('ravninskaRazdalja(1, 2, 3, 4)', 2.82842712475, 6)\r\nCheck.num_equal('ravninskaRazdalja(0, 0, 3, 4)', 5, 6)\r\nCheck.challenge(round(ravninskaRazdalja(1, 4, 2, 6), 6))"
-    }
-  }, 
-  {
-    "pk": 90, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Sestavite funkcijo `matrika2slovar(a)`, ki sprejme obi\u010dajno predstavitev\nmatrike s tabelo tabel in vrne njeno predstavitev s slovarjem po koordinatah.", 
-      "challenge": "", 
-      "solution": "def matrika2slovar(a):\n    \"\"\"Matriko predstavljeno z dvojno tabelo pretvori v slovar po koordinatah.\"\"\"\n    d = {}\n    for (i,vrstica) in enumerate(a):\n        for (j,x) in enumerate(vrstica):\n            if x != 0: d[(i,j)] = x\n    return d", 
-      "problem": 39, 
-      "validation": "Check.equal(\"\"\"matrika2slovar([[1, 0, 0, 0, 2, 0],\n                               [0, 4, 0, 0, 3, 0],\n                               [0, 0, 0, 0, 0, 0],\n                               [0, 0, 0, 0, 0, 5]])\"\"\",\n            { (0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5 },\n            clean = (lambda d : sorted(d.items())))"
-    }
-  }, 
-  {
-    "pk": 85, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "V spremenljivko `otroci` shranite podrazporeditev s podatki\no vseh otrocih v 2. razredu.", 
-      "challenge": "0, 0, 11, 13", 
-      "solution": "otroci <- Titanic[\"2nd\", , \"Child\", ]", 
-      "problem": 34, 
-      "validation": "check$equal(otroci[\"Male\", \"Yes\"], 11)\ncheck$equal(otroci[\"Female\", \"No\"], 0)\ncheck$challenge(toString(otroci))"
-    }
-  }, 
-  {
-    "pk": 39, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Sestavite funkcijo `identiteta(n)`, ki vrne identi\u010dno matriko z\r\ndimenzijami `n` \u00d7 `n`.", 
-      "challenge": "[[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]", 
-      "solution": "def identiteta(n):\r\n    return [[1 if i == j else 0 for i in range(n)] for j in range(n)]", 
-      "problem": 20, 
-      "validation": "Check.equal('identiteta(1)', [[1]])\r\nCheck.equal('identiteta(2)', [[1, 0], [0, 1]])\r\nCheck.equal('identiteta(4)', [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])\r\nCheck.challenge(identiteta(25))"
+      "description": "Sestavite funkcijo `praviDelitelji(n)`, ki vrne seznam vseh pravih\r\ndeliteljev \u0161tevila `n`.", 
+      "challenge": "[1, 2, 3, 5, 6, 10, 15]", 
+      "solution": "def praviDelitelji(n):\r\n    return [i for i in range(1, n) if n % i == 0]", 
+      "problem": 8, 
+      "validation": "Check.equal('praviDelitelji(19)', [1])\r\nCheck.equal('praviDelitelji(28)', [1, 2, 4, 7, 14])\r\nCheck.equal('praviDelitelji(42)', [1, 2, 3, 6, 7, 14, 21])\r\nCheck.challenge(praviDelitelji(30))\r\n"
     }
   }, 
   {
@@ -168,15 +108,15 @@
     }
   }, 
   {
-    "pk": 79, 
+    "pk": 34, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "\nDan je spisek oseb, urejen po abecedi (najprej po priimkih, nato po imenih):\n\n* Ana Ban\n* Mojca Ban\n* Bine Bobi\u010d\n* Alen Drenik\n* Janko Kova\u010d\n* Ervin Lu\u017ear\n* ...\n\nSpisek predstavimo z dvema tabelama, ena vsebuje imena in druga priimke:\n\n    ime = ['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin', ...]\n    priimek = ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear', ...]\n\nTako lahko dobimo ime in priimek k-te osebe v spisku z `ime[k], priimek[k]`.\n\nSestavi funkcijo `najdi(ime, priimek, i, p)`, ki sprejme tak\u0161ni tabeli imen in\npriimkov ime in priimek, ter vrne *indeks*, na katerem se pojavlja oseba z\nimenom `i` in priimkom `p`. Kaj vrne metoda, \u010de take osebe ni? Primer uporabe:\n\n    >>> ime = ['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin']\n    >>> priimek = ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear']\n    >>> najdi(ime, priimek, 'Mojca', 'Ban')\n    1\n", 
-      "challenge": "NoneNone19", 
-      "solution": "def najdi(ime, priimek, i, p):\n    assert (len(ime) == len(priimek)) # preverimo, da sta dolzini tabel enaki\n    u = 0\n    v = len(ime)\n    while u < v:\n        w = (u + v) // 2\n        if priimek[w] == p and ime[w] == i: return w\n        elif priimek[w] < p or (priimek[w] == p and ime[w] < i):\n            u = w + 1\n        else:\n            v = w - 1\n    return None", 
-      "problem": 36, 
-      "validation": "Check.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'Mojca', 'Ban')\"\"\", 1)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'Ervin', 'Lu\u017ear')\"\"\", 5)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     '', '')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     'mojca', 'ban')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Ana', 'Mojca', 'Bine', 'Alen', 'Janko', 'Ervin'],\n                     ['Ban', 'Ban', 'Bobi\u010d', 'Drenik', 'Kova\u010d', 'Lu\u017ear'],\n                     '\u017diga', '\u017digon')\"\"\", None)\nCheck.equal(\"\"\"najdi([], [], 'Josip', 'Broz')\"\"\", None)\nCheck.equal(\"\"\"najdi(['Josip'], ['Broz'], 'Josip', 'Broz')\"\"\", 0)\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'Matej', 'Aleksandrov'))\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'MATEJ', 'Aleksandrov'))\n\nCheck.challenge(\n    najdi(['Alja', 'Andrej', 'Andrej', 'Barbara', 'Eva', 'Eva', 'Filip', 'Gregor', 'Jure', 'KATJA', 'Matej', 'Mateja', 'Naja', 'Nejc', 'Nina', 'Samo', 'Selena', 'Tomaz', 'Ur\u0161ka', 'Ziva'],\n          ['Aleksandrov', 'Arli\u010d', 'Bajcer', 'Bauer', 'Bevc', 'Bobi\u010d', 'Bobnar', 'Bohanec', 'Borstnik', 'Breznik', 'Cerinsek', 'Derca', 'Dervi\u0161i\u0107', 'Dezman', 'Drnovsek', 'Dvorsak', 'Jereb', 'KUSTER', 'Kozarski', 'Kralj'],\n          'Ziva', 'Kralj'))"
+      "description": "Sestavite funkcijo `slika(permutacija, x)`, vrne pa sliko \u0161tevila `x`\r\ns podano permutacijo.\r\nPredpostavite lahko, da je dano \u0161tevilo v domeni permutacije.\r\n\r\n    >>> slika([3, 2, 1], 3)\r\n    1", 
+      "challenge": "979695949392919089888786858483828180797877767574737271706968676665646362616059585756555453525150494847464544434241", 
+      "solution": "def slika(permutacija, x):\r\n    return permutacija[x - 1]", 
+      "problem": 19, 
+      "validation": "Check.equal('slika([3, 4, 2, 1], 1)', 3)\r\nCheck.equal('slika([3, 4, 2, 1], 2)', 4)\r\nCheck.equal('slika([3, 4, 2, 1], 3)', 2)\r\nCheck.equal('slika([3, 4, 2, 1], 4)', 1)\r\n\r\nfor i in range(3, 60):\r\n    Check.challenge(slika(_perm, i))"
     }
   }, 
   {
@@ -192,18 +132,6 @@
     }
   }, 
   {
-    "pk": 1, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 0, 
-      "description": "Ko napi\u0161ete re\u0161itev, pritisnite `ctrl-shift-S` oziroma _Source_.\r\nPreverila se bo pravilnost vseh nalog, katerih re\u0161itev ni prazna.\r\n", 
-      "challenge": "", 
-      "solution": "42", 
-      "problem": 1, 
-      "validation": ""
-    }
-  }, 
-  {
     "pk": 62, 
     "model": "problem.part", 
     "fields": {
@@ -213,6 +141,102 @@
       "solution": "vsota.kvadratov <- function(n) {\n    return(sum((1 : n)^2))\n}", 
       "problem": 21, 
       "validation": "check$equal(vsota.kvadratov(3), 14)\ncheck$equal(vsota.kvadratov(4), 30)\ncheck$challenge(vsota.kvadratov(100))"
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `ravninskaRazdalja(x1, y1, x2, y2)`, ki vrne razdaljo med\r\nto\u010dkama (`x1`, `y1`) in (`x2`, `y2`).\r\n\r\n    >>> ravninskaRazdalja(1, 2, 3, 4)\r\n    2.82842712475", 
+      "challenge": "2.236068", 
+      "solution": "def ravninskaRazdalja(x1, y1, x2, y2):\r\n    return ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** (1 / 2)", 
+      "problem": 4, 
+      "validation": "Check.num_equal('ravninskaRazdalja(1, 2, 3, 4)', 2.82842712475, 6)\r\nCheck.num_equal('ravninskaRazdalja(0, 0, 3, 4)', 5, 6)\r\nCheck.challenge(round(ravninskaRazdalja(1, 4, 2, 6), 6))"
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `identiteta(n)`, ki vrne identi\u010dno matriko z\r\ndimenzijami `n` \u00d7 `n`.", 
+      "challenge": "[[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]", 
+      "solution": "def identiteta(n):\r\n    return [[1 if i == j else 0 for i in range(n)] for j in range(n)]", 
+      "problem": 20, 
+      "validation": "Check.equal('identiteta(1)', [[1]])\r\nCheck.equal('identiteta(2)', [[1, 0], [0, 1]])\r\nCheck.equal('identiteta(4)', [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]])\r\nCheck.challenge(identiteta(25))"
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `limona(n)`, ki za parameter dobi naravno \u0161tevilo `n`\nin vrne niz oblike `\"Ima\u0161 n limon.\"', pri \u010demer mora biti seveda vse\npravilno sklanjano.", 
+      "challenge": "Ima\u0161 1 limono.Ima\u0161 2 limoni.Ima\u0161 3 limone.Ima\u0161 4 limone.Ima\u0161 5 limon.Ima\u0161 6 limon.Ima\u0161 7 limon.Ima\u0161 8 limon.Ima\u0161 9 limon.Ima\u0161 10 limon.Ima\u0161 11 limon.Ima\u0161 12 limon.Ima\u0161 13 limon.Ima\u0161 14 limon.Ima\u0161 15 limon.Ima\u0161 16 limon.Ima\u0161 17 limon.Ima\u0161 18 limon.Ima\u0161 19 limon.Ima\u0161 20 limon.Ima\u0161 21 limon.Ima\u0161 22 limon.Ima\u0161 23 limon.Ima\u0161 24 limon.Ima\u0161 25 limon.Ima\u0161 26 limon.Ima\u0161 27 limon.Ima\u0161 28 limon.Ima\u0161 29 limon.Ima\u0161 30 limon.Ima\u0161 31 limon.Ima\u0161 32 limon.Ima\u0161 33 limon.Ima\u0161 34 limon.Ima\u0161 35 limon.Ima\u0161 36 limon.Ima\u0161 37 limon.Ima\u0161 38 limon.Ima\u0161 39 limon.Ima\u0161 40 limon.Ima\u0161 41 limon.Ima\u0161 42 limon.Ima\u0161 43 limon.Ima\u0161 44 limon.Ima\u0161 45 limon.Ima\u0161 46 limon.Ima\u0161 47 limon.Ima\u0161 48 limon.Ima\u0161 49 limon.", 
+      "solution": "def limona(n):\n    ostanek = n % 100\n    if ostanek == 1:\n        koncnica = 'o'\n    elif ostanek == 2:\n        koncnica = 'i'\n    elif ostanek == 3 or ostanek == 4:\n        koncnica = 'e'\n    else:\n        koncnica = ''\n    return \"Ima\u0161 {0} limon{1}.\".format(n, koncnica)", 
+      "problem": 10, 
+      "validation": "Check.equal('limona(1)', 'Ima\u0161 1 limono.')\nCheck.equal('limona(2)', 'Ima\u0161 2 limoni.')\nCheck.equal('limona(3)', 'Ima\u0161 3 limone.')\nCheck.equal('limona(12)', 'Ima\u0161 12 limon.')\nCheck.equal('limona(13)', 'Ima\u0161 13 limon.')\nCheck.equal('limona(14)', 'Ima\u0161 14 limon.')\nCheck.equal('limona(101)', 'Ima\u0161 101 limono.')\nCheck.equal('limona(103)', 'Ima\u0161 103 limone.')\nCheck.equal('limona(105)', 'Ima\u0161 105 limon.')\nfor i in range(1, 50):\n    Check.challenge(limona(i))"
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `matrika_v_redko(a)`, ki sprejme obi\u010dajno predstavitev\nmatrike s tabelo tabel in vrne njeno predstavitev s slovarjem po koordinatah.", 
+      "challenge": "({(9, 26): 1, (45, 8): 1, (0, 0): 1, (27, 20): 1, (13, 45): 1, (10, 7): 1, (32, 46): 1, (8, 43): 1, (14, 18): 1, (46, 24): 1, (47, 38): 1, (20, 28): 1, (34, 21): 1, (31, 2): 1, (41, 31): 1, (37, 22): 1, (23, 6): 1, (29, 15): 1, (40, 5): 1, (17, 32): 1, (25, 17): 1}, 50, 50)", 
+      "solution": "def matrika_v_redko(a):\n    \"\"\"Matriko predstavljeno z dvojno tabelo pretvori v slovar po koordinatah.\"\"\"\n    m = len(a)\n    n = len(a[0])\n    d = {}\n    for (i,vrstica) in enumerate(a):\n        for (j,x) in enumerate(vrstica):\n            if x != 0: d[(i,j)] = x\n    return (d, m, n)", 
+      "problem": 39, 
+      "validation": "Check.equal(\"\"\"matrika_v_redko([[1, 0, 0, 0, 2, 0],\n                               [0, 4, 0, 0, 3, 0],\n                               [0, 0, 0, 0, 0, 0],\n                               [0, 0, 0, 0, 0, 5]])\"\"\",\n            ({ (0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5 }, 4, 6))\n\nCheck.equal(\"\"\"matrika_v_redko([[1]])\"\"\",\n            ({ (0,0) : 1 }, 1, 1))\n\nCheck.equal(\"\"\"matrika_v_redko([[1,1],[1,1]])\"\"\",\n            ({ (0,0) : 1, (0,1) : 1, (1, 0): 1, (1,1) : 1 }, 2, 2))\n\nCheck.challenge(matrika_v_redko([[int((i*i + j) % 107 == 0) for j in range(50)]\n                                                             for i in range(50)]))"
+    }
+  }, 
+  {
+    "pk": 96, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite funkcijo `prestopno(l)`, ki vrne `True`, \u010de je leto `l` \nprestopno, sicer pa vrne `False`.", 
+      "challenge": "[False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, False, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False, True, False, False, False]", 
+      "solution": "def prestopno(l):\n    return (l % 400 == 0) or (l % 4 == 0 and l % 100 != 0)", 
+      "problem": 29, 
+      "validation": "Check.equal(\"prestopno(2011)\", False)\nCheck.equal(\"prestopno(2000)\", True)\nCheck.equal(\"prestopno(1900)\", False)\nCheck.equal(\"prestopno(2004)\", True)\n\nCheck.challenge([prestopno(l) for l in range(1500, 2000)])"
+    }
+  }, 
+  {
+    "pk": 85, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "V spremenljivko `otroci` shranite podrazporeditev s podatki\no vseh otrocih v 2. razredu.", 
+      "challenge": "0, 0, 11, 13", 
+      "solution": "otroci <- Titanic[\"2nd\", , \"Child\", ]", 
+      "problem": 34, 
+      "validation": "check$equal(otroci[\"Male\", \"Yes\"], 11)\ncheck$equal(otroci[\"Female\", \"No\"], 0)\ncheck$challenge(toString(otroci))"
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Sestavite vektor `otoki`, ki vsebuje iste podatke kot vektor `islands`,\nle da so povr\u0161ine izra\u017eene v kvadratnih kilometrih.\nV vektor `otoki` dodajte \u0161e Blejski otok.", 
+      "challenge": "29800 14245 43999 7687 41 477 60 725 218 189 65 111 54 212 9700 2176 34 78 78 231 104 85 127 36 109 588 41 93 75 39 793 114 150 111 24320 83 34 75 17599 41 39 474 36 67 49 34 31 212 0", 
+      "solution": "otoki <- 1.609344^2 * islands\notoki[\"Blejski otok\"] <- 0.0082", 
+      "problem": 23, 
+      "validation": "check$equal(round(otoki['Java'], 3), 126.909)\ncheck$equal(round(otoki['Britain'], 3), 217.559)\ncheck$equal(otoki['Blejski otok'], 0.0082)\ncheck$challenge(paste(round(otoki), collapse=\" \"))"
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 0, 
+      "description": "Ko napi\u0161ete re\u0161itev, pritisnite `ctrl-shift-S` oziroma _Source_.\r\nPreverila se bo pravilnost vseh nalog, katerih re\u0161itev ni prazna.\r\n", 
+      "challenge": "", 
+      "solution": "42", 
+      "problem": 1, 
+      "validation": ""
     }
   }, 
   {
@@ -252,27 +276,39 @@
     }
   }, 
   {
-    "pk": 78, 
+    "pk": 94, 
     "model": "problem.part", 
     "fields": {
       "_order": 0, 
-      "description": "Sestavite funkcijo `diagonalna(n, d, i)`, ki vrne matriko velikosti\r\n`n` \u00d7 `n` z vektorjem `d` na diagonali ter \u0161tevilom `i` izven \r\ndiagonale.", 
-      "challenge": "30, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 29, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 28, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 27, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 26, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 25, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 24, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 23, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 22, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 21, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 19, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 18, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 17, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 16, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 14, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 13, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 12, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 11, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 9, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 8, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 7, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 1", 
-      "solution": "diagonalna <- function(n, d, i) {\r\n  matrika <- matrix(i, n, n)\r\n  matrika[row(matrika) == col(matrika)] <- d\r\n  return(matrika)\r\n}", 
-      "problem": 33, 
-      "validation": "check$equal(dim(diagonalna(123, 45, 67)), c(123, 123))\r\ncheck$equal(diagonalna(3, c(4, 5, 6), 2), matrix(c(4, 2, 2, 2, 5, 2, 2, 2, 6), 3))\r\ncheck$challenge(toString(dput(diagonalna(30, 30 : 1, 5))))"
+      "description": "Sestavi funkcijo `sled((d,m,n))`, ki vrne sled redke matrike, predstavljene\ns trojico `(d,m,n)`. Sled je vsota diagonalnih elementov.", 
+      "challenge": "741321", 
+      "solution": "def sled(dmn):\n    (d,m,n) = dmn\n    return sum([x for ((i,j),x) in d.items() if i == j])", 
+      "problem": 40, 
+      "validation": "Check.equal(\"\"\"sled(({(0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5}, 4, 6))\"\"\",\n            5)\n\nCheck.equal(\"\"\"sled(({(i,i):i for i in range(101)}, 100, 100))\"\"\",\n            5050)\n\nCheck.challenge(sled(({(i,i):i*i*i for i in range(42)}, 50, 50)))"
     }
   }, 
   {
-    "pk": 6, 
+    "pk": 73, 
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "Sestavite funkcijo `polarnaRazdalja(r1, fi1, r2, fi2)`, ki vrne razdaljo med\r\nto\u010dkama (`r1`, `fi1`) in (`r2`, `fi2`)$ v ravnini, pri \u010demer so\r\nkoordinate v polarnem zapisu, koti pa so izra\u017eeni v stopinjah.\r\n\r\n    >>> polarnaRazdalja(1, 30, 4, 90)\r\n    3.60555127546", 
-      "challenge": "1.001218", 
-      "solution": "import math\r\ndef polarnaRazdalja(r1, fi1, r2, fi2):\r\n    fi1 = math.radians(fi1)\r\n    fi2 = math.radians(fi2)\r\n    return ravninskaRazdalja(r1 * math.cos(fi1), r1 * math.sin(fi1),\r\n                             r2 * math.cos(fi2), r2 * math.sin(fi2))", 
-      "problem": 4, 
-      "validation": "Check.num_equal('polarnaRazdalja(1, 30, 4, 90)', 3.60555127546, 6)\r\nCheck.num_equal('polarnaRazdalja(1, 0, 1, 90)', 1.414213562373095, 6)\r\nCheck.challenge(round(polarnaRazdalja(1, 4, 2, 6), 6))"
+      "description": "Sestavite funkcijo `urejanje_z_zlivanjem`, ki sprejme tabelo `a` in\njo uredi z zlivanje. Funkcija naj ne spreminja tabele `a`, ampak naj\nvrne novo tabelo.", 
+      "challenge": "[4, 18, 34, 52, 72, 94, 118, 144, 172, 202, 234, 268, 304, 342, 382, 424, 468, 514, 562, 612, 664, 718, 774, 832, 892, 954, 1018, 1084, 1152, 1222, 1294, 1368, 1444, 1522, 1602, 1684, 1768, 1854, 1942, 2032, 2124, 2218, 2314, 2412, 2512, 2614, 2718, 2824, 2932, 3042, 3154, 3268, 3384, 3502, 3622, 3744, 3868, 3994, 4122, 4252, 4384, 4518, 4654, 4792, 4932, 5074, 5218, 5364, 5512, 5662, 5814, 5968, 6124, 6282, 6442, 6604, 6768, 6934, 7102, 7272, 7444, 7618, 7794, 7972, 8152, 8334, 8518, 8704, 8892, 9082, 9274, 9468, 9664, 9862, 10062, 10264, 10468, 10674, 10882, 11092, 11304, 11518, 11734, 11952, 12172, 12394, 12618, 12844, 13072, 13302, 13534, 13768, 14004, 14242, 14482, 14724, 14968, 15214, 15462, 15712, 15964, 16218, 16474, 16732, 16992, 17254, 17518, 17784, 18052, 18322, 18594, 18868, 19144, 19422, 19702, 19984, 20268, 20554, 20842, 21132, 21424, 21718, 22014, 22312, 22612, 22914, 23218, 23524, 23832, 24142, 24454, 24768, 25084, 25402, 25722, 26044, 26368, 26694, 27022, 27352, 27684, 28018, 28354, 28692, 29032, 29374, 29718, 30064, 30412, 30762, 31114, 31468, 31824, 32182, 32542, 32904, 33268, 33634, 34002, 34372, 34744, 35118, 35494, 35872, 36252, 36634, 37018, 37404, 37792, 38182, 38574, 38968, 39364, 39762, 40162, 40564, 40968, 41374, 41782, 42192][1, 2, 3]", 
+      "solution": "def uredi_z_zlivanjem(a):\n    \"\"\"Uredi tabelo a z zlivanjem in vrni novo, urejeno tabelo.\"\"\"\n\n    def uredi(a, i, j):\n        \"\"\"Uredi podtabelo a[i:j] z zlivanjem, vrne novo tabelo.\"\"\"\n        if j - i < 2:\n            return a[i:j]\n        else:\n            b = uredi(a, i, (i+j)//2)\n            c = uredi(a, (i+j)//2, j)\n            return zlij(b, c)\n\n    return uredi(a,0,len(a))", 
+      "problem": 27, 
+      "validation": "Check.equal(\"uredi_z_zlivanjem([1,4,5,6,7,9,2,3,8])\", [1,2,3,4,5,6,7,8,9])\nCheck.equal(\"uredi_z_zlivanjem([])\", [])\nCheck.equal(\"uredi_z_zlivanjem([0])\", [0])\nCheck.equal(\"uredi_z_zlivanjem([1,0])\", [0,1])\n\nCheck.challenge([(i * i + 13 * i + 4) for i in range(0,200)])\nCheck.challenge([1,2,3])"
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 1, 
+      "description": "Dana je neprazna tabela `a`, v kateri bi radi preuredili elemente tako,\r\nda bo `a[0]` postal pivot. To pomeni, da moramo dati vse elemente, ki\r\nso manj\u0161i od `a[0]` na za\u010detek tabele, nato sledi `a[0]` in nato \u0161e\r\nelementi, ki so ve\u010dji od `a[0]`. Na primer, tabelo\r\n\r\n    [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\n\r\npreuredimo v\r\n\r\n    [4, 5, 2, 0, 10, 15, 15, 17, 18]\r\n\r\n(Mo\u017enih je ve\u010d razli\u010dnih re\u0161itev, pomembno je, da je element 10 pivot.)\r\n\r\nSestavi funkcijo `premeci(a)`, ki preuredi tabelo `a` tako, da bo `a[0]`\r\npostal pivot. Funkcija naj vrne indeks, na katerem je po preurejanju\r\npristal pivot.\r\n\r\nFunkcija naj deluje v \u010dasu $O(n)$, \u010de je $n$ dol\u017eina tabele `a`, kar dose\u017eemo\r\ntakole:\r\n\r\n1. Nastavimo `i=1` in `j=n-1`.\r\n2. Pove\u010dujemo `i` dokler `i < j` in `a[i] < a[0]`.\r\n3. Zmanj\u0161ujemo `j` dokler `i < j` in `a[0] < a[j]`.\r\n4. Zamenjamo `a[i]` in `a[j]`.\r\n5. Korake 2--4 ponavljamo, dokler je `i < j`.\r\n6. Postavimo `a[0]` na pravo mesto, ki je enako `i` ali `i-1` (premisli!)\r\n\r\nPrimer uporabe:\r\n\r\n    >>> a = [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\n    >>> premeci(a)\r\n    4\r\n    >>> a\r\n    [4, 5, 2, 0, 10, 15, 15, 17, 18]\r\n\r\nFunkcija naj deluje pravilno za tabele z vsaj dvema elementoma.", 
+      "challenge": "312False", 
+      "solution": "def premeci(a):\r\n    i = 1\r\n    j = len(a) - 1\r\n    while i < j:\r\n        while i < j and a[i] < a[0]: i = i + 1\r\n        while i < j and a[0] < a[j]: j = j - 1\r\n        (a[i], a[j]) = (a[j], a[i])\r\n    if a[i] < a[0]:\r\n        (a[0], a[i]) = (a[i], a[0])\r\n        return i\r\n    else:\r\n        (a[0], a[i-1]) = (a[i-1], a[0])\r\n        return i - 1", 
+      "problem": 37, 
+      "validation": "a_in = [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 4, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,4)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[4] ni pivot\")\r\n\r\na_in = [18, 4, 5, 15, 11, 2, 17, 0, 10]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 8, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,8)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[8] ni pivot\")\r\n\r\na_in = [0, 4, 5, 15, 11, 2, 17, 18, 10]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 0, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,0)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[0] ni pivot\")\r\n\r\na_in = [(17 * i + 18) % 31 for i in range(31)]\r\na = a_in[:]\r\nk = a[0]\r\nCheck.equal(\"premeci(a)\", 18, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nj = a.index(k)\r\nCheck.equal(\"je_pivot(a,{0})\".format(j), True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[{1}] ni pivot\".format(a_in,j))\r\n\r\na_in = [(171 * i + 312) % 1009 for i in range(1009)]\r\na = a_in[:]\r\nk = a[0]\r\nj = a.index(k)\r\nCheck.challenge(premeci(a))\r\nCheck.challenge(je_pivot(a,j))"
     }
   }, 
   {
@@ -300,6 +336,18 @@
     }
   }, 
   {
+    "pk": 2, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 1, 
+      "description": "Ko nalogo oddate, lahko na Tomu svojo re\u0161itev primerjate z\r\nuradno re\u0161itvijo (\u010de je zlobni asistent ni skril).\r\nPoglejte, kaj je bila uradna re\u0161itev prvega dela, in jo vpi\u0161ite spodaj.", 
+      "challenge": "42", 
+      "solution": "42", 
+      "problem": 1, 
+      "validation": "if (attempts$solution[[check$current_part]] != 42) {\r\n    attempts$errors[[check$current_part]] <- \"\u0160tevilo ni enako tistemu iz uradne re\u0161itve.\"\r\n}\r\ncheck$challenge(eval(attempts$solution[[check$current_part]]))\r\n"
+    }
+  }, 
+  {
     "pk": 69, 
     "model": "problem.part", 
     "fields": {
@@ -324,6 +372,18 @@
     }
   }, 
   {
+    "pk": 93, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 1, 
+      "description": "Sestavite funkcijo `redka_po_vrsticah`, ki sprejme redko matriko `(d,m,n)` in vrne\nnjeno predstavitev `(e,m,n)` s slovarjem po vrsticah `e`.", 
+      "challenge": "({0: {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9}, 1: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10}, 2: {0: 2, 1: 3, 2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 9, 8: 10, 9: 11}, 3: {0: 3, 1: 4, 2: 5, 3: 6, 4: 7, 5: 8, 6: 9, 7: 10, 8: 11, 9: 12}, 4: {0: 4, 1: 5, 2: 6, 3: 7, 4: 8, 5: 9, 6: 10, 7: 11, 8: 12, 9: 13}, 5: {0: 5, 1: 6, 2: 7, 3: 8, 4: 9, 5: 10, 6: 11, 7: 12, 8: 13, 9: 14}, 6: {0: 6, 1: 7, 2: 8, 3: 9, 4: 10, 5: 11, 6: 12, 7: 13, 8: 14, 9: 15}, 7: {0: 7, 1: 8, 2: 9, 3: 10, 4: 11, 5: 12, 6: 13, 7: 14, 8: 15, 9: 16}, 8: {0: 8, 1: 9, 2: 10, 3: 11, 4: 12, 5: 13, 6: 14, 7: 15, 8: 16, 9: 17}, 9: {0: 9, 1: 10, 2: 11, 3: 12, 4: 13, 5: 14, 6: 15, 7: 16, 8: 17, 9: 18}}, 42, 23)", 
+      "solution": "def redka_po_vrsticah(dmn):\n    (d,m,n) = dmn\n    e = {}\n    for ((i,j),x) in d.items():\n        if i not in e: e[i] = {}\n        e[i][j] = x\n    return (e,m,n)", 
+      "problem": 39, 
+      "validation": "Check.equal(\"\"\"redka_po_vrsticah(({(0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5}, 4, 6))\"\"\",\n            ({ 0 : {0 : 1, 4 : 2}, 1 : {1 : 4, 4 : 3}, 3 : {5 : 5} }, 4, 6))\n\nCheck.equal(\"\"\"redka_po_vrsticah(({(500,501):42}, 1001, 1002))\"\"\", ({500:{501:42}}, 1001,1002))\n\nCheck.challenge(redka_po_vrsticah(({(i,j) : (i + j) for j in range(10) for i in range(10)}, 42, 23)))"
+    }
+  }, 
+  {
     "pk": 80, 
     "model": "problem.part", 
     "fields": {
@@ -332,7 +392,7 @@
       "challenge": "1, 0.5, 0.3333, 0.25, 0.2, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.5, 0.3333, 0.25, 0.2, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.3333, 0.25, 0.2, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.25, 0.2, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.2, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.1667, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.1429, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.125, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.1111, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.1, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0909, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0833, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0769, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0714, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0667, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0625, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0286, 0.0588, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0286, 0.0278, 0.0556, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0286, 0.0278, 0.027, 0.0526, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0286, 0.0278, 0.027, 0.0263, 0.05, 0.0476, 0.0455, 0.0435, 0.0417, 0.04, 0.0385, 0.037, 0.0357, 0.0345, 0.0333, 0.0323, 0.0312, 0.0303, 0.0294, 0.0286, 0.0278, 0.027, 0.0263, 0.0256", 
       "solution": "hilbert <- function(n) {\r\n    outer(1 : n, 1 : n, function(i, j) 1 / (i + j - 1))\r\n}", 
       "problem": 33, 
-      "validation": "check$equal(dim(hilbert(123)), c(123, 123))\r\ncheck$equal(round(hilbert(2), 5), round(matrix(c(1, 1/2, 1/2, 1/3), 2), 5))\r\ncheck$equal(round(hilbert(3), 5), round(matrix(c(1, 1/2, 1/3, 1/2, 1/3, 1/4, 1/3, 1/4, 1/5), 3), 5))\r\ncheck$challenge(toString(dput(round(hilbert(20), 4))))"
+      "validation": "check$equal(dim(hilbert(123)), c(123, 123))\r\ncheck$equal(round(hilbert(2), 5), round(matrix(c(1, 1/2, 1/2, 1/3), 2), 5))\r\ncheck$equal(round(hilbert(3), 5), round(matrix(c(1, 1/2, 1/3, 1/2, 1/3, 1/4, 1/3, 1/4, 1/5), 3), 5))\r\ncheck$challenge(toString(round(hilbert(20), 4)))"
     }
   }, 
   {
@@ -372,27 +432,27 @@
     }
   }, 
   {
-    "pk": 73, 
+    "pk": 6, 
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "Sestavite funkcijo `urejanje_z_zlivanjem`, ki sprejme tabelo `a` in\njo uredi z zlivanje. Funkcija naj ne spreminja tabele `a`, ampak naj\nvrne novo tabelo.", 
-      "challenge": "[4, 18, 34, 52, 72, 94, 118, 144, 172, 202, 234, 268, 304, 342, 382, 424, 468, 514, 562, 612, 664, 718, 774, 832, 892, 954, 1018, 1084, 1152, 1222, 1294, 1368, 1444, 1522, 1602, 1684, 1768, 1854, 1942, 2032, 2124, 2218, 2314, 2412, 2512, 2614, 2718, 2824, 2932, 3042, 3154, 3268, 3384, 3502, 3622, 3744, 3868, 3994, 4122, 4252, 4384, 4518, 4654, 4792, 4932, 5074, 5218, 5364, 5512, 5662, 5814, 5968, 6124, 6282, 6442, 6604, 6768, 6934, 7102, 7272, 7444, 7618, 7794, 7972, 8152, 8334, 8518, 8704, 8892, 9082, 9274, 9468, 9664, 9862, 10062, 10264, 10468, 10674, 10882, 11092, 11304, 11518, 11734, 11952, 12172, 12394, 12618, 12844, 13072, 13302, 13534, 13768, 14004, 14242, 14482, 14724, 14968, 15214, 15462, 15712, 15964, 16218, 16474, 16732, 16992, 17254, 17518, 17784, 18052, 18322, 18594, 18868, 19144, 19422, 19702, 19984, 20268, 20554, 20842, 21132, 21424, 21718, 22014, 22312, 22612, 22914, 23218, 23524, 23832, 24142, 24454, 24768, 25084, 25402, 25722, 26044, 26368, 26694, 27022, 27352, 27684, 28018, 28354, 28692, 29032, 29374, 29718, 30064, 30412, 30762, 31114, 31468, 31824, 32182, 32542, 32904, 33268, 33634, 34002, 34372, 34744, 35118, 35494, 35872, 36252, 36634, 37018, 37404, 37792, 38182, 38574, 38968, 39364, 39762, 40162, 40564, 40968, 41374, 41782, 42192][1, 2, 3]", 
-      "solution": "def uredi_z_zlivanjem(a):\n    \"\"\"Uredi tabelo a z zlivanjem in vrni novo, urejeno tabelo.\"\"\"\n\n    def uredi(a, i, j):\n        \"\"\"Uredi podtabelo a[i:j] z zlivanjem, vrne novo tabelo.\"\"\"\n        if j - i < 2:\n            return a[i:j]\n        else:\n            b = uredi(a, i, (i+j)//2)\n            c = uredi(a, (i+j)//2, j)\n            return zlij(b, c)\n\n    return uredi(a,0,len(a))", 
-      "problem": 27, 
-      "validation": "Check.equal(\"uredi_z_zlivanjem([1,4,5,6,7,9,2,3,8])\", [1,2,3,4,5,6,7,8,9])\nCheck.equal(\"uredi_z_zlivanjem([])\", [])\nCheck.equal(\"uredi_z_zlivanjem([0])\", [0])\nCheck.equal(\"uredi_z_zlivanjem([1,0])\", [0,1])\n\nCheck.challenge([(i * i + 13 * i + 4) for i in range(0,200)])\nCheck.challenge([1,2,3])"
+      "description": "Sestavite funkcijo `polarnaRazdalja(r1, fi1, r2, fi2)`, ki vrne razdaljo med\r\nto\u010dkama (`r1`, `fi1`) in (`r2`, `fi2`)$ v ravnini, pri \u010demer so\r\nkoordinate v polarnem zapisu, koti pa so izra\u017eeni v stopinjah.\r\n\r\n    >>> polarnaRazdalja(1, 30, 4, 90)\r\n    3.60555127546", 
+      "challenge": "1.001218", 
+      "solution": "import math\r\ndef polarnaRazdalja(r1, fi1, r2, fi2):\r\n    fi1 = math.radians(fi1)\r\n    fi2 = math.radians(fi2)\r\n    return ravninskaRazdalja(r1 * math.cos(fi1), r1 * math.sin(fi1),\r\n                             r2 * math.cos(fi2), r2 * math.sin(fi2))", 
+      "problem": 4, 
+      "validation": "Check.num_equal('polarnaRazdalja(1, 30, 4, 90)', 3.60555127546, 6)\r\nCheck.num_equal('polarnaRazdalja(1, 0, 1, 90)', 1.414213562373095, 6)\r\nCheck.challenge(round(polarnaRazdalja(1, 4, 2, 6), 6))"
     }
   }, 
   {
-    "pk": 9, 
+    "pk": 95, 
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "Sestavite funkcijo `nepopolnost(n)`, ki vrne absolutno razliko med\r\n\u0161tevilom `n` in vsoto vseh njegovih pravih deliteljev.", 
-      "challenge": "12", 
-      "solution": "def nepopolnost(n):\r\n    return abs(n - sum(praviDelitelji(n)))", 
-      "problem": 8, 
-      "validation": "Check.equal('nepopolnost(19)', 18)\r\nCheck.equal('nepopolnost(28)', 0)\r\nCheck.equal('nepopolnost(42)', 12)\r\nCheck.challenge(nepopolnost(30))"
+      "description": "Sestavi funkcijo `vsota((d,m,n), (e,u,v))`, ki vsoto danih dveh redkih matrik.", 
+      "challenge": "", 
+      "solution": "def vsota(dmn, euv):\n    (d,m,n) = dmn\n    (e,u,v) = euv\n    assert (m == u and n == v)\n    f = {}\n    for (ij,x) in d: f[ij] = f.get(ij,0) + x\n    for (ij,y) in e: f[ij] = f.get(ij,0) + y\n    return (f,m,n)", 
+      "problem": 40, 
+      "validation": "## MISSING TESTS!!! ###"
     }
   }, 
   {
@@ -408,15 +468,27 @@
     }
   }, 
   {
-    "pk": 2, 
+    "pk": 9, 
     "model": "problem.part", 
     "fields": {
       "_order": 1, 
-      "description": "Ko nalogo oddate, lahko na Projektu Tomo svojo re\u0161itev primerjate z\r\nuradno re\u0161itvijo (\u010de je zlobni asistent ni skril).\r\nPoglejte, kaj je bila uradna re\u0161itev prvega dela, in jo vpi\u0161ite spodaj.", 
-      "challenge": "42", 
-      "solution": "42", 
-      "problem": 1, 
-      "validation": "if (attempts$solution[[check$current_part]] != 42) {\r\n    attempts$errors[[check$current_part]] <- \"\u0160tevilo ni enako tistemu iz uradne re\u0161itve.\"\r\n}\r\ncheck$challenge(eval(attempts$solution[[check$current_part]]))\r\n"
+      "description": "Sestavite funkcijo `nepopolnost(n)`, ki vrne absolutno razliko med\r\n\u0161tevilom `n` in vsoto vseh njegovih pravih deliteljev.", 
+      "challenge": "12", 
+      "solution": "def nepopolnost(n):\r\n    return abs(n - sum(praviDelitelji(n)))", 
+      "problem": 8, 
+      "validation": "Check.equal('nepopolnost(19)', 18)\r\nCheck.equal('nepopolnost(28)', 0)\r\nCheck.equal('nepopolnost(42)', 12)\r\nCheck.challenge(nepopolnost(30))"
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 1, 
+      "description": "V spremenljivko `zenska.posadka` shranite podrazporeditev s podatki\no vseh \u017eenskah v posadki.", 
+      "challenge": "0, 3, 0, 20", 
+      "solution": "zenska.posadka <- Titanic[\"Crew\", \"Female\", , ]", 
+      "problem": 34, 
+      "validation": "check$equal(zenska.posadka[, \"Yes\"], c(0, 20))\ncheck$equal(zenska.posadka[, \"No\"], c(0, 3))\ncheck$challenge(toString(zenska.posadka))"
     }
   }, 
   {
@@ -444,18 +516,6 @@
     }
   }, 
   {
-    "pk": 88, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 1, 
-      "description": "V spremenljivko `zenska.posadka` shranite podrazporeditev s podatki\no vseh \u017eenskah v posadki.", 
-      "challenge": "0, 3, 0, 20", 
-      "solution": "zenska.posadka <- Titanic[\"Crew\", \"Female\", , ]", 
-      "problem": 34, 
-      "validation": "check$equal(zenska.posadka[, \"Yes\"], c(0, 20))\ncheck$equal(zenska.posadka[, \"No\"], c(0, 3))\ncheck$challenge(toString(zenska.posadka))"
-    }
-  }, 
-  {
     "pk": 40, 
     "model": "problem.part", 
     "fields": {
@@ -468,30 +528,6 @@
     }
   }, 
   {
-    "pk": 86, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 1, 
-      "description": "Dana je neprazna tabela `a`, v kateri bi radi preuredili elemente tako,\r\nda bo `a[0]` postal pivot. To pomeni, da moramo dati vse elemente, ki\r\nso manj\u0161i od `a[0]` na za\u010detek tabele, nato sledi `a[0]` in nato \u0161e\r\nelementi, ki so ve\u010dji od `a[0]`. Na primer, tabelo\r\n\r\n    [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\n\r\npreuredimo v\r\n\r\n    [4, 5, 2, 0, 10, 15, 15, 17, 18]\r\n\r\n(Mo\u017enih je ve\u010d razli\u010dnih re\u0161itev, pomembno je, da je element 10 pivot.)\r\n\r\nSestavi funkcijo `premeci(a)`, ki preuredi tabelo `a` tako, da bo `a[0]`\r\npostal pivot. Funkcija naj vrne indeks, na katerem je po preurejanju\r\npristal pivot.\r\n\r\nFunkcija naj deluje v \u010dasu $O(n)$, \u010de je $n$ dol\u017eina tabele `a`, kar dose\u017eemo\r\ntakole:\r\n\r\n1. Nastavimo `i=1` in `j=n-1`.\r\n2. Pove\u010dujemo `i` dokler `i < j` in `a[i] < a[0]`.\r\n3. Zmanj\u0161ujemo `j` dokler `i < j` in `a[0] < a[j]`.\r\n4. Zamenjamo `a[i]` in `a[j]`.\r\n5. Korake 2--4 ponavljamo, dokler je `i < j`.\r\n6. Postavimo `a[0]` na pravo mesto, ki je enako `i` ali `i-1` (premisli!)\r\n\r\nPrimer uporabe:\r\n\r\n    >>> a = [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\n    >>> premeci(a)\r\n    4\r\n    >>> a\r\n    [4, 5, 2, 0, 10, 15, 15, 17, 18]\r\n\r\nFunkcija naj deluje pravilno za tabele z vsaj dvema elementoma.", 
-      "challenge": "312False", 
-      "solution": "def premeci(a):\r\n    i = 1\r\n    j = len(a) - 1\r\n    while i < j:\r\n        while i < j and a[i] < a[0]: i = i + 1\r\n        while i < j and a[0] < a[j]: j = j - 1\r\n        (a[i], a[j]) = (a[j], a[i])\r\n    if a[i] < a[0]:\r\n        (a[0], a[i]) = (a[i], a[0])\r\n        return i\r\n    else:\r\n        (a[0], a[i-1]) = (a[i-1], a[0])\r\n        return i - 1", 
-      "problem": 37, 
-      "validation": "a_in = [10, 4, 5, 15, 11, 2, 17, 0, 18]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 4, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,4)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[4] ni pivot\")\r\n\r\na_in = [18, 4, 5, 15, 11, 2, 17, 0, 10]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 8, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,8)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[8] ni pivot\")\r\n\r\na_in = [0, 4, 5, 15, 11, 2, 17, 18, 10]\r\na = a_in[:]\r\nCheck.equal(\"premeci(a)\", 0, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nCheck.equal(\"je_pivot(a,0)\", True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[0] ni pivot\")\r\n\r\na_in = [(17 * i + 18) % 31 for i in range(31)]\r\na = a_in[:]\r\nk = a[0]\r\nCheck.equal(\"premeci(a)\", 18, env=locals(),\r\n            message=\"\u010ce je a = {0}, vrne\\n  {{0}} vrednost {{1}} namesto vrednosti {{2}}\".format(a_in))\r\nj = a.index(k)\r\nCheck.equal(\"je_pivot(a,{0})\".format(j), True, env=locals(),\r\n            message=\"\u010ce je a = {0},\\n  po klicu premeci(a) element a[{1}] ni pivot\".format(a_in,j))\r\n\r\na_in = [(171 * i + 312) % 1009 for i in range(1009)]\r\na = a_in[:]\r\nk = a[0]\r\nj = a.index(k)\r\nCheck.challenge(premeci(a))\r\nCheck.challenge(je_pivot(a,j))"
-    }
-  }, 
-  {
-    "pk": 70, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 2, 
-      "description": "Sestavite funkcijo `obrestuj(stanja)`, ki sprejme vektor stanj na\nposameznih ra\u010dunih in vrne vektor stanj po obra\u010dunanih obrestih.\nNa pozitivna stanja obra\u010dunajte 5%, na negativna pa 10% obresti.", 
-      "challenge": "-55 -53.9 -52.8 -51.7 -50.6 -49.5 -48.4 -47.3 -46.2 -45.1 -44 -42.9 -41.8 -40.7 -39.6 -38.5 -37.4 -36.3 -35.2 -34.1 -33 -31.9 -30.8 -29.7 -28.6 -27.5 -26.4 -25.3 -24.2 -23.1 -22 -20.9 -19.8 -18.7 -17.6 -16.5 -15.4 -14.3 -13.2 -12.1 -11 -9.9 -8.8 -7.7 -6.6 -5.5 -4.4 -3.3 -2.2 -1.1 0 1.05 2.1 3.15 4.2 5.25 6.3 7.35 8.4 9.45 10.5 11.55 12.6 13.65 14.7 15.75 16.8 17.85 18.9 19.95 21 22.05 23.1 24.15 25.2 26.25 27.3 28.35 29.4 30.45 31.5 32.55 33.6 34.65 35.7 36.75 37.8 38.85 39.9 40.95 42 43.05 44.1 45.15 46.2 47.25 48.3 49.35 50.4 51.45 52.5 53.55", 
-      "solution": "obrestuj <- function(stanja) {\n  stanja[stanja > 0] <- stanja[stanja > 0] * 1.05\n  stanja[stanja < 0] <- stanja[stanja < 0] * 1.10\n  return(stanja)\n}", 
-      "problem": 23, 
-      "validation": "check$equal(obrestuj(c(200, -500, 10, 70)), c(210, -550, 10.5, 73.5))\ncheck$equal(obrestuj(c(200, -50, 10, 700)), c(210, -55, 10.5, 735))\ncheck$challenge(paste(obrestuj(-50 : 51), collapse=\" \"))"
-    }
-  }, 
-  {
     "pk": 14, 
     "model": "problem.part", 
     "fields": {
@@ -501,6 +537,18 @@
       "solution": "def pari(d):\n    return {tuple(sorted((x, y))) for x in d for y in d[x] if x in d[y]}", 
       "problem": 9, 
       "validation": "Check.equal(\"\"\"pari({'Ana' : {'Bine','Cene'},\n                     'Bine' : set(),\n                     'Cene' : {'Bine', 'Ana'},\n                     'Davorka' : {'Davorka'},\n                     'Eva' : {'Bine'}})\\n\"\"\",\n            {('Ana', 'Cene'), ('Davorka', 'Davorka')})\nCheck.equal(\"pari({})\", set())\nCheck.challenge(pari({'Ana' : {'Bine'},\n                      'Bine' : {'Eva', 'Davorka'},\n                      'Cene' : {'Bine', 'Ana'},\n                      'Davorka' : {'Bine'},\n                      'Eva' : {'Bine'}}))"
+    }
+  }, 
+  {
+    "pk": 10, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 2, 
+      "description": "\u0160tevilo je *simetri\u010dno nepopolno*, kadar je njegova nepopolnost enaka\r\nnepopolnosti \u0161tevila, obrnjenega na glavo.\r\nNa primer, vsa palindromna \u0161tevila so simetri\u010dno nepopolna, prav tako\r\npa je nepopolno \u0161tevilo 24, saj je njegova nepopolnost enaka\r\n$|24 - (1 + 2 + 3 + 4 + 6 + 8 + 12)| = 12$, kar je prav tako\r\nnepopolnost \u0161tevila 42.\r\n\r\nSestavite funkcijo `simetricnoNepopolna(n)`, ki vrne seznam vseh\r\nsimetri\u010dno nepopolnih \u0161tevil med 1 in `n`.", 
+      "challenge": "[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33]", 
+      "solution": "def simetricnoNepopolna(n):\r\n    def simetricnoNepopolno(i):\r\n        return nepopolnost(i) == nepopolnost(int(str(i)[::-1]))\r\n    return [i for i in range(1, n + 1) if simetricnoNepopolno(i)]", 
+      "problem": 8, 
+      "validation": "Check.equal('simetricnoNepopolna(19)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])\r\nCheck.equal('simetricnoNepopolna(28)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24])\r\nCheck.equal('simetricnoNepopolna(42)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33, 42])\r\nCheck.challenge(simetricnoNepopolna(40))\r\n"
     }
   }, 
   {
@@ -552,15 +600,15 @@
     }
   }, 
   {
-    "pk": 10, 
+    "pk": 70, 
     "model": "problem.part", 
     "fields": {
       "_order": 2, 
-      "description": "\u0160tevilo je *simetri\u010dno nepopolno*, kadar je njegova nepopolnost enaka\r\nnepopolnosti \u0161tevila, obrnjenega na glavo.\r\nNa primer, vsa palindromna \u0161tevila so simetri\u010dno nepopolna, prav tako\r\npa je nepopolno \u0161tevilo 24, saj je njegova nepopolnost enaka\r\n$|24 - (1 + 2 + 3 + 4 + 6 + 8 + 12)| = 12$, kar je prav tako\r\nnepopolnost \u0161tevila 42.\r\n\r\nSestavite funkcijo `simetricnoNepopolna(n)`, ki vrne seznam vseh\r\nsimetri\u010dno nepopolnih \u0161tevil med 1 in `n`.", 
-      "challenge": "[1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33]", 
-      "solution": "def simetricnoNepopolna(n):\r\n    def simetricnoNepopolno(i):\r\n        return nepopolnost(i) == nepopolnost(int(str(i)[::-1]))\r\n    return [i for i in range(1, n + 1) if simetricnoNepopolno(i)]", 
-      "problem": 8, 
-      "validation": "Check.equal('simetricnoNepopolna(19)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])\r\nCheck.equal('simetricnoNepopolna(28)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24])\r\nCheck.equal('simetricnoNepopolna(42)', [1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22, 24, 33, 42])\r\nCheck.challenge(simetricnoNepopolna(40))\r\n"
+      "description": "Sestavite funkcijo `obrestuj(stanja)`, ki sprejme vektor stanj na\nposameznih ra\u010dunih in vrne vektor stanj po obra\u010dunanih obrestih.\nNa pozitivna stanja obra\u010dunajte 5%, na negativna pa 10% obresti.", 
+      "challenge": "-55 -53.9 -52.8 -51.7 -50.6 -49.5 -48.4 -47.3 -46.2 -45.1 -44 -42.9 -41.8 -40.7 -39.6 -38.5 -37.4 -36.3 -35.2 -34.1 -33 -31.9 -30.8 -29.7 -28.6 -27.5 -26.4 -25.3 -24.2 -23.1 -22 -20.9 -19.8 -18.7 -17.6 -16.5 -15.4 -14.3 -13.2 -12.1 -11 -9.9 -8.8 -7.7 -6.6 -5.5 -4.4 -3.3 -2.2 -1.1 0 1.05 2.1 3.15 4.2 5.25 6.3 7.35 8.4 9.45 10.5 11.55 12.6 13.65 14.7 15.75 16.8 17.85 18.9 19.95 21 22.05 23.1 24.15 25.2 26.25 27.3 28.35 29.4 30.45 31.5 32.55 33.6 34.65 35.7 36.75 37.8 38.85 39.9 40.95 42 43.05 44.1 45.15 46.2 47.25 48.3 49.35 50.4 51.45 52.5 53.55", 
+      "solution": "obrestuj <- function(stanja) {\n  stanja[stanja > 0] <- stanja[stanja > 0] * 1.05\n  stanja[stanja < 0] <- stanja[stanja < 0] * 1.10\n  return(stanja)\n}", 
+      "problem": 23, 
+      "validation": "check$equal(obrestuj(c(200, -500, 10, 70)), c(210, -550, 10.5, 73.5))\ncheck$equal(obrestuj(c(200, -50, 10, 700)), c(210, -55, 10.5, 735))\ncheck$challenge(paste(obrestuj(-50 : 51), collapse=\" \"))"
     }
   }, 
   {
@@ -596,7 +644,7 @@
       "challenge": "1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 1, 3, 6, 10, 15, 21, 28, 36, 45, 55, 66, 78, 91, 105, 120, 136, 153, 171, 190, 210, 1, 4, 10, 20, 35, 56, 84, 120, 165, 220, 286, 364, 455, 560, 680, 816, 969, 1140, 1330, 1540, 1, 5, 15, 35, 70, 126, 210, 330, 495, 715, 1001, 1365, 1820, 2380, 3060, 3876, 4845, 5985, 7315, 8855, 1, 6, 21, 56, 126, 252, 462, 792, 1287, 2002, 3003, 4368, 6188, 8568, 11628, 15504, 20349, 26334, 33649, 42504, 1, 7, 28, 84, 210, 462, 924, 1716, 3003, 5005, 8008, 12376, 18564, 27132, 38760, 54264, 74613, 100947, 134596, 177100, 1, 8, 36, 120, 330, 792, 1716, 3432, 6435, 11440, 19448, 31824, 50388, 77520, 116280, 170544, 245157, 346104, 480700, 657800, 1, 9, 45, 165, 495, 1287, 3003, 6435, 12870, 24310, 43758, 75582, 125970, 203490, 319770, 490314, 735471, 1081575, 1562275, 2220075, 1, 10, 55, 220, 715, 2002, 5005, 11440, 24310, 48620, 92378, 167960, 293930, 497420, 817190, 1307504, 2042975, 3124550, 4686825, 6906900, 1, 11, 66, 286, 1001, 3003, 8008, 19448, 43758, 92378, 184756, 352716, 646646, 1144066, 1961256, 3268760, 5311735, 8436285, 13123110, 20030010, 1, 12, 78, 364, 1365, 4368, 12376, 31824, 75582, 167960, 352716, 705432, 1352078, 2496144, 4457400, 7726160, 13037895, 21474180, 34597290, 54627300, 1, 13, 91, 455, 1820, 6188, 18564, 50388, 125970, 293930, 646646, 1352078, 2704156, 5200300, 9657700, 17383860, 30421755, 51895935, 86493225, 141120525, 1, 14, 105, 560, 2380, 8568, 27132, 77520, 203490, 497420, 1144066, 2496144, 5200300, 10400600, 20058300, 37442160, 67863915, 119759850, 206253075, 347373600, 1, 15, 120, 680, 3060, 11628, 38760, 116280, 319770, 817190, 1961256, 4457400, 9657700, 20058300, 40116600, 77558760, 145422675, 265182525, 471435600, 818809200, 1, 16, 136, 816, 3876, 15504, 54264, 170544, 490314, 1307504, 3268760, 7726160, 17383860, 37442160, 77558760, 155117520, 300540195, 565722720, 1037158320, 1855967520, 1, 17, 153, 969, 4845, 20349, 74613, 245157, 735471, 2042975, 5311735, 13037895, 30421755, 67863915, 145422675, 300540195, 601080390, 1166803110, 2203961430, 4059928950, 1, 18, 171, 1140, 5985, 26334, 100947, 346104, 1081575, 3124550, 8436285, 21474180, 51895935, 119759850, 265182525, 565722720, 1166803110, 2333606220, 4537567650, 8597496600, 1, 19, 190, 1330, 7315, 33649, 134596, 480700, 1562275, 4686825, 13123110, 34597290, 86493225, 206253075, 471435600, 1037158320, 2203961430, 4537567650, 9075135300, 17672631900, 1, 20, 210, 1540, 8855, 42504, 177100, 657800, 2220075, 6906900, 20030010, 54627300, 141120525, 347373600, 818809200, 1855967520, 4059928950, 8597496600, 17672631900, 35345263800", 
       "solution": "pascal <- function(n) {\r\n    outer(1 : n, 1 : n, function(i, j) choose(i + j - 2, i - 1))\r\n}", 
       "problem": 33, 
-      "validation": "check$equal(dim(pascal(123)), c(123, 123))\r\ncheck$equal(pascal(3), matrix(c(1, 1, 1, 1, 2, 3, 1, 3, 6), 3))\r\ncheck$challenge(toString(dput(pascal(20))))"
+      "validation": "check$equal(dim(pascal(123)), c(123, 123))\r\ncheck$equal(pascal(3), matrix(c(1, 1, 1, 1, 2, 3, 1, 3, 6), 3))\r\ncheck$challenge(toString(pascal(20)))"
     }
   }, 
   {
@@ -636,6 +684,18 @@
     }
   }, 
   {
+    "pk": 91, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 2, 
+      "description": "Sestavite funkcijo `redka_po_stolpcih`, ki sprejme redko matriko `(d,m,n)` in vrne\nnjeno predstavitev `(e,m,n)` s slovarjem po stolpcih `e`.", 
+      "challenge": "({0: {0: 0, 1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9}, 1: {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 10}, 2: {0: 2, 1: 3, 2: 4, 3: 5, 4: 6, 5: 7, 6: 8, 7: 9, 8: 10, 9: 11}, 3: {0: 3, 1: 4, 2: 5, 3: 6, 4: 7, 5: 8, 6: 9, 7: 10, 8: 11, 9: 12}, 4: {0: 4, 1: 5, 2: 6, 3: 7, 4: 8, 5: 9, 6: 10, 7: 11, 8: 12, 9: 13}, 5: {0: 5, 1: 6, 2: 7, 3: 8, 4: 9, 5: 10, 6: 11, 7: 12, 8: 13, 9: 14}, 6: {0: 6, 1: 7, 2: 8, 3: 9, 4: 10, 5: 11, 6: 12, 7: 13, 8: 14, 9: 15}, 7: {0: 7, 1: 8, 2: 9, 3: 10, 4: 11, 5: 12, 6: 13, 7: 14, 8: 15, 9: 16}, 8: {0: 8, 1: 9, 2: 10, 3: 11, 4: 12, 5: 13, 6: 14, 7: 15, 8: 16, 9: 17}, 9: {0: 9, 1: 10, 2: 11, 3: 12, 4: 13, 5: 14, 6: 15, 7: 16, 8: 17, 9: 18}}, 42, 23)", 
+      "solution": "def redka_po_stolpcih(dmn):\n    (d,m,n) = dmn\n    e = {}\n    for ((i,j),x) in d.items():\n        if j not in e: e[j] = {}\n        e[j][i] = x\n    return (e,m,n)", 
+      "problem": 39, 
+      "validation": "Check.equal(\"\"\"redka_po_stolpcih(({(0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5}, 4, 6))\"\"\",\n            ({ 0 : {0 : 1}, 1 : {1 : 4}, 4 : {0 : 2, 1 : 3}, 5 : {3 : 5} }, 4, 6))\n\nCheck.equal(\"\"\"redka_po_stolpcih(({(500,501):42}, 1001, 1002))\"\"\", ({501:{500:42}}, 1001,1002))\n\nCheck.challenge(redka_po_stolpcih(({(i,j) : (i + j) for j in range(10) for i in range(10)}, 42, 23)))"
+    }
+  }, 
+  {
     "pk": 89, 
     "model": "problem.part", 
     "fields": {
@@ -660,15 +720,15 @@
     }
   }, 
   {
-    "pk": 23, 
+    "pk": 37, 
     "model": "problem.part", 
     "fields": {
       "_order": 3, 
-      "description": "Sestavite funkcijo `pozdrav(ime, vzklik)`, ki vrne niz, ki predstavlja\npozdrav, ki se za\u010dne z danim vzklikom, ki ima privzeto vrednost\n`\"Zdravo\"`.\nNa primer, `pozdrav(\"Miha\", \"Ojla\")` naj vrne niz `\"Ojla, Miha!\"`,\n`pozdrav(\"Nina\")` pa naj vrne `\"Zdravo, Nina!\"`.\n\n_Namig:_ nize stikate s funkcijo `paste`.", 
-      "challenge": "Zdravo, 0!Zdravo, 0.1!Zdravo, 0.2!Zdravo, 0.3!Zdravo, 0.4!Zdravo, 0.5!Zdravo, 0.6!Zdravo, 0.7!Zdravo, 0.8!Zdravo, 0.9!Zdravo, 1!Zdravo, 1.1!Zdravo, 1.2!Zdravo, 1.3!Zdravo, 1.4!Zdravo, 1.5!Zdravo, 1.6!Zdravo, 1.7!Zdravo, 1.8!Zdravo, 1.9!Zdravo, 2!Zdravo, 2.1!Zdravo, 2.2!Zdravo, 2.3!Zdravo, 2.4!Zdravo, 2.5!Zdravo, 2.6!Zdravo, 2.7!Zdravo, 2.8!Zdravo, 2.9!Zdravo, 3!Zdravo, 3.1!Zdravo, 3.2!Zdravo, 3.3!Zdravo, 3.4!Zdravo, 3.5!Zdravo, 3.6!Zdravo, 3.7!Zdravo, 3.8!Zdravo, 3.9!Zdravo, 4!Zdravo, 4.1!Zdravo, 4.2!Zdravo, 4.3!Zdravo, 4.4!Zdravo, 4.5!Zdravo, 4.6!Zdravo, 4.7!Zdravo, 4.8!Zdravo, 4.9!Zdravo, 5!", 
-      "solution": "pozdrav <- function(ime, vzklik = \"Zdravo\") {\n  paste(vzklik, \", \", ime, \"!\", sep=\"\")\n}", 
-      "problem": 16, 
-      "validation": "check$equal(pozdrav(\"Miha\", \"Ojla\"), \"Ojla, Miha!\")\ncheck$equal(pozdrav(\"Nina\"), \"Zdravo, Nina!\")\nfor (x in seq(0, 5, 0.1)) {\n    check$challenge(pozdrav(as.character(x)))\n}"
+      "description": "Sestavite funkcijo `cikli(permutacija)`, ki vrne seznam disjunktnih\r\nciklov dane permutacije. Vsak cikel naj se za\u010dne z najmanj\u0161im \u0161tevilom\r\nv ciklu, cikli pa naj bodo urejeni po za\u010detnem \u0161tevilu.\r\n\r\n    >>> cikli([3, 2, 1])\r\n    [[1, 3], [2]]", 
+      "challenge": "[[1, 99], [2, 98], [3, 97], [4, 96], [5, 95], [6, 94], [7, 93], [8, 92], [9, 91], [10, 90], [11, 89], [12, 88], [13, 87], [14, 86], [15, 85], [16, 84], [17, 83], [18, 82], [19, 81], [20, 80], [21, 79], [22, 78], [23, 77], [24, 76], [25, 75], [26, 74], [27, 73], [28, 72], [29, 71], [30, 70], [31, 69], [32, 68], [33, 67], [34, 66], [35, 65], [36, 64], [37, 63], [38, 62], [39, 61], [40, 60], [41, 59], [42, 58], [43, 57], [44, 56], [45, 55], [46, 54], [47, 53], [48, 52], [49, 51], [50]]", 
+      "solution": "def cikli(permutacija):\r\n    cikli = []\r\n    stevila = []\r\n    for i in range(1, len(permutacija) + 1):\r\n        if i not in stevila:\r\n            c = cikel(permutacija, i)\r\n            cikli.append(c)\r\n            stevila += c\r\n    return cikli", 
+      "problem": 19, 
+      "validation": "Check.equal('cikli([3, 4, 2, 1])', [[1, 3, 2, 4]])\r\nCheck.equal('cikli([3, 2, 1])', [[1, 3], [2]])\r\nCheck.challenge(cikli(_perm))"
     }
   }, 
   {
@@ -720,6 +780,18 @@
     }
   }, 
   {
+    "pk": 23, 
+    "model": "problem.part", 
+    "fields": {
+      "_order": 3, 
+      "description": "Sestavite funkcijo `pozdrav(ime, vzklik)`, ki vrne niz, ki predstavlja\npozdrav, ki se za\u010dne z danim vzklikom, ki ima privzeto vrednost\n`\"Zdravo\"`.\nNa primer, `pozdrav(\"Miha\", \"Ojla\")` naj vrne niz `\"Ojla, Miha!\"`,\n`pozdrav(\"Nina\")` pa naj vrne `\"Zdravo, Nina!\"`.\n\n_Namig:_ nize stikate s funkcijo `paste`.", 
+      "challenge": "Zdravo, 0!Zdravo, 0.1!Zdravo, 0.2!Zdravo, 0.3!Zdravo, 0.4!Zdravo, 0.5!Zdravo, 0.6!Zdravo, 0.7!Zdravo, 0.8!Zdravo, 0.9!Zdravo, 1!Zdravo, 1.1!Zdravo, 1.2!Zdravo, 1.3!Zdravo, 1.4!Zdravo, 1.5!Zdravo, 1.6!Zdravo, 1.7!Zdravo, 1.8!Zdravo, 1.9!Zdravo, 2!Zdravo, 2.1!Zdravo, 2.2!Zdravo, 2.3!Zdravo, 2.4!Zdravo, 2.5!Zdravo, 2.6!Zdravo, 2.7!Zdravo, 2.8!Zdravo, 2.9!Zdravo, 3!Zdravo, 3.1!Zdravo, 3.2!Zdravo, 3.3!Zdravo, 3.4!Zdravo, 3.5!Zdravo, 3.6!Zdravo, 3.7!Zdravo, 3.8!Zdravo, 3.9!Zdravo, 4!Zdravo, 4.1!Zdravo, 4.2!Zdravo, 4.3!Zdravo, 4.4!Zdravo, 4.5!Zdravo, 4.6!Zdravo, 4.7!Zdravo, 4.8!Zdravo, 4.9!Zdravo, 5!", 
+      "solution": "pozdrav <- function(ime, vzklik = \"Zdravo\") {\n  paste(vzklik, \", \", ime, \"!\", sep=\"\")\n}", 
+      "problem": 16, 
+      "validation": "check$equal(pozdrav(\"Miha\", \"Ojla\"), \"Ojla, Miha!\")\ncheck$equal(pozdrav(\"Nina\"), \"Zdravo, Nina!\")\nfor (x in seq(0, 5, 0.1)) {\n    check$challenge(pozdrav(as.character(x)))\n}"
+    }
+  }, 
+  {
     "pk": 11, 
     "model": "problem.part", 
     "fields": {
@@ -729,18 +801,6 @@
       "solution": "def popolnomaNepopolno(n):\r\n    while(nepopolnost(n) <= n):\r\n        n += 1\r\n    return n", 
       "problem": 8, 
       "validation": "Check.equal('popolnomaNepopolno(0)', 180)\r\nCheck.equal('popolnomaNepopolno(181)', 240)\r\nCheck.equal('popolnomaNepopolno(241)', 360)\r\nCheck.equal('popolnomaNepopolno(361)', 420)\r\nCheck.challenge(popolnomaNepopolno(250))"
-    }
-  }, 
-  {
-    "pk": 37, 
-    "model": "problem.part", 
-    "fields": {
-      "_order": 3, 
-      "description": "Sestavite funkcijo `cikli(permutacija)`, ki vrne seznam disjunktnih\r\nciklov dane permutacije. Vsak cikel naj se za\u010dne z najmanj\u0161im \u0161tevilom\r\nv ciklu, cikli pa naj bodo urejeni po za\u010detnem \u0161tevilu.\r\n\r\n    >>> cikli([3, 2, 1])\r\n    [[1, 3], [2]]", 
-      "challenge": "[[1, 99], [2, 98], [3, 97], [4, 96], [5, 95], [6, 94], [7, 93], [8, 92], [9, 91], [10, 90], [11, 89], [12, 88], [13, 87], [14, 86], [15, 85], [16, 84], [17, 83], [18, 82], [19, 81], [20, 80], [21, 79], [22, 78], [23, 77], [24, 76], [25, 75], [26, 74], [27, 73], [28, 72], [29, 71], [30, 70], [31, 69], [32, 68], [33, 67], [34, 66], [35, 65], [36, 64], [37, 63], [38, 62], [39, 61], [40, 60], [41, 59], [42, 58], [43, 57], [44, 56], [45, 55], [46, 54], [47, 53], [48, 52], [49, 51], [50]]", 
-      "solution": "def cikli(permutacija):\r\n    cikli = []\r\n    stevila = []\r\n    for i in range(1, len(permutacija) + 1):\r\n        if i not in stevila:\r\n            c = cikel(permutacija, i)\r\n            cikli.append(c)\r\n            stevila += c\r\n    return cikli", 
-      "problem": 19, 
-      "validation": "Check.equal('cikli([3, 4, 2, 1])', [[1, 3, 2, 4]])\r\nCheck.equal('cikli([3, 2, 1])', [[1, 3], [2]])\r\nCheck.challenge(cikli(_perm))"
     }
   }, 
   {

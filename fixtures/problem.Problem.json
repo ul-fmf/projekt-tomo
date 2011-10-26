@@ -14,20 +14,6 @@
     }
   }, 
   {
-    "pk": 1, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 0, 
-      "description": "Tako kot lani pri Uvodu v Programiranje, boste tudi letos naloge\r\nre\u0161evali s pomo\u010djo Projekta Tomo.\r\n", 
-      "language": 1, 
-      "title": "Delo s Projektom Tomo", 
-      "timestamp": "2011-10-11 08:28:55", 
-      "author": 1, 
-      "problem_set": 1, 
-      "preamble": ""
-    }
-  }, 
-  {
     "pk": 16, 
     "model": "problem.problem", 
     "fields": {
@@ -52,6 +38,20 @@
       "timestamp": "2011-10-17 12:43:25", 
       "author": 1, 
       "problem_set": 5, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 1, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 0, 
+      "description": "Tako kot lani pri Uvodu v Programiranje, boste tudi letos naloge\r\nre\u0161evali s pomo\u010djo Toma.\r\n", 
+      "language": 1, 
+      "title": "Delo s Tomom", 
+      "timestamp": "2011-10-26 10:56:58", 
+      "author": 1, 
+      "problem_set": 1, 
       "preamble": ""
     }
   }, 
@@ -98,20 +98,6 @@
     }
   }, 
   {
-    "pk": 33, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 0, 
-      "description": "\u010ce vektorju nastavimo dimenzije, postane matrika, kjer gredo elementi\r\nnajprej od zgoraj navzdol, nato pa od leve proti desni.\r\n    \r\n    x <- 1 : 100\r\n    dim(x) <- c(5, 20) # x naj bo matrika dimenzije 5 \u00d7 20\r\n    x\r\n    dim(x) <- c(10, 10) # x naj bo matrika dimenzije 10 \u00d7 10\r\n    x\r\n\r\nMatrike na\u010deloma sestavljamo z ukazom `matrix`, ki sprejme vektor\r\nkomponent ter \u0161tevilo vrstic in stolpcev.\r\n\r\n    matrix(1 : 100, 10, 10)\r\n    matrix(1 : 10, 20, 5) # spet velja cikli\u010dno dopolnjevanje\r\n\r\nPodatki se na\u010deloma polnijo po stolpcih, s parametrom `byrow=TRUE` pa jih\r\nlahko polnimo tudi po vrsticah.\r\n\r\n    matrix(1 : 10, 20, 5, byrow=TRUE)\r\n    \r\nDo elementov dostopamo tako kot poprej, le da indekse lo\u010dimo z vejicami\r\n\r\n    x[10, 5]            # element v 10. vrstici in 5. stolpcu\r\n    x[c(4, 6), c(5, 9)] # elementi v 4. in 6. vrstici ter 5. in 9. stolpcu\r\n    x[4 : 6, 5 : 9]     # elementi od 4. do 6. vrstice ter od 5. do 9. stolpca\r\n    c(x[4, 5], x[6, 9]) # elementa v 4. vrstici in 5. stolpcu\r\n                        # ter v 6. vrstici in 9. stoplcu.\r\n    \r\n\u010ce indeksa ne podamo, vzamemo vse elemente\r\n\r\n    x[5, ] # vsi elementi v 5. vrstici\r\n    x[, 6] # vsi elementi v 6. stoplcu\r\n    \r\nUkaza `row` in `col` vrneta matriko indeksov vrstic in stolpcev.\r\nUkaza sta uporabna predvsem v indeksnih vektorjih\r\n\r\n    x[row(x) %in% c(2, 3, 5, 7)] # vsi elementi v 2., 3., 5. in 7. vrstici\r\n    x[row(x) == col(x)]          # vsi elementi na diagonali\r\n    x[row(x) == col(x) + 1]      # vsi elementi pod diagonalo\r\n    x[row(x) == col(x) - 1]      # vsi elementi nad diagonalo\r\n    \r\nSeveda spreminjanje dimenzij ni najbolj pameten na\u010din ustvarjanja matrik\r\nVe\u010d vektorjev enake dol\u017eine lahko zlo\u017eimo v matriko po vrsticah z ukazom\r\n`rbind` ali po stolpcih z ukazom `cbind`.\r\n\r\n    ocene <- rbind(Miha = c(mat = 5, sjk = 3, fiz = 3),\r\n                   Maja = c(mat = 4, sjk = 5, fiz = 4))\r\n    ocene[\"Miha\", \"mat\"]\r\n    \r\nPozor: veljajo imena stolpcev prvega vnosa:\r\n\r\n    ocene <- rbind(Miha = c(mat = 5, sjk = 3, fiz = 3),\r\n                   Maja = c(kem = 4, bio = 5, geo = 4))\r\n    \r\n\u010ce ukaz `rbind` (ali `cbind`) uporabimo na spremenljivkah, se njihova imena\r\nuporabijo za imena stolpcev.\r\n    \r\n    visine <- c(168, 197, 162, 174, 195, 167, 175, 159, 172, 182, 181, 176)\r\n    mase <- c(84, 70, 48, 74, 64, 73, 84, 88, 68, 71, 63, 68)\r\n    podatki <- cbind(visine, mase)\r\n\r\n\r\n\u010ce je komponenta matrike odvisna le od koordinat, si lahko pomagamo s\r\nfunkcijo `outer`. \r\n\r\nPo\u0161tevanko tako dobimo z ukazom\r\n\r\n    outer(1 : 10, 1 : 10, \"*\") # simbole predstavimo z nizi\r\n    \r\nmatriko binomskih koeficientov pa z\r\n\r\n    outer(0 : 10, 0 : 10, choose)\r\n\r\nFunkcija, ki jo kli\u010demo, mora delovati na vektorjih,\r\nvendar ve\u010d o tem naslednji\u010d.", 
-      "language": 1, 
-      "title": "Matrike", 
-      "timestamp": "2011-10-24 12:48:45", 
-      "author": 1, 
-      "problem_set": 8, 
-      "preamble": ""
-    }
-  }, 
-  {
     "pk": 38, 
     "model": "problem.problem", 
     "fields": {
@@ -130,68 +116,26 @@
     "model": "problem.problem", 
     "fields": {
       "_order": 0, 
-      "description": "\n\nMatriko obi\u010dajno predstavimo kot dvojno tabelo (tabelo tabel), kar\npa je potratno, \u010de je matrika *redka*, se pravi da ima prete\u017eno\nni\u010delne elemente.\n\nObravnavajmo redko matriko\n\n    a = [[1, 0, 0, 0, 2, 0],\n         [0, 4, 0, 0, 3, 0],\n         [0, 0, 0, 0, 0, 0],\n         [0, 0, 0, 0, 0, 5]]\n\nPredstavimo jo lahko na tri na\u010dine:\n\n* **Slovar po koordinatah**, ki preslika pare indeksov v pozicije:\n\n        { (0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5 }\n\n* **Slovar po vrsticah**, ki preslika neni\u010delne vrstice v slovarje, ki slikajo\n  neni\u010delne stolpce v vrednosti:\n\n        { 0 : {0 : 1, 4 : 2}, 1 : {1 : 4, 4 : 3}, 3 : {5 : 5} }\n \n* **Slovar po stolpcih**, ki preslika neni\u010delne stolpce v slovarje, ki\n  slikajo neni\u010delne vrstice v vrednosti;\n\n        { 0 : {0, 1}, 1 : {1 : 4}, 4 : {0 : 2, 1 : 3}, 5 : {3 : 5} }\n", 
+      "description": "\n\nMatriko obi\u010dajno predstavimo kot dvojno tabelo (tabelo tabel), kar\npa je potratno, \u010de je matrika *redka*, se pravi da ima prete\u017eno\nni\u010delne elemente.\n\nObravnavajmo redko matriko\n\n    a = [[1, 0, 0, 0, 2, 0],\n         [0, 4, 0, 0, 3, 0],\n         [0, 0, 0, 0, 0, 0],\n         [0, 0, 0, 0, 0, 5]]\n\nPredstavimo jo lahko na tri na\u010dine:\n\n* **Slovar po koordinatah**, ki preslika pare indeksov v pozicije:\n\n        { (0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5 }\n\n* **Slovar po vrsticah**, ki preslika neni\u010delne vrstice v slovarje, ki slikajo\n  neni\u010delne stolpce v vrednosti:\n\n        { 0 : {0 : 1, 4 : 2}, 1 : {1 : 4, 4 : 3}, 3 : {5 : 5} }\n \n* **Slovar po stolpcih**, ki preslika neni\u010delne stolpce v slovarje, ki\n  slikajo neni\u010delne vrstice v vrednosti;\n\n        { 0 : {0 : 1}, 1 : {1 : 4}, 4 : {0 : 2, 1 : 3}, 5 : {3 : 5} }\n\nRedko matriko predstavimo s trojico `(d,m,n)` kjer je `d` slovar po koordinatah,\n`m` je \u0161tevilo vrstic in `n` \u0161tevilo stolpcev. Na primer, zgornjo matriko `a`\nbi predstavili s trojico\n\n    ({(0,0) : 1, (0,4) : 2, (1,1) : 4, (1,4): 3, (3,5) : 5}, 4, 6)\n\nV\u010dasih bomo potrebovali tudi predstavitve redkih matrik s slovarji po\nvrsticah ali stolpcih.", 
       "language": 2, 
       "title": "Pretvarjanje med predstavitvami redkih matrik", 
-      "timestamp": "2011-10-25 11:44:21", 
+      "timestamp": "2011-10-26 00:47:29", 
       "author": 19, 
       "problem_set": 11, 
       "preamble": ""
     }
   }, 
   {
-    "pk": 26, 
+    "pk": 33, 
     "model": "problem.problem", 
     "fields": {
-      "_order": 1, 
-      "description": "\nPred re\u0161evanjem te naloge si oglejte si video lekcijo\n[Urejanje z vstavljanem](http://vimeo.com/30669299).\nPozor, video vsebuje re\u0161itev naloge, zato ga nehajte\ngledati takoj, ko razumete, kako algoritem deluje.", 
-      "language": 2, 
-      "title": "Urejanje z vstavljanem", 
-      "timestamp": "2011-10-20 08:54:41", 
-      "author": 19, 
-      "problem_set": 6, 
-      "preamble": ""
-    }
-  }, 
-  {
-    "pk": 17, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 1, 
-      "description": "Krmilni stavki v R-ju se obna\u0161ajo podobno kot v Pythonu.\nPogojni stavek napi\u0161emo kot:\n\n    if(pogoj) {\n      ukazi, ki se izvedejo, \u010de pogoj dr\u017ei\n    } else {\n      ukazi, ki se izvedejo, \u010de pogoj ne dr\u017ei\n    }\n\nZanka `while` prav tako deluje podobno kot v Pythonu:\n\n    while(pogoj) {\n      ukazi, ki se izvajajo, dokler pogoj dr\u017ei\n    }\n\nPoleg zanke `while` R pozna tudi zanko `repeat`, ki se obna\u0161a tako kot\nzanka `while`, v kateri je pogoj vedno enak `TRUE`.\n\u010ce \u017eelimo zaustaviti izvajanje zanke `repeat`, uporabimo ukaz `break`,\nki se obna\u0161a tako kot v Pythonu, ali pa ukaz `return`.\n\u010ce \u017eelimo sko\u010diti na naslednji korak trenutne zanke, pa uporabimo\nukaz `next`, ki se obna\u0161a tako kot `continue` v Pythonu.\n\n    prastevilo <- function(n) {\n      i <- 2\n      while(i < n) {\n        if(n %% i == 0)\n          return(FALSE)\n        i <- i + 1\n      }\n      return(TRUE)\n    }", 
+      "_order": 0, 
+      "description": "\u010ce vektorju nastavimo dimenzije, postane matrika, kjer gredo elementi\r\nnajprej od zgoraj navzdol, nato pa od leve proti desni.\r\n    \r\n    x <- 1 : 100\r\n    dim(x) <- c(5, 20) # x naj bo matrika dimenzije 5 \u00d7 20\r\n    x\r\n    dim(x) <- c(10, 10) # x naj bo matrika dimenzije 10 \u00d7 10\r\n    x\r\n\r\nMatrike na\u010deloma sestavljamo z ukazom `matrix`, ki sprejme vektor\r\nkomponent ter \u0161tevilo vrstic in stolpcev.\r\n\r\n    matrix(1 : 100, 10, 10)\r\n    matrix(1 : 10, 20, 5) # spet velja cikli\u010dno dopolnjevanje\r\n\r\nPodatki se na\u010deloma polnijo po stolpcih, s parametrom `byrow=TRUE` pa jih\r\nlahko polnimo tudi po vrsticah.\r\n\r\n    matrix(1 : 10, 20, 5, byrow=TRUE)\r\n    \r\nDo elementov dostopamo tako kot poprej, le da indekse lo\u010dimo z vejicami\r\n\r\n    x[10, 5]            # element v 10. vrstici in 5. stolpcu\r\n    x[c(4, 6), c(5, 9)] # elementi v 4. in 6. vrstici ter 5. in 9. stolpcu\r\n    x[4 : 6, 5 : 9]     # elementi od 4. do 6. vrstice ter od 5. do 9. stolpca\r\n    c(x[4, 5], x[6, 9]) # elementa v 4. vrstici in 5. stolpcu\r\n                        # ter v 6. vrstici in 9. stoplcu.\r\n    \r\n\u010ce indeksa ne podamo, vzamemo vse elemente\r\n\r\n    x[5, ] # vsi elementi v 5. vrstici\r\n    x[, 6] # vsi elementi v 6. stoplcu\r\n    \r\nUkaza `row` in `col` vrneta matriko indeksov vrstic in stolpcev.\r\nUkaza sta uporabna predvsem v indeksnih vektorjih\r\n\r\n    x[row(x) %in% c(2, 3, 5, 7)] # vsi elementi v 2., 3., 5. in 7. vrstici\r\n    x[row(x) == col(x)]          # vsi elementi na diagonali\r\n    x[row(x) == col(x) + 1]      # vsi elementi pod diagonalo\r\n    x[row(x) == col(x) - 1]      # vsi elementi nad diagonalo\r\n    \r\nSeveda spreminjanje dimenzij ni najbolj pameten na\u010din ustvarjanja matrik\r\nVe\u010d vektorjev enake dol\u017eine lahko zlo\u017eimo v matriko po vrsticah z ukazom\r\n`rbind` ali po stolpcih z ukazom `cbind`.\r\n\r\n    ocene <- rbind(Miha = c(mat = 5, sjk = 3, fiz = 3),\r\n                   Maja = c(mat = 4, sjk = 5, fiz = 4))\r\n    ocene[\"Miha\", \"mat\"]\r\n    \r\nPozor: veljajo imena stolpcev prvega vnosa:\r\n\r\n    ocene <- rbind(Miha = c(mat = 5, sjk = 3, fiz = 3),\r\n                   Maja = c(kem = 4, bio = 5, geo = 4))\r\n    \r\n\u010ce ukaz `rbind` (ali `cbind`) uporabimo na spremenljivkah, se njihova imena\r\nuporabijo za imena stolpcev.\r\n    \r\n    visine <- c(168, 197, 162, 174, 195, 167, 175, 159, 172, 182, 181, 176)\r\n    mase <- c(84, 70, 48, 74, 64, 73, 84, 88, 68, 71, 63, 68)\r\n    podatki <- cbind(visine, mase)\r\n\r\n\r\n\u010ce je komponenta matrike odvisna le od koordinat, si lahko pomagamo s\r\nfunkcijo `outer`. \r\n\r\nPo\u0161tevanko tako dobimo z ukazom\r\n\r\n    outer(1 : 10, 1 : 10, \"*\") # simbole predstavimo z nizi\r\n    \r\nmatriko binomskih koeficientov pa z\r\n\r\n    outer(0 : 10, 0 : 10, choose)\r\n\r\nFunkcija, ki jo kli\u010demo, mora delovati na vektorjih,\r\nvendar ve\u010d o tem naslednji\u010d.", 
       "language": 1, 
-      "title": "Krmilni stavki in rekurzija", 
-      "timestamp": "2011-10-24 21:14:27", 
-      "author": 1, 
-      "problem_set": 4, 
-      "preamble": ""
-    }
-  }, 
-  {
-    "pk": 34, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 1, 
-      "description": "Vektorji in matrike v R-ju se ne ustavijo pri dveh dimenzijah. O objektih\r\nvi\u0161jih dimenzij govorimo kot o razporeditvah. Postopek je enak.\r\n    \r\nPrvi dve dimenziji se poka\u017eeta v matri\u010dni obliki, za vse nadaljnje pri\r\nizpisu na\u0161tejemo vse mo\u017enosti.\r\n\r\n    x <- 1 : 100\r\n    dim(x) <- c(10, 5, 2)\r\n    x\r\n    \r\n    dim(x) <- c(5, 5, 2, 2)\r\n    x\r\n    \r\nDo komponent dostopamo na enak na\u010din kot prej.\r\n\r\n    x[4, , 1, ]      # elementi v 4. vrstici in indeksom 1. v 3. dimenziji.\r\n    x[, 2 : 4, , -2] # elementi od 2. do 4. stolpca in z\r\n                     # indeksom razli\u010dnim od 2 v 4. dimenziji.\r\n    x[, , , 1] <- -x[, , , 1] # negiraj elemente z indeksom 1 v 4. dimenziji\r\n    \r\nV spremenljivki `Titanic` so shranjeni podatki o pre\u017eivelih potnikih na\r\nTitaniku. Razporeditev je \u0161tiridimenzionalna.\r\nPoglejte, kaj opisuje katera dimenzija?\r\n    \r\n    Titanic[, \"Male\", , \"No\"] # \u0160tevila mo\u0161kih, ki niso pre\u017eiveli.\r\n    sum(Titanic[\"Crew\", , ,]) # Velikost celotne posadke", 
-      "language": 1, 
-      "title": "Razporeditve", 
-      "timestamp": "2011-10-24 21:39:58", 
+      "title": "Matrike", 
+      "timestamp": "2011-10-26 08:38:39", 
       "author": 1, 
       "problem_set": 8, 
-      "preamble": ""
-    }
-  }, 
-  {
-    "pk": 8, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 1, 
-      "description": "*Nepopolnost* \u0161tevila je absolutna razlika med \u0161tevilom in vsoto njegovih\r\npravih deliteljev.\r\nNa primer, nepopolnost \u0161tevila $10$ je $|10 - (1+2+5)| = 2$.\r\n", 
-      "language": 2, 
-      "title": "Nepopolna \u0161tevila", 
-      "timestamp": "2011-10-06 09:27:38", 
-      "author": 1, 
-      "problem_set": 2, 
       "preamble": ""
     }
   }, 
@@ -210,6 +154,62 @@
     }
   }, 
   {
+    "pk": 17, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 1, 
+      "description": "Krmilni stavki v R-ju se obna\u0161ajo podobno kot v Pythonu.\nPogojni stavek napi\u0161emo kot:\n\n    if(pogoj) {\n      ukazi, ki se izvedejo, \u010de pogoj dr\u017ei\n    } else {\n      ukazi, ki se izvedejo, \u010de pogoj ne dr\u017ei\n    }\n\nZanka `while` prav tako deluje podobno kot v Pythonu:\n\n    while(pogoj) {\n      ukazi, ki se izvajajo, dokler pogoj dr\u017ei\n    }\n\nPoleg zanke `while` R pozna tudi zanko `repeat`, ki se obna\u0161a tako kot\nzanka `while`, v kateri je pogoj vedno enak `TRUE`.\n\u010ce \u017eelimo zaustaviti izvajanje zanke `repeat`, uporabimo ukaz `break`,\nki se obna\u0161a tako kot v Pythonu, ali pa ukaz `return`.\n\u010ce \u017eelimo sko\u010diti na naslednji korak trenutne zanke, pa uporabimo\nukaz `next`, ki se obna\u0161a tako kot `continue` v Pythonu.\n\n    prastevilo <- function(n) {\n      i <- 2\n      while(i < n) {\n        if(n %% i == 0)\n          return(FALSE)\n        i <- i + 1\n      }\n      return(TRUE)\n    }", 
+      "language": 1, 
+      "title": "Krmilni stavki in rekurzija", 
+      "timestamp": "2011-10-24 21:14:27", 
+      "author": 1, 
+      "problem_set": 4, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 1, 
+      "description": "*Nepopolnost* \u0161tevila je absolutna razlika med \u0161tevilom in vsoto njegovih\r\npravih deliteljev.\r\nNa primer, nepopolnost \u0161tevila $10$ je $|10 - (1+2+5)| = 2$.\r\n", 
+      "language": 2, 
+      "title": "Nepopolna \u0161tevila", 
+      "timestamp": "2011-10-06 09:27:38", 
+      "author": 1, 
+      "problem_set": 2, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "language": 2, 
+      "title": "Osnovne operacije z redkimi matrikami", 
+      "timestamp": "2011-10-26 00:55:57", 
+      "author": 19, 
+      "problem_set": 11, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "language": 2, 
+      "title": "Aritmetika", 
+      "timestamp": "2011-10-26 08:53:35", 
+      "author": 19, 
+      "problem_set": 7, 
+      "preamble": ""
+    }
+  }, 
+  {
     "pk": 22, 
     "model": "problem.problem", 
     "fields": {
@@ -224,16 +224,30 @@
     }
   }, 
   {
-    "pk": 29, 
+    "pk": 26, 
     "model": "problem.problem", 
     "fields": {
       "_order": 1, 
-      "description": "", 
+      "description": "\nPred re\u0161evanjem te naloge si oglejte si video lekcijo\n[Urejanje z vstavljanem](http://vimeo.com/30669299).\nPozor, video vsebuje re\u0161itev naloge, zato ga nehajte\ngledati takoj, ko razumete, kako algoritem deluje.", 
       "language": 2, 
-      "title": "Aritmetika", 
-      "timestamp": "2011-10-19 14:54:01", 
+      "title": "Urejanje z vstavljanem", 
+      "timestamp": "2011-10-20 08:54:41", 
       "author": 19, 
-      "problem_set": 7, 
+      "problem_set": 6, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 34, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 1, 
+      "description": "Vektorji in matrike v R-ju se ne ustavijo pri dveh dimenzijah. O objektih\r\nvi\u0161jih dimenzij govorimo kot o razporeditvah. Postopek je enak.\r\n    \r\nPrvi dve dimenziji se poka\u017eeta v matri\u010dni obliki, za vse nadaljnje pri\r\nizpisu na\u0161tejemo vse mo\u017enosti.\r\n\r\n    x <- 1 : 100\r\n    dim(x) <- c(10, 5, 2)\r\n    x\r\n    \r\n    dim(x) <- c(5, 5, 2, 2)\r\n    x\r\n    \r\nDo komponent dostopamo na enak na\u010din kot prej.\r\n\r\n    x[4, , 1, ]      # elementi v 4. vrstici in indeksom 1. v 3. dimenziji.\r\n    x[, 2 : 4, , -2] # elementi od 2. do 4. stolpca in z\r\n                     # indeksom razli\u010dnim od 2 v 4. dimenziji.\r\n    x[, , , 1] <- -x[, , , 1] # negiraj elemente z indeksom 1 v 4. dimenziji\r\n    \r\nV spremenljivki `Titanic` so shranjeni podatki o pre\u017eivelih potnikih na\r\nTitaniku. Razporeditev je \u0161tiridimenzionalna.\r\nPoglejte, kaj opisuje katera dimenzija?\r\n    \r\n    Titanic[, \"Male\", , \"No\"] # \u0160tevila mo\u0161kih, ki niso pre\u017eiveli.\r\n    sum(Titanic[\"Crew\", , ,]) # Velikost celotne posadke", 
+      "language": 1, 
+      "title": "Razporeditve", 
+      "timestamp": "2011-10-24 21:39:58", 
+      "author": 1, 
+      "problem_set": 8, 
       "preamble": ""
     }
   }, 
@@ -294,20 +308,6 @@
     }
   }, 
   {
-    "pk": 31, 
-    "model": "problem.problem", 
-    "fields": {
-      "_order": 3, 
-      "description": "", 
-      "language": 2, 
-      "title": "Nizi", 
-      "timestamp": "2011-10-19 14:54:01", 
-      "author": 19, 
-      "problem_set": 7, 
-      "preamble": ""
-    }
-  }, 
-  {
     "pk": 10, 
     "model": "problem.problem", 
     "fields": {
@@ -318,6 +318,20 @@
       "timestamp": "2011-10-13 12:57:34", 
       "author": 1, 
       "problem_set": 2, 
+      "preamble": ""
+    }
+  }, 
+  {
+    "pk": 31, 
+    "model": "problem.problem", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "language": 2, 
+      "title": "Nizi", 
+      "timestamp": "2011-10-19 14:54:01", 
+      "author": 19, 
+      "problem_set": 7, 
       "preamble": ""
     }
   }, 
