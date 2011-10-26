@@ -172,7 +172,7 @@ regex_break <- function(whole_regex, regexes, source) {
       answer <- try(eval(example), silent = TRUE)
       if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
         error <- paste("Ukaz ", deparse(example), " vrne ", my.print(answer), " namesto ", my.print(expected), sep="")
-        parts$errors[[check$current_part]] <<- c(parts$errors[[check$current_part]], error)
+        attempts$errors[[check$current_part]] <<- c(attempts$errors[[check$current_part]], error)
       }
     }
     check$challenge <- function(x) {
