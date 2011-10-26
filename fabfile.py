@@ -75,6 +75,10 @@ def save_dump():
     for dump in dumps:
         local('./manage.py dumpdata --indent=2 {0} > fixtures/{0}.json'.format(dump))
 
+def set_apache():
+    put('apache/tomo.fmf.uni-lj.si', '/etc/apache2/sites-available/', use_sudo=True)
+    restart("bla")
+
 def reset_local():
     local('touch tomo.db')
     local('rm tomo.db')
