@@ -1,0 +1,5 @@
+Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
+
+- avtomaticen replace datoteke, ko se nalozi na server (za ucitelje)
+- ucitelj lahko pogleda resitev naloge tudi, ce je se ni resil
+- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
