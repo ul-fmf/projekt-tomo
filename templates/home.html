@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block header %}
-{% filter markdown %}
+{% filter markdown:"mathjax" %}
   Tomo je stran, namenjena učenju programiranja.
   Datoteke z ustreznimi nalogami prenesete na svoj računalnik, na katerem jih tudi rešujete.
   Kadarkoli želite, lahko preverite pravilnost svojih rešitev, hkrati pa rešitve tudi shranite nazaj na strežnik.
@@ -26,7 +26,7 @@
   {% for course in courses.all %}
     <h2><a href='{% url course course.id %}'>{{ course.name }}</a></h2>
 
-    {{ course.description|markdown }}
+    {{ course.description|markdown:"mathjax" }}
 
 
     {% for problem_set in course.recent %}

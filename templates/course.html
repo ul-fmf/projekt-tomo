@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block header %}
-  {{ course.description|markdown }}
+  {{ course.description|markdown:"mathjax" }}
 
   {% if request.user.is_staff %}
   <a href="{% url admin:course_problemset_add %}"><button class="btn">Dodaj sklop</button></a>&nbsp;

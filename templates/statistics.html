@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block header %}
-    {{ problem_set.description|markdown }}
+    {{ problem_set.description|markdown:"mathjax" }}
 
     {% if user.is_authenticated %}
       <a href="{% url download_problem_set problem_set.id %}"><button class="btn primary">Prenesi naloge</button></a>&nbsp;
