@@ -2,6 +2,12 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - avtomaticen replace datoteke, ko se nalozi na server (za ucitelje)
 
+- ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
+  "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
+  Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
+  z 0.
+
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
+
