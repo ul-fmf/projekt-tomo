@@ -21,9 +21,8 @@ def stage():
 
 def update(destination):
     lock(destination)
-    with cd('/srv/dev/tomo'):
-        sudo('hg pull')
-        sudo('hg up')
+    with cd(destination):
+        sudo('hg fetch')
     migrate_database(destination)
     unlock(destination)
 
