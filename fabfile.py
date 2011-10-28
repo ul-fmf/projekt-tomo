@@ -61,16 +61,16 @@ def reset_staging_database():
 
 def restart(destination):
     wsgi = 'tomo' if destination == production else 'tomo-dev'
-    sudo('touch {0}/apache/{1}.wsgi'.format(destination, wsgi))
+    sudo('touch {0}apache/{1}.wsgi'.format(destination, wsgi))
 
 def lock(destination):
     lock = 'tomo' if destination == production else 'tomo-dev'
-    sudo('touch {0}/apache/{1}.lock'.format(destination, lock))
+    sudo('touch {0}apache/{1}.lock'.format(destination, lock))
     restart(destination)
 
 def unlock(destination):
     lock = 'tomo' if destination == production else 'tomo-dev'
-    sudo('rm {0}/apache/{1}.lock'.format(destination, lock))
+    sudo('rm {0}apache/{1}.lock'.format(destination, lock))
     restart(destination)
 
 
