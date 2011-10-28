@@ -155,6 +155,8 @@
     <script src="{{ STATIC_URL }}jquery.js"></script>
     <script src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
     <script src="{{ STATIC_URL }}bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-twipsy.js"></script>
+    <script src="{{ STATIC_URL }}bootstrap-popover.js"></script>
     <script type='text/javascript'>
       $(document).ready(
         function() {
@@ -165,6 +167,19 @@
           );
         }
       );
+    </script>
+    <script>
+      $(function () {
+        $("a[rel=popover]")
+          .popover({
+            offset: 10,
+            placement: 'below',
+            html: true,
+          })
+          .click(function(e) {
+            e.preventDefault()
+          })
+      })
     </script>
     <script type="text/javascript" src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>

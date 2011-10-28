@@ -1,16 +1,6 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- MathJax ne deluje, ker Markdown pobrise backslashe
-
 - avtomaticen replace datoteke, ko se nalozi na server (za ucitelje)
-
-- ucitelj lahko pogleda resitev naloge tudi, ce je se ni resil
-
-- ali se ze preverja, ali part-id pase skupaj z id-jem od naloge, ali
-  se se vedno kar shrani?
-
-- tip, ki prikazuje resitev studenta, ko se zapeljemo na + ali - izgine
-  po nekaj sekundah. Potrebovali bi ta pravi pop-up.
 
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 

@@ -82,7 +82,14 @@
       <td>{{ user.get_full_name }}</td>
       {% for part in parts %}
           {% with user_attempts|get_default:part as attempt %}
-          <td>{% if attempt %}<a href="#" title="{{ attempt.solution }}">{{ attempt.correct|yesno:"+,–"}}</a>{% else %}?{% endif %}</td>
+          <td>{% if attempt %}
+            <a href="#" rel="popover" title="Rešitev" data-content="<pre><code>{{ attempt.solution }}</code></pre>">
+              {{ attempt.correct|yesno:"+,–"}}
+            </a>
+            {% else %}
+              ?
+            {% endif %}
+          </td>
           {% endwith %}
       {% endfor %}
       </tr>
