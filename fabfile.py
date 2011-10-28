@@ -20,22 +20,24 @@ def stage():
     local('hg archive tomo.tgz')
     put('tomo.tgz', '/srv/dev/', use_sudo=True)
     local('rm tomo.tgz')
+    lock(staging)
     with cd('/srv/dev/'):
         sudo('mv tomo/virtualenv _virtualenv')
         sudo('rm -r tomo')
         sudo('tar -xzf tomo.tgz')
         sudo('mv _virtualenv tomo/virtualenv')
         sudo('rm tomo.tgz')
-    # migrate_database(staging)
+    migrate_database(staging)
     restart(staging)
 
 def deploy():
+    lock(production)
     intermediate = '/srv/dev/_tomo/'
     sudo('cp -r {0} {1}'.format(staging, intermediate))
     sudo('rm -r {0}'.format(production))
     sudo('mv {0} {1}'.format(intermediate, production))
-    # migrate_database(production)
-    restart(production)
+    migrate_database(production)
+    unlock(production)
 
 def manage(destination, command, options=""):
     settings = 'settings.production' if destination == production else 'settings.dev'
@@ -47,9 +49,10 @@ def dump(destination, application):
     manage(destination, 'dumpdata', '--indent=2 {0}'.format(application))
 
 def migrate_database(destination):
-    manage(destination, 'syncdb')
-    manage(destination, 'loaddata fixtures/auth.json')
+    # manage(destination, 'syncdb')
+    # manage(destination, 'loaddata fixtures/auth.json')
     # manage(destination, 'migrate')
+    pass
 
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
@@ -57,7 +60,18 @@ def reset_staging_database():
     sudo('''su -c "psql --dbname=tomo --command='CREATE DATABASE tomodev WITH TEMPLATE tomo;'" postgres''')
 
 def restart(destination):
-    sudo('apache2ctl graceful')
+    wsgi = 'tomo' if destination == production else 'tomo-dev'
+    sudo('touch {0}apache/{1}.wsgi'.format(destination, wsgi))
+
+def lock(destination):
+    lock = 'tomo' if destination == production else 'tomo-dev'
+    sudo('touch {0}apache/{1}.lock'.format(destination, lock))
+    restart(destination)
+
+def unlock(destination):
+    lock = 'tomo' if destination == production else 'tomo-dev'
+    sudo('rm {0}apache/{1}.lock'.format(destination, lock))
+    restart(destination)
 
 
 def get_dump():
@@ -75,9 +89,9 @@ def save_dump():
     for dump in dumps:
         local('./manage.py dumpdata --indent=2 {0} > fixtures/{0}.json'.format(dump))
 
-def set_apache():
+def reset_apache():
     put('apache/tomo.fmf.uni-lj.si', '/etc/apache2/sites-available/', use_sudo=True)
-    restart("bla")
+    sudo('apache2ctl graceful')
 
 def reset_local():
     local('touch tomo.db')

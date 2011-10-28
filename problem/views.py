@@ -171,15 +171,15 @@ def update(request):
     problem.description = request.POST['description']
     problem.preamble = request.POST['preamble']
 
-    response = []
+    messages = []
     for part in parts:
         if part['part']:
             try:
                 new = Part.objects.get(id=part['part'])
                 if new.id in new_parts:
-                    response.append("Podnaloga z id-jem {0} se ponavlja - naloga ni shranjena.".format(new.id))
+                    messages.append("Podnaloga z id-jem {0} se ponavlja - naloga ni shranjena.".format(new.id))
                 if new.problem != problem:
-                    response.append("Podnaloga z id-jem {0} se pojavlja v nalogi {1} - naloga ni shranjena.".format(new.id, new.problem))
+                    messages.append("Podnaloga z id-jem {0} se pojavlja v nalogi {1} - naloga ni shranjena.".format(new.id, new.problem))
                     continue
             except Part.DoesNotExist:
                 new = Part(problem=problem)
@@ -191,15 +191,19 @@ def update(request):
         new.challenge = part.get('challenge', '')
         new.save()
         new_parts.append(new.id)
-    if response:
-        response += ['Ostale naloge so shranjene.']
+    if messages:
+        messages += ['Ostale naloge so shranjene.']
     else:
-        response = ['Vse naloge so shranjene.']
+        messages = ['Vse naloge so shranjene.']
 
     for p in old_parts:
         if p.id not in new_parts:
-            response.append("Podnaloge z id-jem {0} ni v datoteki, vendar bo ostala v nalogi.".format(p.id))
+            messages.append("Podnaloge z id-jem {0} ni v datoteki, vendar bo ostala v nalogi.".format(p.id))
     problem.set_part_order(new_parts)
     problem.save()
 
-    return HttpResponse("\n".join(response))
+    response = {
+        'message': "\n".join(messages)
+    }
+
+    return HttpResponse(json.dumps(response))

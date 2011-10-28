@@ -67,7 +67,8 @@ if all('errors' not in part or not part['errors'] for part in Check.parts):
         }).encode()
         try:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
-            print(r.read().decode())
+            response = json.loads(r.read().decode())
+            print(response['message'])
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:
