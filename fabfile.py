@@ -28,7 +28,7 @@ def stage():
         sudo('mv _virtualenv tomo/virtualenv')
         sudo('rm tomo.tgz')
     migrate_database(staging)
-    unlock(staging)
+    restart(staging)
 
 def deploy():
     lock(production)
