@@ -1,43 +1,5 @@
 ##############################################################################
 # Copy this file to settings.py and update it to match your configuration.
-# The file matches the standard Django settings.py template except for the
-# following additions.
-##############################################################################
-
-# Django settings for tomo project.
-
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    # Here are the applications we need to include:
-    # Uncomment the next line to enable the admin:
-    'django.contrib.admin',
-    'django.contrib.markup',
-    'tomo.course',
-    'tomo.problem',
-)
-
-# Since the default template does not have TEMPLATE_CONTEXT_PROCESSORS, we need
-# to write it out in full.
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.static',
-    'django.core.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.contrib.messages.context_processors.messages',
-    # This is the context processor we want to include
-    'django.core.context_processors.request',
-)
-
-##############################################################################
-# What follows is the standard Django settings.py template.
 ##############################################################################
 
 DEBUG = True
@@ -146,6 +108,34 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+)
+
+# The apps needed for Tomo are listed here. Think before you change the
+# list, and note it is _not_ the default Django list.
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    #'django.contrib.sites',
+    #'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'django.contrib.admin',
+    'django.contrib.markup',
+    'tomo.course',
+    'tomo.problem',
+)
+
+# Since the default template does not have TEMPLATE_CONTEXT_PROCESSORS, we need
+# to write it out in full.
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.contrib.messages.context_processors.messages',
+    # This is the context processor we want to include
+    'django.core.context_processors.request',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -9,4 +9,22 @@ Installation:
 
 2. Install Django.
 
-3. Get Tomo.
+3. Download Tomo, suppose it is in /some/place/tomo/
+
+4. Copy settings_dist.py to settings.py and edit the relevant info, in particular:
+
+   STATICFILES_DIRS = ('/some/place/tomo/static/',)
+   SECRET_KEY = 'This string contains forty-two characters.'
+   TEMPLATE_DIRS = ('/some/place/tomo/templates/',)
+
+   If you use a sqlite3 database for a development version, call it 'tomo.db' if
+   you want hg to ignore it automatically.
+
+5. If all is well, /some/place/tomo/manage.py should run ok at this point.
+ 
+6. Run the following commands:
+
+    cd  /some/place/tomo/static/
+   ./manage.py syncdb
+   ./manage.py runserver
+
