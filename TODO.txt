@@ -16,7 +16,3 @@ PREVERITI, ALI JE PRAVILNO NAREJENO:
 
 - da ne creshira, ce ni nobenega problema v problemset-u, ker ne zna
   izbrati jezika
-
-- sliderji pri rešitvi, kadar je predolga, da bi šla v tisto malo okno.
-  To se da verjetno urediti s CSS (pove se, da mora imeti okno slider
-  po vertikali, ce vsebina ne gre vanj).

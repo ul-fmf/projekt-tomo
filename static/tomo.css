@@ -127,5 +127,5 @@ body {
 
 .solution-view {
   overflow: auto;
-  max-height: 80%;
+  max-height: 400px;
 }
