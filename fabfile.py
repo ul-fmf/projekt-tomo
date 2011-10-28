@@ -20,22 +20,24 @@ def stage():
     local('hg archive tomo.tgz')
     put('tomo.tgz', '/srv/dev/', use_sudo=True)
     local('rm tomo.tgz')
+    lock(staging)
     with cd('/srv/dev/'):
         sudo('mv tomo/virtualenv _virtualenv')
         sudo('rm -r tomo')
         sudo('tar -xzf tomo.tgz')
         sudo('mv _virtualenv tomo/virtualenv')
         sudo('rm tomo.tgz')
-    # migrate_database(staging)
-    restart(staging)
+    migrate_database(staging)
+    unlock(staging)
 
 def deploy():
+    lock(production)
     intermediate = '/srv/dev/_tomo/'
     sudo('cp -r {0} {1}'.format(staging, intermediate))
     sudo('rm -r {0}'.format(production))
     sudo('mv {0} {1}'.format(intermediate, production))
-    # migrate_database(production)
-    restart(production)
+    migrate_database(production)
+    unlock(production)
 
 def manage(destination, command, options=""):
     settings = 'settings.production' if destination == production else 'settings.dev'
@@ -47,9 +49,10 @@ def dump(destination, application):
     manage(destination, 'dumpdata', '--indent=2 {0}'.format(application))
 
 def migrate_database(destination):
-    manage(destination, 'syncdb')
-    manage(destination, 'loaddata fixtures/auth.json')
+    # manage(destination, 'syncdb')
+    # manage(destination, 'loaddata fixtures/auth.json')
     # manage(destination, 'migrate')
+    pass
 
 def reset_staging_database():
     confirm('Are you sure you want to reset the staging database?', default=False)
