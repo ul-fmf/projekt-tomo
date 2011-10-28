@@ -13,6 +13,9 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
+- uskladiti virtualenv
+- urediti apache direktorij
+- združiti aplikaciji course in problem v aplikacijo tomo
 
 
 PREVERITI, ALI JE PRAVILNO NAREJENO:
