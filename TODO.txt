@@ -7,9 +7,12 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
   z 0.
 
+- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
+
+- ugotoviti, na katerem challengu dobimo napačen odgovor
+
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
-- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
 
 
 PREVERITI, ALI JE PRAVILNO NAREJENO:

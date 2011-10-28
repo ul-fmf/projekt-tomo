@@ -17,18 +17,11 @@ fixtures = [
 ]
 
 def stage():
-    local('hg archive tomo.tgz')
-    put('tomo.tgz', '/srv/dev/', use_sudo=True)
-    local('rm tomo.tgz')
     lock(staging)
-    with cd('/srv/dev/'):
-        sudo('mv tomo/virtualenv _virtualenv')
-        sudo('rm -r tomo')
-        sudo('tar -xzf tomo.tgz')
-        sudo('mv _virtualenv tomo/virtualenv')
-        sudo('rm tomo.tgz')
+    with cd('/srv/dev/tomo'):
+        sudo('hg up')
     migrate_database(staging)
-    restart(staging)
+    unlock(staging)
 
 def deploy():
     lock(production)
@@ -67,6 +60,13 @@ def lock(destination):
     lock = 'tomo' if destination == production else 'tomo-dev'
     sudo('touch {0}apache/{1}.lock'.format(destination, lock))
     restart(destination)
+
+def edit_settings(destination):
+    server_settings = '{0}settings.py'.format(destination)
+    filename = 'settings-temp.py'
+    get(server_settings, filename)
+    local('$EDITOR {0}'.format(filename))
+    put(filename, server_settings, use_sudo=True)
 
 def unlock(destination):
     lock = 'tomo' if destination == production else 'tomo-dev'
