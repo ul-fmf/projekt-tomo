@@ -2,6 +2,10 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - avtomaticen replace datoteke, ko se nalozi na server (za ucitelje)
 
+- sliderji pri rešitvi, kadar je predolga, da bi šla v tisto malo okno.
+  To se da verjetno urediti s CSS (pove se, da mora imeti okno slider
+  po vertikali, ce vsebina ne gre vanj).
+
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
