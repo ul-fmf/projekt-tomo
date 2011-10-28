@@ -124,3 +124,8 @@ body {
   background-color: #ddd;
   color: #404040;
 }
+
+.solution-view {
+  overflow: auto;
+  max-height: 80%;
+}

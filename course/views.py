@@ -56,7 +56,7 @@ def view_problem_set(request, problem_set_id):
         for problem, correct in solved.items():
             solved[problem] = (100 * correct) / parts_count[problem]
     attempts = get_attempts(problem_set, request.user)
-    default_language = problems.all()[0].language if problems else None
+    default_language = problems.all()[0].language if problems.all() else None
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
         'parts_count': parts_count,

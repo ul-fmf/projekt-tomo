@@ -14,4 +14,3 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
-
