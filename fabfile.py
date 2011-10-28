@@ -17,20 +17,18 @@ fixtures = [
 ]
 
 def stage():
-    lock(staging)
+    update(staging)
+
+def update(destination):
+    lock(destination)
     with cd('/srv/dev/tomo'):
+        sudo('hg pull')
         sudo('hg up')
-    migrate_database(staging)
-    unlock(staging)
+    migrate_database(destination)
+    unlock(destination)
 
 def deploy():
-    lock(production)
-    intermediate = '/srv/dev/_tomo/'
-    sudo('cp -r {0} {1}'.format(staging, intermediate))
-    sudo('rm -r {0}'.format(production))
-    sudo('mv {0} {1}'.format(intermediate, production))
-    migrate_database(production)
-    unlock(production)
+    update(production)
 
 def manage(destination, command, options=""):
     settings = 'settings.production' if destination == production else 'settings.dev'
