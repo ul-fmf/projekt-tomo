@@ -1,10 +1,17 @@
+{% load my_tags %}
 ################################################################@@#
 # To je datoteka, s katero pripravite nalogo.
 # {{ problem.title }}
 ################################################################@@#
 
+from hashlib import md5
+import inspect, json, os, re, random, sys
+from urllib.error import HTTPError
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
-{% load my_tags %}{% include 'python/check.py' %}
+{% include 'python/check.py' %}
+
 with open(os.path.abspath(sys.argv[0])) as f:
     source = f.read()
 
@@ -59,7 +66,9 @@ Check.part()
 #####################################################################@@#
 
 Check.summarize()
-if all('errors' not in part or not part['errors'] for part in Check.parts):
+if any(part.get('errors') for part in Check.parts):
+    print('Naloge so napačno sestavljene.')
+else:
     print('Naloge so pravilno sestavljene.')
     if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
         print('Shranjujem naloge...')
@@ -82,5 +91,3 @@ if all('errors' not in part or not part['errors'] for part in Check.parts):
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:
         print('Naloge niso bile shranjene.')
-else:
-    print('Naloge so napačno sestavljene.')

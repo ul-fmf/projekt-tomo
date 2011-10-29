@@ -8,6 +8,8 @@ TODO za Tomo v splošnem:
 
 - bolj user-friendly datoteka za ucitelja (s komentarji na vrhu)
 
+- Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
+
 - counterji, da se ne dovoli uploadanje starih datotek pri uciteljih
 
 - avtomaticen replace za R
