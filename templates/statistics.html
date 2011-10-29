@@ -84,10 +84,10 @@
           {% with user_attempts|get_default:part as attempt %}
           <td>{% if attempt %}
             <a href="#" rel="popover" title="Rešitev" data-content="<pre><code>{{ attempt.solution }}</code></pre>">
-              {{ attempt.correct|yesno:"+,–"}}
+              <span class="attempt-plusminus">{{ attempt.correct|yesno:"+,–"}}</span>
             </a>
             {% else %}
-              ?
+              &nbsp;
             {% endif %}
           </td>
           {% endwith %}

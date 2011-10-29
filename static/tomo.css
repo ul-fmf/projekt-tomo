@@ -129,3 +129,8 @@ body {
   overflow: auto;
   max-height: 400px;
 }
+
+.attempt-plusminus {
+  font-weight: bold;
+  font-size: 200%;
+}
