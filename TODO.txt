@@ -5,13 +5,14 @@ TODO za Tomo v splošnem:
 
 - združiti aplikaciji course in problem v aplikacijo tomo
 
- - v statistiki naj bo okno za prikaz rešitve enako kot pri "poglej rešitev",
-  ta hover je annoying.
-
 - Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
+
+- ni fino, da smo odvisni od eksternih serverjev, kot je tisti yandex.st.
 
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
   in obratno, da lahko student kontaktira (koga, avtorja?)
+
+- če ima naloga samo en part, ni treba, da se ta part označi z "1)".
 
 - možnost, da se preuredi vrstni red nalog
 
