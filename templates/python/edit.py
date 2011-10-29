@@ -1,11 +1,10 @@
-{% load my_tags %}
-################################################################@@#
+#################################################################
 # To je datoteka, s katero pripravite nalogo.
-# {{ problem.title }}
-################################################################@@#
-
+# Vsebina naloge je spodaj, za definicijo razreda Check.
+#################################################################
+{% load my_tags %}
 from hashlib import md5
-import inspect, json, os, re, random, sys
+import inspect, json, os, re, random, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -22,28 +21,32 @@ Check.initialize([
         'solution': match.group(3).strip(),
         'validation': match.group(4).strip(),
     } for match in re.compile(
-        r'#+@(\d+)#'        # beginning of header
+        r'^#+@(\d+)#\n'        # beginning of header
         r'(.*?)'            # description
-        r'#+\1@#'           # end of header
+        r'^#+\1@#\n'           # end of header
         r'(.*?)'            # solution
-        r'Check\.part\(\)'  # beginning of validation
+        r'^Check\.part\(\)\n'  # beginning of validation
         r'(.*?)'            # validation
-        r'(?=#{50,}@)',     # beginning of next part
+        r'^(# )?(?=#{50,}@)',     # beginning of next part
         flags=re.DOTALL|re.MULTILINE
     ).finditer(source)
 ])
 
 problem_match = re.search(
-    r'#{50,}@@#'        # beginning of header
-    r'\n#(.*?)\n'       # title
+    r'^#{50,}@@#\n'     # beginning of header
+    r'^# (.*?)\n'       # title
     r'(.*?)'            # description
-    r'#{50,}@@#'        # end of header
+    r'^#{50,}@@#\n'        # end of header
     r'(.*?)'            # preamble
-    r'(?=#{50,}@)',     # beginning of first part
+    r'^(# )?(?=#{50,}@)',     # beginning of first part
     source, flags=re.DOTALL|re.MULTILINE)
 title = problem_match.group(1).strip()
 description = "\n".join(s[2:] for s in problem_match.group(2).strip().splitlines())
 preamble = problem_match.group(3).strip()
+
+###################################################################
+# Od tu naprej je navodilo naloge
+
 ################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
@@ -63,7 +66,20 @@ Check.part()
 
 {% endfor %}
 
+# ################################################################@000000#
+# # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
+# ################################################################000000@#
+# 
+# sem napisite resitev
+#
+# Check.part()
+# 
+# Check.equal(...)
+#
+# Check.challenge(...)
+
 #####################################################################@@#
+# Od tu naprej ničesar ne spreminjajte.
 
 Check.summarize()
 if any(part.get('errors') for part in Check.parts):
@@ -84,9 +100,10 @@ else:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
             response = json.loads(r.read().decode())
             print(response['message'])
-            # Overwrite myself
-            with open(os.path.abspath(sys.argv[0]), 'w') as f:
-                f.write(response['contents'])
+            if 'contents' in response:
+                shutil.copy(os.path.abspath(sys.argv[0]), os.path.abspath(sys.argv[0]) + ".orig") 
+                with open(os.path.abspath(sys.argv[0]), 'w') as f:
+                    f.write(response['contents'])
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:

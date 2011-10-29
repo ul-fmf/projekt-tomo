@@ -160,62 +160,72 @@ def edit(request, problem_id=None):
 def update(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-    edit = unpack(request.POST['data'], request.POST['signature'])
-    user = get_object_or_404(User, id=edit['user'])
-    problem = get_problem(edit['problem'], user)
-    parts = json.loads(request.POST['parts'])
+    data = unpack(request.POST['data'], request.POST['signature'])
+    user = get_object_or_404(User, id=data['user'])
+    problem = get_problem(data['problem'], user)
     old_parts = problem.parts.all()
+
     new_parts = []
-
-    problem.title = request.POST['title']
-    problem.description = request.POST['description']
-    problem.preamble = request.POST['preamble']
-
+    error = None
     messages = []
-    for part in parts:
-        if part['part']:
+    for part in json.loads(request.POST['parts']):
+        part_id = int(part['part'])
+        if part_id == 0:
+            new = Part(problem=problem)
+        else:
             try:
                 new = Part.objects.get(id=part['part'])
                 if new.id in new_parts:
-                    messages.append("Podnaloga z id-jem {0} se ponavlja - naloga ni shranjena.".format(new.id))
-                if new.problem != problem:
-                    messages.append("Podnaloga z id-jem {0} se pojavlja v nalogi {1} - naloga ni shranjena.".format(new.id, new.problem))
-                    continue
+                    error = "NAPAKA: podnaloga {0} se ponavlja.".format(new.id)
+                    break
+                elif new.problem != problem:
+                    error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
+                    break
             except Part.DoesNotExist:
-                new = Part(problem=problem)
-        else:
-            new = Part(problem=problem)
+                error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
+                break
         new.description = part['description']
         new.solution = part['solution']
         new.validation = part['validation']
         new.challenge = part.get('challenge', '')
         new.save()
+        if part_id == 0:
+            messages.append("Nova podnaloga {0} je ustvarjena.".format(new.id))
+        else:            
+            messages.append("Podnaloga {0} je shranjena.".format(new.id))
         new_parts.append(new.id)
-    if messages:
-        messages += ['Ostale naloge so shranjene.']
+
+    if error:
+        messages.append(error)
+        messages.append("\nNaloge NISO bile shranjene na strežnik.")
+        return HttpResponse(json.dumps({
+                    'message': "\n".join(messages)
+                    }))
     else:
-        messages = ['Vse naloge so shranjene.']
+        for p in old_parts:
+            if p.id not in new_parts:
+                Part.objects.filter(id=p.id).delete()
+                messages.append("Podnaloga {0} je IZBRISANA.".format(p.id))
+        problem.title = request.POST['title']
+        problem.description = request.POST['description']
+        problem.preamble = request.POST['preamble']
+        problem.set_part_order(new_parts)
+        problem.save()
 
-    for p in old_parts:
-        if p.id not in new_parts:
-            messages.append("Podnaloge z id-jem {0} ni v datoteki, vendar bo ostala v nalogi.".format(p.id))
-    problem.set_part_order(new_parts)
-    problem.save()
+        data, signature = pack({
+                'user': user.id,
+                'problem': problem.id,
+                })
+        context = RequestContext(request, {
+                'problem': problem,
+                'parts': problem.parts.all(),
+                'data': data,
+                'signature': signature,
+                })
+        t = loader.get_template(problem.language.edit_file)
+        contents = t.render(RequestContext(request, context))
 
-    data, signature = pack({
-        'user': user.id,
-        'problem': problem.id,
-    })
-    context = RequestContext(request, {
-        'problem': problem,
-        'parts': problem.parts.all(),
-        'data': data,
-        'signature': signature,
-    })
-    t = loader.get_template(problem.language.edit_file)
-    contents = t.render(RequestContext(request, context))
-
-    return HttpResponse(json.dumps({
-                'message': "\n".join(messages),
-                'contents': contents
-                }))
+        return HttpResponse(json.dumps({
+                    'message': "\n".join(messages),
+                    'contents': contents
+                    }))

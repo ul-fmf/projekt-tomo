@@ -12,6 +12,8 @@ TODO za Tomo v splošnem:
 
 - counterji, da se ne dovoli uploadanje starih datotek pri uciteljih
 
+- ali bi lahko bili kompatibilni s Python 2.x brez večjega truda?
+
 - avtomaticen replace za R
 
 - avotmaticen replace za studente
