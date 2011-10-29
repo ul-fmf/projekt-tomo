@@ -1,5 +1,7 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
+TODO za Tomo v splošnem:
+------------------------
 - bolj paranoicen upload
 
 - stripanje praznih vrstic v edit.py
@@ -12,12 +14,20 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - avotmaticen replace za studente
 
+- združiti aplikaciji course in problem v aplikacijo tomo
+
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
   z 0.
 
-- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev,
-  v splosnem narediti permissions preko djangotovih userjev
-
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
+
+- ugotoviti, na katerem challengu dobimo napačen odgovor
+
+- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
+
+TODO za server tomo.fmf.uni-lj.si:
+----------------------------------
+- uskladiti virtualenv
+- urediti apache direktorij
