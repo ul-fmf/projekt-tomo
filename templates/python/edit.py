@@ -16,33 +16,39 @@ with open(os.path.abspath(sys.argv[0])) as f:
 
 Check.initialize([
     {
-        'part': int(match.group(1)),
-        'description': "\n".join(s[2:] for s in match.group(2).strip().splitlines()),
-        'solution': match.group(3).strip(),
-        'validation': match.group(4).strip(),
+        'part': int(match.group('part')),
+        'description': "\n".join(s[2:] for s in match.group('description').strip().splitlines()),
+        'solution': match.group('solution').strip(),
+        'validation': match.group('validation').strip(),
     } for match in re.compile(
-        r'^#+@(\d+)#\n'        # beginning of header
-        r'(.*?)'            # description
-        r'^#+\1@#\n'           # end of header
-        r'(.*?)'            # solution
-        r'^Check\.part\(\)\n'  # beginning of validation
-        r'(.*?)'            # validation
-        r'^(# )?(?=#{50,}@)',     # beginning of next part
+        r'^#+@(?P<part>\d+)#\n'         # beginning of header
+        r'(?P<description>^# [^\n]*\n)' # description
+        r'^#+\1@#\n'                    # end of header
+        r'(?P<solution>.*?)'            # solution
+        r'^Check\.part\(\)\n'           # beginning of validation
+        r'(?P<validation>.*?)'          # validation
+        r'^(# )?(?=#{50,}@)',           # beginning of next part
         flags=re.DOTALL|re.MULTILINE
     ).finditer(source)
 ])
 
 problem_match = re.search(
-    r'^#{50,}@@#\n'     # beginning of header
-    r'^# (.*?)\n'       # title
-    r'(.*?)'            # description
-    r'^#{50,}@@#\n'        # end of header
-    r'(.*?)'            # preamble
-    r'^(# )?(?=#{50,}@)',     # beginning of first part
+    r'^#{50,}@@#\n'                    # beginning of header
+    r'^# (?P<title>[^\n]*)\n'          # title
+    r'^(#\s*\n)*'                      # empty rows
+    r'^(?P<description>.*?)\n'         # description
+    r'^#{50,}@@#\n'                    # end of header
+    r'(?P<preamble>.*?)'               # preamble
+    r'^(# )?(?=#{50,}@)',              # beginning of first part
     source, flags=re.DOTALL|re.MULTILINE)
-title = problem_match.group(1).strip()
-description = "\n".join(s[2:] for s in problem_match.group(2).strip().splitlines())
-preamble = problem_match.group(3).strip()
+
+if not problem_match:
+    print("NAPAKA: datoteka ni pravilno oblikovana")
+    sys.exit(1)
+
+title = problem_match.group('title').strip()
+description = "\n".join(s[2:] for s in problem_match.group('description').strip().splitlines())
+preamble = problem_match.group('preamble').strip()
 
 ###################################################################
 # Od tu naprej je navodilo naloge

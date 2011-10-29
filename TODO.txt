@@ -2,13 +2,19 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 TODO za Tomo v splošnem:
 ------------------------
-- bolj paranoicen upload
 
-- stripanje praznih vrstic v edit.py
-
-- bolj user-friendly datoteka za ucitelja (s komentarji na vrhu)
+- naredi večje + in - pri statistikah, da se jih lažje zadane,
+  okno za prikaz rešitve naj bo enako kot pri "poglej rešitev",
+  ta hover je annoying.
 
 - Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
+
+- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
+  in obratno, da lahko student kontaktira (koga, avtorja?)
+
+- možnost, da se preuredi vrstni red nalog
+
+- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
 - counterji, da se ne dovoli uploadanje starih datotek pri uciteljih
 
@@ -24,8 +30,6 @@ TODO za Tomo v splošnem:
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
   z 0.
-
-- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
 
 - ugotoviti, na katerem challengu dobimo napačen odgovor
 
