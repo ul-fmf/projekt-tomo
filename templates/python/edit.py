@@ -3,8 +3,7 @@
 # Vsebina naloge je spodaj, za definicijo razreda Check.
 #################################################################
 {% load my_tags %}
-from hashlib import md5
-import inspect, json, os, re, random, sys, shutil
+import os, re, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen

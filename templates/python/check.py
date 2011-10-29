@@ -1,3 +1,5 @@
+import json
+
 class Check:
     @staticmethod
     def initialize(parts):

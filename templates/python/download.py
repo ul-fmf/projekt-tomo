@@ -183,6 +183,10 @@
 
 
 {% include 'python/check.py' %}
+import os, re, sys
+from urllib.error import HTTPError
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
 def _check():
     with open(os.path.abspath(sys.argv[0])) as f:

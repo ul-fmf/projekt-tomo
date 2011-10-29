@@ -3,6 +3,8 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 TODO za Tomo v splošnem:
 ------------------------
 
+- združiti aplikaciji course in problem v aplikacijo tomo
+
 - naredi večje + in - pri statistikah, da se jih lažje zadane,
   okno za prikaz rešitve naj bo enako kot pri "poglej rešitev",
   ta hover je annoying.
@@ -24,8 +26,6 @@ TODO za Tomo v splošnem:
 
 - avotmaticen replace za studente
 
-- združiti aplikaciji course in problem v aplikacijo tomo
-
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
@@ -35,7 +35,19 @@ TODO za Tomo v splošnem:
 
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
+- podpora za Mathematico
+
+- podpora za matlab
+
+- podpora za Haskell
+
+- podpora za Ocaml
+
+- podpora za Javo
+
 TODO za server tomo.fmf.uni-lj.si:
 ----------------------------------
+
 - uskladiti virtualenv
+
 - urediti apache direktorij
