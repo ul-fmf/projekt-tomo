@@ -1,3 +1,9 @@
+################################################################@@#
+# To je datoteka, s katero pripravite nalogo.
+# {{ problem.title }}
+################################################################@@#
+
+
 {% load my_tags %}{% include 'python/check.py' %}
 with open(os.path.abspath(sys.argv[0])) as f:
     source = f.read()
@@ -69,6 +75,9 @@ if all('errors' not in part or not part['errors'] for part in Check.parts):
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
             response = json.loads(r.read().decode())
             print(response['message'])
+            # Overwrite myself
+            with open(os.path.abspath(sys.argv[0]), 'w') as f:
+                f.write(response['contents'])
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:

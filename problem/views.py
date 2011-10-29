@@ -202,8 +202,20 @@ def update(request):
     problem.set_part_order(new_parts)
     problem.save()
 
-    response = {
-        'message': "\n".join(messages)
-    }
+    data, signature = pack({
+        'user': user.id,
+        'problem': problem.id,
+    })
+    context = RequestContext(request, {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'data': data,
+        'signature': signature,
+    })
+    t = loader.get_template(problem.language.edit_file)
+    contents = t.render(RequestContext(request, context))
 
-    return HttpResponse(json.dumps(response))
+    return HttpResponse(json.dumps({
+                'message': "\n".join(messages),
+                'contents': contents
+                }))

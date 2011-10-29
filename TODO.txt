@@ -1,18 +1,23 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- avtomaticen replace datoteke, ko se nalozi na server (za ucitelje)
+- bolj paranoicen upload
+
+- stripanje praznih vrstic v edit.py
+
+- bolj user-friendly datoteka za ucitelja (s komentarji na vrhu)
+
+- counterji, da se ne dovoli uploadanje starih datotek pri uciteljih
+
+- avtomaticen replace za R
+
+- avotmaticen replace za studente
 
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
   z 0.
 
-- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
+- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev,
+  v splosnem narediti permissions preko djangotovih userjev
 
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov
-
-
-PREVERITI, ALI JE PRAVILNO NAREJENO:
-
-- da ne creshira, ce ni nobenega problema v problemset-u, ker ne zna
-  izbrati jezika
