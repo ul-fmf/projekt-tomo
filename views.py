@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from tomo.course.models import Course
+from tomo.problem.models import Course
 
 def homepage(request):
     # TODO: Once we implement a view to select courses, enable the selection

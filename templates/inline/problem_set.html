@@ -52,8 +52,8 @@
         <a href="{% url download_problem_set problem_set.id %}">Prenesi naloge</a>
         {% if request.user.is_staff %}
         <a href="">Uredi datoteke</a>
-        <a href="{% url admin:course_problemset_change problem_set.id %}">Uredi sklop</a>
-        <a href="{% url admin:course_problemset_delete problem_set.id %}">Pobriši sklop</a>
+        <a href="{% url admin:problem_problemset_change problem_set.id %}">Uredi sklop</a>
+        <a href="{% url admin:problem_problemset_delete problem_set.id %}">Pobriši sklop</a>
         {% endif %}
     {% else %}
       <div id="modal-from-dom-{{ problem_set.id }}" class="modal hide fade">

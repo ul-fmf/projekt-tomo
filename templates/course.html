@@ -19,9 +19,9 @@
   {{ course.description|markdown:"mathjax" }}
 
   {% if request.user.is_staff %}
-  <a href="{% url admin:course_problemset_add %}"><button class="btn">Dodaj sklop</button></a>&nbsp;
-  <a href="{% url admin:course_course_change course.id %}"><button class="btn">Uredi predmet</button></a>&nbsp;
-  <a href="{% url admin:course_course_delete course.id %}"><button class="btn danger">Pobriši predmet</button></a>
+  <a href="{% url admin:problem_problemset_add %}"><button class="btn">Dodaj sklop</button></a>&nbsp;
+  <a href="{% url admin:problem_course_change course.id %}"><button class="btn">Uredi predmet</button></a>&nbsp;
+  <a href="{% url admin:problem_course_delete course.id %}"><button class="btn danger">Pobriši predmet</button></a>
   {% endif %}
 {% endblock %}
 

@@ -24,8 +24,8 @@
       {% if request.user.is_staff %}
       <a href="{% url view_statistics problem_set.id %}"><button class="btn">Poglej statistiko</button></a>&nbsp;
       <a href=""><button class="btn">Uredi datoteke</button></a>&nbsp;
-      <a href="{% url admin:course_problemset_change problem_set.id %}"><button class="btn">Uredi sklop</button></a>&nbsp;
-      <a href="{% url admin:course_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši sklop</button></a>
+      <a href="{% url admin:problem_problemset_change problem_set.id %}"><button class="btn">Uredi sklop</button></a>&nbsp;
+      <a href="{% url admin:problem_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši sklop</button></a>
       {% endif %}
     {% else %}
       <div id="modal-from-dom" class="modal hide fade">
