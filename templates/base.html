@@ -8,12 +8,12 @@
 
     <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
     <!--[if lt IE 9]>
-      <script src="/static/html5.js"></script>
+      <script src="{{ STATIC_URL}}html5.js"></script>
     <![endif]-->
 
     <!-- Le styles -->
     <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap.css">
-    <link rel="stylesheet" href="/static/default.min.css">
+    <link rel="stylesheet" href="{{ STATIC_URL }}default.min.css">
     <link rel="stylesheet" href="{{ STATIC_URL}}tomo.css">
 
     <!-- Le javascript -->
@@ -24,7 +24,7 @@
         }
       });
     </script>
-    <script type="text/javascript" src="/static/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="{{ STATIC_URL }}jquery.js"></script>
     <script src="{{ STATIC_URL }}bootstrap-dropdown.js"></script>
     <script src="{{ STATIC_URL }}bootstrap-modal.js"></script>
@@ -54,7 +54,7 @@
           })
       })
     </script>
-    <script type="text/javascript" src="/highlight.min.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}highlight.min.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
 
     <!-- Le fav and touch icons -->
