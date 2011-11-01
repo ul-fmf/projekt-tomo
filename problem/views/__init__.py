@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import hashlib, json, os, tempfile, zipfile
+import hashlib, json, os
 
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
-from django.core.servers.basehttp import FileWrapper
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render
@@ -13,6 +12,7 @@ from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 
+from tomo.problem.views.download import *
 from tomo.problem.models import *
 
 def verify(cond):
@@ -56,13 +56,6 @@ def get_problem_attempts(problem, user):
     else:
         return {}
 
-
-def download_file(name, contents):
-    response = HttpResponse(mimetype='text/plain; charset=utf-8')
-    response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
-    response.write(contents)
-    return response
-
 def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
@@ -83,7 +76,7 @@ def download(request, problem_id):
     filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     contents = download_contents(request, problem, request.user,
                                  request.user.is_authenticated())
-    return download_file(filename, contents)
+    return plain_text(filename, contents)
 
 
 @staff_member_required
@@ -93,7 +86,7 @@ def download_user(request, problem_id, user_id):
     username = user.get_full_name() or user.username
     filename = "{0}-{1}.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
     contents = download_contents(request, problem, user, False)
-    return download_file(filename, contents)
+    return plain_text(filename, contents)
 
 @csrf_exempt
 def upload(request):
@@ -170,7 +163,7 @@ def edit(request, problem_id=None):
     filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     t = loader.get_template(problem.language.edit_file)
     contents = t.render(RequestContext(request, context))
-    return download_file(filename, contents)
+    return plain_text(filename, contents)
 
 @csrf_exempt
 def update(request):
@@ -313,19 +306,6 @@ def view_statistics(request, problem_set_id):
         'attempts': attempts
     })
 
-def download_zipfile(files, archivename):
-    temp = tempfile.TemporaryFile()
-    archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
-    for filename, contents in files:
-        archive.writestr(filename, contents)
-    archive.close()
-    wrapper = FileWrapper(temp)
-    response = HttpResponse(wrapper, content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(archivename)
-    response['Content-Length'] = temp.tell()
-    temp.seek(0)
-    return response
-
 
 def download_problem_set(request, problem_set_id):
     problem_set = get_problem_set(problem_set_id, request.user)
@@ -335,4 +315,4 @@ def download_problem_set(request, problem_set_id):
         filename = "{0}/{1}.{2}".format(archivename, slugify(problem.title), problem.language.extension) # Select your files here.
         contents = download_contents(request, problem, request.user, request.user.is_authenticated()).encode('utf-8')
         files.append((filename, contents))
-    return download_zipfile(files, archivename)
+    return zip_archive(archivename, files)
