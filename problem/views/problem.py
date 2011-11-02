@@ -14,15 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 from tomo.problem.utils import *
 from tomo.problem.models import *
 
-def get_problem_attempts(problem, user):
-    if user.is_authenticated():
-        attempts = Attempt.objects.from_user(user).filter(part__problem=problem)
-        return dict([
-            (attempt.part_id, attempt) for attempt in attempts
-        ])
-    else:
-        return {}
-
 
 def problem_file(request, problem_id, student_id=None):
     problem = get_object_or_404(Problem, id=problem_id)
@@ -44,7 +35,7 @@ def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
-        'attempts': get_problem_attempts(problem, request.user),
+        'attempts': Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part(),
         'authenticated': authenticated
     }
     if authenticated:
@@ -70,7 +61,7 @@ def upload(request):
     submission.save()
 
     attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
-    old_attempts = get_problem_attempts(problem, user)
+    old_attempts = Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part()
     incorrect = {}
     challenges = []
 
