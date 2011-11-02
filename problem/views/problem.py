@@ -34,6 +34,7 @@ def problem_file(request, problem_id, student_id=None):
 def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
+        'timestamp' : str(problem.timestamp),
         'parts': problem.parts.all(),
         'attempts': Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part(),
         'authenticated': authenticated
@@ -61,9 +62,9 @@ def upload(request):
     submission.save()
 
     attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
-    old_attempts = Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part()
-    incorrect = {}
-    challenges = []
+    old_attempts = Attempt.objects.from_user(user).for_problem(problem).dict_by_part()
+
+    judgments = []
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
@@ -72,21 +73,24 @@ def upload(request):
             errors = attempt.get('errors', [])
             challenge = attempt.get('challenge', '')
             if solution:
-                correct = challenge == part.challenge
-                if not errors and not correct:
-                    incorrect[i + 1] = (challenge, part.challenge)
-                old = old_attempts.get(part.id, None)
+                correct = not errors and (challenge == part.challenge)
+                judgments.append((i+1, correct))
                 new = Attempt(part=part, submission=submission,
                               solution=solution, errors=json.dumps(errors),
                               correct=correct, active=True)
-                if old and (old.correct != correct or old.solution != solution):
+                old = old_attempts.get(part.id, None)
+                if not old:
+                    new.save ()
+                elif old.correct != correct or old.solution != solution or old.errors != errors:
                     old.active = False
                     old.save()
                     new.save()
-                elif not old:
-                    new.save()
 
-    return render_to_response("response.txt", Context({'incorrect': incorrect}))
+    response = { 'judgments' : judgments }
+    if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
+        response['new_version'] = "NA VOLJO JE NOVA VERZIJA!"
+
+    return HttpResponse(json.dumps(response))
 
 @staff_member_required
 def create(request):

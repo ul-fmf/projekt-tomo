@@ -189,7 +189,7 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 
 def _check():
-    with open(os.path.abspath(sys.argv[0])) as f:
+    with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as f:
         source = f.read()
 
     Check.initialize([
@@ -217,13 +217,15 @@ def _check():
     print('Shranjujem rešitve...')
     post = urlencode({
         'data': '{{ data|safe }}',
-        'signature': '{{ signature }}',
+        'timestamp' : '{{ timestamp }}',
+        'signature': '{{ signature }}',        
         'attempts': Check.dump(),
         'source': source,
-    }).encode()
+    }).encode('utf-8')
     try:
         r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url upload %}', post)
-        print(r.read().decode())
+        response= json.loads(r.read().decode('utf-8'))
+        print(str(response))
     except HTTPError:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     {% else %}

@@ -30,7 +30,8 @@ class Check:
 
     @staticmethod
     def run(example, state, message=None, env={}, clean=lambda x: x):
-        s = {}
+        example = "\n".join(example)
+        s = {x : None for x in state}
         s.update(env)
         exec (example, globals(), s)
         for (x,v) in state.items():

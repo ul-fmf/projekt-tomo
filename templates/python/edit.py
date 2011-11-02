@@ -10,7 +10,7 @@ from urllib.request import urlopen
 
 {% include 'python/check.py' %}
 
-with open(os.path.abspath(sys.argv[0])) as f:
+with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as f:
     source = f.read()
 
 Check.initialize([
@@ -101,10 +101,10 @@ else:
             'description': description,
             'preamble': preamble,
             'parts': Check.dump(),
-        }).encode()
+        }).encode('utf-8')
         try:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
-            response = json.loads(r.read().decode())
+            response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
             if 'contents' in response:
                 shutil.copy(os.path.abspath(sys.argv[0]), os.path.abspath(sys.argv[0]) + ".orig") 
