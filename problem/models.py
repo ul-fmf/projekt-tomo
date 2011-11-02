@@ -2,6 +2,14 @@
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.db.models.query import QuerySet
+
+class QuerySetManager(models.Manager):
+    def __getattr__(self, attr, *args):
+        try:
+            return getattr(self.__class__, attr, *args)
+        except AttributeError:
+            return getattr(self.model.QuerySet(self.model), attr, *args)
 
 class Course(models.Model):
     name = models.CharField(max_length=70)
@@ -36,6 +44,7 @@ class ProblemSet(models.Model):
     visible = models.BooleanField()
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
+    objects = QuerySetManager()
 
     def solved(self, user):
         all_parts = Part.objects.filter(problem__problem_set=self).count()
@@ -54,6 +63,14 @@ class ProblemSet(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
+    class QuerySet(QuerySet):
+        def get_for_user(self, problem_set_id, user):
+            problem_set = ProblemSet.objects.get(id=problem_set_id)
+            if problem_set.visible or user.is_staff:
+                return problem_set
+            else:
+                raise PermissionDenied
+
     class Meta:
         order_with_respect_to = 'course'
 
@@ -69,14 +86,6 @@ class Language(models.Model):
     class Meta:
         ordering = ['name']
 
-class ProblemManager(models.Manager):
-    def get_for_user(self, problem_id, user):
-        problem = Problem.objects.get(id=problem_id)
-        if problem.problem_set.visible or user.is_staff:
-            return problem
-        else:
-            raise PermissionDenied
-
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
     language = models.ForeignKey(Language, related_name='problems')
@@ -85,7 +94,7 @@ class Problem(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     preamble = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
-    objects = ProblemManager()
+    objects = QuerySetManager()
 
     def __unicode__(self):
         return u'{0}'.format(self.title)
@@ -104,6 +113,14 @@ class Problem(models.Model):
 
     def get_absolute_url(self):
         return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
+
+    class QuerySet(QuerySet):
+        def get_for_user(self, problem_id, user):
+            problem = Problem.objects.get(id=problem_id)
+            if problem.problem_set.visible or user.is_staff:
+                return problem
+            else:
+                raise PermissionDenied
 
     class Meta:
         order_with_respect_to = 'problem_set'
@@ -134,14 +151,6 @@ class Submission(models.Model):
         ordering = ['-id']
 
 
-class AttemptManager(models.Manager):
-    @property
-    def active(self):
-        return self.get_query_set().filter(active=True)
-
-    def from_user(self, user):
-        return self.get_query_set().filter(active=True, submission__user=user)
-
 class Attempt(models.Model):
     part = models.ForeignKey(Part, related_name='attempts')
     submission = models.ForeignKey(Submission, related_name='attempts')
@@ -149,7 +158,26 @@ class Attempt(models.Model):
     errors = models.TextField(default="{}")
     correct = models.BooleanField()
     active = models.BooleanField()
-    objects = AttemptManager()
+    objects = QuerySetManager()
+
+    class QuerySet(QuerySet):
+        def active(self):
+            return self.filter(active=True)
+
+        def from_user(self, user):
+            if user.is_authenticated:
+                return self.filter(active=True, submission__user=user)
+            else:
+                return self.none()
+
+        def for_problem(self, problem):
+            return self.filter(part__problem=problem)
+
+        def for_problem_set(self, problem_set):
+            return self.filter(part__problem__problem_set=problem_set)
+
+        def dict_by_part(self):
+            return dict((attempt.part_id, attempt) for attempt in self)
 
     class Meta:
         ordering = ['submission']

@@ -14,35 +14,11 @@ from django.views.decorators.csrf import csrf_exempt
 from tomo.problem.utils import *
 from tomo.problem.models import *
 
-def get_problem_set(problem_set_id, user):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    verify(problem_set.visible or user.is_staff)
-    return problem_set
-
-def get_attempts(problem_set, user):
-    if user.is_authenticated():
-        attempts = Attempt.objects.from_user(user).filter(part__problem__problem_set=problem_set)
-        return dict([
-            (attempt.part_id, attempt) for attempt in attempts
-        ])
-    else:
-        return {}
-
-
-def get_problem_attempts(problem, user):
-    if user.is_authenticated():
-        attempts = Attempt.objects.from_user(user).filter(part__problem=problem)
-        return dict([
-            (attempt.part_id, attempt) for attempt in attempts
-        ])
-    else:
-        return {}
-
 def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
-        'attempts': get_problem_attempts(problem, request.user),
+        'attempts': Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part(),
         'authenticated': authenticated
     }
     if authenticated:
@@ -54,7 +30,7 @@ def download_contents(request, problem, user, authenticated):
     return t.render(RequestContext(request, context))
 
 def view_problem_set(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     parts_count = dict(Problem.objects.filter(problem_set=problem_set) \
                                       .annotate(Count('parts')) \
                                       .values_list('id', 'parts__count'))
@@ -70,7 +46,7 @@ def view_problem_set(request, problem_set_id):
             solved[problem] = solved.get(problem, 0) + int(attempt['correct'])
         for problem, correct in solved.items():
             solved[problem] = (100 * correct) / parts_count[problem]
-    attempts = get_attempts(problem_set, request.user)
+    attempts = Attempt.objects.from_user(request.user).for_problem_set(problem_set).dict_by_part()
     default_language = problems.all()[0].language if problems.all() else None
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
@@ -84,11 +60,9 @@ def view_problem_set(request, problem_set_id):
 
 @staff_member_required
 def view_statistics(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     attempts = {}
-    for attempt in Attempt.objects.active \
-                           .select_related('submission__user_id') \
-                           .filter(part__problem__problem_set=problem_set):
+    for attempt in Attempt.objects.active().for_problem_set(problem_set).select_related('submission__user_id'):
         user_id = attempt.submission.user_id
         user_attempts = attempts.get(user_id, {})
         user_attempts[attempt.part_id] = attempt
@@ -102,7 +76,7 @@ def view_statistics(request, problem_set_id):
     })
 
 def download_problem_set(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     archivename = slugify(problem_set.title)
     files = []
     for problem in problem_set.problems.all():
