@@ -28,11 +28,9 @@ TODO za Tomo v splošnem:
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
-- (A) counterji/timestamp, da se ne dovoli uploadanje starih datotek pri uciteljih
-
 - avtomaticen replace za R
 
-- (A) avotmaticen replace za studente
+- (A) izboljsaj sporocila za studente
 
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
