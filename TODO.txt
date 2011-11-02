@@ -18,8 +18,6 @@ TODO za Tomo v splošnem:
 
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
 
-- (A) Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
-
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
   in obratno, da lahko student kontaktira (koga, avtorja?)
 

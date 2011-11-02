@@ -114,32 +114,38 @@ def update(request):
     new_parts = []
     error = None
     messages = []
-    for part in json.loads(request.POST['parts']):
-        part_id = int(part['part'])
-        if part_id == 0:
-            new = Part(problem=problem)
-        else:
-            try:
-                new = Part.objects.get(id=part['part'])
-                if new.id in new_parts:
-                    error = "NAPAKA: podnaloga {0} se ponavlja.".format(new.id)
-                    break
-                elif new.problem != problem:
+
+    print ("HA HAHA {0} AND {1}".format(request.POST['timestamp'], str(problem.timestamp)))
+    if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
+        error = "NAPAKA: Uporabljate staro verzijo datoteke. (Novo lahko pridobite na strežniku.)"
+
+    else:
+        for part in json.loads(request.POST['parts']):
+            part_id = int(part['part'])
+            if part_id == 0:
+                new = Part(problem=problem)
+            else:
+                try:
+                    new = Part.objects.get(id=part['part'])
+                    if new.id in new_parts:
+                        error = "NAPAKA: podnaloga {0} se ponavlja.".format(new.id)
+                        break
+                    elif new.problem != problem:
+                        error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
+                        break
+                except Part.DoesNotExist:
                     error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
                     break
-            except Part.DoesNotExist:
-                error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
-                break
-        new.description = part['description']
-        new.solution = part['solution']
-        new.validation = part['validation']
-        new.challenge = part.get('challenge', '')
-        new.save()
-        if part_id == 0:
-            messages.append("Nova podnaloga {0} je ustvarjena.".format(new.id))
-        else:
-            messages.append("Podnaloga {0} je shranjena.".format(new.id))
-        new_parts.append(new.id)
+            new.description = part['description']
+            new.solution = part['solution']
+            new.validation = part['validation']
+            new.challenge = part.get('challenge', '')
+            new.save()
+            if part_id == 0:
+                messages.append("Nova podnaloga {0} je ustvarjena.".format(new.id))
+            else:
+                messages.append("Podnaloga {0} je shranjena.".format(new.id))
+            new_parts.append(new.id)
 
     if error:
         messages.append(error)
@@ -164,6 +170,7 @@ def update(request):
                 })
         context = RequestContext(request, {
                 'problem': problem,
+                'timestamp' : str(problem.timestamp),
                 'parts': problem.parts.all(),
                 'data': data,
                 'signature': signature,
@@ -207,6 +214,7 @@ def edit(request, problem_id=None):
     })
     context = RequestContext(request, {
         'problem': problem,
+        'timestamp' : str(problem.timestamp),
         'parts': problem.parts.all(),
         'data': data,
         'signature': signature,

@@ -96,6 +96,7 @@ else:
         post = urlencode({
             'data': '{{ data|safe }}',
             'signature': '{{ signature }}',
+            'timestamp': '{{ timestamp }}',
             'title': title,
             'description': description,
             'preamble': preamble,
