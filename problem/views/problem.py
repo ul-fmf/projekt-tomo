@@ -151,6 +151,12 @@ def update(request):
                 messages.append("Podnaloga {0} je shranjena.".format(new.id))
             new_parts.append(new.id)
 
+    if not error:
+        for p in old_parts:
+            if p.id not in new_parts:
+                error = "Podnaloga {0} MANJKA. (ÄŒe jo Å¾elite zbrisati, uprabite spletni vmesnik.)".format(p.id)
+                break
+
     if error:
         messages.append(error)
         messages.append("\nNaloge NISO bile shranjene na strežnik.")
@@ -158,10 +164,6 @@ def update(request):
                     'message': "\n".join(messages)
                     }))
     else:
-        for p in old_parts:
-            if p.id not in new_parts:
-                Part.objects.filter(id=p.id).delete()
-                messages.append("Podnaloga {0} je IZBRISANA.".format(p.id))
         problem.title = request.POST['title']
         problem.description = request.POST['description']
         problem.preamble = request.POST['preamble']
