@@ -29,6 +29,17 @@ class Check:
         Check.current['challenge'] += str(x)
 
     @staticmethod
+    def run(example, state, message=None, env={}, clean=lambda x: x):
+        s = {}
+        s.update(env)
+        exec (example, s)
+        for (x,v) in state.items():
+            if x not in s:
+                Check.error('Ukazi\n{0}\nne nestavijo spremenljivke {1}, a bi jo morali.'.format(example, x))
+            elif clean(s[x]) != clean(v):
+                Check.error('Ukaz\n{0}\nbi moral nastaviti spremenljivko {1}\nna vrednost {2},\na jo nastavi na{3}'.format(example, x, v, s[x]))
+
+    @staticmethod
     def equal(example, expected, message=None, clean=lambda x: x, env={}):
         if not message:
             message = 'Ukaz {0} vrne {1!r} namesto {2!r}.'

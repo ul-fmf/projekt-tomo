@@ -3,33 +3,43 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 TODO za Tomo v splošnem:
 ------------------------
 
-- Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
+- razdeli problem/views/__init__.py na kose
+
+- (M) USER INTERFACE:
+  - če ima naloga samo en part, ni treba, da se ta part označi z "1)".
+  - ali bi spremenili "1), 2), 3)" v kaj drugega?
+  - gumbi pri nalogi: Uredi, Reši, Pobriši, Kopiraj, Premakni gor, Premakni dol, Napredno...
+  - gumbi pri podnalogi: "moja in urdana rešitev", pobriši podnalogo
+
+- (M) preimenuj "Python" v "Python 3"
+
+- (A) pri challenge dodamo opcijski argument "key", challenge od serverja vrne
+  podatek o tem, kateri challenge je crknil
+
+- (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
+
+- (A) Check.exec, da lahko preverimo tudi rešitve, ki manipulirajo state
 
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
   in obratno, da lahko student kontaktira (koga, avtorja?)
 
-- dodaj "zbriši podnalogo" v spletni vmesnik
-
-- če ima naloga samo en part, ni treba, da se ta part označi z "1)".
-
-- možnost, da se preuredi vrstni red nalog
+- STATISTIKA:
+  - overall statistika
+  - statistika po času
+  - statistika samo za eno nalogo
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
-- counterji, da se ne dovoli uploadanje starih datotek pri uciteljih
-
-- ali bi lahko bili kompatibilni s Python 2.x brez večjega truda?
+- (A) counterji/timestamp, da se ne dovoli uploadanje starih datotek pri uciteljih
 
 - avtomaticen replace za R
 
-- avotmaticen replace za studente
+- (A) avotmaticen replace za studente
 
 - ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
   "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
   Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
   z 0.
-
-- ugotoviti, na katerem challengu dobimo napačen odgovor
 
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
 
