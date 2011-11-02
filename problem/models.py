@@ -23,6 +23,13 @@ class Course(models.Model):
     class Meta:
         ordering = ['name']
 
+class ProblemSetManager(models.Manager):
+    def get_for_user(self, problem_set_id, user):
+        problem_set = ProblemSet.objects.get(id=problem_set_id)
+        if problem_set.visible or user.is_staff:
+            return problem_set
+        else:
+            raise PermissionDenied
 
 class ProblemSet(models.Model):
     SOLUTION_VISIBILITY = (
@@ -36,6 +43,7 @@ class ProblemSet(models.Model):
     visible = models.BooleanField()
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
+    objects = ProblemSetManager()
 
     def solved(self, user):
         all_parts = Part.objects.filter(problem__problem_set=self).count()

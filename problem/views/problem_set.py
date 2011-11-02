@@ -14,11 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 from tomo.problem.utils import *
 from tomo.problem.models import *
 
-def get_problem_set(problem_set_id, user):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    verify(problem_set.visible or user.is_staff)
-    return problem_set
-
 def get_attempts(problem_set, user):
     if user.is_authenticated():
         attempts = Attempt.objects.from_user(user).filter(part__problem__problem_set=problem_set)
@@ -27,7 +22,6 @@ def get_attempts(problem_set, user):
         ])
     else:
         return {}
-
 
 def get_problem_attempts(problem, user):
     if user.is_authenticated():
@@ -54,7 +48,7 @@ def download_contents(request, problem, user, authenticated):
     return t.render(RequestContext(request, context))
 
 def view_problem_set(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     parts_count = dict(Problem.objects.filter(problem_set=problem_set) \
                                       .annotate(Count('parts')) \
                                       .values_list('id', 'parts__count'))
@@ -84,7 +78,7 @@ def view_problem_set(request, problem_set_id):
 
 @staff_member_required
 def view_statistics(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     attempts = {}
     for attempt in Attempt.objects.active \
                            .select_related('submission__user_id') \
@@ -102,7 +96,7 @@ def view_statistics(request, problem_set_id):
     })
 
 def download_problem_set(request, problem_set_id):
-    problem_set = get_problem_set(problem_set_id, request.user)
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     archivename = slugify(problem_set.title)
     files = []
     for problem in problem_set.problems.all():
