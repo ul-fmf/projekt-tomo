@@ -39,9 +39,8 @@ class ProblemSet(models.Model):
     def solved(self, user):
         all_parts = Part.objects.filter(problem__problem_set=self).count()
         if all_parts > 0 and user.is_authenticated():
-            solved_parts = Attempt.objects.filter(submission__user=user,
+            solved_parts = Attempt.objects.from_user(user).filter(
                                                   part__problem__problem_set=self,
-                                                  active=True,
                                                   correct=True).count()
             return int(100 * solved_parts / all_parts)
         else:
@@ -84,12 +83,14 @@ class Problem(models.Model):
     def solved(self, user):
         all_parts = self.parts.count()
         if all_parts > 0 and user.is_authenticated():
-            solved_parts = Attempt.objects.filter(submission__user=user,
-                                                  part__problem=self, active=True,
+            solved_parts = Attempt.objects.from_user(user).filter(part__problem=self,
                                                   correct=True).count()
             return int(100 * solved_parts / all_parts)
         else:
             return 0
+
+    def visible(self, user):
+        return self.problem_set.visible or user.is_staff
 
     def get_absolute_url(self):
         return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
@@ -123,6 +124,14 @@ class Submission(models.Model):
         ordering = ['-id']
 
 
+class AttemptManager(models.Manager):
+    @property
+    def active(self):
+        return self.get_query_set().filter(active=True)
+
+    def from_user(self, user):
+        return self.get_query_set().filter(active=True, submission__user=user)
+
 class Attempt(models.Model):
     part = models.ForeignKey(Part, related_name='attempts')
     submission = models.ForeignKey(Submission, related_name='attempts')
@@ -130,6 +139,7 @@ class Attempt(models.Model):
     errors = models.TextField(default="{}")
     correct = models.BooleanField()
     active = models.BooleanField()
+    objects = AttemptManager()
 
     class Meta:
         ordering = ['submission']
