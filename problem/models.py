@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.db import models
 
 class Course(models.Model):
@@ -68,6 +69,14 @@ class Language(models.Model):
     class Meta:
         ordering = ['name']
 
+class ProblemManager(models.Manager):
+    def get_for_user(self, problem_id, user):
+        problem = Problem.objects.get(id=problem_id)
+        if problem.problem_set.visible or user.is_staff:
+            return problem
+        else:
+            raise PermissionDenied
+
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
     language = models.ForeignKey(Language, related_name='problems')
@@ -76,6 +85,7 @@ class Problem(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     preamble = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
+    objects = ProblemManager()
 
     def __unicode__(self):
         return u'{0}'.format(self.title)

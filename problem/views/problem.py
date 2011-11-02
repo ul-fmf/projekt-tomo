@@ -14,11 +14,6 @@ from django.views.decorators.csrf import csrf_exempt
 from tomo.problem.utils import *
 from tomo.problem.models import *
 
-def get_problem(problem_id, user):
-    problem = get_object_or_404(Problem, id=problem_id)
-    verify(problem.problem_set.visible or user.is_staff)
-    return problem
-
 def get_problem_attempts(problem, user):
     if user.is_authenticated():
         attempts = Attempt.objects.from_user(user).filter(part__problem=problem)
@@ -68,7 +63,7 @@ def upload(request):
 
     download = unpack(request.POST['data'], request.POST['signature'])
     user = get_object_or_404(User, id=download['user'])
-    problem = get_problem(download['problem'], user)
+    problem = Problem.objects.get_for_user(download['problem'], user)
 
     submission = Submission(user=user, problem=problem,
                             source=request.POST['source'])
@@ -122,7 +117,7 @@ def update(request):
         return HttpResponseNotAllowed(['POST'])
     data = unpack(request.POST['data'], request.POST['signature'])
     user = get_object_or_404(User, id=data['user'])
-    problem = get_problem(data['problem'], user)
+    problem = Problem.objects.get_for_user(data['problem'], user)
     old_parts = problem.parts.all()
 
     new_parts = []
@@ -191,7 +186,7 @@ def update(request):
                     }))
 
 def download(request, problem_id):
-    problem = get_problem(problem_id, request.user)
+    problem = Problem.objects.get_for_user(problem_id, request.user)
     filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     contents = download_contents(request, problem, request.user,
                                  request.user.is_authenticated())
@@ -201,7 +196,7 @@ def download(request, problem_id):
 @staff_member_required
 def download_user(request, problem_id, user_id):
     return problem_file(request, problem_id, user_id)
-    problem = get_problem(problem_id, request.user)
+    problem = Problem.objects.get_for_user(problem_id, request.user)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
     filename = "{0}-{1}.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
@@ -211,7 +206,7 @@ def download_user(request, problem_id, user_id):
 @staff_member_required
 def edit(request, problem_id=None):
     if problem_id:
-        problem = get_problem(problem_id, request.user)
+        problem = Problem.objects.get_for_user(problem_id, request.user)
     else:
         problem = Problem(author=request.user)
         problem.save()
