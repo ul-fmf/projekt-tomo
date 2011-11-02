@@ -225,7 +225,10 @@ def _check():
     try:
         r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url upload %}', post)
         response= json.loads(r.read().decode('utf-8'))
-        print(str(response))
+        for (k,b) in response['judgments']:
+            if b: print ("Podnaloga {0} je rešena pravilno.".format(k))
+            else: print ("Podnaloga {0} je rešena NEPRAVILNO.".format(k))
+        if 'message' in response: print (response['message'])
     except HTTPError:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     {% else %}

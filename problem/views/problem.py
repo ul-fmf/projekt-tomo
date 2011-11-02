@@ -88,7 +88,7 @@ def upload(request):
 
     response = { 'judgments' : judgments }
     if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
-        response['new_version'] = "NA VOLJO JE NOVA VERZIJA!"
+        response['message'] = "NA VOLJO JE NOVA VERZIJA!"
 
     return HttpResponse(json.dumps(response))
 
