@@ -8,6 +8,8 @@ TODO za Tomo v splošnem:
 - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
   in obratno, da lahko student kontaktira (koga, avtorja?)
 
+- dodaj "zbriši podnalogo" v spletni vmesnik
+
 - če ima naloga samo en part, ni treba, da se ta part označi z "1)".
 
 - možnost, da se preuredi vrstni red nalog
