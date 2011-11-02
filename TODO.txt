@@ -3,15 +3,10 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 TODO za Tomo v splošnem:
 ------------------------
 
-- razdeli problem/views/__init__.py na kose
-
 - (M) USER INTERFACE:
   - če ima naloga samo en part, ni treba, da se ta part označi z "1)".
   - ali bi spremenili "1), 2), 3)" v kaj drugega?
-  - gumbi pri nalogi: Uredi, Reši, Pobriši, Kopiraj, Premakni gor, Premakni dol, Napredno...
-  - gumbi pri podnalogi: "moja in urdana rešitev", pobriši podnalogo
-
-- (M) preimenuj "Python" v "Python 3"
+  - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
 
 - (A) pri challenge dodamo opcijski argument "key", challenge od serverja vrne
   podatek o tem, kateri challenge je crknil

@@ -35,13 +35,33 @@ body {
 
 .my-actions > a {
   margin-right: 10px;
-  color: #bfbfbf;
 }
 .my-actions > a:hover {
   margin-right: 10px;
   color: #77f;
 }
 
+.my-actions button, .my-actions .danger, .my-actions .primary {
+  margin: 0;
+  padding: 0;
+  color: #bfbfbf;
+  font-size: small;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background: none;
+  text-shadow: none;
+}
+.my-actions button:hover {
+  color: black;
+}
+.my-actions .danger:hover {
+  color: #c43c35;
+}
+.my-actions .primary:hover {
+  color: #0064cd;
+}
 .inline {
   margin-bottom: 10px;
 

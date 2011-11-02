@@ -8,7 +8,7 @@
 
 {% block contents %}
 {% filter markdown:"mathjax" %}
-**{{ forloop.counter }})** {{ part.description|safe }}
+{{ forloop.counter }}) {{ part.description|safe }}
 {% endfilter %}
 
 <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;
@@ -40,6 +40,29 @@
   </div>
 </div>
 <div class='my-actions'>
-  <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#">Poglej rešitev</a>
+  <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#"><button class='btn primary'>
+    {% if attempt.solution %}
+      {% if attempt.correct %}
+        {% if problem_set.solution_visibility == 'skrite' and not request.user.is_staff %}
+          Moja rešitev
+        {% else %}
+          Moja in uradna rešitev
+        {% endif %}
+      {% else %}
+        {% if problem_set.solution_visibility == 'vidne' or request.user.is_staff %}
+          Moj poskus in uradna rešitev
+        {% else %}
+          Moj poskus
+        {% endif %}
+      {% endif %}
+    {% else %}
+      {% if problem_set.solution_visibility == 'vidne' or request.user.is_staff %}
+      Uradna rešitev
+      {% endif %}
+    {% endif %}
+  </button></a>
+  {% if request.user.is_staff %}
+  <a href="{% url admin:problem_part_delete part.id %}"><button class="btn danger">Pobriši</button></a>
+  {% endif %}
 </div>
 {% endblock %}

@@ -45,31 +45,6 @@
 {% endblock %}
 
 {% block actions %}
-    {% if user.is_authenticated %}
-        <a href="{% url download problem.id %}">Prenesi nalogo</a>
-        {% if request.user.is_staff %}
-        <a href="{% url edit problem.id %}">Uredi datoteko</a>
-        <a href="{% url admin:problem_problem_change problem.id %}">Uredi nalogo</a>
-        <a href="{% url admin:problem_problem_delete problem.id %}">Pobriši nalogo</a>
-        {% endif %}
-    {% else %}
-      <div id="modal-from-dom-{{ problem.id }}" class="modal hide fade">
-        <div class="modal-header">
-          <a href="#" class="close">&times;</a>
-          <h3>Za reševanje se najprej prijavite.</h3>
-        </div>
-        <div class="modal-body">
-          <p>
-            Če se ne morete prijaviti, lahko nalogo rešujete z začasno datoteko.
-            V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
-            Ko se boste lahko spet prijavili, boste nalogo morali ponovno prenesti ter vanje prepisati začasno rešitev.
-          </p>
-        </div>
-        <div class="modal-footer">
-          <a href="{% url download problem.id %}" class="btn secondary">Prenesite začasno datoteko</a>
-        </div>
-      </div>
-
-      <a data-controls-modal="modal-from-dom-{{ problem.id }}" data-backdrop="true" data-keyboard="true" href="#">Prenesi nalogo</a>
-    {% endif %}{% endblock %}
+  {% include 'actions/problem.html' %}
+{% endblock %}
 

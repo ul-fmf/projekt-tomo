@@ -165,7 +165,7 @@ class Attempt(models.Model):
             return self.filter(active=True)
 
         def from_user(self, user):
-            if user.is_authenticated:
+            if user.is_authenticated():
                 return self.filter(active=True, submission__user=user)
             else:
                 return self.none()
