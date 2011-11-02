@@ -1,19 +1,22 @@
-# -*- coding: utf-8 -*-
-import hashlib, json, os
+from django.shortcuts import get_object_or_404, render
 
-from django.conf import settings
-from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.models import User
-from django.db.models import Count
-from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404, render_to_response, redirect, render
-from django.template import loader, Context, RequestContext
-from django.template.defaultfilters import slugify
-from django.views.decorators.csrf import csrf_exempt
+from tomo.problem.models import Course
 
-from tomo.problem.views.download import *
-from tomo.problem.models import *
 
+def homepage(request):
+    # TODO: Once we implement a view to select courses, enable the selection
+    # if request.user.is_authenticated():
+    #     courses = request.user.courses
+    # else:
+    #     courses = Course.objects
+    courses = Course.objects
+    solved = dict((problem_set.id, problem_set.solved(request.user))
+                    for course in courses.all()
+                    for problem_set in course.recent())
+    return render(request, "home.html", {
+        'courses': courses,
+        'solved': solved,
+    })
 
 def view_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
@@ -23,6 +26,3 @@ def view_course(request, course_id):
         'course': course,
         'solved': solved,
     })
-
-
-
