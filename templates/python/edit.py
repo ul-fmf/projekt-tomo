@@ -21,7 +21,7 @@ Check.initialize([
         'validation': match.group('validation').strip(),
     } for match in re.compile(
         r'^#+@(?P<part>\d+)#\n'         # beginning of header
-        r'(?P<description>^# [^\n]*\n)' # description
+        r'(?P<description>(^# [^\n]*\n)*)' # description
         r'^#+\1@#\n'                    # end of header
         r'(?P<solution>.*?)'            # solution
         r'^Check\.part\(\)\n'           # beginning of validation
@@ -35,7 +35,7 @@ problem_match = re.search(
     r'^#{50,}@@#\n'                    # beginning of header
     r'^# (?P<title>[^\n]*)\n'          # title
     r'^(#\s*\n)*'                      # empty rows
-    r'^(?P<description>.*?)\n'         # description
+    r'(?P<description>(^# [^\n]*\n)*)' # description
     r'^#{50,}@@#\n'                    # end of header
     r'(?P<preamble>.*?)'               # preamble
     r'^(# )?(?=#{50,}@)',              # beginning of first part
