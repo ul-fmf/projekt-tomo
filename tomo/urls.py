@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('tomo.problem.views',
+urlpatterns = patterns('tomo.views',
     # Download the file used to solve a problem
     (r'(?P<problem_id>\d+)/(?P<user_id>\d+)/', 'download_user', {}, 'download_user'),
     # Download the file used to solve a problem

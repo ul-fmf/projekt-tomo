@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from tomo.problem.models import Course
+from tomo.models import Course
 
 
 def homepage(request):

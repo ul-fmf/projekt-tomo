@@ -11,8 +11,8 @@ from django.template import loader, Context, RequestContext
 from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 
-from tomo.problem.utils import *
-from tomo.problem.models import *
+from tomo.utils import *
+from tomo.models import *
 
 import tempfile, zipfile
 
