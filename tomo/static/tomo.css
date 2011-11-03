@@ -1,0 +1,156 @@
+/* Override some defaults */
+html, body {
+  background-color: #eee;
+}
+body {
+  padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+}
+.container > footer p {
+  text-align: center; /* center align it with the container */
+}
+.container {
+  width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+}
+/* The white background content wrapper */
+.content {
+  background-color: #fff;
+  padding: 20px;
+  margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+  -webkit-border-radius: 0 0 6px 6px;
+     -moz-border-radius: 0 0 6px 6px;
+          border-radius: 0 0 6px 6px;
+  -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+     -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+          box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+/* Page header tweaks */
+.page-header {
+  background-color: #f5f5f5;
+  padding: 20px 20px 10px;
+  margin: -20px -20px 20px;
+}
+.topbar .btn {
+  border: 0;
+}
+
+.my-actions > a {
+  margin-right: 10px;
+}
+.my-actions > a:hover {
+  margin-right: 10px;
+  color: #77f;
+}
+
+.my-actions button, .my-actions .danger, .my-actions .primary {
+  margin: 0;
+  padding: 0;
+  color: #bfbfbf;
+  font-size: small;
+  border: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  background: none;
+  text-shadow: none;
+}
+.my-actions button:hover {
+  color: black;
+}
+.my-actions .danger:hover {
+  color: #c43c35;
+}
+.my-actions .primary:hover {
+  color: #0064cd;
+}
+.inline {
+  margin-bottom: 10px;
+
+}
+
+.stats {
+  padding: 0px;
+  color: #404040;
+  background-color: #f0f0f0;
+  font-size: 9.75px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  width: 48px;
+  height: 48px;
+  text-align: center;
+  position: relative;
+  bottom: -5px;
+}
+.stats.small {
+   width: 32px;
+   height: 32px;
+   margin: -12px 8px 8px 8px;
+   background-color: #fff;
+   font-size: 24px;
+}
+
+.success {
+  background-color: #bfe7bf;
+  color: #46a546;
+}
+.warning {
+  background-color: #fceec1;
+  color: #f89406;
+}
+.error {
+  background-color: #fbc7c6;
+  color: #c43c35;
+}
+.info {
+  background-color: #ddf4fb;
+  border-color: #c6edf9;
+}
+.stats-contents {
+  position: absolute;
+  bottom: 5px;
+  width: 100%;
+}
+.stats {
+  font-size: 180%;
+  font-weight: bold;
+  padding: 0px;
+}
+.stats small {
+   display: block;
+   font-size: 42%;
+   line-height: 8px;
+   margin: 4px 0px;
+}
+.alert-message.block-message.default {
+  color: #404040;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  background-color: #f0f0f0;
+  border-color: #ddd;
+}
+.hidn {
+  background-color: #f0f0f0;
+  margin-left: -10px;
+  padding: 5px 0px;
+}
+.hidn .stats {
+  margin-left: -10px;
+  margin-right: -10px;
+  left: 0px;
+}
+.hidn .span12 {
+  margin-left: 10px;
+}
+.hidn .stats {
+  background-color: #ddd;
+  color: #404040;
+}
+
+.solution-view {
+  overflow: auto;
+  max-height: 400px;
+}
+
+.attempt-plusminus {
+  font-weight: bold;
+  font-size: 200%;
+}

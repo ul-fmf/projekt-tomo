@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+  Tomo &mdash; {{ problem_set.course.name }} &mdash; {{ problem_set.title }} &mdash; Statistiska
+{% endblock %}
+
+{% block breadcrumbs %}
+  <li><a href="{% url homepage %}">Začetna stran</a> <span class="divider">/</span></li>
+  <li><a href="{% url course problem_set.course.id %}">{{ problem_set.course.name }}</a> <span class="divider">/</span></li>
+  <li><a href="{% url problem_set problem_set.id %}">{{ problem_set.title }}</a> <span class="divider">/</span></li>
+  <li class="active">Statistika</li>
+{% endblock %}
+
+{% block heading %}
+  {{ problem_set.title }}
+{% endblock %}
+
+{% block header %}
+    {{ problem_set.description|tex_markdown|safe }}
+
+    {% if user.is_authenticated %}
+      <a href="{% url download_problem_set problem_set.id %}"><button class="btn primary">Prenesi naloge</button></a>&nbsp;
+      {% if request.user.is_staff %}
+      <a href=""><button class="btn">Uredi datoteke</button></a>&nbsp;
+      <a href="{% url admin:tomo_problemset_change problem_set.id %}"><button class="btn">Uredi sklop</button></a>&nbsp;
+      <a href="{% url admin:tomo_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši sklop</button></a>
+      {% endif %}
+    {% else %}
+      <div id="modal-from-dom" class="modal hide fade">
+        <div class="modal-header">
+          <a href="#" class="close">&times;</a>
+          <h3>Za reševanje se najprej prijavite.</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+            Če se ne morete prijaviti, lahko naloge rešujete z začasnimi datotekami.
+            V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
+            Ko se boste lahko spet prijavili, boste naloge morali ponovno prenesti ter vanje prepisati začasne rešitve.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <a href="{% url download_problem_set problem_set.id %}" class="btn secondary">Prenesite začasne datoteke</a>
+        </div>
+      </div>
+
+      <button data-controls-modal="modal-from-dom" data-backdrop="true" data-keyboard="true" class="btn primary">Prenesi naloge</button>
+    {% endif %}
+
+    {% if not request.user.is_staff %}
+    <span class='help-block'>
+      Z zgornjim gumbom na svoj računalnik prenesete arhiv, ki vsebuje datoteke z nalogami.<br />
+      Navodila za reševanje so zapisana v datotekah.
+    </span>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <table>
+    <thead>
+    <tr>
+    <th rowspan='2'>&nbsp;</th>
+    {% for problem in problems.all %}
+      <th colspan='{{ problem.parts.count }}'>
+        Naloga {{ forloop.counter }}
+      </th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for problem in problems.all %}
+      {% for part in problem.parts.all %}
+        <th>{{ forloop.counter }})</th>
+      {% endfor %}
+    {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+      {% with attempts|get:user.id as user_attempts %}
+      <tr>
+      <td>{{ user.get_full_name }}</td>
+      {% for part in parts %}
+          {% with user_attempts|get_default:part as attempt %}
+          <td>{% if attempt %}
+            <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;">
+              <div class="modal-header">
+                <a href="#" class="close">&times;</a>
+                <h3>{{user.get_full_name}}, rešitev naloge {{ forloop.parentloop.counter }}.{{ forloop.counter }})</h3>
+              </div>
+              <div class="modal-body solution-view">
+                {% if attempt.solution %}
+                <pre><code>{{ attempt.solution }}</code></pre>
+                {% else %}
+                <p>Naloge še ni reševal.</p>
+                {% endif %}
+              </div>
+            </div>
+            <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#">
+              <span class="attempt-plusminus">{{ attempt.correct|yesno:"+,–"}}</span>
+            </a>
+            {% else %}
+             &nbsp;
+            {% endif %}
+          </td>
+          {% endwith %}
+      {% endfor %}
+      </tr>
+      {% endwith %}
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
+

@@ -1,0 +1,29 @@
+{% if user.is_authenticated %}
+    {% if request.user.is_staff %}
+    <a href="{% url edit problem.id %}"><button class='btn primary'>Uredi</button></a>
+    <a href="{% url download problem.id %}"><button class='btn'>Reši</button></a>
+    <a href="{% url admin:tomo_problem_delete problem.id %}"><button class='btn danger'>Pobriši</button></a>
+    <a href="{% url admin:tomo_problem_change problem.id %}"><button class='btn'>Napredno…</button></a>
+    {% else %}
+    <a href="{% url download problem.id %}"><button class='btn primary'>Reši</button></a>
+    {% endif %}
+{% else %}
+  <div id="modal-from-dom-{{ problem.id }}" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close">&times;</a>
+      <h3>Za reševanje se najprej prijavite.</h3>
+    </div>
+    <div class="modal-body">
+      <p>
+        Če se ne morete prijaviti, lahko nalogo rešujete z začasno datoteko.
+        V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
+        Ko se boste lahko spet prijavili, boste nalogo morali ponovno prenesti ter vanje prepisati začasno rešitev.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <a href="{% url download problem.id %}" class="btn secondary"><button class='btn'>Prenesite začasno datoteko</button></a>
+    </div>
+  </div>
+
+  <a data-controls-modal="modal-from-dom-{{ problem.id }}" data-backdrop="true" data-keyboard="true" href="#"><button class='btn'>Prenesi nalogo</button></a>
+{% endif %}

@@ -1,0 +1,16 @@
+<div class='row inline {% block style %}{% endblock %}'>
+    <div class="span1">
+        <div class="stats {% block stats-class %}{% endblock %}">
+        <div class="stats-contents">
+        {% block stats %}{% endblock %}
+        </div>
+        </div>
+    </div>
+
+    <div class='span12'>
+        <h3>{% block title %}{% endblock %}</h3>
+        <div class='my-actions'>{% block actions %}{% endblock %}</div>
+        {% block contents %}{% endblock %}
+    </div>
+
+</div>

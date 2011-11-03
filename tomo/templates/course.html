@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+  Tomo &mdash; {{ course.name }}
+{% endblock %}
+
+{% block breadcrumbs %}
+  <li><a href="{% url homepage %}">Začetna stran</a> <span class="divider">/</span></li>
+  <li class="active">{{ course.name }}</li>
+{% endblock %}
+
+{% block heading %}
+  {{ course.name }}
+{% endblock %}
+
+{% block header %}
+  {{ course.description|tex_markdown|safe }}
+
+  {% if request.user.is_staff %}
+  <a href="{% url admin:tomo_problemset_add %}"><button class="btn">Dodaj sklop</button></a>&nbsp;
+  <a href="{% url admin:tomo_course_change course.id %}"><button class="btn">Uredi predmet</button></a>&nbsp;
+  <a href="{% url admin:tomo_course_delete course.id %}"><button class="btn danger">Pobriši predmet</button></a>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% for problem_set in course.problem_sets.all %}
+    {% if problem_set.visible or request.user.is_staff %}
+      {% include 'inline/problem_set.html' %}
+    {% endif %}
+  {% endfor %}
+{% endblock %}
