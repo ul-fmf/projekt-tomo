@@ -1,0 +1,42 @@
+Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
+
+- (M) USER INTERFACE:
+  - če ima naloga samo en part, ni treba, da se ta part označi z "1)".
+  - ali bi spremenili "1), 2), 3)" v kaj drugega?
+  - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
+
+- (A) pri challenge dodamo opcijski argument "key", challenge od serverja vrne
+  podatek o tem, kateri challenge je crknil
+
+- (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
+
+- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
+  in obratno, da lahko student kontaktira (koga, avtorja?)
+
+- STATISTIKA:
+  - overall statistika
+  - statistika po času
+  - statistika samo za eno nalogo
+
+- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
+
+- avtomaticen replace za R
+
+- (A) izboljsaj sporocila za studente
+
+- ali bi bilo bolje, če bi Check.equal lovil izjeme in sam izpisal
+  "moralo bi se vrniti to-in-to, vendar se sprozi ta-in-ta-izjema"?
+  Zdaj dobimo precej skrivnosten backtrace, npr. ce pride do deljenja
+  z 0.
+
+- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
+
+- podpora za Mathematico
+
+- podpora za matlab
+
+- podpora za Haskell
+
+- podpora za Ocaml
+
+- podpora za Javo
