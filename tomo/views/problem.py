@@ -151,7 +151,7 @@ def update(request):
             new.description = part['description']
             new.solution = part['solution']
             new.validation = part['validation']
-            new.challenge = part.get('challenge', '')
+            new.challenge = new.challenge = json.dumps(part.get('challenge', []))
             new.save()
             if part_id == 0:
                 messages.append("Nova podnaloga {0} je ustvarjena.".format(new.id))

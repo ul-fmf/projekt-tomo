@@ -1,5 +1,7 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
+- (M) Popravi urls.py in tomo/urls.py, kateri je ta pravi? Kaj je treba includati iz settings.py?
+
 - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 
 - (M) USER INTERFACE:

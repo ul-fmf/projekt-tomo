@@ -7,7 +7,7 @@ Installation:
 
 1. Install dependencies.
 
-2. Download Tomo application and put it on your Python path.
+2. Download Tomo application and put it on your Django project.
 
 3. Add 'tomo' to your project's settings.INSTALLED_APPS.
    Since 'tomo' currently uses the Django admin application in some places,
