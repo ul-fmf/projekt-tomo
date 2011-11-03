@@ -68,23 +68,32 @@ def upload(request):
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
-        if attempt:
+        if attempt and attempt.get('solution'):
             solution = attempt['solution']
             errors = attempt.get('errors', [])
-            challenge = attempt.get('challenge', '')
-            if solution:
-                correct = not errors and (challenge == part.challenge)
-                judgments.append((i+1, correct))
-                new = Attempt(part=part, submission=submission,
-                              solution=solution, errors=json.dumps(errors),
-                              correct=correct, active=True)
-                old = old_attempts.get(part.id, None)
-                if not old:
-                    new.save ()
-                elif old.correct != correct or old.solution != solution or old.errors != errors:
-                    old.active = False
-                    old.save()
-                    new.save()
+            attempt_challenge = attempt.get('challenge', [])
+            part_challenge = json.loads(part.challenge)
+            incorrect = ("testi" if errors else None)
+            if not incorrect:
+                if [k for (k,x) in attempt_challenge] != [m for (m,y) in part_challenge]:
+                    incorrect = "različni izzivi"
+                else:
+                    for (j, ((k,x), (m,y))) in enumerate(zip(attempt_challenge, part_challenge)):
+                        if x != y:
+                            incorrect = "izziv #{0}, {1}".format(j,m)
+                            break
+            correct = (incorrect is None)
+            judgments.append((i+1, incorrect))
+            new = Attempt(part=part, submission=submission,
+                          solution=solution, errors=json.dumps(errors),
+                          correct=correct, active=True)
+            old = old_attempts.get(part.id, None)
+            if not old:
+                new.save ()
+            elif old.correct != correct or old.solution != solution or old.errors != errors:
+                old.active = False
+                old.save()
+                new.save()
 
     response = { 'judgments' : judgments }
     if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
@@ -119,7 +128,6 @@ def update(request):
     error = None
     messages = []
 
-    print ("HA HAHA {0} AND {1}".format(request.POST['timestamp'], str(problem.timestamp)))
     if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
         error = "NAPAKA: Uporabljate staro verzijo datoteke. (Novo lahko pridobite na strežniku.)"
 

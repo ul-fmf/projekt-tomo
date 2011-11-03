@@ -189,8 +189,8 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 
 def _check():
-    with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as f:
-        source = f.read()
+    with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as _f:
+        _source = _f.read()
 
     Check.initialize([
         {
@@ -203,7 +203,7 @@ def _check():
             r'(.*?)'          # solution
             r'(?=#{50,}@)',   # beginning of next part
             flags=re.DOTALL|re.MULTILINE
-        ).finditer(source)
+        ).finditer(_source)
     ])
 
     {{ problem.preamble|indent:"    "|safe }}
@@ -214,20 +214,20 @@ def _check():
 
     Check.summarize()
     {% if authenticated %}
-    print('Shranjujem rešitve...')
+    print('Shranjujem rešitve na strežnik...')
     post = urlencode({
         'data': '{{ data|safe }}',
         'timestamp' : '{{ timestamp }}',
         'signature': '{{ signature }}',        
         'attempts': Check.dump(),
-        'source': source,
+        'source': _source,
     }).encode('utf-8')
     try:
         r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url upload %}', post)
-        response= json.loads(r.read().decode('utf-8'))
-        for (k,b) in response['judgments']:
-            if b: print ("Podnaloga {0} je rešena pravilno.".format(k))
-            else: print ("Podnaloga {0} je rešena NEPRAVILNO.".format(k))
+        response = json.loads(r.read().decode('utf-8'))
+        for (k, e) in response['judgments']:
+            if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
+            else: print ("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
         if 'message' in response: print (response['message'])
     except HTTPError:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
