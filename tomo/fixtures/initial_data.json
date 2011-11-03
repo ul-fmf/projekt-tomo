@@ -1,0 +1,22 @@
+[
+  {
+    "pk": 2,
+    "model": "tomo.language",
+    "fields": {
+      "edit_file": "python/edit.py",
+      "download_file": "python/download.py",
+      "name": "Python 3",
+      "extension": "py"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "tomo.language",
+    "fields": {
+      "edit_file": "r/edit.r",
+      "download_file": "r/download.r",
+      "name": "R",
+      "extension": "r"
+    }
+  }
+]
