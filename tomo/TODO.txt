@@ -28,6 +28,8 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
+- (A) upload izkljucno v Jsonu
+
 - (A) avtomatičen replace za študente:
 
     primer:
