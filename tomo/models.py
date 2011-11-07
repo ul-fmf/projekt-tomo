@@ -46,16 +46,6 @@ class ProblemSet(models.Model):
                                            choices=SOLUTION_VISIBILITY)
     objects = QuerySetManager()
 
-    def solved(self, user):
-        all_parts = Part.objects.filter(problem__problem_set=self).count()
-        if all_parts > 0 and user.is_authenticated():
-            solved_parts = Attempt.objects.from_user(user).filter(
-                                                  part__problem__problem_set=self,
-                                                  correct=True).count()
-            return int(100 * solved_parts / all_parts)
-        else:
-            return 0
-
     @models.permalink
     def get_absolute_url(self):
         return ('problem_set', [str(self.id)])
@@ -99,15 +89,6 @@ class Problem(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
-    def solved(self, user):
-        all_parts = self.parts.count()
-        if all_parts > 0 and user.is_authenticated():
-            solved_parts = Attempt.objects.from_user(user).filter(part__problem=self,
-                                                  correct=True).count()
-            return int(100 * solved_parts / all_parts)
-        else:
-            return 0
-
     def visible(self, user):
         return self.problem_set.visible or user.is_staff
 
@@ -132,12 +113,22 @@ class Part(models.Model):
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     challenge = models.TextField(blank=True)
+    objects = QuerySetManager()
 
     def __unicode__(self):
         return u'#{0} ({1})'.format(self._order + 1, self.id)
 
     class Meta:
         order_with_respect_to = 'problem'
+
+    @classmethod
+    def solved(self, parts, user):
+        all_parts = parts.count()
+        if all_parts > 0 and user.is_authenticated():
+            solved_parts = Attempt.objects.from_user(user).filter(part__in=parts, correct=True).count()
+            return (True, int(100 * solved_parts / all_parts))
+        else:
+            return (False, all_parts)
 
 
 class Submission(models.Model):
@@ -168,7 +159,7 @@ class Attempt(models.Model):
             if user.is_authenticated():
                 return self.filter(active=True, submission__user=user)
             else:
-                return self.none()
+                return self.filter(active=320)
 
         def for_problem(self, problem):
             return self.filter(part__problem=problem)

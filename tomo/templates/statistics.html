@@ -80,7 +80,7 @@
       <tr>
       <td>{{ user.get_full_name }}</td>
       {% for part in parts %}
-          {% with user_attempts|get_default:part as attempt %}
+          {% with user_attempts|get:part as attempt %}
           <td>{% if attempt %}
             <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;">
               <div class="modal-header">

@@ -1,12 +1,12 @@
 {% load my_tags %}#####################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
-# {{ problem.description|markdown2py|safe }}{% endif %}
+# {{ problem.description|remove_markdown|safe }}{% endif %}
 #####################################################################@@#
 
 {% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
-# {{ forloop.counter }}) {{ part.description|markdown2py|safe }}
+# {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
 {% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% endif %}{% endwith %}
 
@@ -218,7 +218,7 @@ def _check():
     post = urlencode({
         'data': '{{ data|safe }}',
         'timestamp' : '{{ timestamp }}',
-        'signature': '{{ signature }}',        
+        'signature': '{{ signature }}',
         'attempts': Check.dump(),
         'source': _source,
     }).encode('utf-8')

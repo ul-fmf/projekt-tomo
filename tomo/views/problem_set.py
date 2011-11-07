@@ -35,19 +35,12 @@ def view_problem_set(request, problem_set_id):
                                       .annotate(Count('parts')) \
                                       .values_list('id', 'parts__count'))
     solved = {}
-    problems = problem_set.problems
-    if request.user.is_authenticated():
-        attempts = Attempt.objects.from_user(request.user).filter(part__problem__problem_set=problem_set,
-                                          correct=True) \
-                                  .values('part__problem') \
-                                  .annotate(correct=Count('part__problem'))
-        for attempt in attempts:
-            problem = attempt['part__problem']
-            solved[problem] = solved.get(problem, 0) + int(attempt['correct'])
-        for problem, correct in solved.items():
-            solved[problem] = (100 * correct) / parts_count[problem]
-    attempts = Attempt.objects.from_user(request.user).for_problem_set(problem_set).dict_by_part()
-    default_language = problems.all()[0].language if problems.all() else None
+    problems = problem_set.problems.all()
+    for problem in problems:
+        solved[problem.id] = Part.solved(Part.objects.filter(problem=problem), request.user)
+    attempts = Attempt.objects.for_problem_set(problem_set).from_user(request.user).dict_by_part()
+    default_language = problems[0].language if problems.all() else None
+    print(solved)
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
         'parts_count': parts_count,
