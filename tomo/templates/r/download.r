@@ -73,15 +73,115 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #####################################################################@@#
 # Kode pod to črto nikakor ne spreminjajte.
 ########################################################################
 
-invisible("TA VRSTICA JE PRAVILNA.")
+"TA VRSTICA JE PRAVILNA."
 "ČE VAM R SPOROČI, DA JE V NJEJ NAPAKA, SE MOTI."
 "NAPAKA JE NAJVERJETNEJE V ZADNJI VRSTICI VAŠE KODE."
 "ČE JE NE NAJDETE, VPRAŠAJTE ASISTENTA."
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% include 'r/check.r' %}
 if (length(showConnections()) > 1) {
     path <- showConnections()[1, "description"]
 } else {

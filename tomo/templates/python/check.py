@@ -4,6 +4,9 @@ class Check:
     @staticmethod
     def initialize(parts):
         Check.parts = parts
+        for part in Check.parts:
+            part['errors'] = []
+            part['challenge'] = []
         Check.current = None
         Check.part_counter = None
 
@@ -18,15 +21,12 @@ class Check:
 
     @staticmethod
     def error(msg):
-        if 'errors' not in Check.current:
-            Check.current['errors'] = []
         Check.current['errors'].append(msg)
 
     @staticmethod
     def challenge(x, k=None):
-        if 'challenge' not in Check.current:
-            Check.current['challenge'] = []
-        Check.current['challenge'].append((str(k),str(Check.canonize(x))))
+        pair = (str(k), str(Check.canonize(x)))
+        Check.current['challenge'].append(pair)
 
     @staticmethod
     def run(example, state, message=None, env={}, clean=lambda x: x):
