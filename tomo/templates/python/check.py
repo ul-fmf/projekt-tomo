@@ -1,5 +1,3 @@
-import json
-
 class Check:
     @staticmethod
     def initialize(parts):
@@ -45,16 +43,16 @@ class Check:
     def canonize(x, digits=6):
         if   type(x) is float: return round(x, digits)
         elif type(x) is complex: return complex(round(x.real, digits), round(x.imag, digits))
-        elif type(x) is list: return list([Check.canonize(y) for y in x])
-        elif type(x) is tuple: return tuple([Check.canonize(y) for y in x])
-        elif type(x) is dict: return sorted([(Check.canonize(k), Check.canonize(v)) for (k,v) in x.items()])
-        elif type(x) is set: return sorted([Check.canonize(y) for y in x])
+        elif type(x) is list: return list([Check.canonize(y, digits) for y in x])
+        elif type(x) is tuple: return tuple([Check.canonize(y, digits) for y in x])
+        elif type(x) is dict: return sorted([(Check.canonize(k, digits), Check.canonize(v, digits)) for (k,v) in x.items()])
+        elif type(x) is set: return sorted([Check.canonize(y, digits) for y in x])
         else: return x
 
     @staticmethod
     def compare(example, expected,
                 message="Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
-                clean=(lambda x: x), env={},
+                clean=canonize, env={},
                 precision=1.0e-6, strict_float=False, strict_list=True):
         def comp(x,y):
             if x == y: return None
@@ -86,25 +84,6 @@ class Check:
         answer = eval(example, globals(), local)
         reason = comp(clean(answer), clean(expected))
         if reason: Check.error(message.format(example, answer, expected, reason))
-
-    @staticmethod
-    def equal(example, expected, message=None, clean=None, digits=6, env={}):
-        if not message:
-            message = 'Ukaz {0} vrne {1!r} namesto {2!r}.'
-        local = locals()
-        local.update(env)
-        answer = eval(example, globals(), local)
-        if not clean: clean = lambda x: Check.canonize(x,digits)
-        if clean(answer) != clean(expected):
-            Check.error(message.format(example, answer, expected))
-
-    @staticmethod
-    def num_equal(example, expected, digits=6):
-        local = locals()
-        local.update(env)
-        answer = eval(example, globals(), local)
-        if abs(answer - expected) > 10 ** (-digits):
-            Check.error(message.format(example, answer, expected))
 
     @staticmethod
     def summarize():

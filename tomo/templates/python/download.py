@@ -4,6 +4,8 @@
 # {{ problem.description|remove_markdown|safe }}{% endif %}
 #####################################################################@@#
 
+{{ problem.preamble|safe }}
+
 {% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
@@ -182,14 +184,15 @@
 
 
 
-{% include 'python/check.py' %}
-import os, re, sys
+import json, os, re, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
+{% include 'python/check.py' %}
 
 def _check():
-    with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as _f:
+    _filename = os.path.abspath(sys.argv[0])
+    with open(_filename, encoding='utf-8') as _f:
         _source = _f.read()
 
     Check.initialize([
@@ -206,7 +209,6 @@ def _check():
         ).finditer(_source)
     ])
 
-    {{ problem.preamble|indent:"    "|safe }}
     {% for part in parts %}
     if Check.part():
         {{ part.validation|indent:"        "|safe }}

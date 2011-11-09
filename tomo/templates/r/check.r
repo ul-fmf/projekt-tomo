@@ -1,5 +1,3 @@
-{% include 'r/rjson.r' %}
-
 check <- list()
 
 check$initialize <- function(parts) {
@@ -25,30 +23,51 @@ check$error <- function(msg) {
 }
 
 check$challenge <- function(x, k = NA) {
-  pair <- c(toString(k), toString(x))
+  pair <- c(toString(k), toString(check$canonize(x)))
   check$parts$challenge[[check$part.counter]] <<-
     c(check$parts$challenge[[check$part.counter]], list(pair))
 }
 
-check$compare <- function(example, expected) {
-  pretty.print <- function(x) {
-    output <- capture.output(
-      if(length(dim(x)) <= 1) cat(x) else print(x)
-    )
-    if(length(output) == 0) {
-      return("NULL")
-    } else if(length(output) == 1) {
-      return(output)
-    } else {
-      return(paste("    ", c("", output, ""), collapse="\n"))
-    }
+check$run <- function(example, state) {
+  # yet to be implemented
+}
+
+check$canonize <- function(x, digits = 6) {
+  if(typeof(x) == "double" || typeof(x) == "complex") {
+    return(round(x, digits))
+  } else if(typeof(x) == "complex") {
+    return(round(x, digits))
+  } else if(typeof(x) == "list") {
+    return(lapply(x, function(y) canonize(y, digits)))
+  } else {
+    return(x)
   }
+}
+
+check$compare <- function(example, expected,
+                          message = "Ukaz %s vrne %s namesto %s",
+                          clean = NA, digits = 6, precision = 1.0e-6,
+                          strict_float = FALSE, strict_list = TRUE) {
   example <- substitute(example)
   answer <- try(eval(example), silent = TRUE)
-  if(!isTRUE(all.equal(answer, expected, check.attributes = FALSE))) {
-    check$error(
-      paste("Ukaz", deparse(example), "vrne", pretty.print(answer), "namesto", pretty.print(expected))
-    )
+  if(is.na(clean))
+    clean <- function(x) check$canonize(x, digits)
+  # give a reason for difference like in check.py
+  if(!identical(clean(answer), clean(expected))) {
+    pretty.print <- function(x) {
+      output <- capture.output(
+        if(length(dim(x)) <= 1) cat(x) else print(x)
+      )
+      if(length(output) == 0) {
+        return("NULL")
+      } else if(length(output) == 1) {
+        return(output)
+      } else {
+        return(paste("    ", c("", output, ""), collapse="\n"))
+      }
+    }
+    check$error(sprintf(message, deparse(example),
+                pretty.print(answer), pretty.print(expected)))
   }
 }
 

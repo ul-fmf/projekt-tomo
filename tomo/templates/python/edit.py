@@ -3,14 +3,15 @@
 # Vsebina naloge je spodaj, za definicijo razreda Check.
 #################################################################
 {% load my_tags %}
-import os, re, sys, shutil
+
+import json, os, re, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
-
 {% include 'python/check.py' %}
 
-with open(os.path.abspath(sys.argv[0]), encoding='utf-8') as f:
+_filename = os.path.abspath(sys.argv[0])
+with open(_filename, encoding='utf-8') as f:
     source = f.read()
 
 Check.initialize([
@@ -74,11 +75,11 @@ Check.part()
 # ################################################################@000000#
 # # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
 # ################################################################000000@#
-# 
+#
 # sem napisite resitev
 #
 # Check.part()
-# 
+#
 # Check.equal(...)
 #
 # Check.challenge(...)
@@ -107,8 +108,8 @@ else:
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
             if 'contents' in response:
-                shutil.copy(os.path.abspath(sys.argv[0]), os.path.abspath(sys.argv[0]) + ".orig") 
-                with open(os.path.abspath(sys.argv[0]), 'w') as f:
+                shutil.copy(_filename, _filename + ".orig")
+                with open(_filename, 'w') as f:
                     f.write(response['contents'])
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
