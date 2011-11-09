@@ -85,6 +85,6 @@ check$summarize <- function() {
 }
 
 check$dump <- function() {
-  return(toJSON(check$parts))
+  return(paste('[', paste(apply(check$parts, 1, toJSON), collapse=', '), ']',  sep=''))
 }
 

@@ -3,7 +3,6 @@
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 #################################################################
 {% load my_tags %}
-
 {% include 'r/httpRequest.r' %}
 {% include 'r/rjson.r' %}
 {% include 'r/library.r' %}
@@ -13,21 +12,23 @@
 .source <- paste(readLines(.filename), collapse="\n")
 
 matches <- regex_break(paste(
-    '#{50,}@',
-    '(\\d+)',
-    '#.*#{50,}\\1@#', # header
-    '.*?', #solution
-    '(?=#{50,}@)',   # beginning of next part
-    sep=""
+  '^#+@(\\d+)#\n',         # beginning of header
+  '(^# [^\n]*\n)*',        # description
+  '^#+\\1@#\n',            # end of header
+  '.*?',                   # solution
+  '^check\\$part\\(\\)\n', # beginning of validation
+  '.*?',                   # validation
+  '^(# )?(?=#+@)',         # beginning of next part
+  sep=""
 ), c(
-    '#{50,}@',
-    '(\\d+)',
-    '#',
-    '.*?',
-    '#{50,}(\\d+)@#', # header
-    '.*?', #solution
-    'check\\$part\\(\\)',
-    '.*?' #validation
+  '^#+@',                  # beginning of header
+  '(\\d+)',                # beginning of header (?P<part>)
+  '#\n',                   # beginning of header
+  '(^# [^\n]*\n)*',        # description
+  '^#+(\\d+)@#\n',         # end of header
+  '.*?',                   # solution
+  'check\\$part\\(\\)\n',  # beginning of validation
+  '.*?'                    # validation
 ), .source)
 
 check$initialize(data.frame(
@@ -39,22 +40,31 @@ check$initialize(data.frame(
 ))
 
 
-problem_match <- regex_breax(
-  '#{50,}@@#\n#.*?(?=#{50,}@(\\d+))', c(
-  '#{50,}@@#\n#',
-  '.*?',
-  '\n',
-  '.*?',
-  '#{50,}@@#', # header
-  '.*?' #solution
+problem_match <- regex_break(paste(
+  '^#+@@#\n',        # beginning of header
+  '^# ([^\n]*)\n',   # title
+  '^(#\\s*\n)*',     # empty rows
+  '(^# [^\n]*\n)*',  # description
+  '^#+@@#\n',        # end of header
+  '.*?',             # preamble
+  '^(# )?(?=#+@)',   # beginning of first part
+  sep = ""
+), c(
+  '^#+@@#\n',        # beginning of header
+  '^# ',             # title
+  '([^\n]*)',        # title (?P<title>)
+  '\n^(#\\s*\n)*',   # title & empty rows
+  '(^# [^\n]*\n)*',  # description
+  '^#+@@#\n',        # end of header
+  '.*?'              # preamble
   ), .source)
 
 if(length(problem_match) == 0)
   stop("NAPAKA: datoteka ni pravilno oblikovana")
 
-title <- strip(problem_match[1, 2])
-description <- super_strip(problem_match[1, 4])
-preamble <- strip(problem_match[1, 6])
+title <- strip(problem_match[1, 3])
+description <- super_strip(problem_match[1, 5])
+preamble <- strip(problem_match[1, 7])
 
 ###################################################################
 # Od tu naprej je navodilo naloge
@@ -94,20 +104,29 @@ check$part()
 # Od tu naprej ničesar ne spreminjajte.
 
 check$summarize()
-if(any(length(check$parts$errors) > 0)) {
-  stop('Naloge so napačno sestavljene.')
+if(any(sapply(check$parts$errors, length) > 0)) {
+  cat('Naloge so napačno sestavljene.\n')
 } else {
   cat('Naloge so pravilno sestavljene.\n')
-  cat('Shranjujem naloge...')
-  post <- list(
-    data = '{{ data|safe }}',
-    signature = '{{ signature }}',
-    timestamp = '{{ timestamp }}',
-    title = title,
-    description = description,
-    preamble = preamble,
-    parts = check$dump()
-  )
-  response <- postToHost('{{ request.META.SERVER_NAME }}', '{% url update %}', data, port={{ request.META.SERVER_PORT }})
-  cat(response)
+  if(readline('Ali jih shranim na strežnik? [da/NE]') == 'da') {
+    cat('Shranjujem naloge...')
+    post <- list(
+      data = '{{ data|safe }}',
+      signature = '{{ signature }}',
+      timestamp = '{{ timestamp }}',
+      title = title,
+      description = description,
+      preamble = preamble,
+      parts = check$dump()
+    )
+    r <- postToHost('{{ request.META.SERVER_NAME }}', '{% url update %}', post, port={{ request.META.SERVER_PORT }})
+    response <- parse_response(r)
+    cat(response$message, "\n")
+    if('contents' %in% names(response)) {
+      file.copy(.filename, paste(.filename, ".orig", sep=""))
+      cat(response$contents, file=.filename)
+    }
+  } else {
+    cat('Naloge niso bile shranjene.\n')
+  }
 }

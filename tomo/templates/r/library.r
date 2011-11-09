@@ -29,11 +29,14 @@ super_strip <- function(str) {
     str <- gsub("\\A\\s+|\\s+\\Z", "", str, perl=TRUE)
 }
 
-
 get_current_filename <- function () {
   if (length(showConnections()) > 1) {
     return(showConnections()[1, "description"])
   } else {
     return(Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE))
   }
+}
+
+parse_response <- function(response) {
+  return(fromJSON(sub("^[^{]*", "", response), method = "R"))
 }

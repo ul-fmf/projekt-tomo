@@ -197,14 +197,14 @@ def _check():
 
     Check.initialize([
         {
-            'part': int(match.group(1)),
-            'solution': match.group(2).strip()
+            'part': int(match.group('part')),
+            'solution': match.group('solution').strip()
         } for match in re.compile(
-            r'#{50,}@(\d+)#' # beginning of header
-            r'.*?'            # header
-            r'#{50,}\1@#'    # end of header
-            r'(.*?)'          # solution
-            r'(?=#{50,}@)',   # beginning of next part
+            r'^#+@(?P<part>\d+)#\n' # beginning of header
+            r'(^# [^\n]*\n)*'       # description
+            r'#+\1@#\n'             # end of header
+            r'(?P<solution>.*?)',   # solution
+            r'^(# )?(?=#+@)',       # beginning of next part
             flags=re.DOTALL|re.MULTILINE
         ).finditer(_source)
     ])

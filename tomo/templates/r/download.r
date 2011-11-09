@@ -196,22 +196,24 @@
   .source <- paste(readLines(.filename), collapse="\n")
 
   matches <- regex_break(paste(
-      '#{50,}@',
-      '(\\d+)',
-      '#.*?#{50,}\\1@#', # header
-      '.*?',             # solution
-      '(?=#{50,}@)',     # beginning of next part
+      '^#+@(\\d+)#\n',  # beginning of header
+      '(^# [^\n]*\n)*', # description
+      '#+\\1@#\n',      # header
+      '.*?',            # solution
+      '^(# )?(?=#+@)',  # beginning of next part
       sep=""
   ),  c(
-      '#{50,}@',
-      '(\\d+)',
-      '#.*#{50,}(\\d+)@#', # header
-      '.*?'                #solution
+      '^#+@',           # beginning of header
+      '(\\d+)',         # beginning of header (?P<part>)
+      '#\n',            # beginning of header
+      '(^# [^\n]*\n)*', # description
+      '#+(\\d+)@#\n',   # header
+      '.*?'             # solution
   ), .source)
 
   check$initialize(data.frame(
     part = apply(matches, 1, function(match) as.numeric(match[2])),
-    solution = apply(matches, 1, function(match) strip(match[4])),
+    solution = apply(matches, 1, function(match) strip(match[6])),
     stringsAsFactors=FALSE
   ))
 
@@ -229,7 +231,7 @@
     timestamp = '{{ timestamp }}',
     signature = '{{ signature }}',
     attempts = check$dump(),
-    source=source
+    source = .source
   )
   response <- postToHost('{{ request.META.SERVER_NAME }}', '{% url upload %}', post, port={{ request.META.SERVER_PORT }})
   cat(response)
