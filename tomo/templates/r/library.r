@@ -24,3 +24,16 @@ regex_break <- function(whole_regex, regexes, source) {
 
 strip <- function(str) gsub("^\\s+|\\s+$", "", str)
 
+super_strip <- function(str) {
+    str <- gsub("(^|\n)# ?", "\n", str)
+    str <- gsub("\\A\\s+|\\s+\\Z", "", str, perl=TRUE)
+}
+
+
+get_current_filename <- function () {
+  if (length(showConnections()) > 1) {
+    return(showConnections()[1, "description"])
+  } else {
+    return(Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE))
+  }
+}
