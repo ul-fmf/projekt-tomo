@@ -1,0 +1,29 @@
+  <div class='row'>
+    <div class='offset1'>
+    <h3>Dodaj nalogo</h3>
+<form method="post" action="{% url create %}" class="form-stacked">
+{% csrf_token %}
+      <fieldset>
+        <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />
+        <div class="clearfix">
+          <label for="xlInput3">Naslov</label>
+          <div class="input">
+            <input size="30" type="text" name="title" />
+          </div>
+        </div><!-- /clearfix -->
+        <div class="clearfix">
+          <label for="stackedSelect">Jezik</label>
+          <div class="input">
+<select name="language" id="language">
+      {% for language in languages.all %}
+        <option value="{{ language.id }}" {% if language.id == default_language.id %}selected{%endif %}>{{ language.name }}</option>
+      {% endfor %}
+      </select>
+                </div>
+        </div><!-- /clearfix -->
+        <button type="submit" class="btn primary">Dodaj</button>
+      </fieldset>
+    </form>
+
+    </div>
+  </div>

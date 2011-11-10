@@ -39,3 +39,16 @@
   {% include 'actions/problem.html' %}
 {% endblock %}
 
+{% block extras %}
+      <div class='row'>
+        <div class='span12 offset1'>
+          {{ problem.description|tex_markdown|safe }}
+        </div>
+      </div>
+      {% for part in problem.parts.all %}
+          {% include 'inline/part.html' %}
+        {% with attempts|get:part.id as attempt %}
+        {% endwith %}
+      {% endfor %}
+    <hr />
+{% endblock %}

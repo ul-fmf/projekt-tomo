@@ -219,7 +219,7 @@
 
   {% for part in parts %}
   if (check$part()) {
-      {{ part.validation|indent:"        "|safe }}
+    {{ part.validation|indent:"    "|safe }}
   }
   {% endfor %}
 

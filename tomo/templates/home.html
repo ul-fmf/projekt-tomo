@@ -1,33 +1,47 @@
 {% extends 'base.html' %}
 {% load my_tags %}
 
-
-{% block breadcrumbs %}
-  <li class="active">Začetna stran</li>
-{% endblock %}
-
-{% block heading %}
+{% block title %}
   Tomo
 {% endblock %}
 
+{% block breadcrumbs %}
+  <li class="active">
+    Začetna stran
+  </li>
+{% endblock %}
+
 {% block header %}
-{% filter tex_markdown %}
+  Tomo
+{% endblock %}
+
+{% block description %}
+  {% filter tex_markdown %}
   Tomo je stran, namenjena učenju programiranja.
   Datoteke z ustreznimi nalogami prenesete na svoj računalnik, na katerem jih tudi rešujete.
   Kadarkoli želite, lahko preverite pravilnost svojih rešitev, hkrati pa rešitve tudi shranite nazaj na strežnik.
-{% endfilter %}
+  {% endfilter %}
+{% endblock %}
 
+{% block actions %}
   {% if request.user.is_staff %}
-  <a href="{% url admin:tomo_course_add %}"><button class="btn">Dodaj predmet</button></a>
+    <a href="{% url admin:tomo_course_add %}">
+      <button class="btn">
+        Dodaj predmet
+      </button>
+    </a>
   {% endif %}
 {% endblock %}
 
-{% block content %}
+{% block contents %}
   {% for course in courses.all %}
-    <h2><a href='{% url course course.id %}'>{{ course.name }}</a></h2>
+    <h2>
+      <a href='{% url course course.id %}'>
+        {{ course.name }}
+      </a>
+    </h2>
 
     {{ course.description|tex_markdown|safe }}
-
 
     {% for problem_set in course.recent %}
       {% if problem_set.visible or request.user.is_staff %}
@@ -35,7 +49,11 @@
       {% endif %}
     {% endfor %}
 
-    <h3><a href='{% url course course.id %}'>Vsi sklopi…</a></h3>
+    <h3>
+      <a href='{% url course course.id %}'>
+        Vsi sklopi…
+      </a>
+    </h3>
 
     {% if not forloop.last %}<hr />{% endif %}
   {% endfor %}

@@ -108,12 +108,12 @@
                 {% block breadcrumbs %}{% endblock %}
               </ul>
 
-              <h1>{% block heading %}{% endblock %}</h1>
+              <h1>{% block header %}{% endblock %}</h1>
 
-              {% block header %}{% endblock %}
+              {% block description %}{% endblock %}
+              {% block actions %}{% endblock %}
             </div>
-            {% block content %}
-            {% endblock %}
+            {% block contents %}{% endblock %}
           </div>
         </div>
       </div>
