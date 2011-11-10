@@ -1,7 +1,5 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- (M) JSON template za R
-
 - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 
 - (M) USER INTERFACE:

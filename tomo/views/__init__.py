@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 
-from tomo.models import Course, Part
+from tomo.models import Course, Part, ProblemSet
 
 
 def homepage(request):
@@ -10,19 +10,14 @@ def homepage(request):
     # else:
     #     courses = Course.objects
     courses = Course.objects
-    sol = dict((problem_set.id, Part.solved(Part.objects.filter(problem__problem_set=problem_set), request.user))
-                    for course in courses.all()
-                    for problem_set in course.recent())
     return render(request, "home.html", {
         'courses': courses,
-        'solved': sol,
+        'solved': ProblemSet.objects.problem_sets_success(ProblemSet.objects, request.user),
     })
 
 def view_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
-    solved = dict((problem_set.id, Part.solved(Part.objects.filter(problem__problem_set=problem_set), request.user))
-                  for problem_set in course.problem_sets.all())
     return render(request, "course.html", {
         'course': course,
-        'solved': solved,
+        'solved': ProblemSet.objects.problem_sets_success(ProblemSet.objects.filter(course=course), request.user),
     })

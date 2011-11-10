@@ -1,17 +1,19 @@
-{% extends 'page/base.html' %}
+{% extends 'base.html' %}
 
-{% block description %}
-    <h1 class='failure message'>
-        Stran ne obstaja.
-    </h1>
+{% block title %}
+  Tomo
 {% endblock %}
 
-{% block action %}
-    <p class='instructions'>
-        Vpisali ste naslov strani, ki ne obstaja. Poglejte, če ste naslov
-        vpisali pravilno.
-    </p>
-    <a class='button default' href='{% url collection_list %}'>
-        Nazaj na začetek
-    </a>
+{% block header %}
+  Stran ne obstaja.
+{% endblock %}
+
+{% block contents %}
+  <p class='instructions'>
+    Vpisali ste naslov strani, ki ne obstaja.
+    Poglejte, če ste naslov vpisali pravilno.
+  </p>
+  <a class='button default' href='{% url homepage %}'>
+    Nazaj na začetek
+  </a>
 {% endblock %}

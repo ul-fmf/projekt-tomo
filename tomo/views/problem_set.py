@@ -34,18 +34,14 @@ def view_problem_set(request, problem_set_id):
     parts_count = dict(Problem.objects.filter(problem_set=problem_set) \
                                       .annotate(Count('parts')) \
                                       .values_list('id', 'parts__count'))
-    solved = {}
     problems = problem_set.problems.all()
-    for problem in problems:
-        solved[problem.id] = Part.solved(Part.objects.filter(problem=problem), request.user)
     attempts = Attempt.objects.for_problem_set(problem_set).from_user(request.user).dict_by_part()
     default_language = problems[0].language if problems.all() else None
-    print(solved)
     return render(request, "problem_set.html", {
         'problem_set': problem_set,
         'parts_count': parts_count,
         'problems': problems,
-        'solved': solved,
+        'solved': problem_set.problems_success(request.user),
         'attempts': attempts,
         'languages': Language.objects,
         'default_language': default_language,

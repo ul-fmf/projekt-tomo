@@ -53,6 +53,33 @@ class ProblemSet(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
+    def problems_success(self, user):
+        correct = dict(
+            Attempt.objects.from_user(
+                user
+            ).for_problem_set(
+                self
+            ).filter(
+                correct=True
+            ).values(
+                'part__problem'
+            ).order_by(
+                'part__problem'
+            ).annotate(
+                correct_count=models.Count('part__problem')
+            ).values_list('part__problem', 'correct_count')
+        )
+        total = dict(
+            Problem.objects.filter(
+                problem_set=self
+            ).annotate(
+                part_count=models.Count('parts')
+            ).values_list('id', 'part_count')
+        )
+        success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot)) for
+                    problem_id, tot in total.items())
+        return success
+
     class QuerySet(QuerySet):
         def get_for_user(self, problem_set_id, user):
             problem_set = ProblemSet.objects.get(id=problem_set_id)
@@ -60,6 +87,30 @@ class ProblemSet(models.Model):
                 return problem_set
             else:
                 raise PermissionDenied
+
+        def problem_sets_success(self, problem_sets, user):
+            correct = dict(
+                Attempt.objects.from_user(
+                    user
+                ).filter(
+                    correct=True, part__problem__problem_set__in=problem_sets
+                ).values(
+                    'part__problem__problem_set'
+                ).order_by(
+                    'part__problem__problem_set'
+                ).annotate(
+                    correct_count=models.Count('part__problem__problem_set')
+                ).values_list('part__problem__problem_set', 'correct_count')
+            )
+            total = dict(
+                problem_sets.annotate(
+                    part_count=models.Count('problems__parts')
+                ).values_list('id', 'part_count')
+            )
+            success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
+                        problem_set_id, tot in total.items())
+            return success
+
 
     class Meta:
         order_with_respect_to = 'course'
@@ -120,15 +171,6 @@ class Part(models.Model):
 
     class Meta:
         order_with_respect_to = 'problem'
-
-    @classmethod
-    def solved(self, parts, user):
-        all_parts = parts.count()
-        if all_parts > 0 and user.is_authenticated():
-            solved_parts = Attempt.objects.from_user(user).filter(part__in=parts, correct=True).count()
-            return (True, int(100 * solved_parts / all_parts))
-        else:
-            return (False, all_parts)
 
 
 class Submission(models.Model):

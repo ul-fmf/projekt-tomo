@@ -1,11 +1,13 @@
 <div class='row inline {% block style %}{% endblock %}'>
-    <div class="span1">{% block stats %}{% endblock %}</div>
+  <div class="span1">
+    {% block stats %}{% endblock %}
+  </div>
 
-    <div class='span12'>
-        <h3>{% block title %}{% endblock %}</h3>
-        <div class='my-actions'>{% block actions %}{% endblock %}</div>
-        {% block contents %}{% endblock %}
-    </div>
-
+  <div class='span12'>
+    <h3>{% block header %}{% endblock %}</h3>
+      <div class='my-actions'>{% block actions %}{% endblock %}</div>
+      {% block contents %}{% endblock %}
+  </div>
+  {% block extras %}{% endblock %}
 </div>
-{% block extras %}{% endblock %}
+

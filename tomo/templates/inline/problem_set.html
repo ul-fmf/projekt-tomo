@@ -2,43 +2,43 @@
 {% load my_tags %}
 
 {% block stats %}
-    {% with stat=solved|get:problem_set.id %}
-    {% with percentage=stat.0 %}
-    {% with num=stat.1 %}
-        {% if percentage %}
-            <div class="stats {% spaceless %}
-                {% if count == 100 %}success{% endif %}
-                {% if count < 100 and count >= 50 %}warning{% endif %}
-                {% if count < 50 %}error{% endif %}
-                {% endspaceless %}">
-                <div class="stats-contents">
-                    {{ num }}
-                    <small>%</small>
-                </div>
-            </div>
-        {% else %}
-            <div class="stats">
-                <div class="stats-contents">
-                    {{ num }}
-                    <small>
-                        nalog{% koncnica num "a" "i" "e" "" %}
-                    </small>
-                </div>
-            </div>
-        {% endif %}
+  {% if request.user.is_authenticated %}
+    {% with percentage=solved|get:problem_set.id %}
+    <div class="stats {% spaceless %}
+      {% if percentage == 100 %}success{% endif %}
+      {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
+      {% if percentage < 50 %}error{% endif %}
+      {% endspaceless %}">
+      <div class="stats-contents">
+        {{ percentage }}
+        <small>%</small>
+      </div>
+    </div>
     {% endwith %}
+  {% else %}
+    {% with problem_count=problem_set.problems.count %}
+    <div class="stats">
+      <div class="stats-contents">
+        {{ problem_count }}
+        <small>
+          nalog{% koncnica problem_count "a" "i" "e" "" %}
+        </small>
+      </div>
+    </div>
     {% endwith %}
-    {% endwith %}
+  {% endif %}
 {% endblock %}
 
-{% block style %}{% if not problem_set.visible %}hidn{% endif %}{% endblock %}
+{% block style %}
+  {% if not problem_set.visible %}hidn{% endif %}
+{% endblock %}
 
-{% block title %}
-    <a href="{% url problem_set problem_set.id %}">
-        {{ problem_set.title }}
-    </a>
+{% block header %}
+  <a href="{% url problem_set problem_set.id %}">
+    {{ problem_set.title }}
+  </a>
 {% endblock %}
 
 {% block actions %}
-    {% include 'actions/problem_set.html' %}
+  {% include 'actions/problem_set.html' %}
 {% endblock %}
