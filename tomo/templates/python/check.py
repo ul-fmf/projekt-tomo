@@ -90,8 +90,8 @@ class Check:
         for i, part in enumerate(Check.parts):
             if not part['solution']:
                 print('Podnaloga {0} je brez rešitve.'.format(i + 1))
-            elif 'errors' in part:
-                print('Podaloga {0} ni prestala vseh testov:'.format(i + 1))
+            elif part['errors']:
+                print('Podnaloga {0} ni prestala vseh testov:'.format(i + 1))
                 for e in part['errors']:
                     print("- {0}\n".format("\n  ".join(e.splitlines())))
             else:

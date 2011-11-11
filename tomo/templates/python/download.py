@@ -200,14 +200,28 @@ def _check():
             'part': int(match.group('part')),
             'solution': match.group('solution').strip()
         } for match in re.compile(
-            r'^#+@(?P<part>\d+)#\n' # beginning of header
-            r'(^# [^\n]*\n)*'       # description
-            r'#+\1@#\n'             # end of header
-            r'(?P<solution>.*?)',   # solution
-            r'^(# )?(?=#+@)',       # beginning of next part
+            r'#+@(?P<part>\d+)#\n' # beginning of header
+            r'.*?'                 # description
+            r'#+\1@#\n'            # end of header
+            r'(?P<solution>.*?)'   # solution
+            r'(?=#+@)',            # beginning of next part
             flags=re.DOTALL|re.MULTILINE
         ).finditer(_source)
     ])
+
+    problem_match = re.search(
+        r'#+@@#\n'           # beginning of header
+        r'.*?'               # description
+        r'#+@@#\n'           # end of header
+        r'(?P<preamble>.*?)' # preamble
+        r'(?=#+@)',          # beginning of first part
+        _source, flags=re.DOTALL|re.MULTILINE)
+
+    if not problem_match:
+        print("NAPAKA: datoteka ni pravilno oblikovana")
+        sys.exit(1)
+
+    _preamble = problem_match.group('preamble').strip()
 
     {% for part in parts %}
     if Check.part():
@@ -221,6 +235,7 @@ def _check():
         'data': '{{ data|safe }}',
         'timestamp' : '{{ timestamp }}',
         'signature': '{{ signature }}',
+        'preamble': _preamble,
         'attempts': Check.dump(),
         'source': _source,
     }).encode('utf-8')
@@ -231,8 +246,9 @@ def _check():
             if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
             else: print ("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
         if 'message' in response: print (response['message'])
-    except HTTPError:
+    except HTTPError as r:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
+        print(r.read().decode('utf-8'))
     {% else %}
     print('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
     {% endif %}
