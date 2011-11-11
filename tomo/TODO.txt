@@ -3,8 +3,6 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 
 - (M) USER INTERFACE:
-  - če ima naloga samo en part, ni treba, da se ta part označi z "1)".
-  - ali bi spremenili "1), 2), 3)" v kaj drugega?
   - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
 
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov

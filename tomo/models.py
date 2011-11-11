@@ -5,11 +5,15 @@ from django.db import models
 from django.db.models.query import QuerySet
 
 class QuerySetManager(models.Manager):
+    """A re-usable Manager to access a custom QuerySet"""
     def __getattr__(self, attr, *args):
         try:
             return getattr(self.__class__, attr, *args)
         except AttributeError:
-            return getattr(self.model.QuerySet(self.model), attr, *args)
+            return getattr(self.get_query_set(), attr, *args)
+
+    def get_query_set(self):
+        return self.model.QuerySet(self.model)
 
 class Course(models.Model):
     name = models.CharField(max_length=70)
@@ -53,33 +57,6 @@ class ProblemSet(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
-    def problems_success(self, user):
-        correct = dict(
-            Attempt.objects.from_user(
-                user
-            ).for_problem_set(
-                self
-            ).filter(
-                correct=True
-            ).values(
-                'part__problem'
-            ).order_by(
-                'part__problem'
-            ).annotate(
-                correct_count=models.Count('part__problem')
-            ).values_list('part__problem', 'correct_count')
-        )
-        total = dict(
-            Problem.objects.filter(
-                problem_set=self
-            ).annotate(
-                part_count=models.Count('parts')
-            ).values_list('id', 'part_count')
-        )
-        success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot)) for
-                    problem_id, tot in total.items())
-        return success
-
     class QuerySet(QuerySet):
         def get_for_user(self, problem_set_id, user):
             problem_set = ProblemSet.objects.get(id=problem_set_id)
@@ -88,12 +65,12 @@ class ProblemSet(models.Model):
             else:
                 raise PermissionDenied
 
-        def problem_sets_success(self, problem_sets, user):
+        def success(self, user):
             correct = dict(
                 Attempt.objects.from_user(
                     user
                 ).filter(
-                    correct=True, part__problem__problem_set__in=problem_sets
+                    correct=True, part__problem__problem_set__in=self
                 ).values(
                     'part__problem__problem_set'
                 ).order_by(
@@ -103,7 +80,7 @@ class ProblemSet(models.Model):
                 ).values_list('part__problem__problem_set', 'correct_count')
             )
             total = dict(
-                problem_sets.annotate(
+                self.annotate(
                     part_count=models.Count('problems__parts')
                 ).values_list('id', 'part_count')
             )
@@ -153,7 +130,28 @@ class Problem(models.Model):
                 return problem
             else:
                 raise PermissionDenied
-
+        def success(self, user):
+            correct = dict(
+                Attempt.objects.from_user(
+                    user
+                ).filter(
+                    correct=True, part__problem__in=self
+                ).values(
+                    'part__problem'
+                ).order_by(
+                    'part__problem'
+                ).annotate(
+                    correct_count=models.Count('part__problem')
+                ).values_list('part__problem', 'correct_count')
+            )
+            total = dict(
+                self.annotate(
+                    part_count=models.Count('parts')
+                ).values_list('id', 'part_count')
+            )
+            success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot if tot else 0)) for
+                        problem_id, tot in total.items())
+            return success
     class Meta:
         order_with_respect_to = 'problem_set'
 
@@ -164,7 +162,6 @@ class Part(models.Model):
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     challenge = models.TextField(blank=True)
-    objects = QuerySetManager()
 
     def __unicode__(self):
         return u'#{0} ({1})'.format(self._order + 1, self.id)
@@ -201,6 +198,7 @@ class Attempt(models.Model):
             if user.is_authenticated():
                 return self.filter(active=True, submission__user=user)
             else:
+                # Ugly hack because we want to stay in the same queryset.
                 return self.filter(active=320)
 
         def for_problem(self, problem):

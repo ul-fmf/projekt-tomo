@@ -12,12 +12,12 @@ def homepage(request):
     courses = Course.objects
     return render(request, "home.html", {
         'courses': courses,
-        'solved': ProblemSet.objects.problem_sets_success(ProblemSet.objects, request.user),
+        'solved': ProblemSet.objects.success(request.user),
     })
 
 def view_course(request, course_id):
     course = get_object_or_404(Course, id=course_id)
     return render(request, "course.html", {
         'course': course,
-        'solved': ProblemSet.objects.problem_sets_success(ProblemSet.objects.filter(course=course), request.user),
+        'solved': ProblemSet.objects.filter(course=course).success(request.user)
     })

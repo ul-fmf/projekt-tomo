@@ -1,55 +1,51 @@
-{% extends "inline/base.html" %}
 {% load my_tags %}
 
-{% block stats %}
-  {% if request.user.is_authenticated %}
-    {% with percentage=solved|get:problem.id %}
-    <div class="stats {% spaceless %}
-      {% if percentage == 100 %}success{% endif %}
-      {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
-      {% if percentage < 50 %}error{% endif %}
-      {% endspaceless %}">
-      <div class="stats-contents">
-        {{ percentage }}
-        <small>%</small>
+<div class='row inline'>
+  <div class="span1">
+    {% if request.user.is_authenticated %}
+      {% with percentage=solved|get:problem.id %}
+      <div class="stats {% spaceless %}
+        {% if percentage == 100 %}success{% endif %}
+        {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
+        {% if percentage < 50 %}error{% endif %}
+        {% endspaceless %}">
+        <div class="stats-contents">
+          {{ percentage }}
+          <small>%</small>
+        </div>
       </div>
-    </div>
-    {% endwith %}
-  {% else %}
-    {% with part_count=problem.parts.count %}
-    <div class="stats">
-      <div class="stats-contents">
-        {{ part_count }}
-         <small>
-          podnalog{% koncnica part_count "a" "i" "e" "" %}
-        </small>
+      {% endwith %}
+    {% else %}
+      {% with part_count=problem.parts.count %}
+      <div class="stats">
+        <div class="stats-contents">
+          {{ part_count }}
+           <small>
+            podnalog{% koncnica part_count "a" "i" "e" "" %}
+          </small>
+        </div>
       </div>
-    </div>
-    {% endwith %}
-  {% endif %}
-{% endblock %}
+      {% endwith %}
+    {% endif %}
+  </div>
 
-{% block header %}
-  <span id="problem-{{ problem.id }}">
-    Naloga {{ forloop.counter }}
-    {% if problem.title %} &mdash; {{ problem.title }}{% endif %}
-  </span>
-{% endblock %}
+  <div class='span12'>
+    <h3 id="problem-{{ problem.id }}">
+      Naloga {{ forloop.counter }}
+      {% if problem.title %} &mdash; {{ problem.title }}{% endif %}
+    </h3>
 
-{% block actions %}
-  {% include 'actions/problem.html' %}
-{% endblock %}
+    <div class='my-actions'>
+      {% include 'actions/problem.html' %}
+    </div>
 
-{% block extras %}
-    <div class='row'>
-    <div class='span12 offset1'>
-      {{ problem.description|tex_markdown|safe }}
-    </div>
-    </div>
+    {{ problem.description|tex_markdown|safe }}
+
     {% for part in problem.parts.all %}
-      {% include 'inline/part.html' %}
     {% with attempts|get:part.id as attempt %}
+      {% include 'inline/part.html' %}
     {% endwith %}
     {% endfor %}
-  <hr />
-{% endblock %}
+    <hr />
+  </div>
+</div>

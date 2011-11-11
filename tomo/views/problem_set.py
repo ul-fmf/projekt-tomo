@@ -41,7 +41,7 @@ def view_problem_set(request, problem_set_id):
         'problem_set': problem_set,
         'parts_count': parts_count,
         'problems': problems,
-        'solved': problem_set.problems_success(request.user),
+        'solved': problem_set.problems.success(request.user),
         'attempts': attempts,
         'languages': Language.objects,
         'default_language': default_language,
