@@ -196,19 +196,19 @@
   .source <- paste(readLines(.filename), collapse="\n")
 
   matches <- regex_break(paste(
-      '^#+@(\\d+)#\n',  # beginning of header
-      '(^# [^\n]*\n)*', # description
-      '#+\\1@#\n',      # header
-      '.*?',            # solution
-      '^(# )?(?=#+@)',  # beginning of next part
+      '#+@(\\d+)#\n', # beginning of header
+      '.*?',          # description
+      '#+\\1@#\n',    # end of header
+      '.*?',          # solution
+      '(?=#+@)',      # beginning of next part
       sep=""
   ),  c(
-      '^#+@',           # beginning of header
-      '(\\d+)',         # beginning of header (?P<part>)
-      '#\n',            # beginning of header
-      '(^# [^\n]*\n)*', # description
-      '#+(\\d+)@#\n',   # header
-      '.*?'             # solution
+      '#+@',          # beginning of header
+      '(\\d+)',       # beginning of header (?P<part>)
+      '#\n',          # beginning of header
+      '.*?',          # description
+      '#+(\\d+)@#\n', # end of header
+      '.*?'           # solution
   ), .source)
 
   check$initialize(data.frame(
@@ -216,6 +216,25 @@
     solution = apply(matches, 1, function(match) strip(match[6])),
     stringsAsFactors=FALSE
   ))
+
+  problem_match <- regex_break(paste(
+    '#+@@#\n', # beginning of header
+    '.*?',     # description
+    '#+@@#\n', # end of header
+    '.*?',     # preamble
+    '(?=#+@)', # beginning of first part
+    sep = ""
+  ), c(
+    '#+@@#\n', # beginning of header
+    '.*?',     # description
+    '#+@@#\n', # end of header
+    '.*?'      # preamble
+    ), .source)
+
+  if(length(problem_match) == 0)
+    stop("NAPAKA: datoteka ni pravilno oblikovana")
+
+  .preamble <- strip(problem_match[1, 4])
 
   {% for part in parts %}
   if (check$part()) {
@@ -228,8 +247,8 @@
   cat('Shranjujem rešitve na strežnik...\n')
   post <- list(
     data = '{{ data|safe }}',
-    timestamp = '{{ timestamp }}',
     signature = '{{ signature }}',
+    preamble = .preamble,
     attempts = check$dump(),
     source = .source
   )

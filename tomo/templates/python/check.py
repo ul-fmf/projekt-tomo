@@ -52,7 +52,7 @@ class Check:
     @staticmethod
     def compare(example, expected,
                 message="Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
-                clean=canonize, env={},
+                clean=lambda x: x, env={},
                 precision=1.0e-6, strict_float=False, strict_list=True):
         def comp(x,y):
             if x == y: return None
@@ -93,7 +93,7 @@ class Check:
             elif part['errors']:
                 print('Podnaloga {0} ni prestala vseh testov:'.format(i + 1))
                 for e in part['errors']:
-                    print("- {0}\n".format("\n  ".join(e.splitlines())))
+                    print("- {0}".format("\n  ".join(e.splitlines())))
             else:
                 print('Podnaloga {0} je prestala vse teste.'.format(i + 1))
 

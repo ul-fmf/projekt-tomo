@@ -233,7 +233,6 @@ def _check():
     print('Shranjujem rešitve na strežnik...')
     post = urlencode({
         'data': '{{ data|safe }}',
-        'timestamp' : '{{ timestamp }}',
         'signature': '{{ signature }}',
         'preamble': _preamble,
         'attempts': Check.dump(),

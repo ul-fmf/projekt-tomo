@@ -34,7 +34,6 @@ def problem_file(request, problem_id, student_id=None):
 def download_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
-        'timestamp' : str(problem.timestamp),
         'parts': problem.parts.all(),
         'attempts': Attempt.objects.from_user(request.user).for_problem(problem).dict_by_part(),
         'authenticated': authenticated
@@ -42,7 +41,8 @@ def download_contents(request, problem, user, authenticated):
     if authenticated:
         context['data'], context['signature'] = pack({
             'user': user.id,
-            'problem': problem.id
+            'problem': problem.id,
+            'timestamp' : str(problem.timestamp),
         })
     t = loader.get_template(problem.language.download_file)
     return t.render(RequestContext(request, context))
@@ -96,7 +96,7 @@ def upload(request):
                 new.save()
 
     response = { 'judgments' : judgments }
-    if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
+    if download.get('timestamp', '') != str(problem.timestamp):
         response['message'] = "NA VOLJO JE NOVA VERZIJA!"
 
     return HttpResponse(json.dumps(response))
@@ -128,7 +128,7 @@ def update(request):
     error = None
     messages = []
 
-    if 'timestamp' not in request.POST or request.POST['timestamp'] != str(problem.timestamp):
+    if data.get('timestamp', '') != str(problem.timestamp):
         error = "NAPAKA: Uporabljate staro verzijo datoteke. (Novo lahko pridobite na strežniku.)"
 
     else:
@@ -181,10 +181,10 @@ def update(request):
         data, signature = pack({
                 'user': user.id,
                 'problem': problem.id,
+                'timestamp' : str(problem.timestamp),
                 })
         context = RequestContext(request, {
                 'problem': problem,
-                'timestamp' : str(problem.timestamp),
                 'parts': problem.parts.all(),
                 'data': data,
                 'signature': signature,
@@ -225,10 +225,10 @@ def edit(request, problem_id=None):
     data, signature = pack({
         'user': request.user.id,
         'problem': problem.id,
+        'timestamp' : str(problem.timestamp),
     })
     context = RequestContext(request, {
         'problem': problem,
-        'timestamp' : str(problem.timestamp),
         'parts': problem.parts.all(),
         'data': data,
         'signature': signature,

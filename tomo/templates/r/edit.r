@@ -13,7 +13,7 @@
 
 matches <- regex_break(paste(
   '^#+@(\\d+)#\n',         # beginning of header
-  '(^# [^\n]*\n)*',        # description
+  '(^#( [^\n]*)?\n)*',     # description
   '^#+\\1@#\n',            # end of header
   '.*?',                   # solution
   '^check\\$part\\(\\)\n', # beginning of validation
@@ -24,7 +24,7 @@ matches <- regex_break(paste(
   '^#+@',                  # beginning of header
   '(\\d+)',                # beginning of header (?P<part>)
   '#\n',                   # beginning of header
-  '(^# [^\n]*\n)*',        # description
+  '(^#( [^\n]*)?\n)*',     # description
   '^#+(\\d+)@#\n',         # end of header
   '.*?',                   # solution
   'check\\$part\\(\\)\n',  # beginning of validation
@@ -41,22 +41,22 @@ check$initialize(data.frame(
 
 
 problem_match <- regex_break(paste(
-  '^#+@@#\n',        # beginning of header
-  '^# ([^\n]*)\n',   # title
-  '^(#\\s*\n)*',     # empty rows
-  '(^# [^\n]*\n)*',  # description
-  '^#+@@#\n',        # end of header
-  '.*?',             # preamble
-  '^(# )?(?=#+@)',   # beginning of first part
+  '^#+@@#\n',          # beginning of header
+  '^# ([^\n]*)\n',     # title
+  '^(#\\s*\n)*',       # empty rows
+  '(^#( [^\n]*)?\n)*', # description
+  '^#+@@#\n',          # end of header
+  '.*?',               # preamble
+  '^(# )?(?=#+@)',     # beginning of first part
   sep = ""
 ), c(
-  '^#+@@#\n',        # beginning of header
-  '^# ',             # title
-  '([^\n]*)',        # title (?P<title>)
-  '\n^(#\\s*\n)*',   # title & empty rows
-  '(^# [^\n]*\n)*',  # description
-  '^#+@@#\n',        # end of header
-  '.*?'              # preamble
+  '^#+@@#\n',          # beginning of header
+  '^# ',               # title
+  '([^\n]*)',          # title (?P<title>)
+  '\n^(#\\s*\n)*',     # title & empty rows
+  '(^#( [^\n]*)?\n)*', # description
+  '^#+@@#\n',          # end of header
+  '.*?'                # preamble
   ), .source)
 
 if(length(problem_match) == 0)
@@ -113,7 +113,6 @@ if(any(sapply(check$parts$errors, length) > 0)) {
     post <- list(
       data = '{{ data|safe }}',
       signature = '{{ signature }}',
-      timestamp = '{{ timestamp }}',
       title = title,
       description = description,
       preamble = preamble,
