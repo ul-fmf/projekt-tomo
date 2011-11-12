@@ -116,7 +116,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       title = title,
       description = description,
       preamble = preamble,
-      parts = check$dump()
+      parts = check$parts
     )
     r <- postToHost('{{ request.META.SERVER_NAME }}', '{% url update %}', post, port={{ request.META.SERVER_PORT }})
     response <- parse_response(r)

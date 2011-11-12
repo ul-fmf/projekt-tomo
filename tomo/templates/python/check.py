@@ -96,7 +96,3 @@ class Check:
                     print("- {0}".format("\n  ".join(e.splitlines())))
             else:
                 print('Podnaloga {0} je prestala vse teste.'.format(i + 1))
-
-    @staticmethod
-    def dump():
-        return json.dumps(Check.parts)

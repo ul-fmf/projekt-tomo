@@ -53,15 +53,17 @@ def upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    download = unpack(request.POST['data'], request.POST['signature'])
+    post = json.loads(request.raw_post_data)
+
+    download = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=download['user'])
     problem = Problem.objects.get_for_user(download['problem'], user)
 
     submission = Submission(user=user, problem=problem,
-                            source=request.POST['source'])
+                            source=post['source'])
     submission.save()
 
-    attempts = dict((attempt['part'], attempt) for attempt in json.loads(request.POST['attempts']))
+    attempts = dict((attempt['part'], attempt) for attempt in post['attempts'])
     old_attempts = Attempt.objects.from_user(user).for_problem(problem).dict_by_part()
 
     judgments = []
@@ -119,11 +121,13 @@ def create(request):
 def update(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-    data = unpack(request.POST['data'], request.POST['signature'])
+
+    post = json.loads(request.raw_post_data)
+
+    data = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=data['user'])
     problem = Problem.objects.get_for_user(data['problem'], user)
     old_parts = problem.parts.all()
-
     new_parts = []
     error = None
     messages = []
@@ -132,7 +136,7 @@ def update(request):
         error = "NAPAKA: Uporabljate staro verzijo datoteke. (Novo lahko pridobite na strežniku.)"
 
     else:
-        for part in json.loads(request.POST['parts']):
+        for part in post['parts']:
             part_id = int(part['part'])
             if part_id == 0:
                 new = Part(problem=problem)
@@ -172,9 +176,9 @@ def update(request):
                     'message': "\n".join(messages)
                     }))
     else:
-        problem.title = request.POST['title']
-        problem.description = request.POST['description']
-        problem.preamble = request.POST['preamble']
+        problem.title = post['title']
+        problem.description = post['description']
+        problem.preamble = post['preamble']
         problem.set_part_order(new_parts)
         problem.save()
 

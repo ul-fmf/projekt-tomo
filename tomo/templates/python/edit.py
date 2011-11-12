@@ -94,13 +94,13 @@ else:
     print('Naloge so pravilno sestavljene.')
     if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
         print('Shranjujem naloge...')
-        post = urlencode({
+        post = json.dumps({
             'data': '{{ data|safe }}',
             'signature': '{{ signature }}',
             'title': title,
             'description': description,
             'preamble': preamble,
-            'parts': Check.dump(),
+            'parts': Check.parts,
         }).encode('utf-8')
         try:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)

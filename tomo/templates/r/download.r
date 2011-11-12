@@ -249,7 +249,7 @@
     data = '{{ data|safe }}',
     signature = '{{ signature }}',
     preamble = .preamble,
-    attempts = check$dump(),
+    attempts = check$parts,
     source = .source
   )
   response <- postToHost('{{ request.META.SERVER_NAME }}', '{% url upload %}', post, port={{ request.META.SERVER_PORT }})

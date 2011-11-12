@@ -231,11 +231,11 @@ def _check():
     Check.summarize()
     {% if authenticated %}
     print('Shranjujem rešitve na strežnik...')
-    post = urlencode({
+    post = json.dumps({
         'data': '{{ data|safe }}',
         'signature': '{{ signature }}',
         'preamble': _preamble,
-        'attempts': Check.dump(),
+        'attempts': Check.parts,
         'source': _source,
     }).encode('utf-8')
     try:

@@ -1,32 +1,10 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
+- (M) upload v Jsonu za R
 
-- (M) USER INTERFACE:
-  - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
+- (M) avtomaticen replace za R
 
-- (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
-
-- Kaj lahko Check.canonize naredi v zvezi s tem:
-
-   >>> -(0/2)
-   -0.0
-   >>> -0/2
-   0.0
-
-- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
-  in obratno, da lahko student kontaktira (koga, avtorja?)
-
-- STATISTIKA:
-  - overall statistika
-  - statistika po času
-  - statistika samo za eno nalogo
-
-- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
-
-- (A) upload izkljucno v Jsonu
-
-- (A) avtomatičen replace za študente:
+- (M) avtomatičen replace za študente:
 
     primer:
 
@@ -42,7 +20,30 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
     with open(filename, "wb") as f:
         f.write(new_contents)
 
-- avtomaticen replace za R
+- (M) preambula v submissionih
+
+- (M) USER INTERFACE:
+  - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
+
+- (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
+
+- Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
+
+- Kaj lahko Check.canonize naredi v zvezi s tem:
+
+   >>> -(0/2)
+   -0.0
+   >>> -0/2
+   0.0
+
+- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
+  in obratno, da lahko student kontaktira (koga, avtorja?)
+
+- STATISTIKA:
+  - overall statistika
+  - statistika po času
+
+- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
 - narediti Check.compare in Check.run odporna na izjeme.
 
@@ -56,4 +57,4 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - podpora za Ocaml
 
-- podpora za Javo
+- (kdorkoli razen M) podpora za Javo
