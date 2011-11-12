@@ -211,11 +211,13 @@
       '.*?'           # solution
   ), .source)
 
-  check$initialize(data.frame(
-    part = apply(matches, 1, function(match) as.numeric(match[2])),
-    solution = apply(matches, 1, function(match) strip(match[6])),
-    stringsAsFactors=FALSE
-  ))
+  check$initialize(
+    apply(matches, 1, function(match) list(
+        part = as.numeric(match[2]),
+        solution = strip(match[6])
+      )
+    )
+  )
 
   problem_match <- regex_break(paste(
     '#+@@#\n', # beginning of header
@@ -250,9 +252,9 @@
     signature = '{{ signature }}',
     preamble = .preamble,
     attempts = check$parts,
-    source = .source
+    source = "" # sending source somehow causes problems on the server side.
   )
-  response <- postToHost('{{ request.META.SERVER_NAME }}', '{% url upload %}', post, port={{ request.META.SERVER_PORT }})
+  response <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
   cat(response)
   {% else %}
   cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')

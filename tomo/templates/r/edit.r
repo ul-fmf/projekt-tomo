@@ -31,13 +31,15 @@ matches <- regex_break(paste(
   '.*?'                    # validation
 ), .source)
 
-check$initialize(data.frame(
-  part = apply(matches, 1, function(match) as.numeric(match[2])),
-  description = apply(matches, 1, function(match) super_strip(match[4])),
-  solution = apply(matches, 1, function(match) strip(match[6])),
-  validation = apply(matches, 1, function(match) strip(match[8])),
-  stringsAsFactors = FALSE
-))
+  check$initialize(
+    apply(matches, 1, function(match) list(
+        part = as.numeric(match[2]),
+        description = super_strip(match[4]),
+        solution = strip(match[6]),
+        validation = strip(match[8])
+      )
+    )
+  )
 
 
 problem_match <- regex_break(paste(
@@ -118,7 +120,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       preamble = preamble,
       parts = check$parts
     )
-    r <- postToHost('{{ request.META.SERVER_NAME }}', '{% url update %}', post, port={{ request.META.SERVER_PORT }})
+    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url update %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
     response <- parse_response(r)
     cat(response$message, "\n")
     if('contents' %in% names(response)) {

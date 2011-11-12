@@ -1,6 +1,6 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- (M) upload v Jsonu za R
+- (M) ugotovi, zakaj JSON upload v R-ju ne dela čisto dobro (zna biti kaj s Content-Type)
 
 - (M) avtomaticen replace za R
 

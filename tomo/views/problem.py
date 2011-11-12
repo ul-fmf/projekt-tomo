@@ -122,6 +122,7 @@ def update(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
+    print(request.raw_post_data)
     post = json.loads(request.raw_post_data)
 
     data = unpack(post['data'], post['signature'])

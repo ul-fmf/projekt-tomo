@@ -1,9 +1,12 @@
 check <- list()
 
 check$initialize <- function(parts) {
-  check$parts <<- parts
-  check$parts$errors <<- list(list())
-  check$parts$challenge <<- list(list())
+  init.part <- function(part) {
+    part$errors <- list()
+    part$challenge <- list()
+    return(part)
+  }
+  check$parts <<- lapply(parts, init.part)
   check$current <<- NA
   check$part.counter <<- NA
 }
@@ -14,18 +17,18 @@ check$part <- function() {
   } else {
     check$part.counter <<- check$part.counter + 1
   }
-  return(check$parts$solution[[check$part.counter]] != "")
+  return(check$parts[[check$part.counter]]$solution != "")
 }
 
 check$error <- function(msg) {
-  check$parts$errors[[check$part.counter]] <<-
-    c(check$parts$errors[[check$part.counter]], msg)
+  check$parts[[check$part.counter]]$errors <<-
+    c(check$parts[[check$part.counter]]$errors, msg)
 }
 
 check$challenge <- function(x, k = NA) {
   pair <- c(toString(k), toString(check$canonize(x)))
-  check$parts$challenge[[check$part.counter]] <<-
-    c(check$parts$challenge[[check$part.counter]], list(pair))
+  check$parts[[check$part.counter]]$challenge<<-
+    c(check$parts[[check$part.counter]]$challenge, list(pair))
 }
 
 check$run <- function(example, state) {
@@ -72,19 +75,14 @@ check$compare <- function(example, expected,
 }
 
 check$summarize <- function() {
-  for(i in 1:nrow(check$parts)) {
-    if(check$parts$solution[[i]] == "") {
+  for(i in 1:length(check$parts)) {
+    if(check$parts[[i]]$solution == "") {
       cat("Podnaloga", i, "je brez rešitve.\n")
-    } else if (length(check$parts$errors[[i]]) > 0) {
+    } else if (length(check$parts[[i]]$errors) > 0) {
       cat("Podnaloga", i, "ni prestala vseh testov.\n")
-      cat(paste("- ", check$parts$errors[[i]], "\n", sep = ""), sep="")
+      cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep="")
     } else {
       cat("Podnaloga", i, "je prestala vse teste.\n")
     }
   }
 }
-
-check$dump <- function() {
-  return(paste('[', paste(apply(check$parts, 1, toJSON), collapse=', '), ']',  sep=''))
-}
-
