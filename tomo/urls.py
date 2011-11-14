@@ -15,19 +15,17 @@ urlpatterns = patterns('',
     (r'^problem/', include(patterns('tomo.views.problem',
         (r'^(?P<problem_id>\d+)/', include(patterns('tomo.views.problem',
             # Download the file used to solve a problem
-            (r'^$', 'download', {}, 'download'),
+            url(r'^student/$', 'student_download', name='student_download'),
             # Download the file used to solve a problem
-            (r'^(?P<user_id>\d+)/$', 'download_user', {}, 'download_user'),
+            url(r'^(?P<user_id>\d+)/$', 'student_archive_download' name='student_archive_download'),
             # Download the file used to solve a problem
-            (r'^edit/$', 'edit', {}, 'edit'),
+            url(r'^teacher/$', 'teacher_download', name='teacher_download'),
         ))),
-        # Respond to a challenge
-        (r'^upload/$', 'upload', {}, 'upload'),
-        # Download the file used to edit a problem
-        (r'^edit/$', 'edit', {}, 'edit'),
         # Create a problem
         (r'^create/$', 'create', {}, 'create'),
+        # Respond to a challenge
+        (r'^upload/teacher/$', 'teacher_upload', {}, 'student_upload'),
         # Update the problem
-        (r'^update/$', 'update', {}, 'update'),
+        (r'^upload/student/$', 'teacher_upload', {}, 'teacher_upload'),
     ))),
 )

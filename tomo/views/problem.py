@@ -27,23 +27,10 @@ def student_contents(request, problem, user, authenticated):
             'problem': problem.id,
             'timestamp': str(problem.timestamp)
         })
-    return render_to_string(problem.language.download_file,
+    return render_to_string(problem.language.student_file,
                             context_instance=RequestContext(request, context))
 
-def teacher_contents(request, problem, user):
-    context = RequestContext(request, {
-        'problem': problem,
-        'parts': problem.parts.all(),
-    })
-    context['data'], context['signature'] = pack({
-        'user': user.id,
-        'problem': problem.id,
-        'timestamp' : str(problem.timestamp),
-    })
-    return render_to_string(problem.language.edit_file,
-                            context_instance=RequestContext(request, context))
-
-def download(request, problem_id):
+def student_download(request, problem_id):
     problem = Problem.objects.get_for_user(problem_id, request.user)
     filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     contents = student_contents(request, problem, request.user,
@@ -51,7 +38,7 @@ def download(request, problem_id):
     return plain_text(filename, contents)
 
 @staff_member_required
-def download_user(request, problem_id, user_id):
+def student_archive_download(request, problem_id, user_id):
     problem = Problem.objects.get_for_user(problem_id, request.user)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
@@ -60,7 +47,7 @@ def download_user(request, problem_id, user_id):
     return plain_text(filename, contents)
 
 @csrf_exempt
-def upload(request):
+def student_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -124,8 +111,27 @@ def create(request):
     problem.save()
     return redirect(problem)
 
+def teacher_contents(request, problem, user):
+    context = RequestContext(request, {
+        'problem': problem,
+        'parts': problem.parts.all(),
+    })
+    context['data'], context['signature'] = pack({
+        'user': user.id,
+        'problem': problem.id,
+        'timestamp' : str(problem.timestamp),
+    })
+    return render_to_string(problem.language.teacher_file,
+                            context_instance=RequestContext(request, context))
+
+@staff_member_required
+def teacher_download(request, problem_id=None):
+    problem = Problem.objects.get_for_user(problem_id, request.user)
+    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
+    return plain_text(filename, teacher_contents(request, problem, request.user))
+
 @csrf_exempt
-def update(request):
+def teacher_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
@@ -183,6 +189,7 @@ def update(request):
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages)
                     }))
+
     else:
         problem.title = post['title']
         problem.description = post['description']
@@ -190,28 +197,9 @@ def update(request):
         problem.set_part_order(new_parts)
         problem.save()
 
-        data, signature = pack({
-                'user': user.id,
-                'problem': problem.id,
-                'timestamp' : str(problem.timestamp),
-                })
-        context = RequestContext(request, {
-                'problem': problem,
-                'parts': problem.parts.all(),
-                'data': data,
-                'signature': signature,
-                })
-        contents = render_to_string(problem.language.edit_file,
-                                    context_instance=RequestContext(request, context))
+        contents = teacher_contents(request, problem, user)
 
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages),
                     'contents': contents
                     }))
-
-@staff_member_required
-def edit(request, problem_id=None):
-    problem = Problem.objects.get_for_user(problem_id, request.user)
-    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
-    return plain_text(filename, teacher_contents(request, problem, request.user))
-

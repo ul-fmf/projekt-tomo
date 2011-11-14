@@ -120,7 +120,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       preamble = preamble,
       parts = check$parts
     )
-    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url update %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
+    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
     response <- parse_response(r)
     cat(response$message, "\n")
     if('contents' %in% names(response)) {

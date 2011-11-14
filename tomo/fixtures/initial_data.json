@@ -3,8 +3,8 @@
     "pk": 2,
     "model": "tomo.language",
     "fields": {
-      "edit_file": "python/edit.py",
-      "download_file": "python/download.py",
+      "teacher_file": "downloads/python/teacher.py",
+      "student_file": "downloads/python/student.py",
       "name": "Python 3",
       "extension": "py"
     }
@@ -13,8 +13,8 @@
     "pk": 1,
     "model": "tomo.language",
     "fields": {
-      "edit_file": "r/edit.r",
-      "download_file": "r/download.r",
+      "teacher_file": "downloads/r/teacher.r",
+      "student_file": "downloads/r/student.r",
       "name": "R",
       "extension": "r"
     }

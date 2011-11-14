@@ -239,7 +239,7 @@ def _check():
         'source': _source,
     }).encode('utf-8')
     try:
-        r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url upload %}', post)
+        r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url student_upload %}', post)
         response = json.loads(r.read().decode('utf-8'))
         for (k, e) in response['judgments']:
             if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))

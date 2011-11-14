@@ -94,8 +94,8 @@ class ProblemSet(models.Model):
 
 class Language(models.Model):
     name = models.CharField(max_length=70)
-    download_file = models.CharField(max_length=70)
-    edit_file = models.CharField(max_length=70)
+    student_file = models.CharField(max_length=70)
+    teacher_file = models.CharField(max_length=70)
     extension = models.CharField(max_length=4)
 
     def __unicode__(self):

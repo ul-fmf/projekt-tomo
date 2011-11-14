@@ -103,7 +103,7 @@ else:
             'parts': Check.parts,
         }).encode('utf-8')
         try:
-            r = urlopen('http://{{ request.META.HTTP_HOST }}{% url update %}', post)
+            r = urlopen('http://{{ request.META.HTTP_HOST }}{% url teacher_upload %}', post)
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
             if 'contents' in response:

@@ -254,7 +254,7 @@
     attempts = check$parts,
     source = "" # sending source somehow causes problems on the server side.
   )
-  response <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
+  response <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
   cat(response)
   {% else %}
   cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
