@@ -185,13 +185,20 @@
 
 
 
+get_current_filename <- function () {
+  if (length(showConnections()) > 1) {
+    return(showConnections()[1, "description"])
+  } else {
+    return(Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE))
+  }
+}
 .filename <- get_current_filename()
 
 .check <- function() {
-  {% include 'r/httpRequest.r' %}
-  {% include 'r/rjson.r' %}
-  {% include 'r/library.r' %}
-  {% include 'r/check.r' %}
+  {% include 'downloads/r/httpRequest.r' %}
+  {% include 'downloads/r/rjson.r' %}
+  {% include 'downloads/r/library.r' %}
+  {% include 'downloads/r/check.r' %}
 
   .source <- paste(readLines(.filename), collapse="\n")
 
@@ -254,8 +261,27 @@
     attempts = check$parts,
     source = "" # sending source somehow causes problems on the server side.
   )
-  response <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
-  cat(response)
+  tryCatch({
+    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
+    response <- fromJSON(parse.response(r), method = "R")
+    for(judgment in response$judgments) {
+      print(judgment)
+    }
+    if(response$obsolete) {
+      cat("Na voljo je nova različica.")
+      index <- 1
+      while(file.exists(paste(.filename, ".", index, sep = "")))
+        index <- index + 1
+      backup.filename = paste(.filename, ".", index, sep = "")
+      cat("Trenutno datoteko kopiram v ", backup.filename, ".", sep = "")
+      file.copy(.filename, backup.filename)
+      r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url api_student_contents %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
+      cat(parse.response(r), file=.filename)
+    }
+  },
+  error = function(r) {
+    cat('Pri shranjevanju je prišlo do napake. Poskusite znova.')
+  })
   {% else %}
   cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
   {% endif %}

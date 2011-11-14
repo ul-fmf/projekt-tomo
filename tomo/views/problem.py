@@ -37,6 +37,19 @@ def student_download(request, problem_id):
                                  request.user.is_authenticated())
     return plain_text(filename, contents)
 
+@csrf_exempt
+def api_student_contents(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    post = json.loads(request.raw_post_data)
+
+    data = unpack(post['data'], post['signature'])
+    user = get_object_or_404(User, id=data['user'])
+    problem = Problem.objects.get_for_user(data['problem'], user)
+    contents = student_contents(request, problem, user, True)
+    return HttpResponse(contents)
+
 @staff_member_required
 def student_archive_download(request, problem_id, user_id):
     problem = Problem.objects.get_for_user(problem_id, request.user)
@@ -95,9 +108,10 @@ def student_upload(request):
                 old.save()
                 new.save()
 
-    response = { 'judgments' : judgments }
-    if download.get('timestamp', '') != str(problem.timestamp):
-        response['message'] = "NA VOLJO JE NOVA VERZIJA!"
+    response = {
+        'judgments' : judgments,
+        'obsolete': download.get('timestamp', '') != str(problem.timestamp)
+    }
 
     return HttpResponse(json.dumps(response))
 

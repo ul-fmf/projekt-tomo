@@ -8,7 +8,7 @@ import json, os, re, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
-{% include 'python/check.py' %}
+{% include 'downloads/python/check.py' %}
 
 _filename = os.path.abspath(sys.argv[0])
 with open(_filename, encoding='utf-8') as f:

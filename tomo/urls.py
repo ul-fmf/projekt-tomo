@@ -17,15 +17,17 @@ urlpatterns = patterns('',
             # Download the file used to solve a problem
             url(r'^student/$', 'student_download', name='student_download'),
             # Download the file used to solve a problem
-            url(r'^(?P<user_id>\d+)/$', 'student_archive_download' name='student_archive_download'),
+            url(r'^(?P<user_id>\d+)/$', 'student_archive_download', name='student_archive_download'),
             # Download the file used to solve a problem
             url(r'^teacher/$', 'teacher_download', name='teacher_download'),
         ))),
+        # Download the file used to solve a problem
+        url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
         # Create a problem
         (r'^create/$', 'create', {}, 'create'),
         # Respond to a challenge
-        (r'^upload/teacher/$', 'teacher_upload', {}, 'student_upload'),
+        (r'^upload/teacher/$', 'teacher_upload', {}, 'teacher_upload'),
         # Update the problem
-        (r'^upload/student/$', 'teacher_upload', {}, 'teacher_upload'),
+        (r'^upload/student/$', 'student_upload', {}, 'student_upload'),
     ))),
 )

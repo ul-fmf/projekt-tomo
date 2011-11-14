@@ -37,6 +37,6 @@ get_current_filename <- function () {
   }
 }
 
-parse_response <- function(response) {
-  return(fromJSON(sub("^[^{]*", "", response), method = "R"))
+parse.response <- function(response) {
+  return(sub("^.*\r\n\r\n", "", response))
 }

@@ -3,10 +3,10 @@
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 #################################################################
 {% load my_tags %}
-{% include 'r/httpRequest.r' %}
-{% include 'r/rjson.r' %}
-{% include 'r/library.r' %}
-{% include 'r/check.r' %}
+{% include 'downloads/r/httpRequest.r' %}
+{% include 'downloads/r/rjson.r' %}
+{% include 'downloads/r/library.r' %}
+{% include 'downloads/r/check.r' %}
 
 .filename <- get_current_filename()
 .source <- paste(readLines(.filename), collapse="\n")
@@ -121,7 +121,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       parts = check$parts
     )
     r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
-    response <- parse_response(r)
+    response <- parse.response(r)
     cat(response$message, "\n")
     if('contents' %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))

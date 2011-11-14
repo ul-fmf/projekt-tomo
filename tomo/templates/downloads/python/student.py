@@ -188,7 +188,7 @@ import json, os, re, sys, shutil
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
-{% include 'python/check.py' %}
+{% include 'downloads/python/check.py' %}
 
 def _check():
     _filename = os.path.abspath(sys.argv[0])
@@ -244,7 +244,18 @@ def _check():
         for (k, e) in response['judgments']:
             if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
             else: print ("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
-        if 'message' in response: print (response['message'])
+        if response['obsolete']:
+            print ("Na voljo je nova različica.")
+            index = 1
+            while os.path.exists('{0}.{1}'.format(_filename, index)):
+                index += 1
+            backup_filename = "{0}.{1}".format(_filename, index)
+            print("Trenutno datoteko kopiram v {0}.".format(backup_filename))
+            r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}', post)
+            shutil.copy(_filename, backup_filename)
+            with open(_filename, 'w') as f:
+                f.write(r.read().decode('utf-8'))
+            print ("Datoteka je posodobljena.")
     except HTTPError as r:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
         print(r.read().decode('utf-8'))
