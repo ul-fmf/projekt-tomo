@@ -3,7 +3,6 @@
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 #################################################################
 {% load my_tags %}
-{% include 'downloads/r/httpRequest.r' %}
 {% include 'downloads/r/rjson.r' %}
 {% include 'downloads/r/library.r' %}
 {% include 'downloads/r/check.r' %}
@@ -120,12 +119,13 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       preamble = preamble,
       parts = check$parts
     )
-    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
-    response <- parse.response(r)
+    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+    response <- fromJSON(r, method = "R")
     cat(response$message, "\n")
-    if('contents' %in% names(response)) {
+    if(response$outdated) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
-      cat(response$contents, file=.filename)
+      r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url api_teacher_contents %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+      cat(r, file=.filename)
     }
   } else {
     cat('Naloge niso bile shranjene.\n')

@@ -64,6 +64,7 @@ def student_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
+    print(request.raw_post_data)
     post = json.loads(request.raw_post_data)
 
     download = unpack(post['data'], post['signature'])
@@ -110,7 +111,7 @@ def student_upload(request):
 
     response = {
         'judgments' : judgments,
-        'obsolete': download.get('timestamp', '') != str(problem.timestamp)
+        'outdated': download.get('timestamp', '') != str(problem.timestamp)
     }
 
     return HttpResponse(json.dumps(response))
@@ -145,23 +146,39 @@ def teacher_download(request, problem_id=None):
     return plain_text(filename, teacher_contents(request, problem, request.user))
 
 @csrf_exempt
-def teacher_upload(request):
+def api_teacher_contents(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    print(request.raw_post_data)
     post = json.loads(request.raw_post_data)
 
     data = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=data['user'])
+    verify(user.is_staff)
     problem = Problem.objects.get_for_user(data['problem'], user)
-    old_parts = problem.parts.all()
+    contents = teacher_contents(request, problem, user)
+    return HttpResponse(contents)
+
+@csrf_exempt
+def teacher_upload(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    post = json.loads(request.raw_post_data)
+
+    data = unpack(post['data'], post['signature'])
+    user = get_object_or_404(User, id=data['user'])
+    verify(user.is_staff)
+
+    problem = get_object_or_404(Problem, id=data['problem'])
+
+    old_parts = dict((part.id, part) for part in problem.parts.all())
     new_parts = []
     error = None
     messages = []
 
     if data.get('timestamp', '') != str(problem.timestamp):
-        error = "NAPAKA: Uporabljate staro verzijo datoteke. (Novo lahko pridobite na strežniku.)"
+        return(HttpResponse("NAPAKA: Uporabljate zastarelo verzijo datoteke. (Novo lahko pridobite na strežniku.)"))
 
     else:
         for part in post['parts']:
@@ -180,40 +197,40 @@ def teacher_upload(request):
                 except Part.DoesNotExist:
                     error = "NAPAKA: podnaloga {0} ima neveljaven id.".format(new.id)
                     break
+                else:
+                    old_parts.pop(new.id)
             new.description = part['description']
             new.solution = part['solution']
             new.validation = part['validation']
             new.challenge = new.challenge = json.dumps(part.get('challenge', []))
-            new.save()
             if part_id == 0:
                 messages.append("Nova podnaloga {0} je ustvarjena.".format(new.id))
             else:
                 messages.append("Podnaloga {0} je shranjena.".format(new.id))
-            new_parts.append(new.id)
+            new_parts.append(new)
 
     if not error:
         for p in old_parts:
-            if p.id not in new_parts:
-                error = "Podnaloga {0} MANJKA. (Če jo želite zbrisati, uprabite spletni vmesnik.)".format(p.id)
-                break
+            error = "Podnaloga {0} MANJKA. (Če jo želite zbrisati, uprabite spletni vmesnik.)".format(p)
+            break
 
     if error:
         messages.append(error)
         messages.append("\nNaloge NISO bile shranjene na strežnik.")
         return HttpResponse(json.dumps({
-                    'message': "\n".join(messages)
+                    'message': "\n".join(messages),
+                    'outdated': False
                     }))
 
     else:
         problem.title = post['title']
         problem.description = post['description']
         problem.preamble = post['preamble']
-        problem.set_part_order(new_parts)
         problem.save()
-
-        contents = teacher_contents(request, problem, user)
+        for part in new_parts:
+            part.save()
 
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages),
-                    'contents': contents
+                    'outdated': True
                     }))

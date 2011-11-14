@@ -244,7 +244,7 @@ def _check():
         for (k, e) in response['judgments']:
             if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
             else: print ("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
-        if response['obsolete']:
+        if response['outdated']:
             print ("Na voljo je nova različica.")
             index = 1
             while os.path.exists('{0}.{1}'.format(_filename, index)):

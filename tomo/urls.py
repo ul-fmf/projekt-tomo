@@ -23,6 +23,8 @@ urlpatterns = patterns('',
         ))),
         # Download the file used to solve a problem
         url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
+        # Download the file used to solve a problem
+        url(r'^api/teacher/$', 'api_teacher_contents', name='api_teacher_contents'),
         # Create a problem
         (r'^create/$', 'create', {}, 'create'),
         # Respond to a challenge

@@ -37,6 +37,30 @@ get_current_filename <- function () {
   }
 }
 
-parse.response <- function(response) {
-  return(sub("^.*\r\n\r\n", "", response))
+# Code is borrowed from httpRequest package.
+
+postJSON <-function(host, path, port=80, json) {
+  fp <- make.socket(host=host, port=port, server=FALSE)
+  write.socket(fp, paste(
+    "POST ", path, " HTTP/1.1\n",
+    "Host: ", host, "\n",
+    "Content-Type: application/json; charset=utf-8\n",
+    "Content-Length: ", nchar(json, "bytes"), "\n\n",
+    json,
+    # I HAVE ABSOLUTELY NO IDEA WHY THIS HAS TO BE HERE, BUT SOMEHOW, THE
+    # REQUEST LENGTH IS TOO SHORT WITHOUT IT.
+    rep("\n", nchar(json, "bytes") - nchar(json)),
+    collapse = "", sep = ""
+  ))
+  output <- character(0)
+  repeat {
+    ss <- read.socket(fp, loop=FALSE)
+    output <- paste(output, ss, sep="")
+    if(regexpr("\r\n0\r\n\r\n", ss) > -1)
+      break()
+    if (ss == "")
+      break()
+  }
+  close.socket(fp)
+  return(sub("^.*\r\n\r\n", "", output))
 }

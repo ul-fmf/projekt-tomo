@@ -195,7 +195,6 @@ get_current_filename <- function () {
 .filename <- get_current_filename()
 
 .check <- function() {
-  {% include 'downloads/r/httpRequest.r' %}
   {% include 'downloads/r/rjson.r' %}
   {% include 'downloads/r/library.r' %}
   {% include 'downloads/r/check.r' %}
@@ -262,12 +261,12 @@ get_current_filename <- function () {
     source = "" # sending source somehow causes problems on the server side.
   )
   tryCatch({
-    r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
-    response <- fromJSON(parse.response(r), method = "R")
+    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+    response <- fromJSON(r, method = "R")
     for(judgment in response$judgments) {
       print(judgment)
     }
-    if(response$obsolete) {
+    if(response$outdated) {
       cat("Na voljo je nova različica.")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
@@ -275,8 +274,8 @@ get_current_filename <- function () {
       backup.filename = paste(.filename, ".", index, sep = "")
       cat("Trenutno datoteko kopiram v ", backup.filename, ".", sep = "")
       file.copy(.filename, backup.filename)
-      r <- simplePostToHost(host='{{ request.META.SERVER_NAME }}', path='{% url api_student_contents %}', datatosend=toJSON(post), port={{ request.META.SERVER_PORT }})
-      cat(parse.response(r), file=.filename)
+      r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url api_student_contents %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+      cat(r, file=.filename)
     }
   },
   error = function(r) {
