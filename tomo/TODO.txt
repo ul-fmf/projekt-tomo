@@ -1,7 +1,5 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- (M) ugotovi, zakaj JSON upload v R-ju ne dela čisto dobro (zna biti kaj s Content-Type)
-
 - (M) avtomaticen replace za R
 
 - (M) avtomatičen replace za študente:
@@ -20,10 +18,14 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
     with open(filename, "wb") as f:
         f.write(new_contents)
 
-- (M) preambula v submissionih
+- (M) ugotovi, zakaj JSON upload v R-ju ne dela čisto dobro (zna biti kaj s Content-Type)
+
+- (M) preambula v submissionih in downloadih za študente
 
 - (M) USER INTERFACE:
   - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
+  - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
+    in obratno, da lahko student kontaktira (koga, avtorja?)
 
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
 
@@ -35,9 +37,6 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
    -0.0
    >>> -0/2
    0.0
-
-- koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
-  in obratno, da lahko student kontaktira (koga, avtorja?)
 
 - STATISTIKA:
   - overall statistika
