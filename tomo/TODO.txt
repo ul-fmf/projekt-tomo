@@ -1,15 +1,21 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- (M) ugotovi, zakaj JSON upload v R-ju ne dela čisto dobro (zna biti kaj s Content-Type)
-
 - (M) preambula v submissionih in downloadih za študente
+
+- (M) implementiraj Transfer-Encoding: chunked v R-ju
 
 - (M) USER INTERFACE:
   - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
   - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
     in obratno, da lahko student kontaktira (koga, avtorja?)
 
+- (M) podpora za Mathematico
+
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
+
+- (M) ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
+
+- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
 - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 
@@ -24,13 +30,9 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
   - overall statistika
   - statistika po času
 
-- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
-
 - narediti Check.compare in Check.run odporna na izjeme.
 
 - narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
-
-- podpora za Mathematico
 
 - podpora za matlab
 

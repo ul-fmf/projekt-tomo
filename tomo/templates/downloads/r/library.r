@@ -62,5 +62,5 @@ postJSON <-function(host, path, port=80, json) {
       break()
   }
   close.socket(fp)
-  return(sub("^.*\r\n\r\n", "", output))
+  return(sub("^.*?\r\n\r\n", "", output))
 }
