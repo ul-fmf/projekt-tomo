@@ -68,16 +68,15 @@ postJSON <-function(host, path, port=80, json) {
     contents <- ""
     repeat {
       match <- regex_break(".*", c("\\d+", "\\r\\n", ".*"), chunked)
-      len <- strtoi(match[1, 1], 16) - 1
+      len <- strtoi(match[1, 1], 16)
       rest <- match[1, 3]
-      if(len == -1 || ncol(match) == 0)
+      if(len == 0 || ncol(match) == 0)
         break
       contents <- paste(contents, substr(rest, 1, len), sep = "")
-      chunked <- substr(rest, len + 3, nchar(rest))
+      chunked <- substr(rest, len + 2, nchar(rest))
     }
   } else {
     contents <- sub("^.*?\r\n\r\n", "", output)
   }
   return(contents)
 }
-
