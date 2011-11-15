@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 import json
 
@@ -165,6 +166,8 @@ def teacher_upload(request):
         return HttpResponseNotAllowed(['POST'])
 
     post = json.loads(request.raw_post_data)
+    post.update({"d": 10})
+    return HttpResponse(json.dumps(post))
 
     data = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=data['user'])

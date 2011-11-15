@@ -42,25 +42,42 @@ get_current_filename <- function () {
 postJSON <-function(host, path, port=80, json) {
   fp <- make.socket(host=host, port=port, server=FALSE)
   write.socket(fp, paste(
-    "POST ", path, " HTTP/1.1\n",
-    "Host: ", host, "\n",
-    "Content-Type: application/json; charset=utf-8\n",
-    "Content-Length: ", nchar(json, "bytes"), "\n\n",
+    "POST ", path, " HTTP/1.1\r\n",
+    "Host: ", host, "\r\n",
+    "Content-Type: application/json; charset=utf-8\r\n",
+    "Content-Length: ", nchar(json, "bytes"), "\r\n\r\n",
     json,
     # I HAVE ABSOLUTELY NO IDEA WHY THIS HAS TO BE HERE, BUT SOMEHOW, THE
     # REQUEST LENGTH IS TOO SHORT WITHOUT IT.
     rep("\n", nchar(json, "bytes") - nchar(json)),
     collapse = "", sep = ""
   ))
+
   output <- character(0)
   repeat {
     ss <- read.socket(fp, loop=FALSE)
     output <- paste(output, ss, sep="")
-    if(regexpr("\r\n0\r\n\r\n", ss) > -1)
-      break()
-    if (ss == "")
+    if(ss == "" || regexpr("\r\n0\r\n\r\n", ss) > -1)
       break()
   }
   close.socket(fp)
-  return(sub("^.*?\r\n\r\n", "", output))
+
+  header <- sub("\r\n\r\n.*?$", "", output)
+  if(grepl("Transfer-Encoding: chunked", header)) {
+    chunked <- sub("^.*?\r\n\r\n", "", output)
+    contents <- ""
+    repeat {
+      match <- regex_break(".*", c("\\d+", "\\r\\n", ".*"), chunked)
+      len <- strtoi(match[1, 1], 16) - 1
+      rest <- match[1, 3]
+      if(len == -1 || ncol(match) == 0)
+        break
+      contents <- paste(contents, substr(rest, 1, len), sep = "")
+      chunked <- substr(rest, len + 3, nchar(rest))
+    }
+  } else {
+    contents <- sub("^.*?\r\n\r\n", "", output)
+  }
+  return(contents)
 }
+
