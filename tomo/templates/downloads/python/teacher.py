@@ -106,10 +106,11 @@ else:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url teacher_upload %}', post)
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
-            if 'contents' in response:
+            if response['outdated']:
+                r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_teacher_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
                 shutil.copy(_filename, _filename + ".orig")
                 with open(_filename, 'w') as f:
-                    f.write(response['contents'])
+                    f.write(r.read().decode('utf-8'))
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:

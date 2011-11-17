@@ -267,15 +267,15 @@ get_current_filename <- function () {
       print(judgment)
     }
     if(response$outdated) {
-      cat("Na voljo je nova različica.")
+      cat("Na voljo je nova različica.\n")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
         index <- index + 1
       backup.filename = paste(.filename, ".", index, sep = "")
       cat("Trenutno datoteko kopiram v ", backup.filename, ".", sep = "")
       file.copy(.filename, backup.filename)
-      r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url api_student_contents %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
-      cat(r, file=.filename)
+      r <- readLines('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+      cat(paste(c(r, ""), collapse = "\n"), file=.filename)
     }
   },
   error = function(r) {

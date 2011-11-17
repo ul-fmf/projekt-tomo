@@ -49,12 +49,10 @@ check$canonize <- function(x, digits = 6) {
 
 check$compare <- function(example, expected,
                           message = "Ukaz %s vrne %s namesto %s",
-                          clean = NA, digits = 6, precision = 1.0e-6,
+                          clean = function(x) x, digits = 6, precision = 1.0e-6,
                           strict_float = FALSE, strict_list = TRUE) {
   example <- substitute(example)
   answer <- try(eval(example), silent = TRUE)
-  if(is.na(clean))
-    clean <- function(x) check$canonize(x, digits)
   # give a reason for difference like in check.py
   if(!identical(clean(answer), clean(expected))) {
     pretty.print <- function(x) {

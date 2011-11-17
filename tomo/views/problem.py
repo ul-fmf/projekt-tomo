@@ -37,14 +37,8 @@ def student_download(request, problem_id):
                                  request.user.is_authenticated())
     return plain_text(filename, contents)
 
-@csrf_exempt
 def api_student_contents(request):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    post = json.loads(request.raw_post_data)
-
-    data = unpack(post['data'], post['signature'])
+    data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
     problem = Problem.objects.get_for_user(data['problem'], user)
     contents = student_contents(request, problem, user, True)
@@ -145,14 +139,8 @@ def teacher_download(request, problem_id=None):
     filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     return plain_text(filename, teacher_contents(request, problem, request.user))
 
-@csrf_exempt
 def api_teacher_contents(request):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    post = json.loads(request.raw_post_data)
-
-    data = unpack(post['data'], post['signature'])
+    data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
     verify(user.is_staff)
     problem = Problem.objects.get_for_user(data['problem'], user)

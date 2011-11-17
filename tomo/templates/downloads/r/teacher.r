@@ -27,7 +27,8 @@ matches <- regex_break(paste(
   '^#+(\\d+)@#\n',         # end of header
   '.*?',                   # solution
   'check\\$part\\(\\)\n',  # beginning of validation
-  '.*?'                    # validation
+  '.*?',                   # validation
+  '^(# )?'                 # beginning of next part
 ), .source)
 
   check$initialize(
@@ -124,8 +125,8 @@ if(any(sapply(check$parts$errors, length) > 0)) {
     cat(response$message, "\n")
     if(response$outdated) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
-      r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url api_teacher_contents %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
-      cat(r, file=.filename)
+      r <- readLines('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_teacher_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+      cat(paste(c(r, ""), collapse = "\n"), file=.filename)
     }
   } else {
     cat('Naloge niso bile shranjene.\n')

@@ -251,8 +251,8 @@ def _check():
                 index += 1
             backup_filename = "{0}.{1}".format(_filename, index)
             print("Trenutno datoteko kopiram v {0}.".format(backup_filename))
-            r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}', post)
             shutil.copy(_filename, backup_filename)
+            r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
             with open(_filename, 'w') as f:
                 f.write(r.read().decode('utf-8'))
             print ("Datoteka je posodobljena.")
