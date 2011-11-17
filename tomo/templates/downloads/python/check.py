@@ -50,11 +50,11 @@ class Check:
         else: return x
 
     @staticmethod
-    def compare(example, expected,
+    def equal(example, expected,
                 message="Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
                 clean=lambda x: x, env={},
                 precision=1.0e-6, strict_float=False, strict_list=True):
-        def comp(x,y):
+        def difference(x,y):
             if x == y: return None
             elif (type(x) != type(y) and
                  (strict_float or not (type(y) is float and type(x) in [int,float])) and
@@ -82,7 +82,7 @@ class Check:
         local = locals()
         local.update(env)
         answer = eval(example, globals(), local)
-        reason = comp(clean(answer), clean(expected))
+        reason = difference(clean(answer), clean(expected))
         if reason: Check.error(message.format(example, answer, expected, reason))
 
     @staticmethod

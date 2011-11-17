@@ -2,8 +2,6 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
 - (M) preambula v submissionih in downloadih za študente
 
-- (M) implementiraj Transfer-Encoding: chunked v R-ju
-
 - (M) USER INTERFACE:
   - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
   - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
@@ -14,6 +12,8 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
 
 - (M) ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
+- (M) preveri Transfer-Encoding: chunked v R-ju
+
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 

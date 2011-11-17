@@ -47,14 +47,33 @@ check$canonize <- function(x, digits = 6) {
   }
 }
 
-check$compare <- function(example, expected,
-                          message = "Ukaz %s vrne %s namesto %s",
+check$equal <- function(example, expected,
+                          message = "Ukaz %s vrne %s namesto %s (%s)",
                           clean = function(x) x, digits = 6, precision = 1.0e-6,
                           strict_float = FALSE, strict_list = TRUE) {
+  difference <- function(x, y) {
+    if(identical(x, y)) return(NA)
+    else if(typeof(x) != typeof(y) && (strict_float || !(mode(x) != mode(y))))
+      return("različna tipa")
+    else if(!is.null(dim(y))) {
+      if(dim(x) != dim(y)) return("različne dimenzije")
+    }
+    else if(mode(y) == 'numeric') {
+      if(any(abs(x - y) > precision))
+        return("numerična napaka")
+      else
+        return(NA)
+    }
+    else if(!isTRUE(attr.all.equal(x, y))) {
+      return("različne lastnosti")
+    }
+    else return("različni vrednosti")
+    return(!isTRUE(all.equal(x, y, check.attributes = FALSE)))
+  }
   example <- substitute(example)
   answer <- try(eval(example), silent = TRUE)
-  # give a reason for difference like in check.py
-  if(!identical(clean(answer), clean(expected))) {
+  reason <- difference(clean(answer), clean(expected))
+  if(!is.na(reason)) {
     pretty.print <- function(x) {
       output <- capture.output(
         if(length(dim(x)) <= 1) cat(x) else print(x)
@@ -64,11 +83,11 @@ check$compare <- function(example, expected,
       } else if(length(output) == 1) {
         return(output)
       } else {
-        return(paste("    ", c("", output, ""), collapse="\n"))
+        return(paste("    ", c("", output, ""), collapse = "\n"))
       }
     }
     check$error(sprintf(message, deparse(example),
-                pretty.print(answer), pretty.print(expected)))
+                pretty.print(answer), pretty.print(expected), reason))
   }
 }
 
@@ -78,7 +97,7 @@ check$summarize <- function() {
       cat("Podnaloga", i, "je brez rešitve.\n")
     } else if (length(check$parts[[i]]$errors) > 0) {
       cat("Podnaloga", i, "ni prestala vseh testov.\n")
-      cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep="")
+      cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep = "")
     } else {
       cat("Podnaloga", i, "je prestala vse teste.\n")
     }
