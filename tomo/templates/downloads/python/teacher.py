@@ -106,8 +106,8 @@ else:
             r = urlopen('http://{{ request.META.HTTP_HOST }}{% url teacher_upload %}', post)
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
-            if response['outdated']:
-                r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_teacher_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+            if 'update' in response:
+                r = urlopen(response['update'])
                 shutil.copy(_filename, _filename + ".orig")
                 with open(_filename, 'w') as f:
                     f.write(r.read().decode('utf-8'))

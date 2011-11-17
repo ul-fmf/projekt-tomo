@@ -3,11 +3,13 @@ import json
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.utils.http import urlencode
 from django.views.decorators.csrf import csrf_exempt
 
 from tomo.models import *
@@ -58,7 +60,6 @@ def student_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    print(request.raw_post_data)
     post = json.loads(request.raw_post_data)
 
     download = unpack(post['data'], post['signature'])
@@ -105,8 +106,19 @@ def student_upload(request):
 
     response = {
         'judgments' : judgments,
-        'outdated': download.get('timestamp', '') != str(problem.timestamp)
     }
+
+    if download.get('timestamp', '') != str(problem.timestamp):
+        data, sig = pack({
+            'user': user.id,
+            'problem': problem.id,
+        })
+        response['update'] = 'http://{0}:{1}{2}?{3}'.format(
+            request.META['SERVER_NAME'],
+            request.META['SERVER_PORT'],
+            reverse('api_student_contents'),
+            urlencode({'data': data, 'signature': sig})
+        )
 
     return HttpResponse(json.dumps(response))
 
@@ -206,8 +218,7 @@ def teacher_upload(request):
         messages.append(error)
         messages.append("\nNaloge NISO bile shranjene na strežnik.")
         return HttpResponse(json.dumps({
-                    'message': "\n".join(messages),
-                    'outdated': False
+                    'message': "\n".join(messages)
                     }))
 
     else:
@@ -218,7 +229,16 @@ def teacher_upload(request):
         for part in new_parts:
             part.save()
 
+        data, sig = pack({
+            'user': user.id,
+            'problem': problem.id,
+        })
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages),
-                    'outdated': True
-                    }))
+                    'update': 'http://{0}:{1}{2}?{3}'.format(
+                        request.META['SERVER_NAME'],
+                        request.META['SERVER_PORT'],
+                        reverse('api_teacher_contents'),
+                        urlencode({'data': data, 'signature': sig})
+                    )
+                }))

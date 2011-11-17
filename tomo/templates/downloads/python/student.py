@@ -246,7 +246,7 @@ def _check():
                 print("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
             else:
                 print("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
-        if response['outdated']:
+        if 'update' in response:
             print("Na voljo je nova različica.")
             index = 1
             while os.path.exists('{0}.{1}'.format(_filename, index)):
@@ -254,7 +254,7 @@ def _check():
             backup_filename = "{0}.{1}".format(_filename, index)
             print("Trenutno datoteko kopiram v {0}.".format(backup_filename))
             shutil.copy(_filename, backup_filename)
-            r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+            r = urlopen(response['update'])
             with open(_filename, 'w') as f:
                 f.write(r.read().decode('utf-8'))
             print("Datoteka je posodobljena.")

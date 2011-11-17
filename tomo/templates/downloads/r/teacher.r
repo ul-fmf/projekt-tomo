@@ -111,7 +111,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
 } else {
   cat('Naloge so pravilno sestavljene.\n')
   if(readline('Ali jih shranim na strežnik? [da/NE]') == 'da') {
-    cat('Shranjujem naloge...')
+    cat('Shranjujem naloge...\n')
     post <- list(
       data = '{{ data|safe }}',
       signature = '{{ signature }}',
@@ -123,9 +123,9 @@ if(any(sapply(check$parts$errors, length) > 0)) {
     r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
     response <- fromJSON(r, method = "R")
     cat(response$message, "\n")
-    if(response$outdated) {
+    if("update" %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
-      r <- readLines('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_teacher_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+      r <- readLines(response$update)
       cat(paste(c(r, ""), collapse = "\n"), file=.filename)
     }
   } else {

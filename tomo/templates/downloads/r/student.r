@@ -269,7 +269,7 @@ get_current_filename <- function () {
       else
         cat("Podnaloga ", judgment[[1]], " je shranjena in zavrnjena kot nepravilna (", judgment[[2]], ").\n", sep = "")
     }
-    if(response$outdated) {
+    if("update" %in% names(response)) {
       cat("Na voljo je nova različica.\n")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
@@ -277,7 +277,7 @@ get_current_filename <- function () {
       backup.filename = paste(.filename, ".", index, sep = "")
       cat("Trenutno datoteko kopiram v ", backup.filename, ".\n", sep = "")
       file.copy(.filename, backup.filename)
-      r <- readLines('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
+      r <- readLines(response$update)
       cat(paste(c(r, ""), collapse = "\n"), file=.filename)
       cat("Datoteka je posodobljena.\n")
     }
