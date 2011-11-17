@@ -1,13 +1,13 @@
 Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
 
-- (M) preambula v submissionih in downloadih za študente
-
 - (M) USER INTERFACE:
   - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
   - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
     in obratno, da lahko student kontaktira (koga, avtorja?)
 
 - (M) podpora za Mathematico
+
+- (M) kaj, če si je študent pobrisal preambulo in bi rad uradno nazaj?
 
 - (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
 

@@ -17,10 +17,16 @@ from tomo.utils import *
 
 
 def student_contents(request, problem, user, authenticated):
+    try:
+        sub = Submission.objects.filter(user=user, problem=problem).latest('timestamp')
+        preamble = sub.preamble
+    except Submission.DoesNotExist:
+        preamble = problem.preamble
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
         'attempts': Attempt.objects.from_user(user).for_problem(problem).dict_by_part(),
+        'preamble': preamble,
         'authenticated': authenticated
     }
     if authenticated:
@@ -67,7 +73,7 @@ def student_upload(request):
     problem = Problem.objects.get_for_user(download['problem'], user)
 
     submission = Submission(user=user, problem=problem,
-                            source=post['source'])
+                            preamble=post['preamble'], source=post['source'])
     submission.save()
 
     attempts = dict((attempt['part'], attempt) for attempt in post['attempts'])
