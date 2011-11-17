@@ -242,10 +242,12 @@ def _check():
         r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url student_upload %}', post)
         response = json.loads(r.read().decode('utf-8'))
         for (k, e) in response['judgments']:
-            if e is None: print ("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
-            else: print ("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
+            if e is None:
+                print("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
+            else:
+                print("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
         if response['outdated']:
-            print ("Na voljo je nova različica.")
+            print("Na voljo je nova različica.")
             index = 1
             while os.path.exists('{0}.{1}'.format(_filename, index)):
                 index += 1
@@ -255,7 +257,7 @@ def _check():
             r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
             with open(_filename, 'w') as f:
                 f.write(r.read().decode('utf-8'))
-            print ("Datoteka je posodobljena.")
+            print("Datoteka je posodobljena.")
     except HTTPError as r:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
         print(r.read().decode('utf-8'))

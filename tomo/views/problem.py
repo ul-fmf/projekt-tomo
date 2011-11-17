@@ -83,15 +83,15 @@ def student_upload(request):
             part_challenge = json.loads(part.challenge)
             incorrect = ("testi" if errors else None)
             if not incorrect:
-                if [k for (k,x) in attempt_challenge] != [m for (m,y) in part_challenge]:
-                    incorrect = "različni izzivi"
+                if len(attempt_challenge) != len(part_challenge):
+                    incorrect = "različno število izzivov"
                 else:
-                    for (j, ((k,x), (m,y))) in enumerate(zip(attempt_challenge, part_challenge)):
+                    for (j, ((k, x), (_, y))) in enumerate(zip(attempt_challenge, part_challenge)):
                         if x != y:
-                            incorrect = "izziv #{0}, {1}".format(j,m)
+                            incorrect = "izziv #{0} ({1})".format(j + 1, k)
                             break
             correct = (incorrect is None)
-            judgments.append((i+1, incorrect))
+            judgments.append((i + 1, incorrect))
             new = Attempt(part=part, submission=submission,
                           solution=solution, errors=json.dumps(errors),
                           correct=correct, active=True)

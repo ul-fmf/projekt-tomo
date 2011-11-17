@@ -264,7 +264,10 @@ get_current_filename <- function () {
     r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
     response <- fromJSON(r, method = "R")
     for(judgment in response$judgments) {
-      print(judgment)
+      if(is.null(judgment[[2]]))
+        cat("Podnaloga", judgment[[1]], "je shranjena in sprejeta kot pravilna.\n")
+      else
+        cat("Podnaloga ", judgment[[1]], " je shranjena in zavrnjena kot nepravilna (", judgment[[2]], ").\n", sep = "")
     }
     if(response$outdated) {
       cat("Na voljo je nova različica.\n")
@@ -272,10 +275,11 @@ get_current_filename <- function () {
       while(file.exists(paste(.filename, ".", index, sep = "")))
         index <- index + 1
       backup.filename = paste(.filename, ".", index, sep = "")
-      cat("Trenutno datoteko kopiram v ", backup.filename, ".", sep = "")
+      cat("Trenutno datoteko kopiram v ", backup.filename, ".\n", sep = "")
       file.copy(.filename, backup.filename)
       r <- readLines('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url api_student_contents %}?data={{ data|urlencode }}&signature={{ signature|urlencode }}')
       cat(paste(c(r, ""), collapse = "\n"), file=.filename)
+      cat("Datoteka je posodobljena.\n")
     }
   },
   error = function(r) {
