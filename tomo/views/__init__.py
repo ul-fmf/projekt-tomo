@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, render, redirect
 
 from tomo.models import Course, ProblemSet
-from tomo.forms import SettingsForm
 
 
 def homepage(request):
