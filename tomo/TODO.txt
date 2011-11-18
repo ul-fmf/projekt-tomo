@@ -1,45 +1,37 @@
-Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
+ČIMPREJ
 
-- (M) USER INTERFACE:
-  - gumbi pri nalogi: Kopiraj, Premakni gor, Premakni dol,
-  - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
-    in obratno, da lahko student kontaktira (koga, avtorja?)
+- podpora za Mathematico
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
-- (M) podpora za Mathematico
-
-- (M) kaj, če si je študent pobrisal preambulo in bi rad uradno nazaj?
-
-
-
-
-
-- (M) ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
-- (M) preveri Transfer-Encoding: chunked v R-ju
-
-
-
-- Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
-
-- Kaj lahko Check.canonize naredi v zvezi s tem:
-
-   >>> -(0/2)
-   -0.0
-   >>> -0/2
-   0.0
-
-- STATISTIKA:
-  - overall statistika
-  - statistika po času
+- premikanje nalog v sklopu
+- premikanje sklopov v predmetu
 
 - narediti Check.compare in Check.run odporna na izjeme.
 
-- narediti grupo "ucitelj", da bomo lahko locili administratorje od uciteljev
+- na stran s statistiko dodaj stolpec s časom oddaje
 
-- podpora za matlab
+- kontaktiranje študentov glede rešitev
+- kontaktiranje avtorjev glede nalog
 
-- podpora za Haskell
+PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
 
-- podpora za Ocaml
+- pomoč
+- ločitev administratorjev in učiteljev
 
-- (kdorkoli razen M) podpora za Javo
+
+KO BO ČAS
+
+- razni bugi, za katere upamo, da jih ne nabašemo:
+    - ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
+    - preveri Transfer-Encoding: chunked v R-ju
+    - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
+
+- statistika:
+    - statistika za posameznega študenta
+    - spisek najboljših
+
+- podpora za obskurne jezike:
+    - matlab
+    - Haskell
+    - Ocaml
+    - Javo
