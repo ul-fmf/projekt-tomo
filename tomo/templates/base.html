@@ -75,6 +75,8 @@
             <li class="dropdown" data-dropdown="dropdown">
               <a href="#" class="dropdown-toggle">{{ user.get_full_name }}</a>
               <ul class="dropdown-menu">
+                <li><a href="{% url settings %}">Nastavitve</a></li>
+                <li class="divider"></li>
                 <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
               </ul>
             </li>

@@ -5,17 +5,19 @@ Naslednja opravila so razvrscena po prioriteti (zgoraj bolj nujna):
   - koristno bi bilo, ce bi lahko ucitelj komentiral resitve studentov,
     in obratno, da lahko student kontaktira (koga, avtorja?)
 
+- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 - (M) podpora za Mathematico
 
 - (M) kaj, če si je študent pobrisal preambulo in bi rad uradno nazaj?
 
-- (M) naročnje na predmete pri študentih in učiteljih, pod spiskom predmetov
+
+
+
 
 - (M) ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
 - (M) preveri Transfer-Encoding: chunked v R-ju
 
 
-- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
 
 - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 

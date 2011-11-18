@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load my_tags %}
+
+{% block title %}
+  Tomo &mdash;
+  Nastavitve
+{% endblock %}
+
+{% block breadcrumbs %}
+  <li>
+    <a href="{% url homepage %}">Začetna stran</a>
+    <span class="divider">/</span>
+  </li>
+  <li class="active">
+    Nastavitve
+  </li>
+{% endblock %}
+
+{% block header %}
+  Nastavitve
+{% endblock %}
+
+{% block contents %}
+  <form method="POST" action="{% url settings %}">
+    <fieldset>
+      <legend>Začetna stran</legend>
+      <div class="clearfix">
+        <label id="my_courses">Moji predmeti</label>
+        <div class="input">
+          <ul class="inputs-list">
+           {% for course in all_courses %}
+            <li>
+              <label>
+                <input type="checkbox" name="my_courses" value="{{ course.id }}" {% if course in my_courses %}checked{% endif %} />
+                <span><strong>{{ course.name }}</strong> <small>{{ course.description}}</small></span>
+              </label>
+            </li>
+            {% endfor %}
+          </ul>
+          <span class="help-block">Izberite predmete, ki naj se prikažejo na prvi strani.</span>
+        </div>
+      </div><!-- /clearfix -->
+      <div class="actions">
+        <input type="submit" class="btn primary" value="Shrani">
+      </div>
+    </fieldset>
+    {% csrf_token %}
+  </form>
+{% endblock %}

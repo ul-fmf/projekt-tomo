@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     (r'^$', 'tomo.views.homepage', {}, 'homepage'),
+    (r'^settings/$', 'tomo.views.settings', {}, 'settings'),
     (r'^course/', include(patterns('tomo.views',
         url(r'^(?P<course_id>\d+)/$', 'view_course', name='course'),
     ))),

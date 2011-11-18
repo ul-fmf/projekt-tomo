@@ -55,6 +55,11 @@
       </a>
     </h3>
 
-    {% if not forloop.last %}<hr />{% endif %}
+    <hr />
   {% endfor %}
+
+  <p>
+    Seznam predmetov, ki se prikažejo na prvi strani, lahko urejate pod <a href="{% url settings %}">nastavitvami</a>.
+  </p>
+
 {% endblock %}
