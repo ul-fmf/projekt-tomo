@@ -57,7 +57,7 @@ postJSON <-function(host, path, port=80, json) {
   repeat {
     ss <- read.socket(fp, loop=FALSE)
     output <- paste(output, ss, sep="")
-    if(ss == "" || regexpr("\r\n0\r\n\r\n$", output) > -1)
+    if(ss == "" || regexpr("\r\n0\r\n\r\n#?$", output) > -1)
       break()
   }
   close.socket(fp)

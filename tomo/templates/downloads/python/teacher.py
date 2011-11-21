@@ -109,7 +109,7 @@ else:
             if 'update' in response:
                 r = urlopen(response['update'])
                 shutil.copy(_filename, _filename + ".orig")
-                with open(_filename, 'w') as f:
+                with open(_filename, 'w', encoding='utf-8') as f:
                     f.write(r.read().decode('utf-8'))
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
