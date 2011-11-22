@@ -126,7 +126,7 @@ if(any(sapply(check$parts$errors, length) > 0)) {
     if("update" %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
       r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
-      cat(paste(c(r, ""), collapse = "\n"), file=.filename)
+      writeLines(r, con=file(.filename, encoding="UTF-8"))
     }
   } else {
     cat('Naloge niso bile shranjene.\n')

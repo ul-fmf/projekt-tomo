@@ -278,7 +278,7 @@ get_current_filename <- function () {
       cat("Trenutno datoteko kopiram v ", backup.filename, ".\n", sep = "")
       file.copy(.filename, backup.filename)
       r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
-      cat(paste(c(r, ""), collapse = "\n"), file=.filename)
+      writeLines(r, con=file(.filename, encoding="UTF-8"))
       cat("Datoteka je posodobljena.\n")
     }
   },
