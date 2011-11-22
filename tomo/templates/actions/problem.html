@@ -2,6 +2,8 @@
     {% if request.user.is_staff %}
     <a href="{% url teacher_download problem.id %}"><button class='btn primary'>Uredi</button></a>
     <a href="{% url student_download problem.id %}"><button class='btn'>Reši</button></a>
+    {% if not forloop.first %}<a href="{% url move_problem_up problem.id %}"><button class='btn'>Gor</button></a>{% endif %}
+    {% if not forloop.last %}<a href="{% url move_problem_down problem.id %}"><button class='btn'>Dol</button></a>{% endif %}
     <a href="{% url admin:tomo_problem_delete problem.id %}"><button class='btn danger'>Pobriši</button></a>
     <a href="{% url admin:tomo_problem_change problem.id %}"><button class='btn'>Napredno…</button></a>
     {% else %}

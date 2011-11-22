@@ -61,6 +61,26 @@ def student_archive_download(request, problem_id, user_id):
     contents = student_contents(request, problem, user, False)
     return plain_text(filename, contents)
 
+@staff_member_required
+def move_up(request, problem_id):
+    problem = get_object_or_404(Problem, id=problem_id)
+    order = problem.problem_set.get_problem_order()
+    i = order.index(problem.id)
+    if i - 1 >= 0:
+        order[i - 1], order[i] = order[i], order[i - 1]
+        problem.problem_set.set_problem_order(order)
+    return redirect(problem)
+
+@staff_member_required
+def move_down(request, problem_id):
+    problem = get_object_or_404(Problem, id=problem_id)
+    order = problem.problem_set.get_problem_order()
+    i = order.index(problem.id)
+    if i + 1 <= len(order) - 1:
+        order[i + 1], order[i] = order[i], order[i + 1]
+    problem.problem_set.set_problem_order(order)
+    return redirect(problem)
+
 @csrf_exempt
 def student_upload(request):
     if request.method != 'POST':

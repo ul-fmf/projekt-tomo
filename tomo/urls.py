@@ -11,6 +11,9 @@ urlpatterns = patterns('',
             url(r'^$', 'view_problem_set', name='problem_set'),
             url(r'^zip/$', 'download_problem_set', name='download_problem_set'),
             url(r'^stats/$', 'view_statistics', name='view_statistics'),
+            url(r'^move_up/$', 'move_up', name='move_problem_set_up'),
+            # Download the file used to solve a problem
+            url(r'^move_down/$', 'move_down', name='move_problem_set_down'),
         ))),
     ))),
     (r'^problem/', include(patterns('tomo.views.problem',
@@ -21,6 +24,10 @@ urlpatterns = patterns('',
             url(r'^(?P<user_id>\d+)/$', 'student_archive_download', name='student_archive_download'),
             # Download the file used to solve a problem
             url(r'^teacher/$', 'teacher_download', name='teacher_download'),
+            # Download the file used to solve a problem
+            url(r'^move_up/$', 'move_up', name='move_problem_up'),
+            # Download the file used to solve a problem
+            url(r'^move_down/$', 'move_down', name='move_problem_down'),
         ))),
         # Download the file used to solve a problem
         url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
