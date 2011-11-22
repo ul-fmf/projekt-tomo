@@ -261,7 +261,7 @@ get_current_filename <- function () {
     source = "" # sending source somehow causes problems on the server side.
   )
   tryCatch({
-    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
     for(judgment in response$judgments) {
       if(is.null(judgment[[2]]))
@@ -277,7 +277,7 @@ get_current_filename <- function () {
       backup.filename = paste(.filename, ".", index, sep = "")
       cat("Trenutno datoteko kopiram v ", backup.filename, ".\n", sep = "")
       file.copy(.filename, backup.filename)
-      r <- readLines(response$update)
+      r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
       cat(paste(c(r, ""), collapse = "\n"), file=.filename)
       cat("Datoteka je posodobljena.\n")
     }

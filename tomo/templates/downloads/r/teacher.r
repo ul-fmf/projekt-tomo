@@ -8,7 +8,7 @@
 {% include 'downloads/r/check.r' %}
 
 .filename <- get_current_filename()
-.source <- paste(readLines(.filename), collapse="\n")
+.source <- paste(readLines(.filename, encoding = "UTF-8"), collapse="\n")
 
 matches <- regex_break(paste(
   '^#+@(\\d+)#\n',         # beginning of header
@@ -120,12 +120,12 @@ if(any(sapply(check$parts$errors, length) > 0)) {
       preamble = preamble,
       parts = check$parts
     )
-    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', port={{ request.META.SERVER_PORT }}, json=toJSON(post))
+    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
     cat(response$message, "\n")
     if("update" %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
-      r <- readLines(response$update)
+      r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
       cat(paste(c(r, ""), collapse = "\n"), file=.filename)
     }
   } else {

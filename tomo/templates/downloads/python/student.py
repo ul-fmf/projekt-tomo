@@ -255,7 +255,7 @@ def _check():
             print("Trenutno datoteko kopiram v {0}.".format(backup_filename))
             shutil.copy(_filename, backup_filename)
             r = urlopen(response['update'])
-            with open(_filename, 'w') as f:
+            with open(_filename, 'w', encoding='utf-8') as f:
                 f.write(r.read().decode('utf-8'))
             print("Datoteka je posodobljena.")
     except HTTPError as r:

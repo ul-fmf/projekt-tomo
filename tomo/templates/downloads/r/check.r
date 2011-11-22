@@ -50,25 +50,21 @@ check$canonize <- function(x, digits = 6) {
 check$equal <- function(example, expected,
                           message = "Ukaz %s vrne %s namesto %s (%s)",
                           clean = function(x) x, digits = 6, precision = 1.0e-6,
-                          strict_float = FALSE, strict_list = TRUE) {
+                          strict.float = FALSE, check.attributes = FALSE) {
   difference <- function(x, y) {
     if(identical(x, y)) return(NA)
-    else if(typeof(x) != typeof(y) && (strict_float || !(mode(x) != mode(y))))
+    else if(isTRUE(all.equal(x, y, check.attributes = check.attributes))) return(NA)
+    else if(typeof(x) != typeof(y) && (strict.float || !(mode(x) != mode(y))))
       return("različna tipa")
-    else if(!is.null(dim(y))) {
-      if(dim(x) != dim(y)) return("različne dimenzije")
-    }
+    else if(length(x) != length(y))
+      return("različno število komponent")
     else if(mode(y) == 'numeric') {
       if(any(abs(x - y) > precision))
         return("numerična napaka")
       else
         return(NA)
     }
-    else if(!isTRUE(attr.all.equal(x, y))) {
-      return("različne lastnosti")
-    }
     else return("različni vrednosti")
-    return(!isTRUE(all.equal(x, y, check.attributes = FALSE)))
   }
   example <- substitute(example)
   answer <- try(eval(example), silent = TRUE)

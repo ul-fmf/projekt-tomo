@@ -37,34 +37,25 @@ get_current_filename <- function () {
   }
 }
 
-# Code is borrowed from httpRequest package.
-
 postJSON <-function(host, path, port=80, json) {
-  fp <- make.socket(host=host, port=port, server=FALSE)
-  write.socket(fp, paste(
+  con <- socketConnection(host=host, port=port, server=FALSE, blocking=TRUE)
+  post <- paste(
     "POST ", path, " HTTP/1.1\r\n",
     "Host: ", host, "\r\n",
+    "Connection: close\r\n",
     "Content-Type: application/json; charset=utf-8\r\n",
-    "Content-Length: ", nchar(json, "bytes"), "\r\n\r\n",
+    "Content-Length: ", nchar(json, type="bytes"), "\r\n\r\n",
     json,
-    # I HAVE ABSOLUTELY NO IDEA WHY THIS HAS TO BE HERE, BUT SOMEHOW, THE
-    # REQUEST LENGTH IS TOO SHORT WITHOUT IT.
-    rep("\n", nchar(json, "bytes") - nchar(json)),
-    collapse = "", sep = ""
-  ))
+    sep = ""
+  )
+  writeLines(post, con=con, sep="", useBytes=TRUE)
+  response <- paste(readLines(con, warn=FALSE), collapse="\r\n")
+  close.connection(con)
+  Encoding(response) <- "UTF-8"
 
-  output <- character(0)
-  repeat {
-    ss <- read.socket(fp, loop=FALSE)
-    output <- paste(output, ss, sep="")
-    if(ss == "" || regexpr("\r\n0\r\n\r\n#?$", output) > -1)
-      break()
-  }
-  close.socket(fp)
-
-  header <- sub("\r\n\r\n.*?$", "", output)
+  header <- sub("\r\n\r\n.*?$", "", response)
   if(grepl("Transfer-Encoding: chunked", header)) {
-    chunked <- sub("^.*?\r\n\r\n", "", output)
+    chunked <- sub("^.*?\r\n\r\n", "", response)
     contents <- ""
     repeat {
       match <- regex_break(".*", c("[a-f0-9]+", "\\r\\n", ".*"), chunked)
@@ -76,7 +67,8 @@ postJSON <-function(host, path, port=80, json) {
       chunked <- substr(rest, len + 2, nchar(rest))
     }
   } else {
-    contents <- sub("^.*?\r\n\r\n", "", output)
+    contents <- sub("^.*?\r\n\r\n", "", response)
   }
   return(contents)
 }
+
