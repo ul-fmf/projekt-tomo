@@ -230,7 +230,7 @@ def _check():
 
     Check.summarize()
     {% if authenticated %}
-    print('Shranjujem rešitve na strežnik...')
+    print('Shranjujem rešitve na strežnik... ', end = "")
     post = json.dumps({
         'data': '{{ data|safe }}',
         'signature': '{{ signature }}',
@@ -241,28 +241,27 @@ def _check():
     try:
         r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url student_upload %}', post)
         response = json.loads(r.read().decode('utf-8'))
-        for (k, e) in response['judgments']:
-            if e is None:
-                print("Podnaloga {0} je shranjena in sprejeta kot pravilna.".format(k))
-            else:
-                print("Podnaloga {0} je shranjena in zavrnjena kot nepravilna ({1}).".format(k,e))
+        print('Rešitve so shranjene.')
+        for (k, e) in response['rejected']:
+            print("Rešitev podnaloge {0} je zavrnjena ({1}).".format(k, e))
         if 'update' in response:
-            print("Na voljo je nova različica.")
+            print("Na voljo je nova različica... Posodabljam datoteko... ", end = "")
             index = 1
             while os.path.exists('{0}.{1}'.format(_filename, index)):
                 index += 1
             backup_filename = "{0}.{1}".format(_filename, index)
-            print("Trenutno datoteko kopiram v {0}.".format(backup_filename))
             shutil.copy(_filename, backup_filename)
             r = urlopen(response['update'])
             with open(_filename, 'w', encoding='utf-8') as f:
                 f.write(r.read().decode('utf-8'))
             print("Datoteka je posodobljena.")
+            print("Kopija stare datoteke je v {0}.".format(backup_filename))
+            print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
     except HTTPError as r:
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
-        print(r.read().decode('utf-8'))
+        Check.error = r.read().decode('utf-8')
     {% else %}
-    print('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
+    print('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
     {% endif %}
 
 _check()

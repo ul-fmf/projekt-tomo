@@ -106,12 +106,12 @@ check$part()
 # Od tu naprej ničesar ne spreminjajte.
 
 check$summarize()
-if(any(sapply(check$parts$errors, length) > 0)) {
+if(any(lapply(check$parts, function(part) length(part$errors) > 0))) {
   cat('Naloge so napačno sestavljene.\n')
 } else {
   cat('Naloge so pravilno sestavljene.\n')
   if(readline('Ali jih shranim na strežnik? [da/NE]') == 'da') {
-    cat('Shranjujem naloge...\n')
+    cat('Shranjujem naloge... ')
     post <- list(
       data = '{{ data|safe }}',
       signature = '{{ signature }}',

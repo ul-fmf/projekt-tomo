@@ -252,7 +252,7 @@ get_current_filename <- function () {
 
   check$summarize()
   {% if authenticated %}
-  cat('Shranjujem rešitve na strežnik...\n')
+  cat('Shranjujem rešitve na strežnik... ')
   post <- list(
     data = '{{ data|safe }}',
     signature = '{{ signature }}',
@@ -263,30 +263,29 @@ get_current_filename <- function () {
   tryCatch({
     r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url student_upload %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
-    for(judgment in response$judgments) {
-      if(is.null(judgment[[2]]))
-        cat("Podnaloga", judgment[[1]], "je shranjena in sprejeta kot pravilna.\n")
-      else
-        cat("Podnaloga ", judgment[[1]], " je shranjena in zavrnjena kot nepravilna (", judgment[[2]], ").\n", sep = "")
-    }
+    cat('Rešitve so shranjene.\n')
+    for(rejected in response$rejected)
+      cat("Rešitev podnaloge ", rejected[[1]], " je zavrnjena (", rejected[[2]], ").\n", sep = "")
     if("update" %in% names(response)) {
-      cat("Na voljo je nova različica.\n")
+      cat("Na voljo je nova različica... Posodabljam datoteko... ")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
         index <- index + 1
       backup.filename = paste(.filename, ".", index, sep = "")
-      cat("Trenutno datoteko kopiram v ", backup.filename, ".\n", sep = "")
       file.copy(.filename, backup.filename)
       r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
       writeLines(r, con=file(.filename, encoding="UTF-8"))
       cat("Datoteka je posodobljena.\n")
+      cat("Kopija stare datoteke je v ", backup.filename, ".\n", sep = "")
+      cat("Če se datoteka v urejevalniku ni osvežila, jo shranite ter ponovno zaženite.")
     }
   },
   error = function(r) {
     cat('Pri shranjevanju je prišlo do napake. Poskusite znova.')
+    check$error = r$message
   })
   {% else %}
-  cat('Rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
+  cat('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.\n')
   {% endif %}
 }
 

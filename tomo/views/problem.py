@@ -79,7 +79,7 @@ def student_upload(request):
     attempts = dict((attempt['part'], attempt) for attempt in post['attempts'])
     old_attempts = Attempt.objects.from_user(user).for_problem(problem).dict_by_part()
 
-    judgments = []
+    rejected = []
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
@@ -98,7 +98,8 @@ def student_upload(request):
                             incorrect = "izziv #{0} ({1})".format(j + 1, k)
                             break
             correct = (incorrect is None)
-            judgments.append((i + 1, incorrect))
+            if incorrect:
+                rejected.append((i + 1, incorrect))
             new = Attempt(part=part, submission=submission,
                           solution=solution, errors=json.dumps(errors),
                           correct=correct, active=True)
@@ -111,7 +112,7 @@ def student_upload(request):
                 new.save()
 
     response = {
-        'judgments' : judgments,
+        'rejected' : rejected,
     }
 
     if download.get('timestamp', '') != str(problem.timestamp):
