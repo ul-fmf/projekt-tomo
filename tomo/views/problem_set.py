@@ -28,15 +28,14 @@ def view_problem_set(request, problem_set_id):
 def view_statistics(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
-    for attempt in Attempt.objects.active().for_problem_set(problem_set).select_related('submission__user_id', 'part__problem_id'):
-        user_id = attempt.submission.user_id
+    for attempt in Attempt.objects.active().for_problem_set(problem_set).select_related('submission__user', 'part__problem_id'):
+        user = attempt.submission.user
         problem_id = attempt.part.problem_id
-        user_attempts = attempts[problem_id].get(user_id, {})
+        user_attempts = attempts[problem_id].get(user, {})
         user_attempts[attempt.part_id] = attempt
-        attempts[problem_id][user_id] = user_attempts
+        attempts[problem_id][user] = user_attempts
     return render(request, "statistics.html", {
         'problem_set': problem_set,
-        'parts': [part.id for problem in problem_set.problems.all() for part in problem.parts.all()],
         'users': User.objects.filter(id__in=attempts.keys()).order_by('last_name'),
         'problems': problem_set.problems,
         'attempts': attempts

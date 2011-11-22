@@ -49,12 +49,12 @@
     </thead>
 
     <tbody>
-      {% for user in users %}
-      {% with attempts|get:user.id as user_attempts %}
+      {% with attempts|get:problem.id as problem_attempts %}
+      {% for user, attempts in problem_attempts.items %}
       <tr>
         <td>{{ user.get_full_name }}</td>
-        {% for part in parts %}
-        {% with user_attempts|get:part as attempt %}
+        {% for part in problem.parts.all %}
+        {% with attempts|get:part.id as attempt %}
           <td>
             {% if attempt %}
               <div id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;">
@@ -66,9 +66,7 @@
                 </div>
                 <div class="modal-body solution-view">
                   {% if attempt.solution %}
-                    <pre><code>
-                      {{ attempt.solution }}
-                    </code></pre>
+                    <pre><code>{{ attempt.solution }}</code></pre>
                   {% else %}
                     <p>
                       Naloge še ni reševal.
@@ -77,9 +75,7 @@
                 </div>
               </div>
               <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}" data-backdrop="true" data-keyboard="true" href="#">
-                <span class="attempt-plusminus">
-                  {{ attempt.correct|yesno:"+,–"}}
-                </span>
+              <img src="{{ STATIC_URL }}{% if attempt.solution %}{% if attempt.correct %}correct{% else %}incorrect{% endif %}{% else %}missing{% endif %}.png">
               </a>
             {% else %}
               &nbsp;
@@ -88,8 +84,8 @@
         {% endwith %}
         {% endfor %}
       </tr>
-      {% endwith %}
       {% endfor %}
+      {% endwith %}
     </tbody>
   </table>
   {% endfor %}
