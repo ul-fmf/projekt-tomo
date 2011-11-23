@@ -61,10 +61,10 @@ class Check:
         def difference(x,y):
             if x == y: return None
             elif (type(x) != type(y) and
-                 (strict_float or not (type(y) is float and type(x) in [int,float])) and
+                 (strict_float or not (type(y) in [int, float, complex] and type(x) in [int, float, complex])) and
                  (strict_list or not (type(y) in [list, tuple] and type(x) in [list, tuple]))):
                 return "različna tipa"
-            elif type(y) in [float,complex]:
+            elif type(y) in [int, float, complex]:
                 return ("numerična napaka" if abs(x-y) > precision else None)
             elif type(y) in [tuple,list]:
                 if len(y) != len(x): return "napačna dolžina seznama"
