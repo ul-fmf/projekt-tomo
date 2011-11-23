@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 
 from tomo.models import *
 from tomo.utils import *
-from tomo.views.problem import student_contents
+from tomo.views.problem import student_contents, teacher_contents
 
 def view_problem_set(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)

@@ -106,12 +106,12 @@ check$part()
 # Od tu naprej ničesar ne spreminjajte.
 
 check$summarize()
-if(any(lapply(check$parts, function(part) length(part$errors) > 0))) {
+if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
   cat('Naloge so napačno sestavljene.\n')
 } else {
   cat('Naloge so pravilno sestavljene.\n')
   if(readline('Ali jih shranim na strežnik? [da/NE]') == 'da') {
-    cat('Shranjujem naloge... ')
+    cat('Shranjujem naloge...\n')
     post <- list(
       data = '{{ data|safe }}',
       signature = '{{ signature }}',
@@ -126,7 +126,9 @@ if(any(lapply(check$parts, function(part) length(part$errors) > 0))) {
     if("update" %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
       r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
-      writeLines(r, con=file(.filename, encoding="UTF-8"))
+      f <- file(.filename, encoding="UTF-8")
+      writeLines(r, f)
+      close.connection(f)
     }
   } else {
     cat('Naloge niso bile shranjene.\n')
