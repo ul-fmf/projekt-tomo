@@ -1,14 +1,14 @@
 {% if user.is_authenticated %}
   {% if request.user.is_staff %}
-  <a href=""><button class="btn primary">Uredi</button></a>
-  <a href="{% url download_problem_set problem_set.id %}"><button class="btn">Reši</button></a>
+  <a href="{% url teacher_zip problem_set.id %}"><button class="btn">Uredi</button></a>
+  <a href="{% url student_zip problem_set.id %}"><button class="btn">Reši</button></a>
   <a href="{% url view_statistics problem_set.id %}"><button class="btn">Statistika</button></a>
     {% if not forloop.first %}<a href="{% url move_problem_set_up problem_set.id %}"><button class='btn'>Gor</button></a>{% endif %}
     {% if not forloop.last %}<a href="{% url move_problem_set_down problem_set.id %}"><button class='btn'>Dol</button></a>{% endif %}
   <a href="{% url admin:tomo_problemset_delete problem_set.id %}"><button class="btn danger">Pobriši</button></a>
   <a href="{% url admin:tomo_problemset_change problem_set.id %}"><button class="btn">Napredno…</button></a>
   {% else %}
-  <a href="{% url download_problem_set problem_set.id %}"><button class="btn primary">Reši</button></a>
+  <a href="{% url student_zip problem_set.id %}"><button class="btn primary">Reši</button></a>
   {% endif %}
 {% else %}
   <div id="modal-from-dom" class="modal hide fade">
@@ -24,7 +24,7 @@
       </p>
     </div>
     <div class="modal-footer">
-      <a href="{% url download_problem_set problem_set.id %}" class="btn secondary">Prenesite začasne datoteke</a>
+      <a href="{% url student_zip problem_set.id %}" class="btn secondary">Prenesite začasne datoteke</a>
     </div>
   </div>
 

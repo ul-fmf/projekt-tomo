@@ -41,13 +41,24 @@ def view_statistics(request, problem_set_id):
         'attempts': attempts
     })
 
-def download_problem_set(request, problem_set_id):
+def student_zip(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     archivename = slugify(problem_set.title)
     files = []
     for problem in problem_set.problems.all():
         filename = "{0}/{1}.{2}".format(archivename, slugify(problem.title), problem.language.extension) # Select your files here.
         contents = student_contents(request, problem, request.user, request.user.is_authenticated()).encode('utf-8')
+        files.append((filename, contents))
+    return zip_archive(archivename, files)
+
+
+def teacher_zip(request, problem_set_id):
+    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
+    archivename = slugify(problem_set.title)
+    files = []
+    for problem in problem_set.problems.all():
+        filename = "{0}/{1}.{2}".format(archivename, slugify(problem.title), problem.language.extension) # Select your files here.
+        contents = teacher_contents(request, problem, request.user).encode('utf-8')
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
