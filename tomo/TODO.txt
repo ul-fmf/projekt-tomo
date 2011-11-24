@@ -24,7 +24,6 @@ PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
 KO BO ČAS
 
 - razni bugi, za katere upamo, da jih ne nabašemo:
-    - ugotovi, zakaj je Content-Length pri R-ju nastavljen napačno
     - preveri Transfer-Encoding: chunked v R-ju
     - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
 

@@ -15,7 +15,7 @@ class Check:
         else:
             Check.part_counter += 1
         Check.current = Check.parts[Check.part_counter]
-        return Check.current.get('solution', '') != ''
+        return Check.current.get('solution', '').strip() != ''
 
     @staticmethod
     def error(msg):
