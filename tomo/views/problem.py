@@ -255,6 +255,7 @@ def teacher_upload(request):
         problem.save()
         for part in new_parts:
             part.save()
+        problem.set_part_order([part.id for part in new_parts])
 
         data, sig = pack({
             'user': user.id,
