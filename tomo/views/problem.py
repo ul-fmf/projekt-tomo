@@ -21,7 +21,7 @@ def student_contents(request, problem, user, authenticated):
         sub = Submission.objects.filter(user=user, problem=problem).latest('timestamp')
         preamble = sub.preamble
     except Submission.DoesNotExist:
-        preamble = problem.preamble
+        preamble = "\n{0}\n".format(problem.preamble)
     context = {
         'problem': problem,
         'parts': problem.parts.all(),

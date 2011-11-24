@@ -3,16 +3,13 @@
 #
 # {{ problem.description|remove_markdown|safe }}{% endif %}
 #####################################################################@@#
-
-{{ preamble|safe }}
-
-{% for part in parts %}
+{{ preamble|safe }}{% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
-{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% endif %}{% endwith %}
+{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% else %}
 
-{% endfor %}
+{% endif %}{% endwith %}{% endfor %}
 
 
 
@@ -198,30 +195,32 @@ def _check():
     Check.initialize([
         {
             'part': int(match.group('part')),
-            'solution': match.group('solution').strip()
+            'solution': match.group('solution')
         } for match in re.compile(
             r'#+@(?P<part>\d+)#\n' # beginning of header
             r'.*?'                 # description
             r'#+\1@#\n'            # end of header
             r'(?P<solution>.*?)'   # solution
-            r'(?=#+@)',            # beginning of next part
+            r'(?=\n#+@)',            # beginning of next part
             flags=re.DOTALL|re.MULTILINE
         ).finditer(_source)
     ])
+    Check.parts[-1]['solution'] = Check.parts[-1]['solution'].rstrip()
+
 
     problem_match = re.search(
         r'#+@@#\n'           # beginning of header
         r'.*?'               # description
         r'#+@@#\n'           # end of header
         r'(?P<preamble>.*?)' # preamble
-        r'(?=#+@)',          # beginning of first part
+        r'(?=\n#+@)',          # beginning of first part
         _source, flags=re.DOTALL|re.MULTILINE)
 
     if not problem_match:
         print("NAPAKA: datoteka ni pravilno oblikovana")
         sys.exit(1)
 
-    _preamble = problem_match.group('preamble').strip()
+    _preamble = problem_match.group('preamble')
 
     {% for part in parts %}
     if Check.part():
