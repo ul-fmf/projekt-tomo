@@ -80,9 +80,12 @@ Check.part()
 #
 # Check.part()
 #
-# Check.compare(...)
+# Check.equal("""testni_primer"", resitev)
 #
-# Check.challenge(...)
+# Check.challenge(testni_primer_1)
+# Check.challenge(testni_primer_2)
+# Check.challenge(testni_primer_3)
+# ...
 
 #####################################################################@@#
 # Od tu naprej ničesar ne spreminjajte.

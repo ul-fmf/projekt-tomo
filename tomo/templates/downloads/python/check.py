@@ -70,7 +70,7 @@ class Check:
                 if len(y) != len(x): return "napačna dolžina seznama"
                 else:
                     for (u,v) in zip(x,y):
-                        msg = comp(u,v)
+                        msg = difference(u,v)
                         if msg: return msg
                     return None
             elif type(y) is dict:
@@ -78,7 +78,7 @@ class Check:
                 else:
                     for (k,v) in y.items():
                         if k not in x: return "manjkajoči ključ v slovarju"
-                        msg = comp(x[k], v)
+                        msg = difference(x[k], v)
                         if msg: return msg
                     return None
             else: return "različni vrednosti"
