@@ -46,7 +46,7 @@ class Check:
             # We want to canonize -0.0 and similar small negative numbers to 0.0
             # Since -0.0 still behaves as False, we can use the following
             return x if x else 0.0
-        elif type(x) is complex: return complex(canonize(x.real, digits), canonize(x.imag, digits))
+        elif type(x) is complex: return complex(Check.canonize(x.real, digits), Check.canonize(x.imag, digits))
         elif type(x) is list: return list([Check.canonize(y, digits) for y in x])
         elif type(x) is tuple: return tuple([Check.canonize(y, digits) for y in x])
         elif type(x) is dict: return sorted([(Check.canonize(k, digits), Check.canonize(v, digits)) for (k,v) in x.items()])

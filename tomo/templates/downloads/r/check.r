@@ -41,7 +41,7 @@ check$canonize <- function(x, digits = 6) {
   } else if(typeof(x) == "complex") {
     return(round(x, digits))
   } else if(typeof(x) == "list") {
-    return(lapply(x, function(y) canonize(y, digits)))
+    return(lapply(x, function(y) check$canonize(y, digits)))
   } else {
     return(x)
   }
@@ -84,6 +84,25 @@ check$equal <- function(example, expected,
     }
     check$error(sprintf(message, deparse(example),
                 pretty.print(answer), pretty.print(expected), reason))
+  }
+}
+
+check$equal.error <- function(example, expected) {
+  example = substitute(example)
+  no.error <- TRUE
+  tryCatch(
+    eval(example),
+    error = function(e) {
+      no.error <<- FALSE
+      if(e$message != expected) {
+        check$error(sprintf("Izraz %s sproži napako \'%s\' in ne \'%s\'",
+                            deparse(example), e$message, expected))
+      }
+    }
+  )
+  if(no.error) {
+        check$error(sprintf("Izraz %s vrne vrednost namesto da bi sprožil napako \'%s\'",
+                            deparse(example), expected))
   }
 }
 
