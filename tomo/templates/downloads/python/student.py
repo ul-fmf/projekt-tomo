@@ -224,7 +224,12 @@ def _check():
 
     {% for part in parts %}
     if Check.part():
-        {{ part.validation|indent:"        "|safe }}
+        try:
+            {{ part.validation|indent:"            "|safe }}
+            pass
+        except Exception as exc:
+            Check.error("V vrstici {0} je prišlo do napake. ({1})".format(exc.__traceback__.tb_lineno, exc))
+
     {% endfor %}
 
     Check.summarize()
