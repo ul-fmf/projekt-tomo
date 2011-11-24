@@ -23,6 +23,7 @@ regex_break <- function(whole_regex, regexes, source) {
 }
 
 strip <- function(str) gsub("^\\s+|\\s+$", "", str)
+rstrip <- function(str) gsub("\\s+$", "", str)
 
 super_strip <- function(str) {
     str <- gsub("(^|\n)# ?", "\n", str)

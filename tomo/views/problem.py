@@ -17,7 +17,7 @@ from tomo.utils import *
 
 
 def student_contents(request, problem, user, authenticated):
-    if user.is_authenticated:
+    if user.is_authenticated():
         try:
             sub = Submission.objects.filter(user=user, problem=problem).latest('timestamp')
             preamble = sub.preamble

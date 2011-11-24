@@ -17,7 +17,7 @@ check$part <- function() {
   } else {
     check$part.counter <<- check$part.counter + 1
   }
-  return(check$parts[[check$part.counter]]$solution != "")
+  return(strip(check$parts[[check$part.counter]]$solution) != "")
 }
 
 check$error <- function(msg) {

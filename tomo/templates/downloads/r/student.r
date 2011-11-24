@@ -3,16 +3,13 @@
 #
 # {{ problem.description|remove_markdown|safe }}{% endif %}
 #####################################################################@@#
-
-{{ preamble|safe }}
-
-{% for part in parts %}
+{{ preamble|safe }}{% for part in parts %}
 ################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
 ################################################################{{ part.id|stringformat:'06d'}}@#
-{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% endif %}{% endwith %}
+{% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% else %}
 
-{% endfor %}
+{% endif %}{% endwith %}{% endfor %}
 
 
 
@@ -220,10 +217,11 @@ get_current_filename <- function () {
   check$initialize(
     apply(matches, 1, function(match) list(
         part = as.numeric(match[2]),
-        solution = strip(match[6])
+        solution = match[6]
       )
     )
   )
+  check$parts[[length(check$parts)]]$solution = rstrip(check$parts[[length(check$parts)]]$solution)
 
   problem_match <- regex_break(paste(
     '#+@@#\n', # beginning of header
@@ -242,7 +240,7 @@ get_current_filename <- function () {
   if(length(problem_match) == 0)
     stop("NAPAKA: datoteka ni pravilno oblikovana")
 
-  .preamble <- strip(problem_match[1, 4])
+  .preamble <- problem_match[1, 4]
 
   {% for part in parts %}
   if (check$part()) {
