@@ -108,7 +108,7 @@ check$equal.error <- function(example, expected) {
 
 check$summarize <- function() {
   for(i in 1:length(check$parts)) {
-    if(check$parts[[i]]$solution == "") {
+    if(strip(check$parts[[i]]$solution) == "") {
       cat("Podnaloga", i, "je brez rešitve.\n")
     } else if (length(check$parts[[i]]$errors) > 0) {
       cat("Podnaloga", i, "ni prestala vseh testov.\n")
