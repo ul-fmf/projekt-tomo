@@ -103,7 +103,7 @@ def student_upload(request):
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
-        if attempt and attempt.get('solution'):
+        if attempt and attempt.get('solution').strip():
             solution = attempt['solution']
             errors = attempt.get('errors', [])
             attempt_challenge = attempt.get('challenge', [])

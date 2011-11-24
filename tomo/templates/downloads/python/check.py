@@ -92,7 +92,7 @@ class Check:
     @staticmethod
     def summarize():
         for i, part in enumerate(Check.parts):
-            if not part['solution']:
+            if not part['solution'].strip():
                 print('Podnaloga {0} je brez rešitve.'.format(i + 1))
             elif part['errors']:
                 print('Podnaloga {0} ni prestala vseh testov:'.format(i + 1))
