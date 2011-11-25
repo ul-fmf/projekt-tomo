@@ -71,9 +71,7 @@ check$equal <- function(example, expected,
   reason <- difference(clean(answer), clean(expected))
   if(!is.na(reason)) {
     pretty.print <- function(x) {
-      output <- capture.output(
-        if(length(dim(x)) <= 1) cat(x) else print(x)
-      )
+      output <- capture.output(print(x))
       if(length(output) == 0) {
         return("NULL")
       } else if(length(output) == 1) {
