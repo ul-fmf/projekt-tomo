@@ -41,12 +41,12 @@
   <table>
     <thead>
       <tr>
+        <th>&nbsp;</th>
         <th>Ime</th>
         <th>Priimek</th>
         {% for part in problem.parts.all %}
         <th>{{ forloop.counter }})</th>
         {% endfor %}
-        <th>Čas oddaje</th>
       </tr>
     </thead>
 
@@ -54,6 +54,7 @@
       {% with attempts|get:problem.id as problem_attempts %}
       {% for user, attempts in problem_attempts.items %}
       <tr>
+        <td><a href="{% url student_archive_download problem.id user.id %}"><img src="{{ STATIC_URL }}download.png"></a></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         {% for part in problem.parts.all %}
