@@ -244,7 +244,12 @@ get_current_filename <- function () {
 
   {% for part in parts %}
   if (check$part()) {
-    {{ part.validation|indent:"    "|safe }}
+    tryCatch({
+      {{ part.validation|indent:"      "|safe }}
+    },
+    error = function(e) {
+      check$error(sprintf("Pri izvajanju je prišlo do napake. (%s)", e$message))
+    })
   }
   {% endfor %}
 
