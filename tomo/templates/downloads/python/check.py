@@ -18,8 +18,8 @@ class Check:
         return Check.current.get('solution', '').strip() != ''
 
     @staticmethod
-    def error(msg):
-        Check.current['errors'].append(msg)
+    def error(msg, *args, **kwargs):
+        Check.current['errors'].append(msg.format(*args, **kwargs))
 
     @staticmethod
     def challenge(x, k=None):
@@ -29,15 +29,18 @@ class Check:
     @staticmethod
     def run(example, state, message=None, env={}, clean=lambda x: x):
         code = "\n".join(example)
-        example = "\n".join(["    " + line for line in example])
+        example = "  >>> " + "\n  >>> ".join(example)
         s = {}
         s.update(env)
         exec (code, globals(), s)
+        errors = []
         for (x,v) in state.items():
             if x not in s:
-                Check.error('Ukazi\n\n{0}\n\nne nestavijo spremenljivke {1}, a bi jo morali.'.format(example, x))
+                errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
             elif clean(s[x]) != clean(v):
-                Check.error('Ukazi\n\n{0}\n\nbi morali nastaviti {1} na {2},\na nastavijo {1} na {3}'.format(example, x, v, s[x]))
+                errors.append('morajo nastaviti {0} na {1},\nvendar nastavijo {0} na {2}'.format(x, v, s[x]))
+        if errors:
+            Check.error('Ukazi\n{0}\n{1}.', example,  ";\n".join(errors))
 
     @staticmethod
     def canonize(x, digits=6):
@@ -54,7 +57,7 @@ class Check:
         else: return x
 
     @staticmethod
-    def equal(example, expected,
+    def equal(example, value=None, exception=None,
                 message="Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
                 clean=lambda x: x, env={},
                 precision=1.0e-6, strict_float=False, strict_list=True):
@@ -85,9 +88,28 @@ class Check:
 
         local = locals()
         local.update(env)
-        answer = eval(example, globals(), local)
-        reason = difference(clean(answer), clean(expected))
-        if reason: Check.error(message.format(example, answer, expected, reason))
+        try:
+            returned = eval(example, globals(), local)
+        except Exception as e:
+            returned = None
+            raised = e
+        else:
+            raised = None
+
+        if raised and not exception:
+            Check.error("Izraz {0} bi moral vrniti {1!r} vendar sproži izjemo {2!r}.",
+                        example, value, raised)
+        elif raised and exception and (raised.__class__ != exception.__class__ or raised.args != exception.args):
+            Check.error("Izraz {0} bi moral sprožiti izjemo {1!r} vendar sproži izjemo {2!r}.",
+                        example, exception, raised)
+        elif exception and not raised:
+            Check.error("Izraz {0} bi moral sprožiti izjemo {1} vendar vrne {2!r}.",
+                        example, exception, returned)
+        elif not exception and not raised:
+            reason = difference(clean(returned), clean(value))
+            if reason:
+                Check.error("Izraz {0} bi moral vrniti {1!r} vendar vrne {2!r} ({3}).",
+                            example, value, returned, reason)
 
     @staticmethod
     def summarize():

@@ -228,7 +228,7 @@ def _check():
             {{ part.validation|indent:"            "|safe }}
             pass
         except Exception as exc:
-            Check.error("V vrstici {0} je prišlo do napake. ({1})".format(exc.__traceback__.tb_lineno, exc))
+            Check.error("Testi sprožijo izjemo {0!r}", exc)
 
     {% endfor %}
 
