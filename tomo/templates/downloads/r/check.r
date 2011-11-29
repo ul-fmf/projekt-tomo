@@ -96,6 +96,32 @@ check$equal <- function(example, value = NA, exception = NA,
   }
 }
 
+check$random <- function(example, period = 10, sample = 100, uniqueness = 0.9) {
+  example <- substitute(example)
+  results <- replicate(sample, toString(check$canonize(replicate(period, eval(example)))))
+  if (length(unique(results)) < uniqueness * sample) {
+    check$error("Izraz %s ne vrača naključnih rezultatov.", deparse(example))
+  }
+}
+
+check$probability <- function(example, interval, sample = 100) {
+  example <- substitute(example)
+  results <- replicate(sample, isTRUE(eval(example)))
+  prob <- sum(results) / sample
+  if (!(interval[1] < prob && prob <= interval[2])) {
+    check$error("Izraz %s velja z verjetnostjo %.2f, ki je izven pričakovanega intervala [%.2f, %.2f].", deparse(example), prob, interval[1], interval[2])
+  }
+}
+
+check$expected <- function(example, interval, sample = 100) {
+  example <- substitute(example)
+  results <- replicate(sample, eval(example))
+  prob <- sum(results) / sample
+  if (!(interval[1] < prob && prob <= interval[2])) {
+    check$error("Povprečna vrednost izraza %s je %.2f, kar je izven pričakovanega intervala [%.2f, %.2f].", deparse(example), prob, interval[1], interval[2])
+  }
+}
+
 check$summarize <- function() {
   for(i in 1:length(check$parts)) {
     if(strip(check$parts[[i]]$solution) == "") {
