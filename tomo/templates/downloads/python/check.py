@@ -108,8 +108,7 @@ class Check:
         elif not exception and not raised:
             reason = difference(clean(returned), clean(value))
             if reason:
-                Check.error("Izraz {0} bi moral vrniti {1!r} vendar vrne {2!r} ({3}).",
-                            example, value, returned, reason)
+                Check.error(message, example, value, returned, reason)
 
     @staticmethod
     def summarize():

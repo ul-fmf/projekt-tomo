@@ -20,9 +20,9 @@ check$part <- function() {
   return(strip(check$parts[[check$part.counter]]$solution) != "")
 }
 
-check$error <- function(msg) {
+check$error <- function(msg, ...) {
   check$parts[[check$part.counter]]$errors <<-
-    c(check$parts[[check$part.counter]]$errors, msg)
+    c(check$parts[[check$part.counter]]$errors, sprintf(msg, ...))
 }
 
 check$challenge <- function(x, k = NA) {
@@ -47,9 +47,9 @@ check$canonize <- function(x, digits = 6) {
   }
 }
 
-check$equal <- function(example, expected,
+check$equal <- function(example, value = NA, exception = NA,
                           message = "Ukaz %s vrne %s namesto %s (%s)",
-                          clean = function(x) x, digits = 6, precision = 1.0e-6,
+                          clean = function(x) x, precision = 1.0e-6,
                           strict.float = FALSE, check.attributes = FALSE) {
   difference <- function(x, y) {
     if(identical(x, y)) return(NA)
@@ -67,40 +67,32 @@ check$equal <- function(example, expected,
     else return("različni vrednosti")
   }
   example <- substitute(example)
-  answer <- try(eval(example), silent = TRUE)
-  reason <- difference(clean(answer), clean(expected))
-  if(!is.na(reason)) {
-    pretty.print <- function(x) {
-      output <- capture.output(print(x))
-      if(length(output) == 0) {
-        return("NULL")
-      } else if(length(output) == 1) {
-        return(output)
-      } else {
-        return(paste("    ", c("", output, ""), collapse = "\n"))
-      }
-    }
-    check$error(sprintf(message, deparse(example),
-                pretty.print(answer), pretty.print(expected), reason))
-  }
-}
-
-check$equal.error <- function(example, expected) {
-  example = substitute(example)
-  no.error <- TRUE
+  raised <- NA
   tryCatch(
-    eval(example),
+    returned <- eval(example),
     error = function(e) {
-      no.error <<- FALSE
-      if(e$message != expected) {
-        check$error(sprintf("Izraz %s sproži napako \'%s\' in ne \'%s\'",
-                            deparse(example), e$message, expected))
-      }
+      raised <<- e$message
+      returned <<- NA
     }
   )
-  if(no.error) {
-        check$error(sprintf("Izraz %s vrne vrednost namesto da bi sprožil napako \'%s\'",
-                            deparse(example), expected))
+
+  if(!is.na(raised) && is.na(exception)) {
+    check$error("Izraz %s bi moral vrniti %s vendar sproži izjemo %s.",
+                deparse(example), pretty.print(value), raised)
+  } else if(!is.na(raised) && !is.na(exception) && raised != exception) {
+    check$error("Izraz %s bi moral sprožiti izjemo %s vendar sproži izjemo %s.",
+                deparse(example), exception, raised)
+
+  } else if(!is.na(exception) && is.na(raised)) {
+    check$error("Izraz %s bi moral sprožiti izjemo %s vendar vrne %s.",
+                deparse(example), exception, pretty.print(returned))
+
+  } else if(is.na(raised) && is.na(exception)) {
+    reason <- difference(clean(returned), clean(value))
+    if(!is.na(reason)) {
+      check$error(message, deparse(example), pretty.print(value),
+                  pretty.print(returned), reason)
+    }
   }
 }
 

@@ -73,3 +73,14 @@ postJSON <-function(host, path, port=80, json) {
   return(contents)
 }
 
+pretty.print <- function(x) {
+  output <- capture.output(print(x))
+  if(length(output) == 0) {
+    return("NULL")
+  } else if(length(output) == 1) {
+    return(output)
+  } else {
+    return(paste("    ", c("", output, ""), collapse = "\n"))
+  }
+}
+
