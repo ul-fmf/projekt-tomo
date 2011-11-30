@@ -80,7 +80,7 @@ Check.part()
 #
 # Check.part()
 #
-# Check.equal("""testni_primer"", resitev)
+# Check.equal("""testni_primer""", resitev)
 #
 # Check.challenge(testni_primer_1)
 # Check.challenge(testni_primer_2)

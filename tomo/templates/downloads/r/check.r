@@ -58,7 +58,7 @@ check$equal <- function(example, value = NA, exception = NA,
       return("različna tipa")
     else if(length(x) != length(y))
       return("različno število komponent")
-    else if(mode(y) == 'numeric') {
+    else if(mode(x) == 'numeric' && mode(y) == 'numeric') {
       if(any(abs(x - y) > precision))
         return("numerična napaka")
       else
@@ -90,8 +90,8 @@ check$equal <- function(example, value = NA, exception = NA,
   } else if(is.na(raised) && is.na(exception)) {
     reason <- difference(clean(returned), clean(value))
     if(!is.na(reason)) {
-      check$error(message, deparse(example), pretty.print(value),
-                  pretty.print(returned), reason)
+      check$error(message, deparse(example), pretty.print(returned),
+                  pretty.print(value), reason)
     }
   }
 }

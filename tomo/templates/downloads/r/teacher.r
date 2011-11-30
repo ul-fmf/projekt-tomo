@@ -98,9 +98,12 @@ check$part()
 #
 # check$part()
 #
-# check$compare(...)
+# check$equal(testni_primer, resitev)
 #
-# check$challenge(...)
+# check$challenge(testni_primer_1)
+# check$challenge(testni_primer_2)
+# check$challenge(testni_primer_3)
+# ...
 
 #####################################################################@@#
 # Od tu naprej ničesar ne spreminjajte.

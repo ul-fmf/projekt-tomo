@@ -108,7 +108,7 @@ class Check:
         elif not exception and not raised:
             reason = difference(clean(returned), clean(value))
             if reason:
-                Check.error(message, example, value, returned, reason)
+                Check.error(message, example, returned, value, reason)
 
     @staticmethod
     def summarize():
