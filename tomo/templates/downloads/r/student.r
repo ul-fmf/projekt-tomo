@@ -248,7 +248,7 @@ get_current_filename <- function () {
       {{ part.validation|indent:"      "|safe }}
     },
     error = function(e) {
-      check$error("Pri izvajanju je prišlo do napake. (%s)", e$message)
+      check$error("Testi v izrazu %s sprožijo izjemo %s", deparse(e$call), e$message)
     })
   }
   {% endfor %}

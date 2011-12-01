@@ -181,7 +181,7 @@
 
 
 
-import json, os, re, sys, shutil
+import json, os, re, sys, shutil, traceback
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -227,8 +227,8 @@ def _check():
         try:
             {{ part.validation|indent:"            "|safe }}
             pass
-        except Exception as exc:
-            Check.error("Testi sprožijo izjemo {0!r}", exc)
+        except:
+            Check.error("Testi sprožijo izjemo\n  {0}", "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 
     {% endfor %}
 
