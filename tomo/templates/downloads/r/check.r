@@ -48,9 +48,8 @@ check$canonize <- function(x, digits = 6) {
 }
 
 check$equal <- function(example, value = NA, exception = NA,
-                          message = "Ukaz %s vrne %s namesto %s (%s)",
-                          clean = function(x) x, precision = 1.0e-6,
-                          strict.float = FALSE, check.attributes = FALSE) {
+                        clean = function(x) x,
+                        precision = 1.0e-6, strict.float = FALSE, check.attributes = FALSE) {
   difference <- function(x, y) {
     if(identical(x, y)) return(NA)
     else if(isTRUE(all.equal(x, y, check.attributes = check.attributes))) return(NA)
@@ -67,31 +66,23 @@ check$equal <- function(example, value = NA, exception = NA,
     else return("različni vrednosti")
   }
   example <- substitute(example)
-  raised <- NA
-  tryCatch(
-    returned <- eval(example),
-    error = function(e) {
-      raised <<- e$message
-      returned <<- NA
-    }
-  )
 
-  if(!is.na(raised) && is.na(exception)) {
-    check$error("Izraz %s bi moral vrniti %s vendar sproži izjemo %s.",
-                deparse(example), pretty.print(value), raised)
-  } else if(!is.na(raised) && !is.na(exception) && raised != exception) {
-    check$error("Izraz %s bi moral sprožiti izjemo %s vendar sproži izjemo %s.",
-                deparse(example), exception, raised)
-
-  } else if(!is.na(exception) && is.na(raised)) {
-    check$error("Izraz %s bi moral sprožiti izjemo %s vendar vrne %s.",
-                deparse(example), exception, pretty.print(returned))
-
-  } else if(is.na(raised) && is.na(exception)) {
+  if(!is.na(exception)) {
+    tryCatch({
+      eval(example)
+      check$error("Izraz %s vrne vrednost namesto da bi sprožil izjemo '%s'.",
+                  deparse(example), exception)
+    }, error = function(e) {
+      if(e$message != exception)
+        check$error("Izraz %s sproži izjemo '%s' namesto '%s'.",
+                    deparse(example), e$message, exception)
+    })
+  } else {
+    returned <- eval(example)
     reason <- difference(clean(returned), clean(value))
     if(!is.na(reason)) {
-      check$error(message, deparse(example), pretty.print(returned),
-                  pretty.print(value), reason)
+      check$error("Izraz %s vrne %s namesto %s (%s)",
+                  deparse(example), pretty.print(returned), pretty.print(value), reason)
     }
   }
 }

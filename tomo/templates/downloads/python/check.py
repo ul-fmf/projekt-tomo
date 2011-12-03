@@ -58,28 +58,27 @@ class Check:
 
     @staticmethod
     def equal(example, value=None, exception=None,
-                message="Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
                 clean=lambda x: x, env={},
                 precision=1.0e-6, strict_float=False, strict_list=True):
-        def difference(x,y):
+        def difference(x, y):
             if x == y: return None
             elif (type(x) != type(y) and
                  (strict_float or not (type(y) in [int, float, complex] and type(x) in [int, float, complex])) and
                  (strict_list or not (type(y) in [list, tuple] and type(x) in [list, tuple]))):
                 return "različna tipa"
             elif type(y) in [int, float, complex]:
-                return ("numerična napaka" if abs(x-y) > precision else None)
+                return ("numerična napaka" if abs(x - y) > precision else None)
             elif type(y) in [tuple,list]:
                 if len(y) != len(x): return "napačna dolžina seznama"
                 else:
-                    for (u,v) in zip(x,y):
-                        msg = difference(u,v)
+                    for (u, v) in zip(x, y):
+                        msg = difference(u, v)
                         if msg: return msg
                     return None
             elif type(y) is dict:
                 if len(y) != len(x): return "napačna dolžina slovarja"
                 else:
-                    for (k,v) in y.items():
+                    for (k, v) in y.items():
                         if k not in x: return "manjkajoči ključ v slovarju"
                         msg = difference(x[k], v)
                         if msg: return msg
@@ -88,27 +87,24 @@ class Check:
 
         local = locals()
         local.update(env)
-        try:
-            returned = eval(example, globals(), local)
-        except Exception as e:
-            returned = None
-            raised = e
-        else:
-            raised = None
 
-        if raised and not exception:
-            Check.error("Izraz {0} bi moral vrniti {1!r} vendar sproži izjemo {2!r}.",
-                        example, value, raised)
-        elif raised and exception and (raised.__class__ != exception.__class__ or raised.args != exception.args):
-            Check.error("Izraz {0} bi moral sprožiti izjemo {1!r} vendar sproži izjemo {2!r}.",
-                        example, exception, raised)
-        elif exception and not raised:
-            Check.error("Izraz {0} bi moral sprožiti izjemo {1} vendar vrne {2!r}.",
-                        example, exception, returned)
-        elif not exception and not raised:
+        if exception:
+            try:
+                eval(example, globals(), local)
+            except Exception as e:
+                if e.__class__ != exception.__class__ or e.args != exception.args:
+                    Check.error("Izraz {0} sproži izjemo {1!r} namesto {2!r}.",
+                                example, e, exception)
+            else:
+                Check.error("Izraz {0} vrne vrednost namesto da bi sprožil izjemo {1}.",
+                            example, exception)
+
+        else:
+            returned = eval(example, globals(), local)
             reason = difference(clean(returned), clean(value))
             if reason:
-                Check.error(message, example, returned, value, reason)
+                Check.error("Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
+                            example, returned, value, reason)
 
     @staticmethod
     def summarize():
@@ -120,4 +116,8 @@ class Check:
                 for e in part['errors']:
                     print("- {0}".format("\n  ".join(e.splitlines())))
             else:
-                print('Podnaloga {0} je prestala vse teste.'.format(i + 1))
+                rejection = part.get('rejection')
+                if rejection:
+                    print('Podnaloga {0} ni prestala izziva. ({1})'.format(i + 1, rejection))
+                else:
+                    print('Podnaloga {0} je pravilno rešena.'.format(i + 1))
