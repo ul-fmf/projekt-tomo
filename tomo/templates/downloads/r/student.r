@@ -253,7 +253,6 @@ get_current_filename <- function () {
   }
   {% endfor %}
 
-  check$summarize()
   {% if authenticated %}
   cat('Shranjujem rešitve na strežnik... ')
   post <- list(
@@ -268,9 +267,10 @@ get_current_filename <- function () {
     response <- fromJSON(r, method = "R")
     cat('Rešitve so shranjene.\n')
     for(rejected in response$rejected)
-      cat("Rešitev podnaloge ", rejected[[1]], " je zavrnjena (", rejected[[2]], ").\n", sep = "")
+      check$parts[[as.integer(rejected[[1]])]]$rejection <- rejected[[2]]
+    check$summarize()
     if("update" %in% names(response)) {
-      cat("Na voljo je nova različica... Posodabljam datoteko... ")
+      cat("Posodabljam datoteko... ")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
         index <- index + 1
@@ -280,16 +280,17 @@ get_current_filename <- function () {
       f <- file(.filename, encoding="UTF-8")
       writeLines(r, f)
       close.connection(f)
-      cat("Datoteka je posodobljena.\n")
-      cat("Kopija stare datoteke je v ", backup.filename, ".\n", sep = "")
-      cat("Če se datoteka v urejevalniku ni osvežila, jo shranite ter ponovno zaženite.")
+      cat("Stara datoteka je preimenovana v ", basename(backup.filename), ".\n", sep = "")
+      cat("Če se datoteka v urejevalniku ni osvežila, jo shranite ter ponovno zaženite.\n")
     }
   },
   error = function(r) {
-    cat('Pri shranjevanju je prišlo do napake. Poskusite znova.')
-    check$error = r$message
+    cat('Pri shranjevanju je prišlo do napake.\n')
+    check$summarize()
+    cat('Pri shranjevanju je prišlo do napake. Poskusite znova.\n')
   })
   {% else %}
+  check$summarize()
   cat('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.\n')
   {% endif %}
 }

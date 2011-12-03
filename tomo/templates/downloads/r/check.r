@@ -118,10 +118,12 @@ check$summarize <- function() {
     if(strip(check$parts[[i]]$solution) == "") {
       cat("Podnaloga", i, "je brez rešitve.\n")
     } else if (length(check$parts[[i]]$errors) > 0) {
-      cat("Podnaloga", i, "ni prestala vseh testov.\n")
+      cat("Podnaloga", i, "ni prestala vseh testov:\n")
       cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep = "")
+    } else if ("rejection" %in% names(check$parts[[i]])) {
+      cat("Podnaloga ", i, " je zavrnjena. (", check$parts[[i]]$rejection, ")\n", sep = "")
     } else {
-      cat("Podnaloga", i, "je prestala vse teste.\n")
+      cat("Podnaloga", i, "je pravilno rešena.\n")
     }
   }
 }

@@ -115,9 +115,7 @@ class Check:
                 print('Podnaloga {0} ni prestala vseh testov:'.format(i + 1))
                 for e in part['errors']:
                     print("- {0}".format("\n  ".join(e.splitlines())))
+            elif 'rejection' in part:
+                print('Podnaloga {0} je zavrnjena. ({1})'.format(i + 1, part['rejection']))
             else:
-                rejection = part.get('rejection')
-                if rejection:
-                    print('Podnaloga {0} ni prestala izziva. ({1})'.format(i + 1, rejection))
-                else:
-                    print('Podnaloga {0} je pravilno rešena.'.format(i + 1))
+                print('Podnaloga {0} je pravilno rešena.'.format(i + 1))

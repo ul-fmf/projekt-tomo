@@ -103,6 +103,7 @@ def student_upload(request):
     old_attempts = Attempt.objects.from_user(user).for_problem(problem).dict_by_part()
 
     rejected = []
+    update = download.get('timestamp', '') != str(problem.timestamp)
 
     for i, part in enumerate(problem.parts.all()):
         attempt = attempts.get(part.id, None)
@@ -115,10 +116,11 @@ def student_upload(request):
             if not incorrect:
                 if len(attempt_challenge) != len(part_challenge):
                     incorrect = "različno število izzivov"
+                    update = True
                 else:
                     for (j, ((k, x), (_, y))) in enumerate(zip(attempt_challenge, part_challenge)):
                         if x != y:
-                            incorrect = "izziv #{0} ({1})".format(j + 1, k)
+                            incorrect = "izziv #{0} - {1}".format(j + 1, k)
                             break
             correct = (incorrect is None)
             if incorrect:
@@ -138,7 +140,7 @@ def student_upload(request):
         'rejected' : rejected,
     }
 
-    if download.get('timestamp', '') != str(problem.timestamp):
+    if update:
         data, sig = pack({
             'user': user.id,
             'problem': problem.id,

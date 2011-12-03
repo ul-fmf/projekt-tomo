@@ -1,7 +1,5 @@
 ČIMPREJ
 
-- narediti Check.compare in Check.run odporna na izjeme.
-
 - podpora za Mathematico
 
 - kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti

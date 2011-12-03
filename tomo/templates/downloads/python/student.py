@@ -232,7 +232,6 @@ def _check():
 
     {% endfor %}
 
-    Check.summarize()
     {% if authenticated %}
     print('Shranjujem rešitve na strežnik... ', end = "")
     post = json.dumps({
@@ -247,9 +246,10 @@ def _check():
         response = json.loads(r.read().decode('utf-8'))
         print('Rešitve so shranjene.')
         for (k, e) in response['rejected']:
-            print("Rešitev podnaloge {0} je zavrnjena ({1}).".format(k, e))
+            Check.parts[k - 1]['rejection'] = e
+        Check.summarize()
         if 'update' in response:
-            print("Na voljo je nova različica... Posodabljam datoteko... ", end = "")
+            print("Posodabljam datoteko... ", end = "")
             index = 1
             while os.path.exists('{0}.{1}'.format(_filename, index)):
                 index += 1
@@ -258,13 +258,15 @@ def _check():
             r = urlopen(response['update'])
             with open(_filename, 'w', encoding='utf-8') as f:
                 f.write(r.read().decode('utf-8'))
-            print("Datoteka je posodobljena.")
-            print("Kopija stare datoteke je v {0}.".format(backup_filename))
+            print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
     except HTTPError as r:
+        print('Pri shranjevanju je prišlo do napake.')
+        Check.summarize()
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
         Check.error = r.read().decode('utf-8')
     {% else %}
+    Check.summarize()
     print('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
     {% endif %}
 
