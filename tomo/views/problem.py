@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from copy import deepcopy
 
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -83,6 +84,27 @@ def move_down(request, problem_id):
         order[i + 1], order[i] = order[i], order[i + 1]
     problem.problem_set.set_problem_order(order)
     return redirect(problem)
+
+@staff_member_required
+def copy(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    problem = get_object_or_404(Problem, id=request.POST['problem_id'])
+    problem_set = get_object_or_404(ProblemSet, id=request.POST['problem_set_id'])
+
+    new_problem = deepcopy(problem)
+    new_problem.id = None
+    new_problem.problem_set = problem_set
+    new_problem.save()
+
+    for part in problem.parts.all():
+        new_part = deepcopy(part)
+        new_part.id = None
+        new_part.problem = new_problem
+        new_part.save()
+
+    return redirect(new_problem)
 
 @csrf_exempt
 def student_upload(request):

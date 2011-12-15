@@ -36,6 +36,8 @@ urlpatterns = patterns('',
         url(r'^api/teacher/$', 'api_teacher_contents', name='api_teacher_contents'),
         # Create a problem
         (r'^create/$', 'create', {}, 'create'),
+        # Create a problem
+        (r'^copy/$', 'copy', {}, 'copy'),
         # Respond to a challenge
         (r'^upload/teacher/$', 'teacher_upload', {}, 'teacher_upload'),
         # Update the problem

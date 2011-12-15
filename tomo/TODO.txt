@@ -2,8 +2,6 @@
 
 - podpora za Mathematico
 
-- kopiranje problem-setov med predmeti in kopiranje nalog med problem-seti
-
 - na stran s statistiko dodaj stolpec s časom oddaje
 - na statistiki naredi urejanje po stolpcih
 
@@ -17,6 +15,8 @@ PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
 
 - pomoč
 - ločitev administratorjev in učiteljev
+- kopiranje problem-setov med predmeti
+
 
 
 KO BO ČAS
