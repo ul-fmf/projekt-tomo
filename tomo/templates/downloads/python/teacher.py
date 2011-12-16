@@ -1,7 +1,7 @@
-#################################################################
+##########################################################################
 # To je datoteka, s katero pripravite nalogo.
 # Vsebina naloge je spodaj, za definicijo razreda Check.
-#################################################################
+##########################################################################
 {% load my_tags %}
 
 import json, os, re, sys, shutil
@@ -23,7 +23,7 @@ Check.initialize([
     } for match in re.compile(
         r'^#+@(?P<part>\d+)#\n'               # beginning of header
         r'(?P<description>(^#( [^\n]*)?\n)*)' # description
-        r'^#+\1@#\n'                          # end of header
+        r'^#+(?P=part)@#\n'                   # end of header
         r'(?P<solution>.*?)'                  # solution
         r'^Check\.part\(\)\n'                 # beginning of validation
         r'(?P<validation>.*?)'                # validation
@@ -50,21 +50,21 @@ title = problem_match.group('title').strip()
 description = "\n".join(s[2:] for s in problem_match.group('description').strip().splitlines())
 preamble = problem_match.group('preamble').strip()
 
-###################################################################
+##########################################################################
 # Od tu naprej je navodilo naloge
 
-################################################################@@#
+#######################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}
-################################################################@@#
+#######################################################################@@#
 
 {{ problem.preamble|safe }}
 
 {% for part in parts %}
-################################################################@{{ part.id|stringformat:'06d'}}#
+##################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ part.description|indent:"# "|safe }}
-################################################################{{ part.id|stringformat:'06d'}}@#
+##################################################################{{ part.id|stringformat:'06d'}}@#
 {{ part.solution|safe }}
 
 Check.part()
@@ -72,9 +72,9 @@ Check.part()
 
 {% endfor %}
 
-# ################################################################@000000#
+# ##################################################################@000000#
 # # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
-# ################################################################000000@#
+# ##################################################################000000@#
 #
 # sem napisite resitev
 #
@@ -87,7 +87,7 @@ Check.part()
 # Check.challenge(testni_primer_3)
 # ...
 
-#####################################################################@@#
+#######################################################################@@#
 # Od tu naprej ničesar ne spreminjajte.
 
 Check.summarize()

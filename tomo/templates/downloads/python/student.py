@@ -1,12 +1,12 @@
-{% load my_tags %}#####################################################################@@#
+{% load my_tags %}#######################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
 # {{ problem.description|remove_markdown|safe }}{% endif %}
-#####################################################################@@#
+#######################################################################@@#
 {{ preamble|safe }}{% for part in parts %}
-################################################################@{{ part.id|stringformat:'06d'}}#
+##################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
-################################################################{{ part.id|stringformat:'06d'}}@#
+##################################################################{{ part.id|stringformat:'06d'}}@#
 {% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% else %}
 
 {% endif %}{% endwith %}{% endfor %}
@@ -114,9 +114,9 @@
 
 
 
-#####################################################################@@#
+#######################################################################@@#
 # Kode pod to črto nikakor ne spreminjajte.
-########################################################################
+##########################################################################
 
 "TA VRSTICA JE PRAVILNA."
 "ČE VAM PYTHON SPOROČI, DA JE V NJEJ NAPAKA, SE MOTI."
@@ -199,9 +199,9 @@ def _check():
         } for match in re.compile(
             r'#+@(?P<part>\d+)#\n' # beginning of header
             r'.*?'                 # description
-            r'#+\1@#\n'            # end of header
+            r'#+(?P=part)@#\n'     # end of header
             r'(?P<solution>.*?)'   # solution
-            r'(?=\n#+@)',            # beginning of next part
+            r'(?=\n#+@)',          # beginning of next part
             flags=re.DOTALL|re.MULTILINE
         ).finditer(_source)
     ])
@@ -213,7 +213,7 @@ def _check():
         r'.*?'               # description
         r'#+@@#\n'           # end of header
         r'(?P<preamble>.*?)' # preamble
-        r'(?=\n#+@)',          # beginning of first part
+        r'(?=\n#+@)',        # beginning of first part
         _source, flags=re.DOTALL|re.MULTILINE)
 
     if not problem_match:
