@@ -66,26 +66,29 @@ class ProblemSet(models.Model):
                 raise PermissionDenied
 
         def success(self, user):
-            correct = dict(
-                Attempt.objects.filter(
-                    correct=True, part__problem__problem_set__in=self,
-                    submission__user=user
-                ).values(
-                    'part__problem__problem_set'
-                ).order_by(
-                    'part__problem__problem_set'
-                ).annotate(
-                    correct_count=models.Count('part__problem__problem_set')
-                ).values_list('part__problem__problem_set', 'correct_count')
-            )
-            total = dict(
-                self.annotate(
-                    part_count=models.Count('problems__parts')
-                ).values_list('id', 'part_count')
-            )
-            success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
-                        problem_set_id, tot in total.items())
-            return success
+            if user.is_authenticated():
+                correct = dict(
+                    Attempt.objects.filter(
+                        correct=True, part__problem__problem_set__in=self,
+                        submission__user=user
+                    ).values(
+                        'part__problem__problem_set'
+                    ).order_by(
+                        'part__problem__problem_set'
+                    ).annotate(
+                        correct_count=models.Count('part__problem__problem_set')
+                    ).values_list('part__problem__problem_set', 'correct_count')
+                )
+                total = dict(
+                    self.annotate(
+                        part_count=models.Count('problems__parts')
+                    ).values_list('id', 'part_count')
+                )
+                success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
+                            problem_set_id, tot in total.items())
+                return success
+            else:
+                return {}
 
 
     class Meta:
@@ -130,25 +133,28 @@ class Problem(models.Model):
             else:
                 raise PermissionDenied
         def success(self, user):
-            correct = dict(
-                Attempt.objects.filter(
-                    correct=True, part__problem__in=self, submission__user=user
-                ).values(
-                    'part__problem'
-                ).order_by(
-                    'part__problem'
-                ).annotate(
-                    correct_count=models.Count('part__problem')
-                ).values_list('part__problem', 'correct_count')
-            )
-            total = dict(
-                self.annotate(
-                    part_count=models.Count('parts')
-                ).values_list('id', 'part_count')
-            )
-            success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot if tot else 0)) for
-                        problem_id, tot in total.items())
-            return success
+            if user.is_authenticated():
+                correct = dict(
+                    Attempt.objects.filter(
+                        correct=True, part__problem__in=self, submission__user=user
+                    ).values(
+                        'part__problem'
+                    ).order_by(
+                        'part__problem'
+                    ).annotate(
+                        correct_count=models.Count('part__problem')
+                    ).values_list('part__problem', 'correct_count')
+                )
+                total = dict(
+                    self.annotate(
+                        part_count=models.Count('parts')
+                    ).values_list('id', 'part_count')
+                )
+                success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot if tot else 0)) for
+                            problem_id, tot in total.items())
+                return success
+            else:
+                return {}
     class Meta:
         order_with_respect_to = 'problem_set'
 
