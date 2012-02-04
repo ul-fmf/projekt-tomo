@@ -67,10 +67,9 @@ class ProblemSet(models.Model):
 
         def success(self, user):
             correct = dict(
-                Attempt.objects.from_user(
-                    user
-                ).filter(
-                    correct=True, part__problem__problem_set__in=self
+                Attempt.objects.filter(
+                    correct=True, part__problem__problem_set__in=self,
+                    submission__user=user
                 ).values(
                     'part__problem__problem_set'
                 ).order_by(
@@ -132,10 +131,8 @@ class Problem(models.Model):
                 raise PermissionDenied
         def success(self, user):
             correct = dict(
-                Attempt.objects.from_user(
-                    user
-                ).filter(
-                    correct=True, part__problem__in=self
+                Attempt.objects.filter(
+                    correct=True, part__problem__in=self, submission__user=user
                 ).values(
                     'part__problem'
                 ).order_by(
@@ -194,21 +191,18 @@ class Attempt(models.Model):
         def active(self):
             return self.filter(active=True)
 
-        def from_user(self, user):
-            if user.is_authenticated():
-                return self.filter(active=True, submission__user=user)
-            else:
-                # Ugly hack because we want to stay in the same queryset.
-                return self.filter(active=320)
-
         def for_problem(self, problem):
             return self.filter(part__problem=problem)
 
         def for_problem_set(self, problem_set):
             return self.filter(part__problem__problem_set=problem_set)
 
-        def dict_by_part(self):
-            return dict((attempt.part_id, attempt) for attempt in self)
+        def user_attempts(self, user):
+            if user.is_authenticated():
+                attempts = self.filter(active=True, submission__user=user)
+                return dict((attempt.part_id, attempt) for attempt in attempts)
+            else:
+                return {}
 
     class Meta:
         ordering = ['submission']

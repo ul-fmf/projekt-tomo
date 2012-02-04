@@ -13,7 +13,7 @@ from tomo.views.problem import student_contents, teacher_contents
 def view_problem_set(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     problems = problem_set.problems.all()
-    attempts = Attempt.objects.for_problem_set(problem_set).from_user(request.user).dict_by_part()
+    attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
     default_language = problems[0].language if problems else None
     return render(request, "problem_set.html", {
         'problem_set': problem_set,

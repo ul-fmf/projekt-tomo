@@ -29,7 +29,7 @@ def student_contents(request, problem, user, authenticated):
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
-        'attempts': Attempt.objects.from_user(user).for_problem(problem).dict_by_part(),
+        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
         'preamble': preamble,
         'authenticated': authenticated
     }
@@ -122,7 +122,7 @@ def student_upload(request):
     submission.save()
 
     attempts = dict((attempt['part'], attempt) for attempt in post['attempts'])
-    old_attempts = Attempt.objects.from_user(user).for_problem(problem).dict_by_part()
+    old_attempts = Attempt.objects.for_problem(problem).user_attempts(user)
 
     rejected = []
     update = download.get('timestamp', '') != str(problem.timestamp)
