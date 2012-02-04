@@ -96,8 +96,8 @@ class Check:
                     Check.error("Izraz {0} sproži izjemo {1!r} namesto {2!r}.",
                                 example, e, exception)
             else:
-                Check.error("Izraz {0} vrne vrednost namesto da bi sprožil izjemo {1}.",
-                            example, exception)
+                Check.error("Izraz {0} vrne {1!r} namesto da bi sprožil izjemo {2}.",
+                            example, returned, exception)
 
         else:
             returned = eval(example, globals(), local)
