@@ -69,7 +69,7 @@ class ProblemSet(models.Model):
             if user.is_authenticated():
                 correct = dict(
                     Attempt.objects.filter(
-                        correct=True, part__problem__problem_set__in=self,
+                        active=True, correct=True, part__problem__problem_set__in=self,
                         submission__user=user
                     ).values(
                         'part__problem__problem_set'
@@ -136,7 +136,8 @@ class Problem(models.Model):
             if user.is_authenticated():
                 correct = dict(
                     Attempt.objects.filter(
-                        correct=True, part__problem__in=self, submission__user=user
+                        active=True, correct=True, part__problem__in=self,
+                        submission__user=user
                     ).values(
                         'part__problem'
                     ).order_by(
