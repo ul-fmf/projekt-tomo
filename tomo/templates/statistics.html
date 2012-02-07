@@ -69,13 +69,7 @@
                   </h3>
                 </div>
                 <div class="modal-body solution-view">
-                  {% if attempt.solution %}
-                    <pre><code>{{ attempt.solution }}</code></pre>
-                  {% else %}
-                    <p>
-                      Naloge še ni reševal.
-                    </p>
-                  {% endif %}
+                  {% include 'inline/solution.html' %}
                 </div>
               </div>
               <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" data-backdrop="true" data-keyboard="true" href="#">

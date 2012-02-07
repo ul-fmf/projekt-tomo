@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db import models
@@ -210,6 +211,9 @@ class Attempt(models.Model):
                 return dict((attempt.part_id, attempt) for attempt in attempts)
             else:
                 return {}
+    
+    def error_list(self):
+        return json.loads(self.errors)
 
     class Meta:
         ordering = ['submission']
