@@ -16,15 +16,16 @@
     {% endif %}
 
     <h4>Uradna rešitev</h4>
-    {% if problem_set.solution_visibility == 'vidne' or request.user.is_staff %}
+    {% if request.user.is_staff %}
       <pre><code>{{ part.solution }}</code></pre>
-    {% endif %}
-    {% if problem_set.solution_visibility == 'pogojno' and attempt.correct %}
-      <pre><code>{{ part.solution }}</code></pre>
-    {% endif %}
-    {% if problem_set.solution_visibility == 'pogojno' and not attempt.correct and not request.user.is_staff %}
-      <p>Uradno rešitev boste lahko videli šele takrat, ko boste nalogo pravilno rešili.</p>
-    {% endif %}
-    {% if problem_set.solution_visibility == 'skrite' %}
-      <p>Uradne rešitve so skrite.</p>
+    {% else %}
+      {% if problem_set.solution_visibility == 'vidne' or problem_set.solution_visibility == 'pogojno' and attempt.correct %}
+        <pre><code>{{ part.solution }}</code></pre>
+      {% endif %}
+      {% if problem_set.solution_visibility == 'pogojno' and not attempt.correct %}
+        <p>Uradno rešitev boste lahko videli šele takrat, ko boste nalogo pravilno rešili.</p>
+      {% endif %}
+      {% if problem_set.solution_visibility == 'skrite' %}
+        <p>Uradne rešitve so skrite.</p>
+      {% endif %}
     {% endif %}

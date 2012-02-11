@@ -1,7 +1,7 @@
 {% load my_tags %}
 
 <div class='row inline'>
-  <div class="span13">
+  <div class="span11">
 
     {% if not forloop.first or not forloop.last %}
     <h4 class="part" style="background-image: url({{ STATIC_URL }}{% if attempt.solution %}{% if attempt.correct %}correct{% else %}incorrect{% endif %}{% else %}missing{% endif %}.png);">
