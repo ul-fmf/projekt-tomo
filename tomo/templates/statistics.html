@@ -54,7 +54,7 @@
       {% with attempts|get:problem.id as problem_attempts %}
       {% for user, attempts in problem_attempts.items %}
       <tr>
-        <td><a href="{% url student_archive_download problem.id user.id %}"><img src="{{ STATIC_URL }}download.png"></a></td>
+        <td><a href="{% url student_archive_download problem.id user.id %}"><img src="{{ STATIC_URL }}img/download.png"></a></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         {% for part in problem.parts.all %}
@@ -73,7 +73,7 @@
                 </div>
               </div>
               <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" data-backdrop="true" data-keyboard="true" href="#">
-              <img src="{{ STATIC_URL }}{% if attempt.solution %}{% if attempt.correct %}correct{% else %}incorrect{% endif %}{% else %}missing{% endif %}.png">
+              <img src="{{ STATIC_URL }}img/{% if attempt.solution %}{% if attempt.correct %}correct{% else %}incorrect{% endif %}{% else %}missing{% endif %}.png">
               </a>
             {% else %}
               &nbsp;
