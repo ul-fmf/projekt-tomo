@@ -7,14 +7,5 @@ $(document).ready(
     );
   }
 );
-$(function () {
-  $("a[rel=popover]")
-    .popover({
-      offset: 10,
-      placement: 'below',
-      html: true,
-    })
-    .click(function(e) {
-      e.preventDefault()
-    })
-})
+
+$('.action, .status').tooltip({delay: { show: 500, hide: 100 }})

@@ -25,6 +25,10 @@ class Course(models.Model):
 
     def recent(self):
         return self.problem_sets.reverse()[:3]
+    
+    @classmethod
+    def user_courses(self, user):
+        return user.courses if user.is_authenticated() else self.objects
 
     @models.permalink
     def get_absolute_url(self):

@@ -1,3 +1,4 @@
+{% load my_tags %}
 <!DOCTYPE html>
 <html lang="si">
   <head>
@@ -13,7 +14,7 @@
 
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <!-- <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet"> -->
+    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/default.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL}}css/tomo.css" rel="stylesheet">
 
@@ -36,18 +37,19 @@
           </a>
           <a class="brand" href="{% url homepage %}">Tomo</a>
           <div class="nav-collapse">
-            <ul class="nav pull-right">
             {% if user.is_authenticated %}
+            <ul class="nav pull-right">
               <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name}} <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name }} <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url settings %}">Nastavitve</a></li>
                   <li class="divider"></li>
                   <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
                 </ul>
               </li>
+            </ul>
             {% else %}
-              <form method='post' action="{% url django.contrib.auth.views.login %}" class="pull-right">
+              <form method='post' action="{% url django.contrib.auth.views.login %}" class="navbar-form pull-right">
                 {% csrf_token %}
                 <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
                 <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">
@@ -55,37 +57,88 @@
                 <button class="btn" type="submit">Prijavite se</button>
               </form>
             {% endif %}
-            </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-    <div class="container">
-      <div class="content">
-        <div class="row">
-          <div class="span14">
-            <div class="page-header">
-              {% if form.errors %}
-              <div class="alert-message error fade in" data-alert="alert" >
-                <p><strong>Napaka ob prijavi!</strong>
-                Uporabite enako uporabniško ime in geslo kot ju na študentskih računalnikih, na primer <code>NovakJ</code> in <code>Triglav.1</code>.
-              </div>
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              {% for course in courses.all %}
+              <li class="nav-header">{{ course.name }}</li>
+              {% for ps in course.problem_sets.all %}
+              <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
+                {% if request.user.is_staff %}
+                <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-remove-sign"></i>{% endif %}
+                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-question-sign"></i>{% endif %}
+                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-sign"></i>{% endif %}
+                </a>
+                <a href="{% url toggle_visibile ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
+                  <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
+                </a>
+                <a href="{% url admin:tomo_problemset_delete ps.id %}" class="action" title="Pobriši">
+                  <i class="icon-trash"></i>
+                </a>
+                <a href="{% url admin:tomo_problemset_change ps.id %}" class="action" title="Napredno…">
+                  <i class="icon-cog"></i>
+                </a>
+                <a href="{% url move_problem_set_up ps.id %}" class="action" title="Premakni gor">
+                  <i class="icon-arrow-up"></i>
+                </a>
+                <a href="{% url move_problem_set_down ps.id %}" class="action" title="Premakni dol">
+                  <i class="icon-arrow-down"></i>
+                </a>
+                <a href="{% url problem_set ps.id %}">{{ ps.title }}</a>
+                {% else %}
+                <a href="#" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+                    {% if request.user.is_authenticated %}
+                      {% with percentage=solved|get:problem_set.id %}
+                      <span class="label {% spaceless %}
+                        {% if percentage == 100 %}success{% endif %}
+                        {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
+                        {% if percentage < 50 %}error{% endif %}
+                        {% endspaceless %}">
+                        {{ percentage }}%
+                      </span>
+                      {% endwith %}
+                    {% endif %}
+                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-remove-sign status"></i>{% endif %}
+                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-question-sign status"></i>{% endif %}
+                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-sign status"></i>{% endif %}
+                </a>
+                <a href="{% url problem_set ps.id %}">
+                  {{ ps.title }}
+                </a>
+                {% endif %}
+              </li>
+              {% endfor %}
+              {% if request.user.is_staff %}
+                <a href=""><i class="icon-plus"></i>dodaj nalogo</a>
               {% endif %}
-
-              <ul class="breadcrumb">
-                {% block breadcrumbs %}{% endblock %}
-              </ul>
-
-              <h1>{% block header %}{% endblock %}</h1>
-
-              {% block description %}{% endblock %}
-              {% block actions %}{% endblock %}
+              {% endfor %}
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+        <div class="span9">
+          {% if form.errors %}
+            <div class="alert alert-error fade in" data-alert="alert" >
+              <h4 class="alert-heading alert-error">Napaka ob prijavi!</h4>
+              Uporabite enako uporabniško ime in geslo kot ju na študentskih računalnikih, na primer <code>KovacM</code> in <code>Triglav.1</code>.
             </div>
-            {% block contents %}{% endblock %}
-          </div>
-        </div>
-      </div>
+          {% endif %}
+          <h1>{% block header %}{% endblock %}</h1>
+
+          {% block description %}{% endblock %}
+          {% block actions %}{% endblock %}
+          {% block contents %}{% endblock %}
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
 
       <footer>
         <p>Tomo ponosno uporablja
@@ -94,10 +147,15 @@
           <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>
         <p>
         <p>&copy; Andrej Bauer, Matija Pretnar 2011</p>
+                    <p class="muted" style="margin-bottom: 0;">Tight pants next level keffiyeh <a href="#" rel='tooltip' title="first tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown. Farm-to-table seitan, mcsweeney's fixie sustainable quinoa 8-bit american apparel <a href="#" rel='tooltip' title='Another tooltip'>have a</a> terry richardson vinyl chambray. Beard stumptown, cardigans banh mi lomo thundercats. Tofu biodiesel williamsburg marfa, four loko mcsweeney's cleanse vegan chambray. A <a href="#" rel='tooltip' title='Another one here too'>really ironic</a> artisan whatever keytar, scenester farm-to-table banksy Austin <a href="#" rel='tooltip' title='The last tip!'>twitter handle</a> freegan cred raw denim single-origin coffee viral.
+            </p>
       </footer>
-    </div> <!-- /container -->
 
-    <!-- Le javascript -->
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         tex2jax: {
@@ -111,7 +169,6 @@
     <script src="{{ STATIC_URL }}js/tomo.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}js/highlight.min.js" type="text/javascript"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-
 
   </body>
 </html>

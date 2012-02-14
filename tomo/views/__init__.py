@@ -4,12 +4,8 @@ from tomo.models import Course, ProblemSet
 
 
 def homepage(request):
-    if request.user.is_authenticated():
-        courses = request.user.courses
-    else:
-        courses = Course.objects
     return render(request, "home.html", {
-        'courses': courses,
+        'courses': Course.user_courses(request.user),
         'solved': ProblemSet.objects.success(request.user),
     })
 

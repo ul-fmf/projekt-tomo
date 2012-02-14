@@ -7,6 +7,46 @@ body {
 }
 
 
+.nav > li > a.action, .nav > li > a.status {
+  background: transparent;
+  float: right;
+  margin-left: 5px;
+  padding: 3px;
+}
+
+.nav > li > a.status {
+  margin-left: 9px;
+}
+
+.nav > li > a.action > i {
+  background-image: none;
+}
+
+.nav > li:hover > a.action > i, .nav > li > a.status > i {
+  background-image: url(../img/glyphicons-halflings-gray.png);
+}
+
+.nav > li > a.action:hover > i, .nav > li > a.status:hover > i {
+  background-image: url(../img/glyphicons-halflings.png);
+}
+
+.nav > li.active > a.actions:hover > i, .nav > li.active > a.status:hover > i {
+  background-image: url(../img/glyphicons-halflings-white.png);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .my-actions {
   margin-top: -8px;
   margin-bottom: 12px;

@@ -12,6 +12,8 @@ urlpatterns = patterns('',
             url(r'^student/$', 'student_zip', name='student_zip'),
             url(r'^teacher/$', 'teacher_zip', name='teacher_zip'),
             url(r'^stats/$', 'view_statistics', name='view_statistics'),
+            url(r'^toggle_solution_visibility/$', 'toggle_solution_visibility', name='toggle_solution_visibility'),
+            url(r'^toggle_visibile/$', 'toggle_visibile', name='toggle_visibile'),
             url(r'^move_up/$', 'move_up', name='move_problem_set_up'),
             # Download the file used to solve a problem
             url(r'^move_down/$', 'move_down', name='move_problem_set_down'),

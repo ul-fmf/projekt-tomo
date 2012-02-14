@@ -16,9 +16,10 @@ def view_problem_set(request, problem_set_id):
     attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
     default_language = problems[0].language if problems else None
     return render(request, "problem_set.html", {
+        'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
         'problems': problems,
-        'solved': problem_set.problems.success(request.user),
+        'solved': ProblemSet.objects.success(request.user),
         'attempts': attempts,
         'languages': Language.objects,
         'default_language': default_language,
@@ -70,7 +71,7 @@ def move_up(request, problem_set_id):
     if i - 1 >= 0:
         order[i - 1], order[i] = order[i], order[i - 1]
         problem_set.course.set_problemset_order(order)
-    return redirect(problem_set.course)
+    return redirect(problem_set)
 
 @staff_member_required
 def move_down(request, problem_set_id):
@@ -80,4 +81,23 @@ def move_down(request, problem_set_id):
     if i + 1 <= len(order) - 1:
         order[i + 1], order[i] = order[i], order[i + 1]
         problem_set.course.set_problemset_order(order)
-    return redirect(problem_set.course)
+    return redirect(problem_set)
+
+@staff_member_required
+def toggle_solution_visibility(request, problem_set_id):
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    if problem_set.solution_visibility == 'skrite':
+        problem_set.solution_visibility = 'pogojno'
+    elif problem_set.solution_visibility == 'pogojno':
+        problem_set.solution_visibility = 'vidne'
+    else:
+        problem_set.solution_visibility = 'skrite'
+    problem_set.save()
+    return redirect(problem_set)
+
+@staff_member_required
+def toggle_visibile(request, problem_set_id):
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    problem_set.visible = not problem_set.visible
+    problem_set.save()
+    return redirect(problem_set)
