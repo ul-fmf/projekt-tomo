@@ -1,0 +1,37 @@
+<div class="modal fade" id="add-problem">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      Dodajanje naloge v sklop {{ problem_set.title }}
+    </h3>
+  </div>
+
+  <form action="{% url create %}" method="post">
+    <fieldset>
+
+  <div class="modal-body">
+    <div class="clearfix">
+      {% csrf_token %}
+      <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />
+      <label for="normalSelect">Naslov</label>
+      <div class="input">
+        <input size="30" type="text" name="title" />
+      </div>
+      <label for="normalSelect">Jezik</label>
+      <div class="input">
+        <select name="language" id="language">
+        {% for language in languages.all %}
+          <option value="{{ language.id }}" {% if language.id == default_language.id %}selected{% endif %}>{{ language.name }}</option>
+        {% endfor %}
+        </select>
+      </div>
+    </div><!-- /clearfix -->
+  </div>
+
+  <div class="modal-footer">
+    <input type="submit" class="btn primary" value="Dodaj">
+  </div>
+
+    </fieldset>
+  </form>
+</div>

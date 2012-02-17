@@ -1,3 +1,22 @@
+@media print {
+  .navbar, .span3 {
+    visibility: hidden;
+    width: 0px;
+  }
+  .span9 {
+    width: 940px;
+  }
+}
+
+.btn-mini {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
+.btn-small .icon {
+  margin-top: -3px;
+}
+
 body {
   padding-top: 60px;
   padding-bottom: 40px;
@@ -6,27 +25,42 @@ body {
   padding: 9px 0;
 }
 
+pre code {
+  background-color: inherit;
+  line-height: inherit;
+  border: 0;
+}
 
-.nav > li > a.action, .nav > li > a.status {
-  background: transparent;
+.status, .action {
   float: right;
-  margin-left: 5px;
-  padding: 3px;
 }
 
-.nav > li > a.status {
-  margin-left: 9px;
-}
-
-.nav > li > a.action > i {
-  background-image: none;
-}
-
-.nav > li:hover > a.action > i, .nav > li > a.status > i {
+.status {
   background-image: url(../img/glyphicons-halflings-gray.png);
 }
 
-.nav > li > a.action:hover > i, .nav > li > a.status:hover > i {
+.nav > li > a.action, .nav > li > a.status {
+  background: transparent;
+  padding: 3px;
+}
+
+.nav > li > a.action, .action {
+  margin-left: 5px;
+}
+
+.nav > li > a.status, .status {
+  margin-left: 9px;
+}
+
+.nav > li > a.action > i, .action {
+  background-image: none;
+}
+
+#toggle, .nav > li:hover > a.action > i, .nav > li > a.status > i, *:hover > .action {
+  background-image: url(../img/glyphicons-halflings-gray.png);
+}
+
+#toggle:hover, .nav > li > a.action:hover > i, .nav > li > a.status:hover > i, .status:hover, .action:hover {
   background-image: url(../img/glyphicons-halflings.png);
 }
 
@@ -36,146 +70,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-.my-actions {
-  margin-top: -8px;
-  margin-bottom: 12px;
-}
-
-.my-actions > a {
-  margin-right: 10px;
-}
-.my-actions > a:hover {
-  margin-right: 10px;
-  color: #77f;
-}
-
-.my-actions button, .my-actions .danger, .my-actions .primary {
-  margin: 0;
-  padding: 0;
-  color: #bfbfbf;
-  font-size: small;
-  border: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  background: none;
-  text-shadow: none;
-}
-.my-actions button:hover {
-  color: black;
-}
-.my-actions .danger:hover {
-  color: #c43c35;
-}
-.my-actions .primary:hover {
-  color: #0064cd;
-}
-.inline {
-  margin-bottom: 10px;
-
-}
-
-h4.part {
-  background-position: left center;
-  background-repeat: no-repeat;
-  padding-left: 24px; margin-left: -24px
-}
-h4 .correct {
-  background-image: url({{ STATIC_URL }}img/001_06.png);
-}
-h4 .incorrect {
-  background-image: url({{ STATIC_URL }}img/001_05.png);
-}
-
-.stats {
-  float: right;
-  padding: 0px;
-  color: #404040;
-  background-color: #f0f0f0;
-  font-size: 9.75px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  width: 48px;
-  height: 48px;
-  text-align: center;
-  position: relative;
-  bottom: -5px;
-}
-.stats.small {
-   width: 32px;
-   height: 32px;
-   margin: -12px 8px 8px 8px;
-   background-color: #fff;
-   font-size: 24px;
-}
-
-.success {
-  background-color: #bfe7bf;
-  color: #46a546;
-}
-.warning {
-  background-color: #fceec1;
-  color: #f89406;
-}
-.error {
-  background-color: #fbc7c6;
-  color: #c43c35;
-}
-.info {
-  background-color: #ddf4fb;
-  border-color: #c6edf9;
-}
-.stats-contents {
-  position: absolute;
-  bottom: 5px;
-  width: 100%;
-}
-.stats {
-  font-size: 180%;
-  font-weight: bold;
-  padding: 0px;
-}
-.stats small {
-   display: block;
-   font-size: 42%;
-   line-height: 8px;
-   margin: 4px 0px;
-}
-.alert-message.block-message.default {
-  color: #404040;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-  background-color: #f0f0f0;
-  border-color: #ddd;
-}
-.hidn {
-  background-color: #f0f0f0;
-  margin-left: -10px;
-  padding: 5px 0px;
-}
-.hidn .stats {
-  margin-left: -10px;
-  margin-right: -10px;
-  left: 0px;
-}
-.hidn .span12 {
-  margin-left: 10px;
-}
-.hidn .stats {
-  background-color: #ddd;
-  color: #404040;
-}
 
 .solution-view {
   overflow: auto;

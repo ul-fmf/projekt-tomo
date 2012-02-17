@@ -1741,6 +1741,11 @@ table .span12 {
 .btn-small .icon {
   margin-top: -1px;
 }
+.btn-mini {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
 .btn-primary,
 .btn-primary:hover,
 .btn-warning,

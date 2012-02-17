@@ -15,7 +15,8 @@
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/default.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet">
+    <!-- <link href="{{ STATIC_URL }}css/default.min.css" rel="stylesheet"> -->
     <link href="{{ STATIC_URL}}css/tomo.css" rel="stylesheet">
 
     <!-- Le fav and touch icons -->
@@ -64,7 +65,7 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div class="span3">
+        <div id="sidebar" class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
               {% for course in courses.all %}
@@ -73,9 +74,9 @@
               <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
                 {% if request.user.is_staff %}
                 <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
-                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-remove-sign"></i>{% endif %}
-                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-question-sign"></i>{% endif %}
-                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-sign"></i>{% endif %}
+                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
+                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
+                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
                 </a>
                 <a href="{% url toggle_visibile ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
                   <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
@@ -100,15 +101,15 @@
                       <span class="label {% spaceless %}
                         {% if percentage == 100 %}success{% endif %}
                         {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
-                        {% if percentage < 50 %}error{% endif %}
+                        {% if percentage < 50 %}important{% endif %}
                         {% endspaceless %}">
                         {{ percentage }}%
                       </span>
                       {% endwith %}
                     {% endif %}
-                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-remove-sign status"></i>{% endif %}
-                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-question-sign status"></i>{% endif %}
-                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-sign status"></i>{% endif %}
+                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
+                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
+                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
                 </a>
                 <a href="{% url problem_set ps.id %}">
                   {{ ps.title }}
@@ -117,24 +118,22 @@
               </li>
               {% endfor %}
               {% if request.user.is_staff %}
-                <a href=""><i class="icon-plus"></i>dodaj nalogo</a>
+                <a href=""><button class="btn btn-mini"><strong>+</strong> dodaj sklop</button></a>
               {% endif %}
               {% endfor %}
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
-        <div class="span9">
+        <div id="contents" class="span9">
+          <a href="#" id="toggle" class="icon-chevron-left"></a>
           {% if form.errors %}
             <div class="alert alert-error fade in" data-alert="alert" >
               <h4 class="alert-heading alert-error">Napaka ob prijavi!</h4>
               Uporabite enako uporabniško ime in geslo kot ju na študentskih računalnikih, na primer <code>KovacM</code> in <code>Triglav.1</code>.
             </div>
           {% endif %}
-          <h1>{% block header %}{% endblock %}</h1>
 
-          {% block description %}{% endblock %}
-          {% block actions %}{% endblock %}
-          {% block contents %}{% endblock %}
+          {% block content %}{% endblock %}
         </div><!--/span-->
       </div><!--/row-->
 
@@ -142,13 +141,10 @@
 
       <footer>
         <p>Tomo ponosno uporablja
-          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
-          <a href="http://www.mathjax.org/">MathJax</a> in
-          <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>
+          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> in
+          <a href="http://www.mathjax.org/">MathJax</a>.
         <p>
-        <p>&copy; Andrej Bauer, Matija Pretnar 2011</p>
-                    <p class="muted" style="margin-bottom: 0;">Tight pants next level keffiyeh <a href="#" rel='tooltip' title="first tooltip">you probably</a> haven't heard of them. Photo booth beard raw denim letterpress vegan messenger bag stumptown. Farm-to-table seitan, mcsweeney's fixie sustainable quinoa 8-bit american apparel <a href="#" rel='tooltip' title='Another tooltip'>have a</a> terry richardson vinyl chambray. Beard stumptown, cardigans banh mi lomo thundercats. Tofu biodiesel williamsburg marfa, four loko mcsweeney's cleanse vegan chambray. A <a href="#" rel='tooltip' title='Another one here too'>really ironic</a> artisan whatever keytar, scenester farm-to-table banksy Austin <a href="#" rel='tooltip' title='The last tip!'>twitter handle</a> freegan cred raw denim single-origin coffee viral.
-            </p>
+        <p>&copy; Andrej Bauer, Matija Pretnar 2012</p>
       </footer>
 
     </div><!--/.fluid-container-->
@@ -164,11 +160,9 @@
       });
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script src="{{ STATIC_URL }}js/jquery.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/jquery.min.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/prettify.js" type="text/javascript"></script>
     <script src="{{ STATIC_URL }}js/tomo.js" type="text/javascript"></script>
-    <script src="{{ STATIC_URL }}js/highlight.min.js" type="text/javascript"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
   </body>
 </html>

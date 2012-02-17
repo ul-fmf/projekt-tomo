@@ -36,6 +36,7 @@ def view_statistics(request, problem_set_id):
         user_attempts[attempt.part_id] = attempt
         attempts[problem_id][user] = user_attempts
     return render(request, "statistics.html", {
+        'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
         'users': User.objects.filter(id__in=attempts.keys()).order_by('last_name'),
         'problems': problem_set.problems,

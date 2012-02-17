@@ -1,0 +1,39 @@
+<div class="modal fade" id="copy-problem-{{ problem.id }}">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      Kopiranje naloge {{ problem.title }}
+    </h3>
+  </div>
+
+  <form action="{% url copy %}" method="post">
+    <fieldset>
+
+  <div class="modal-body">
+    <div class="clearfix">
+      {% csrf_token %}
+      <input type="hidden" name="problem_id" value="{{ problem.id }}">
+      <label for="normalSelect">Ciljni sklop</label>
+      <div class="input">
+        <select name="problem_set_id" id="normalSelect">
+        {% for course in request.user.taught_courses.all %}
+          <optgroup label="{{ course.name }}">
+          {% for problem_set in course.problem_sets.all %}
+            <option {% if problem_set == problem.problem_set %}selected{% endif %} value="{{ problem_set.id }}">
+              {{ problem_set.title }}
+            </option>
+          {% endfor %}
+          </optgroup>
+        {% endfor %}
+        </select>
+      </div>
+    </div><!-- /clearfix -->
+  </div>
+
+  <div class="modal-footer">
+    <input type="submit" class="btn primary" value="Kopiraj">
+  </div>
+
+    </fieldset>
+  </form>
+</div>

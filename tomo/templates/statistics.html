@@ -4,41 +4,31 @@
 {% block title %}
   Tomo &mdash;
   {{ problem_set.course.name }} &mdash;
-  {{ problem_set.title }} &mdash;
-  Statistika
+  {{ problem_set.title }}
 {% endblock %}
 
-{% block breadcrumbs %}
-  <li>
-    <a href="{% url homepage %}">Začetna stran</a>
-    <span class="divider">/</span>
-  </li>
-  <li>
-    <a href="{% url course problem_set.course.id %}">{{ problem_set.course.name }}</a>
-    <span class="divider">/</span>
-  </li>
-  <li>
-    <a href="{% url problem_set problem_set.id %}">{{ problem_set.title }}</a>
-    <span class="divider">/</span>
-  </li>
-  <li class="active">
-    Statistika
-  </li>
-{% endblock %}
+{% block content %}
+  <h1>{{ problem_set.title }}</h1>
 
-{% block header %}
-  {{ problem_set.title }} &mdash;
-  Statistika
-{% endblock %}
+  {% if request.user.is_staff %}
+  <ul class="nav nav-tabs">
+    <li>
+      <a href="{% url problem_set problem_set.id %}">Naloga</a>
+    </li>
+    <li class="active">
+      <a href="{% url view_statistics problem_set.id %}">Statistika</a>
+    </li>
+  </ul>
+  {% endif %}
 
-{% block contents %}
+
   {% for problem in problems.all %}
   <h3>
     Naloga {{ forloop.counter }}
     {% if problem.title %} &mdash; {{ problem.title }}{% endif %}
   </h3>
 
-  <table>
+  <table class="table table-striped table-bordered table-condensed">
     <thead>
       <tr>
         <th>&nbsp;</th>
@@ -54,26 +44,15 @@
       {% with attempts|get:problem.id as problem_attempts %}
       {% for user, attempts in problem_attempts.items %}
       <tr>
-        <td><a href="{% url student_archive_download problem.id user.id %}"><img src="{{ STATIC_URL }}img/download.png"></a></td>
+        <td><a class="icon-download" href="{% url student_archive_download problem.id user.id %}"></a></td>
         <td>{{ user.first_name }}</td>
         <td>{{ user.last_name }}</td>
         {% for part in problem.parts.all %}
         {% with attempts|get:part.id as attempt %}
           <td>
             {% if attempt %}
-              <div id="solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;">
-                <div class="modal-header">
-                  <a href="#" class="close">&times;</a>
-                  <h3>
-                    {{user.get_full_name}}, rešitev naloge {{ forloop.parentloop.parentloop.counter }}.{{ forloop.counter }})
-                  </h3>
-                </div>
-                <div class="modal-body solution-view">
-                  {% include 'inline/solution.html' %}
-                </div>
-              </div>
-              <a data-controls-modal="solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" data-backdrop="true" data-keyboard="true" href="#">
-              <img src="{{ STATIC_URL }}img/{% if attempt.solution %}{% if attempt.correct %}correct{% else %}incorrect{% endif %}{% else %}missing{% endif %}.png">
+              {% include 'modal/view_student_solution.html' %}
+              <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="icon-{% if attempt.correct %}plus{% else %}minus{% endif %}-sign">
               </a>
             {% else %}
               &nbsp;
@@ -88,3 +67,6 @@
   </table>
   {% endfor %}
 {% endblock %}
+
+
+

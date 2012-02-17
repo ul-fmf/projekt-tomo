@@ -1,0 +1,15 @@
+<div class="modal fade" id="solutions-{{ problem.id }}-{{ part.id }}" class="modal hide fade" style="width: 700px; margin: -250px 0 0 -352px;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      Naloga {{ forloop.parentloop.counter }}.{{ forloop.counter }})
+    </h3>
+  </div>
+
+  <div class="modal-body solution-view">
+    {% include 'inline/solution.html' %}
+  </div>
+
+  <div class="modal-footer">
+  </div>
+</div>
