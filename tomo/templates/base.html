@@ -99,9 +99,9 @@
                     {% if request.user.is_authenticated %}
                       {% with percentage=solved|get:ps.id %}
                       <span class="label {% spaceless %}
-                        {% if percentage == 100 %}success{% endif %}
-                        {% if percentage < 100 and percentage >= 50 %}warning{% endif %}
-                        {% if percentage < 50 %}important{% endif %}
+                        {% if percentage == 100 %}label-success{% endif %}
+                        {% if percentage < 100 and percentage >= 50 %}label-warning{% endif %}
+                        {% if percentage < 50 %}label-important{% endif %}
                         {% endspaceless %}">
                         {{ percentage }}%
                       </span>
