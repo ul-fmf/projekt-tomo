@@ -19,6 +19,7 @@ def view_problem_set(request, problem_set_id):
         'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
         'problems': problems,
+        'all_courses': Course.objects.all(),
         'solved': ProblemSet.objects.success(request.user),
         'attempts': attempts,
         'languages': Language.objects,
@@ -65,22 +66,13 @@ def teacher_zip(request, problem_set_id):
     return zip_archive(archivename, files)
 
 @staff_member_required
-def move_up(request, problem_set_id):
+def move(request, problem_set_id, k):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    k = int(k)
     order = problem_set.course.get_problemset_order()
     i = order.index(problem_set.id)
-    if i - 1 >= 0:
-        order[i - 1], order[i] = order[i], order[i - 1]
-        problem_set.course.set_problemset_order(order)
-    return redirect(problem_set)
-
-@staff_member_required
-def move_down(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    order = problem_set.course.get_problemset_order()
-    i = order.index(problem_set.id)
-    if i + 1 <= len(order) - 1:
-        order[i + 1], order[i] = order[i], order[i + 1]
+    if 0 <= i + k < len(order):
+        order[i + k], order[i] = order[i], order[i + k]
         problem_set.course.set_problemset_order(order)
     return redirect(problem_set)
 

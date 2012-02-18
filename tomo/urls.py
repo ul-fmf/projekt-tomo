@@ -1,11 +1,8 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
-    (r'^$', 'tomo.views.homepage', {}, 'homepage'),
-    (r'^settings/$', 'tomo.views.settings', {}, 'settings'),
-    (r'^course/', include(patterns('tomo.views',
-        url(r'^(?P<course_id>\d+)/$', 'view_course', name='course'),
-    ))),
+    url(r'^$', 'tomo.views.homepage', name='homepage'),
+    url(r'^settings/$', 'tomo.views.settings', name='settings'),
     (r'^problem_set/', include(patterns('tomo.views',
         (r'^(?P<problem_set_id>\d+)/', include(patterns('tomo.views.problem_set',
             url(r'^$', 'view_problem_set', name='problem_set'),
@@ -14,35 +11,21 @@ urlpatterns = patterns('',
             url(r'^stats/$', 'view_statistics', name='view_statistics'),
             url(r'^toggle_solution_visibility/$', 'toggle_solution_visibility', name='toggle_solution_visibility'),
             url(r'^toggle_visibile/$', 'toggle_visibile', name='toggle_visibile'),
-            url(r'^move_up/$', 'move_up', name='move_problem_set_up'),
-            # Download the file used to solve a problem
-            url(r'^move_down/$', 'move_down', name='move_problem_set_down'),
+            url(r'^move/(?P<k>-?\d+)/$', 'move', name='move_problem_set'),
         ))),
     ))),
     (r'^problem/', include(patterns('tomo.views.problem',
         (r'^(?P<problem_id>\d+)/', include(patterns('tomo.views.problem',
-            # Download the file used to solve a problem
             url(r'^student/$', 'student_download', name='student_download'),
-            # Download the file used to solve a problem
             url(r'^(?P<user_id>\d+)/$', 'student_archive_download', name='student_archive_download'),
-            # Download the file used to solve a problem
             url(r'^teacher/$', 'teacher_download', name='teacher_download'),
-            # Download the file used to solve a problem
-            url(r'^move_up/$', 'move_up', name='move_problem_up'),
-            # Download the file used to solve a problem
-            url(r'^move_down/$', 'move_down', name='move_problem_down'),
+            url(r'^move/(?P<k>-?\d+)/$', 'move', name='move_problem'),
         ))),
-        # Download the file used to solve a problem
         url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
-        # Download the file used to solve a problem
         url(r'^api/teacher/$', 'api_teacher_contents', name='api_teacher_contents'),
-        # Create a problem
-        (r'^create/$', 'create', {}, 'create'),
-        # Create a problem
-        (r'^copy/$', 'copy', {}, 'copy'),
-        # Respond to a challenge
-        (r'^upload/teacher/$', 'teacher_upload', {}, 'teacher_upload'),
-        # Update the problem
-        (r'^upload/student/$', 'student_upload', {}, 'student_upload'),
+        url(r'^create/$', 'create', name='create'),
+        url(r'^copy/$', 'copy', name='copy'),
+        url(r'^upload/teacher/$', 'teacher_upload', name='teacher_upload'),
+        url(r'^upload/student/$', 'student_upload', name='student_upload'),
     ))),
 )

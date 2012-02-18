@@ -1,6 +1,39 @@
 {% extends 'base.html' %}
-{% load my_tags %}
 
 {% block title %}
   Tomo
+{% endblock %}
+
+{% block content %}
+  <div class="hero-unit">
+    <h1>Pozdravljeni!</h1>
+    <p>
+      Tomo je vaš osebni učitelj programiranja.
+      Učite se tako, da na svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku reševanja.
+    </p>
+  </div>
+  <div class="row-fluid">
+    <div class="span4">
+      <h2>Kje so naloge?</h2>
+      <p>
+        Sklop nalog lahko izberete na levi strani.
+        Če na levi strani ne vidite nobenega sklopa, morate v <a href="#settings-form" data-toggle="modal">nastavitvah</a> najprej izbrati vsaj en predmet.
+      </p>
+    </div><!--/span-->
+    <div class="span4">
+      <h2>Kako rešujem naloge?</h2>
+      <p>
+        S Tomota shranite datoteko z nalogami, jo odprite v ustreznem programu in vanjo začnite pisati svoje rešitve.
+        Vsakič, ko datoteko poženete, vas bo Tomo obvestil o pravilnosti rešitev, hkrati pa bo rešitve tudi shranil.
+      </p>
+    </div><!--/span-->
+    <div class="span4">
+      <h2>Kako se prijavim?</h2>
+      <p>
+        Tomo je zaenkrat namenjen študentom Fakultete za matematiko in fiziko.
+        Prijavite se zgoraj desno in sicer z uporabniškim imenom in geslom, ki ju uporabljate za prijavo na študentske računalnike.
+        Če niste študent ali pa se vam ne uspe prijaviti, lahko naloge še vedno rešujete, vendar se vaše rešitve ne bodo shranjevale.
+      </p>
+    </div><!--/span-->
+  </div><!--/row-->
 {% endblock %}

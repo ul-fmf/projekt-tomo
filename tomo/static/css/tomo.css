@@ -1,13 +1,3 @@
-@media print {
-  .navbar, .span3 {
-    visibility: hidden;
-    width: 0px;
-  }
-  .span9 {
-    width: 940px;
-  }
-}
-
 .btn-mini {
   padding: 2px 6px;
   font-size: 11px;
@@ -39,7 +29,7 @@ pre code {
   background-image: url(../img/glyphicons-halflings-gray.png);
 }
 
-.nav > li > a.action, .nav > li > a.status {
+.nav > li > a.action, .nav > li > a.status, .nav > li.active > a.action, .nav > li.active > a.status {
   background: transparent;
   padding: 3px;
 }
@@ -52,31 +42,27 @@ pre code {
   margin-left: 9px;
 }
 
-.nav > li > a.action > i, .action {
-  background-image: none;
-}
-
-#toggle, .nav > li:hover > a.action > i, .nav > li > a.status > i, *:hover > .action {
-  background-image: url(../img/glyphicons-halflings-gray.png);
-}
-
-#toggle:hover, .nav > li > a.action:hover > i, .nav > li > a.status:hover > i, .status:hover, .action:hover {
+.nav > li.active > a.action:hover > i, .nav > li.active > a.status:hover > i {
   background-image: url(../img/glyphicons-halflings.png);
 }
 
-.nav > li.active > a.actions:hover > i, .nav > li.active > a.status:hover > i {
+.nav > li.active > a.action > i, .nav > li.active > a.status > i {
   background-image: url(../img/glyphicons-halflings-white.png);
 }
 
+.nav > li > a.action > i, .action, .nav > li.active > a.action > i {
+  background-image: none;
+}
 
+.nav > li:hover > a.action > i, .nav > li > a.status > i, *:hover > .action {
+  background-image: url(../img/glyphicons-halflings-gray.png);
+}
 
+.nav > li > a.action:hover > i, .nav > li > a.status:hover > i, .status:hover, .action:hover {
+  background-image: url(../img/glyphicons-halflings.png);
+}
 
 .solution-view {
   overflow: auto;
   max-height: 400px;
-}
-
-.attempt-plusminus {
-  font-weight: bold;
-  font-size: 200%;
 }

@@ -5,11 +5,8 @@
 - na stran s statistiko dodaj stolpec s časom oddaje
 - na statistiki naredi urejanje po stolpcih
 
-- prenovi kazanje rešitev
 - kontaktiranje študentov glede rešitev
 - kontaktiranje avtorjev glede nalog
-
-- popucati akcije
 
 PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
 
@@ -20,6 +17,10 @@ PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
 
 
 KO BO ČAS
+
+- CSS za printanje
+- favicon
+- Mathjax config v tomo.js
 
 - razni bugi, za katere upamo, da jih ne nabašemo:
     - preveri Transfer-Encoding: chunked v R-ju

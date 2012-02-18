@@ -14,9 +14,7 @@
 
     <!-- Le styles -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ STATIC_URL }}css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet">
-    <!-- <link href="{{ STATIC_URL }}css/default.min.css" rel="stylesheet"> -->
     <link href="{{ STATIC_URL}}css/tomo.css" rel="stylesheet">
 
     <!-- Le fav and touch icons -->
@@ -31,34 +29,27 @@
    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
           <a class="brand" href="{% url homepage %}">Tomo</a>
-          <div class="nav-collapse">
-            {% if user.is_authenticated %}
-            <ul class="nav pull-right">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name }} <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url settings %}">Nastavitve</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
-                </ul>
-              </li>
-            </ul>
-            {% else %}
-              <form method='post' action="{% url django.contrib.auth.views.login %}" class="navbar-form pull-right">
-                {% csrf_token %}
-                <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
-                <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">
-                <input type='hidden' name='next' value='{{ next|default:request.path }}' >
-                <button class="btn" type="submit">Prijavite se</button>
-              </form>
-            {% endif %}
-          </div><!--/.nav-collapse -->
+          {% if user.is_authenticated %}
+          <ul class="nav pull-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a data-toggle="modal" href="#settings-form">Nastavitve</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
+              </ul>
+            </li>
+          </ul>
+          {% else %}
+            <form method='post' action="{% url django.contrib.auth.views.login %}" class="navbar-form pull-right">
+              {% csrf_token %}
+              <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
+              <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">
+              <input type='hidden' name='next' value='{{ next|default:request.path }}' >
+              <button class="btn" type="submit">Prijavite se</button>
+            </form>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -71,61 +62,62 @@
               {% for course in courses.all %}
               <li class="nav-header">{{ course.name }}</li>
               {% for ps in course.problem_sets.all %}
-              <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
                 {% if request.user.is_staff %}
-                <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
-                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
-                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
-                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
-                </a>
-                <a href="{% url toggle_visibile ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
-                  <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
-                </a>
-                <a href="{% url admin:tomo_problemset_delete ps.id %}" class="action" title="Pobriši">
-                  <i class="icon-trash"></i>
-                </a>
-                <a href="{% url admin:tomo_problemset_change ps.id %}" class="action" title="Napredno…">
-                  <i class="icon-cog"></i>
-                </a>
-                <a href="{% url move_problem_set_up ps.id %}" class="action" title="Premakni gor">
-                  <i class="icon-arrow-up"></i>
-                </a>
-                <a href="{% url move_problem_set_down ps.id %}" class="action" title="Premakni dol">
-                  <i class="icon-arrow-down"></i>
-                </a>
-                <a href="{% url problem_set ps.id %}">{{ ps.title }}</a>
+                  <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
+                    <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+                      {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
+                      {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
+                      {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
+                    </a>
+                    <a href="{% url toggle_visibile ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
+                      <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
+                    </a>
+                    <a href="{% url admin:tomo_problemset_delete ps.id %}" class="action" title="Pobriši">
+                      <i class="icon-trash"></i>
+                    </a>
+                    <a href="{% url admin:tomo_problemset_change ps.id %}" class="action" title="Napredno…">
+                      <i class="icon-cog"></i>
+                    </a>
+                    <a href="{% url move_problem_set ps.id -1 %}" class="action" title="Premakni gor">
+                      <i class="icon-arrow-up"></i>
+                    </a>
+                    <a href="{% url move_problem_set ps.id 1 %}" class="action" title="Premakni dol">
+                      <i class="icon-arrow-down"></i>
+                    </a>
+                    <a href="{% url problem_set ps.id %}">{{ ps.title }}</a>
+                  </li>
                 {% else %}
-                <a href="#" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
-                    {% if request.user.is_authenticated %}
-                      {% with percentage=solved|get:ps.id %}
-                      <span class="label {% spaceless %}
-                        {% if percentage == 100 %}label-success{% endif %}
-                        {% if percentage < 100 and percentage >= 50 %}label-warning{% endif %}
-                        {% if percentage < 50 %}label-important{% endif %}
-                        {% endspaceless %}">
-                        {{ percentage }}%
-                      </span>
-                      {% endwith %}
-                    {% endif %}
-                  {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
-                  {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
-                  {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
-                </a>
-                <a href="{% url problem_set ps.id %}">
-                  {{ ps.title }}
-                </a>
+                  {% if ps.visible %}
+                    <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
+                      <a href="#" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+                          {% if request.user.is_authenticated %}
+                            {% with percentage=solved|get:ps.id %}
+                            <span class="label {% spaceless %}
+                              {% if percentage == 100 %}label-success{% endif %}
+                              {% if percentage < 100 and percentage >= 50 %}label-warning{% endif %}
+                              {% if percentage < 50 %}label-important{% endif %}
+                              {% endspaceless %}">
+                              {{ percentage }}%
+                            </span>
+                            {% endwith %}
+                          {% endif %}
+                        {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
+                        {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
+                        {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
+                      </a>
+                      <a href="{% url problem_set ps.id %}">
+                        {{ ps.title }}
+                      </a>
+                    </li>
+                  {% endif %}
                 {% endif %}
-              </li>
               {% endfor %}
-              {% if request.user.is_staff %}
-                <a href=""><button class="btn btn-mini"><strong>+</strong> dodaj sklop</button></a>
-              {% endif %}
               {% endfor %}
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
+
         <div id="contents" class="span9">
-          <a href="#" id="toggle" class="icon-chevron-left"></a>
           {% if form.errors %}
             <div class="alert alert-error fade in" data-alert="alert" >
               <h4 class="alert-heading alert-error">Napaka ob prijavi!</h4>
@@ -133,7 +125,8 @@
             </div>
           {% endif %}
 
-          {% block content %}{% endblock %}
+          {% block content %}
+          {% endblock %}
         </div><!--/span-->
       </div><!--/row-->
 
@@ -146,6 +139,8 @@
         <p>
         <p>&copy; Andrej Bauer, Matija Pretnar 2012</p>
       </footer>
+    
+    {% include 'modal/settings.html' %}
 
     </div><!--/.fluid-container-->
 

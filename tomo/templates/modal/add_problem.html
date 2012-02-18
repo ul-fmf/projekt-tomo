@@ -7,31 +7,21 @@
   </div>
 
   <form action="{% url create %}" method="post">
-    <fieldset>
-
   <div class="modal-body">
-    <div class="clearfix">
-      {% csrf_token %}
-      <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />
-      <label for="normalSelect">Naslov</label>
-      <div class="input">
-        <input size="30" type="text" name="title" />
-      </div>
-      <label for="normalSelect">Jezik</label>
-      <div class="input">
-        <select name="language" id="language">
-        {% for language in languages.all %}
-          <option value="{{ language.id }}" {% if language.id == default_language.id %}selected{% endif %}>{{ language.name }}</option>
-        {% endfor %}
-        </select>
-      </div>
-    </div><!-- /clearfix -->
+    {% csrf_token %}
+    <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />
+    <label>Naslov</label>
+    <input size="30" type="text" name="title" />
+    <label>Jezik</label>
+    <select name="language" id="language">
+    {% for language in languages.all %}
+      <option value="{{ language.id }}" {% if language.id == default_language.id %}selected{% endif %}>{{ language.name }}</option>
+    {% endfor %}
+    </select>
   </div>
 
   <div class="modal-footer">
-    <input type="submit" class="btn primary" value="Dodaj">
+    <button type="submit" class="btn btn-primary">Dodaj</button>
   </div>
-
-    </fieldset>
   </form>
 </div>

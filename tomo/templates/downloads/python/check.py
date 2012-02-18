@@ -41,6 +41,9 @@ class Check:
                 errors.append('morajo nastaviti {0} na {1},\nvendar nastavijo {0} na {2}'.format(x, v, s[x]))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', example,  ";\n".join(errors))
+            return False
+        else:
+            return True
 
     @staticmethod
     def canonize(x, digits=6):
@@ -95,9 +98,13 @@ class Check:
                 if e.__class__ != exception.__class__ or e.args != exception.args:
                     Check.error("Izraz {0} sproži izjemo {1!r} namesto {2!r}.",
                                 example, e, exception)
+                    return False
+                else:
+                    return True
             else:
                 Check.error("Izraz {0} vrne {1!r} namesto da bi sprožil izjemo {2}.",
                             example, returned, exception)
+                return False
 
         else:
             returned = eval(example, globals(), local)
@@ -105,6 +112,9 @@ class Check:
             if reason:
                 Check.error("Izraz {0} vrne {1!r} namesto {2!r} ({3}).",
                             example, returned, value, reason)
+                return False
+            else:
+                return False
 
     @staticmethod
     def summarize():

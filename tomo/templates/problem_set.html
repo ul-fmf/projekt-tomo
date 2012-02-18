@@ -8,12 +8,17 @@
 {% endblock %}
 
 {% block content %}
-  <h1>{{ problem_set.title }}</h1>
+  <div class="page-header">
+    <h1>{{ problem_set.title }}</h1>
+
+  </div>
+
+  {{ problem_set.description|tex_markdown|safe }}
 
   {% if request.user.is_staff %}
   <ul class="nav nav-tabs">
     <li class="active">
-      <a href="{% url problem_set problem_set.id %}">Naloga</a>
+      <a href="{% url problem_set problem_set.id %}">Naloge</a>
     </li>
     <li>
       <a href="{% url view_statistics problem_set.id %}">Statistika</a>
@@ -21,25 +26,20 @@
   </ul>
   {% endif %}
 
-  {{ problem_set.description|tex_markdown|safe }}
-
   {% if request.user.is_staff %}
     <a href="{% url teacher_zip problem_set.id %}" class="btn btn-primary"><i class="icon-edit icon-white"></i> Uredi sklop</a>
     <a href="{% url student_zip problem_set.id %}" class="btn"><i class="icon-check"></i> Reši sklop</a>
   {% else %}
     {% if request.user.is_authenticated %}
-      <a href="{% url student_zip problem_set.id %}" class="btn-primary"><i class="icon-check icon-white"></i> Reši sklop</a>
+      <a href="{% url student_zip problem_set.id %}" class="btn btn-primary"><i class="icon-check icon-white"></i> Reši sklop</a>
     {% else %}
-      {% include 'modal/anonymous_download_problem_set.html' %}
+      {% include 'modal/anonymous_problem_set.html' %}
       <a href="#anonymous-download-problem-set-{{ problem_set.id }}" data-toggle="modal" class="btn btn-primary"><i class="icon-check icon-white"></i> Reši sklop</a>
     {% endif %}
-    <p class='help-block'>
-      Z zgornjim gumbom na svoj računalnik prenesete arhiv, ki vsebuje datoteke z nalogami.<br />
-      Navodila za reševanje so zapisana v datotekah.
-    </p>
   {% endif %}
 
   {% for problem in problems %}
+    {% include 'modal/copy_problem.html' %}
     <hr />
     {% if request.user.is_staff %}
       <h2 id="problem-{{ problem.id }}">
@@ -48,10 +48,12 @@
         <a class="icon-check status" href="{% url student_download problem.id %}" title="Reši nalogo"></a>
         <a class="icon-cog action" href="{% url admin:tomo_problem_change problem.id %}" title="Napredne nastavitve naloge…"></a>
         <a class="icon-trash action" href="{% url admin:tomo_problem_delete problem.id %}" title="Pobriši nalogo"></a>
-        {% include 'modal/copy_problem.html' %}
         <a class="icon-share-alt action" data-toggle="modal" href="#copy-problem-{{ problem.id }}" title="Kopiraj nalogo"></a>
+        <a class="icon-arrow-up action" href="{% url move_problem problem.id -1 %}" title="Premakni gor"></a>
+        <a class="icon-arrow-down action" href="{% url move_problem problem.id 1 %}" title="Premakni dol"></a>
       </h2>
     {% else %}
+      <div class="problem">
       <h2 id="problem-{{ problem.id }}">
         {{ problem.title }}
         {% if request.user.is_authenticated %}
@@ -60,7 +62,8 @@
           <a class="icon-check status" href="#anonymous-download-problem-{{ problem.id }}" data-toggle="modal" title="Reši nalogo"></a>
         {% endif %}
       </h2>
-      {% include 'modal/anonymous_download_problem.html' %}
+      </div>
+      {% include 'modal/anonymous_problem.html' %}
     {% endif %}
 
     {{ problem.description|tex_markdown|safe }}
@@ -68,8 +71,10 @@
      {% for part in problem.parts.all %}
       {% with attempts|get:part.id as attempt %}
           {% include 'modal/view_solution.html' %}
+          <div class="part">
           <h4>
-            <a class="icon-search status" data-toggle="modal" title="Poglejte rešitev" href="#solutions-{{ problem.id }}-{{ part.id }}"></a>
+            <a class="icon-search status" data-toggle="modal" title="Poglejte rešitev" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}"></a>
+            <a class="icon-trash action" href="{% url admin:tomo_part_delete part.id %}" title="Pobriši podnalogo"></a>
             Podnaloga {{ forloop.counter }}
             {% if attempt.correct %}
               <span style="vertical-align: top" class="label label-success">rešena</span>
@@ -79,6 +84,7 @@
           </h4>
           <div id="part-{{ part.id }}">
             {{ part.description|tex_markdown|safe }}
+          </div>
           </div>
       {% endwith %}
     {% endfor %}

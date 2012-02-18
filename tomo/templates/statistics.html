@@ -51,7 +51,7 @@
         {% with attempts|get:part.id as attempt %}
           <td>
             {% if attempt %}
-              {% include 'modal/view_student_solution.html' %}
+              {% include 'modal/view_solution.html' %}
               <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="icon-{% if attempt.correct %}plus{% else %}minus{% endif %}-sign">
               </a>
             {% else %}
