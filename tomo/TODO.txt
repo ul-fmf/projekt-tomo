@@ -1,5 +1,10 @@
 ČIMPREJ
 
+- procenti na firefoxu so hecni
+- oštevilčenje datotek
+- pobriši brisanje podnalog za študente
+- kaj če ni nobenih predmetov
+
 - podpora za Mathematico
 
 - na stran s statistiko dodaj stolpec s časom oddaje
