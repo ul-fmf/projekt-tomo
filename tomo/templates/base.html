@@ -69,7 +69,7 @@
                       {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
                       {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
                     </a>
-                    <a href="{% url toggle_visibile ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
+                    <a href="{% url toggle_visible ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
                       <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
                     </a>
                     <a href="{% url admin:tomo_problemset_delete ps.id %}" class="action" title="Pobriši">

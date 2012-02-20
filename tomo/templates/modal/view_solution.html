@@ -2,7 +2,7 @@
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3>
-      {% if request.user.is_staff %}
+      {% if user %}
         {{ user.get_full_name }}, {{ problem.title }}, podnaloga {{ forloop.counter }}
       {% else %}
         {{ problem.title }}, podnaloga {{ forloop.counter }}

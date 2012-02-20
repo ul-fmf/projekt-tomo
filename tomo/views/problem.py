@@ -74,7 +74,7 @@ def move(request, problem_id, k):
     if 0 <= i + k < len(order):
         order[i + k], order[i] = order[i], order[i + k]
         problem.problem_set.set_problem_order(order)
-    return redirect(problem)
+    return redirect(request.META.get('HTTP_REFERER', problem))
 
 @staff_member_required
 def copy(request):
