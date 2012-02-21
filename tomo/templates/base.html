@@ -63,7 +63,7 @@
               <li class="nav-header">{{ course.name }}</li>
               {% for ps in course.problem_sets.all %}
                 {% if request.user.is_staff %}
-                  <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
+                  <li class="{% if ps.id == problem_set.id %}active{% endif %} {% if not ps.visible %}hidden{% endif %}">
                     <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
                       {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
                       {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}

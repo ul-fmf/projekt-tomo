@@ -21,6 +21,10 @@ pre code {
   border: 0;
 }
 
+.hidden a {
+  color: #bbb;
+}
+
 .status, .action {
   float: right;
 }
