@@ -54,7 +54,7 @@
           <td>
             {% if attempt %}
               {% include 'modal/view_solution.html' %}
-              <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="icon-{% if attempt.correct %}ok{% else %}remove{% endif %}">
+              <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}"><img src="{{ STATIC_URL }}img/{% if attempt.correct %}correct{% else %}incorrect{% endif %}.png"></a>
               </a>
             {% else %}
               &nbsp;
