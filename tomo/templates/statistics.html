@@ -32,8 +32,7 @@
     <thead>
       <tr>
         <th>&nbsp;</th>
-        <th>Ime</th>
-        <th>Priimek</th>
+        <th>Ime in priimek</th>
         {% for part in problem.parts.all %}
         <th>{{ forloop.counter }})</th>
         {% endfor %}
@@ -42,13 +41,14 @@
 
     <tbody>
       {% with attempts|get:problem.id as problem_attempts %}
-      {% for user, attempts in problem_attempts.items %}
+      {% for user in users %}
+      {% if user.id in problem_attempts %}
       <tr>
         <td><a class="icon-download" href="{% url student_archive_download problem.id user.id %}"></a></td>
-        <td>{{ user.first_name }}</td>
-        <td>{{ user.last_name }}</td>
+        <td>{{ user.get_full_name }}</td>
+        {% with problem_attempts|get:user.id as user_attempts %}
         {% for part in problem.parts.all %}
-        {% with attempts|get:part.id as attempt %}
+        {% with user_attempts|get:part.id as attempt %}
           <td>
             {% if attempt %}
               {% include 'modal/view_solution.html' %}
@@ -60,7 +60,9 @@
           </td>
         {% endwith %}
         {% endfor %}
+        {% endwith %}
       </tr>
+      {% endif %}
       {% endfor %}
       {% endwith %}
     </tbody>
