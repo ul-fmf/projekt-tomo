@@ -34,7 +34,9 @@
         <th>&nbsp;</th>
         <th>Ime in priimek</th>
         {% for part in problem.parts.all %}
-        <th>{{ forloop.counter }})</th>
+        {% with success|get:part.id as part_success %}
+        <th>{{ forloop.counter }}) <span class="label label-success">{{ part_success.correct }}</span> / <span class="label label-important">{{ part_success.incorrect }}</span></th>
+        {% endwith %}
         {% endfor %}
       </tr>
     </thead>
@@ -52,7 +54,7 @@
           <td>
             {% if attempt %}
               {% include 'modal/view_solution.html' %}
-              <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="icon-{% if attempt.correct %}plus{% else %}minus{% endif %}-sign">
+              <a data-toggle="modal" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" class="icon-{% if attempt.correct %}ok{% else %}remove{% endif %}">
               </a>
             {% else %}
               &nbsp;

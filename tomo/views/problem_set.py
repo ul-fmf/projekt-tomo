@@ -33,19 +33,22 @@ def view_statistics(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
     user_ids = set()
+    success = dict((part.id, {'correct': 0, 'incorrect': 0}) for problem in problem_set.problems.all() for part in problem.parts.all())
     for attempt in Attempt.objects.active().for_problem_set(problem_set).select_related('submission__user', 'part__problem_id'):
         user_id = attempt.submission.user_id
         user_ids.add(user_id)
         problem_id = attempt.part.problem_id
         user_attempts = attempts[problem_id].get(user_id, {})
         user_attempts[attempt.part_id] = attempt
+        success[attempt.part_id]['correct' if attempt.correct else 'incorrect'] += 1 
         attempts[problem_id][user_id] = user_attempts
     return render(request, "statistics.html", {
         'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
         'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
         'problems': problem_set.problems,
-        'attempts': attempts
+        'attempts': attempts,
+        'success': success
     })
 
 def student_zip(request, problem_set_id):
