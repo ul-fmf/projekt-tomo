@@ -158,12 +158,11 @@ def student_upload(request):
             'user': user.id,
             'problem': problem.id,
         })
-        response['update'] = 'http://{0}:{1}{2}?{3}'.format(
-            request.META['SERVER_NAME'],
-            request.META['SERVER_PORT'],
-            reverse('api_student_contents'),
+        response['update'] = '{0}?{1}'.format(
+            request.build_absolute_uri(reverse('api_student_contents')),
             urlencode({'data': data, 'signature': sig})
         )
+        print response['update']
 
     return HttpResponse(json.dumps(response))
 
@@ -225,10 +224,8 @@ def teacher_upload(request):
         'user': user.id,
         'problem': problem.id,
     })
-    update_url = 'http://{0}:{1}{2}?{3}'.format(
-        request.META['SERVER_NAME'],
-        request.META['SERVER_PORT'],
-        reverse('api_teacher_contents'),
+    update_url = '{0}?{1}'.format(
+        request.build_absolute_uri(reverse('api_teacher_contents')),
         urlencode({'data': update_data, 'signature': sig})
     )
 
