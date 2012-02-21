@@ -110,10 +110,17 @@ else:
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
             if 'update' in response:
+                print("Posodabljam datoteko... ", end = "")
+                index = 1
+                while os.path.exists('{0}.{1}'.format(_filename, index)):
+                    index += 1
+                backup_filename = "{0}.{1}".format(_filename, index)
+                shutil.copy(_filename, backup_filename)
                 r = urlopen(response['update'])
-                shutil.copy(_filename, _filename + ".orig")
                 with open(_filename, 'w', encoding='utf-8') as f:
                     f.write(r.read().decode('utf-8'))
+                print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
+                print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
         except HTTPError:
             print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
     else:

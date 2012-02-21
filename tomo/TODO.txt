@@ -2,6 +2,7 @@
 
 - procenti na firefoxu so hecni
 - oštevilčenje datotek
+- Py datoteke MIME type
 
 - podpora za Mathematico
 

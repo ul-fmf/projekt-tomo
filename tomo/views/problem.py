@@ -221,11 +221,25 @@ def teacher_upload(request):
     new_parts = []
     error = None
     messages = []
+    update_data, sig = pack({
+        'user': user.id,
+        'problem': problem.id,
+    })
+    update_url = 'http://{0}:{1}{2}?{3}'.format(
+        request.META['SERVER_NAME'],
+        request.META['SERVER_PORT'],
+        reverse('api_teacher_contents'),
+        urlencode({'data': update_data, 'signature': sig})
+    )
 
     if data.get('timestamp', '') != str(problem.timestamp):
-        return(HttpResponse("NAPAKA: Uporabljate zastarelo verzijo datoteke. (Novo lahko pridobite na strežniku.)"))
+        return HttpResponse(json.dumps({
+            'message': "NAPAKA: Uporabljate zastarelo verzijo datoteke.",
+            'update': update_url
+        }))
 
     else:
+
         for part in post['parts']:
             part_id = int(part['part'])
             if part_id == 0:
@@ -275,16 +289,7 @@ def teacher_upload(request):
             part.save()
         problem.set_part_order([part.id for part in new_parts])
 
-        data, sig = pack({
-            'user': user.id,
-            'problem': problem.id,
-        })
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages),
-                    'update': 'http://{0}:{1}{2}?{3}'.format(
-                        request.META['SERVER_NAME'],
-                        request.META['SERVER_PORT'],
-                        reverse('api_teacher_contents'),
-                        urlencode({'data': data, 'signature': sig})
-                    )
+                    'update': update_url
                 }))
