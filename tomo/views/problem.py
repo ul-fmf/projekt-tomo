@@ -66,14 +66,13 @@ def student_archive_download(request, problem_id, user_id):
     return plain_text(filename, contents)
 
 @staff_member_required
-def move(request, problem_id, k):
+def move(request, problem_id, shift):
     problem = get_object_or_404(Problem, id=problem_id)
-    k = int(k)
     order = problem.problem_set.get_problem_order()
-    i = order.index(problem.id)
-    if 0 <= i + k < len(order):
-        order[i + k], order[i] = order[i], order[i + k]
-        problem.problem_set.set_problem_order(order)
+    old = order.index(problem.id)
+    new = max(0, min(old + int(shift), len(order) - 1))
+    order[old], order[new] = order[new], order[old]
+    problem.problem_set.set_problem_order(order)
     return redirect(request.META.get('HTTP_REFERER', problem))
 
 @staff_member_required
@@ -162,7 +161,6 @@ def student_upload(request):
             request.build_absolute_uri(reverse('api_student_contents')),
             urlencode({'data': data, 'signature': sig})
         )
-        print response['update']
 
     return HttpResponse(json.dumps(response))
 

@@ -16,7 +16,6 @@ def view_problem_set(request, problem_set_id):
     problems = problem_set.problems.all()
     attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
     default_language = problems[0].language if problems else None
-    print(cache._cache.keys())
     return render(request, "problem_set.html", {
         'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
@@ -73,14 +72,13 @@ def teacher_zip(request, problem_set_id):
     return zip_archive(archivename, files)
 
 @staff_member_required
-def move(request, problem_set_id, k):
+def move(request, problem_set_id, shift):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    k = int(k)
     order = problem_set.course.get_problemset_order()
-    i = order.index(problem_set.id)
-    if 0 <= i + k < len(order):
-        order[i + k], order[i] = order[i], order[i + k]
-        problem_set.course.set_problemset_order(order)
+    old = order.index(problem_set.id)
+    new = max(0, min(old + int(shift), len(order) - 1))
+    order[old], order[new] = order[new], order[old]
+    problem_set.course.set_problemset_order(order)
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
 @staff_member_required
