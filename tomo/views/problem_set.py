@@ -3,9 +3,7 @@ from django.core.cache import cache
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.template import RequestContext
 from django.template.defaultfilters import slugify
-from django.template.loader import render_to_string
 
 from tomo.models import *
 from tomo.utils import *
@@ -60,7 +58,6 @@ def student_zip(request, problem_set_id):
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
-
 def teacher_zip(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     archivename = slugify(problem_set.title)
@@ -84,12 +81,8 @@ def move(request, problem_set_id, shift):
 @staff_member_required
 def toggle_solution_visibility(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    if problem_set.solution_visibility == 'skrite':
-        problem_set.solution_visibility = 'pogojno'
-    elif problem_set.solution_visibility == 'pogojno':
-        problem_set.solution_visibility = 'vidne'
-    else:
-        problem_set.solution_visibility = 'skrite'
+    next = {'skrite': 'pogojno', 'pogojno': 'vidne', 'vidne': 'skrite'}
+    problem_set.solution_visibility = next[problem_set.solution_visibility]
     problem_set.save()
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
