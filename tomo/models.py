@@ -63,6 +63,12 @@ class ProblemSet(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
+    def default_language(self):
+        try:
+            return Language.objects.filter(problems__problem_set=self).latest('problems__timestamp')
+        except Problem.DoesNotExist:
+            return
+
     class QuerySet(QuerySet):
         def get_for_user(self, problem_set_id, user):
             problem_set = ProblemSet.objects.get(id=problem_set_id)

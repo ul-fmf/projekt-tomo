@@ -13,7 +13,6 @@ def view_problem_set(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     problems = problem_set.problems.all()
     attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
-    default_language = problems[0].language if problems else None
     return render(request, "problem_set.html", {
         'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
@@ -21,8 +20,7 @@ def view_problem_set(request, problem_set_id):
         'all_courses': Course.objects.all(),
         'solved': ProblemSet.objects.success(request.user),
         'attempts': attempts,
-        'languages': Language.objects,
-        'default_language': default_language,
+        'languages': Language.objects
     })
 
 @staff_member_required

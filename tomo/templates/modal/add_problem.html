@@ -15,7 +15,7 @@
     <label>Jezik</label>
     <select name="language" id="language">
     {% for language in languages.all %}
-      <option value="{{ language.id }}" {% if language.id == default_language.id %}selected{% endif %}>{{ language.name }}</option>
+      <option value="{{ language.id }}" {% if language == problem_set.default_language %}selected{% endif %}>{{ language.name }}</option>
     {% endfor %}
     </select>
   </div>
