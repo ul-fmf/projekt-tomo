@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import datetime
+
 from django.core.cache import cache
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -24,12 +26,17 @@ def view_problem_set(request, problem_set_id):
     })
 
 @staff_member_required
-def view_statistics(request, problem_set_id):
+def view_statistics(request, problem_set_id, limit):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
     user_ids = set()
+    limit = int(limit)
     success = dict((part.id, {'correct': 0, 'incorrect': 0}) for problem in problem_set.problems.all() for part in problem.parts.all())
-    for attempt in Attempt.objects.active().for_problem_set(problem_set).select_related('submission__user', 'part__problem_id'):
+    active_attempts = Attempt.objects.active().for_problem_set(problem_set)
+    if limit:
+        cutoff = datetime.datetime.now() - datetime.timedelta(minutes=limit)
+        active_attempts = active_attempts.filter(submission__timestamp__gt=cutoff)
+    for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
         user_id = attempt.submission.user_id
         user_ids.add(user_id)
         problem_id = attempt.part.problem_id
@@ -37,13 +44,22 @@ def view_statistics(request, problem_set_id):
         user_attempts[attempt.part_id] = attempt
         success[attempt.part_id]['correct' if attempt.correct else 'incorrect'] += 1 
         attempts[problem_id][user_id] = user_attempts
+    limits = [
+        ("Zadnje pol ure", 30),
+        ("Zadnji dve uri", 2 * 60),
+        ("Zadnji dan", 24 * 60),
+        ("Zadnji teden", 7 * 24 * 60),
+        ("Vse", 0)
+    ]
     return render(request, "statistics.html", {
         'courses': Course.user_courses(request.user),
         'problem_set': problem_set,
         'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
         'problems': problem_set.problems,
         'attempts': attempts,
-        'success': success
+        'success': success,
+        'limits': limits,
+        'limit': limit
     })
 
 def student_zip(request, problem_set_id):

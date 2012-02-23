@@ -10,17 +10,22 @@
 {% block content %}
   <h1>{{ problem_set.title }}</h1>
 
-  {% if request.user.is_staff %}
   <ul class="nav nav-tabs">
     <li>
       <a href="{% url problem_set problem_set.id %}">Naloga</a>
     </li>
     <li class="active">
-      <a href="{% url view_statistics problem_set.id %}">Statistika</a>
+      <a href="{% url view_statistics problem_set.id 120 %}">Statistika</a>
     </li>
   </ul>
-  {% endif %}
 
+  <ul class="nav nav-pills">
+    {% for desc, lim in limits %}
+    <li{% if lim == limit %} class="active"{% endif %}>
+      <a href="{% url view_statistics problem_set.id lim %}">{{ desc }}</a>
+    </li>
+    {% endfor %}
+  </ul>
 
   {% for problem in problems.all %}
   <h3>
