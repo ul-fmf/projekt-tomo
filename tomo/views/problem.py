@@ -44,10 +44,9 @@ def student_contents(request, problem, user, authenticated):
 
 def student_download(request, problem_id):
     problem = Problem.objects.get_for_user(problem_id, request.user)
-    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
     contents = student_contents(request, problem, request.user,
                                  request.user.is_authenticated())
-    return plain_text(filename, contents)
+    return plain_text(problem.filename(), contents)
 
 def api_student_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
@@ -190,8 +189,7 @@ def teacher_contents(request, problem, user):
 @staff_member_required
 def teacher_download(request, problem_id=None):
     problem = Problem.objects.get_for_user(problem_id, request.user)
-    filename = "{0}.{1}".format(slugify(problem.title), problem.language.extension)
-    return plain_text(filename, teacher_contents(request, problem, request.user))
+    return plain_text(problem.filename(), teacher_contents(request, problem, request.user))
 
 def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])

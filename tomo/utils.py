@@ -8,7 +8,6 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, render_to_response, redirect, render
 from django.template import loader, Context, RequestContext
-from django.template.defaultfilters import slugify
 from django.views.decorators.csrf import csrf_exempt
 
 from tomo.utils import *

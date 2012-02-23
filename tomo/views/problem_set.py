@@ -53,8 +53,9 @@ def student_zip(request, problem_set_id):
     archivename = slugify(problem_set.title)
     files = []
     for i, problem in enumerate(problem_set.problems.all()):
-        filename = "{0}/{1:02d}-{2}.{3}".format(archivename, i + 1, slugify(problem.title), problem.language.extension) # Select your files here.
-        contents = student_contents(request, problem, request.user, request.user.is_authenticated()).encode('utf-8')
+        filename = "{0}/{1:02d}-{2}".format(archivename, i + 1, problem.filename())
+        contents = student_contents(request, problem, request.user,
+                                    request.user.is_authenticated()).encode('utf-8')
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
@@ -63,7 +64,7 @@ def teacher_zip(request, problem_set_id):
     archivename = slugify(problem_set.title)
     files = []
     for problem in problem_set.problems.all():
-        filename = "{0}/{1}.{2}".format(archivename, slugify(problem.title), problem.language.extension) # Select your files here.
+        filename = "{0}/{1}".format(archivename, problem.filename()) # Select your files here.
         contents = teacher_contents(request, problem, request.user).encode('utf-8')
         files.append((filename, contents))
     return zip_archive(archivename, files)

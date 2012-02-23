@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models.query import QuerySet
+from django.template.defaultfilters import slugify
 
 class QuerySetManager(models.Manager):
     """A re-usable Manager to access a custom QuerySet"""
@@ -126,6 +127,9 @@ class Problem(models.Model):
 
     def visible(self, user):
         return self.problem_set.visible or user.is_staff
+
+    def filename(self):
+        return u'{0}.{1}'.format(slugify(self.title), self.language.extension)
 
     def get_absolute_url(self):
         return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
