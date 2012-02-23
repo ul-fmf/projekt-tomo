@@ -29,7 +29,7 @@
    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="{% url homepage %}">Tomo</a>
+          <a class="brand" href="{% url homepage %}">Tomo{% if debug %} – razvojna različica{% endif %}</a>
           {% if user.is_authenticated %}
           <ul class="nav pull-right">
             <li class="dropdown">
