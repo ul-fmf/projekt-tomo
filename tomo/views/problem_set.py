@@ -73,6 +73,7 @@ def student_zip(request, problem_set_id):
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
+@staff_member_required
 def teacher_zip(request, problem_set_id):
     problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
     archivename = slugify(problem_set.title)
