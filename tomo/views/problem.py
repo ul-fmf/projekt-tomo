@@ -31,7 +31,8 @@ def student_contents(request, problem, user, authenticated):
         'parts': problem.parts.all(),
         'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
         'preamble': preamble,
-        'authenticated': authenticated
+        'authenticated': authenticated,
+        'user': user,
     }
     if authenticated:
         context['data'], context['signature'] = pack({
@@ -177,6 +178,7 @@ def teacher_contents(request, problem, user):
     context = RequestContext(request, {
         'problem': problem,
         'parts': problem.parts.all(),
+        'user': user,
     })
     context['data'], context['signature'] = pack({
         'user': user.id,

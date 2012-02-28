@@ -7,6 +7,7 @@ class Check:
             part['challenge'] = []
         Check.current = None
         Check.part_counter = None
+        Check.user_id = {{ user.id }}
 
     @staticmethod
     def part():
