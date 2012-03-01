@@ -90,8 +90,9 @@ def move(request, problem_set_id, shift):
     order = problem_set.course.get_problemset_order()
     old = order.index(problem_set.id)
     new = max(0, min(old + int(shift), len(order) - 1))
-    order[old], order[new] = order[new], order[old]
+    order.insert(new, order.pop(old))
     problem_set.course.set_problemset_order(order)
+    problem_set.course.save()
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
 @staff_member_required
