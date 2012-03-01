@@ -23,6 +23,7 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, related_name='courses', blank=True)
     teachers = models.ManyToManyField(User, related_name='taught_courses', blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def recent(self):
         return self.problem_sets.reverse()[:3]
@@ -52,6 +53,7 @@ class ProblemSet(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     visible = models.BooleanField()
+    timestamp = models.DateTimeField(auto_now=True)
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
     objects = QuerySetManager()
@@ -59,6 +61,10 @@ class ProblemSet(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('problem_set', [str(self.id)])
+
+    def save(self, *args, **kwargs):
+        self.course.save()
+        super(ProblemSet, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return u'{0}'.format(self.title)
@@ -131,6 +137,10 @@ class Problem(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.title)
 
+    def save(self, *args, **kwargs):
+        self.problem_set.save()
+        super(Problem, self).save(*args, **kwargs)
+
     def visible(self, user):
         return self.problem_set.visible or user.is_staff
 
@@ -181,9 +191,14 @@ class Part(models.Model):
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     challenge = models.TextField(blank=True)
+    timestamp = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
         return u'#{0} ({1})'.format(self._order + 1, self.id)
+
+    def save(self, *args, **kwargs):
+        self.problem.save()
+        super(Part, self).save(*args, **kwargs)
 
     class Meta:
         order_with_respect_to = 'problem'

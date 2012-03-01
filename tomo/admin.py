@@ -18,7 +18,7 @@ class ProblemAdmin(admin.ModelAdmin):
     )
     date_hierarchy = 'timestamp'
     inlines = [PartInline]
-    list_display = ('title', 'problem_set', 'author', 'language')
+    list_display = ('title', 'problem_set', 'author', 'language', 'timestamp')
     list_editable = ('problem_set', 'author', 'language')
     list_filter = ('author', 'language', 'problem_set')
     save_on_top = True
@@ -56,9 +56,12 @@ class ProblemInline(admin.StackedInline):
 
 class CourseAdmin(admin.ModelAdmin):
     inlines = [ProblemSetInline]
-    list_display = ('shortname', 'name')
+    list_display = ('shortname', 'name', 'timestamp')
     list_editable = ('name', )
     save_on_top = True
+
+class PartAdmin(admin.ModelAdmin):
+    list_display = ('id', 'problem', 'timestamp',)
 
 class ProblemSetAdmin(admin.ModelAdmin):
     fieldsets = (
@@ -67,7 +70,7 @@ class ProblemSetAdmin(admin.ModelAdmin):
         }),
     )
     inlines = [ProblemInline]
-    list_display = ('title', 'visible', 'solution_visibility')
+    list_display = ('title', 'visible', 'solution_visibility', 'timestamp')
     list_filter = ('visible', 'solution_visibility')
     list_editable = ('visible', 'solution_visibility')
     save_on_top = True
@@ -79,4 +82,4 @@ admin.site.register(ProblemSet, ProblemSetAdmin)
 admin.site.register(Language)
 admin.site.register(Problem, ProblemAdmin)
 admin.site.register(Submission, SubmissionAdmin)
-admin.site.register(Part)
+admin.site.register(Part, PartAdmin)
