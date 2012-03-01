@@ -1,3 +1,4 @@
+{% load cache %}
 <div class="modal fade" id="copy-problem-{{ problem.id }}">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
@@ -13,6 +14,7 @@
       <label>Ciljni sklop</label>
       <select name="problem_set_id" id="normalSelect">
       {% for course in request.user.taught_courses.all %}
+        {% cache 1000000 problem-set-select 1 course.id course.timestamp %}
         <optgroup label="{{ course.name }}">
         {% for problem_set in course.problem_sets.all %}
           <option {% if problem_set == problem.problem_set %}selected{% endif %} value="{{ problem_set.id }}">
@@ -20,6 +22,7 @@
           </option>
         {% endfor %}
         </optgroup>
+        {% endcache %}
       {% endfor %}
       </select>
   </div>

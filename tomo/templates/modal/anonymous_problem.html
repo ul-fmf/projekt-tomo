@@ -1,3 +1,5 @@
+{% load cache %}
+{% cache 1000000 anonymous-problem 1 problem.id problem.timestamp %}
 <div class="modal fade" id="anonymous-download-problem-{{ problem.id }}">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
@@ -18,3 +20,4 @@
     <a href="{% url student_download problem.id %}" class="btn btn-secondary"><i class="icon-check"></i> Reši nalogo</a>
   </div>
 </div>
+{% endcache %}

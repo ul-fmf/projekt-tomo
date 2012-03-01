@@ -1,3 +1,5 @@
+{% load cache %}
+{% cache 1000000 add-problem 1 problem_set.id problem_set.timestamp %}
 <div class="modal fade" id="add-problem">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
@@ -25,3 +27,4 @@
   </div>
   </form>
 </div>
+{% endcache %}
