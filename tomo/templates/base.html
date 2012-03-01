@@ -59,62 +59,11 @@
         <div id="sidebar" class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              {% for course in courses.all %}
-              <li class="nav-header">{{ course.name }}</li>
-              {% for ps in course.problem_sets.all %}
-                {% if request.user.is_staff %}
-                  <li class="{% if ps.id == problem_set.id %}active{% endif %} {% if not ps.visible %}hidden{% endif %}">
-                    <a href="{% url toggle_solution_visibility ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
-                      {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
-                      {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
-                      {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
-                    </a>
-                    <a href="{% url toggle_visible ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
-                      <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
-                    </a>
-                    <a href="{% url admin:tomo_problemset_delete ps.id %}" class="action" title="Pobriši">
-                      <i class="icon-trash"></i>
-                    </a>
-                    <a href="{% url admin:tomo_problemset_change ps.id %}" class="action" title="Napredno…">
-                      <i class="icon-cog"></i>
-                    </a>
-                    <a href="{% url move_problem_set ps.id -1 %}" class="action" title="Premakni gor">
-                      <i class="icon-arrow-up"></i>
-                    </a>
-                    <a href="{% url move_problem_set ps.id 1 %}" class="action" title="Premakni dol">
-                      <i class="icon-arrow-down"></i>
-                    </a>
-                    <a href="{% url problem_set ps.id %}">{{ ps.title }}</a>
-                  </li>
-                {% else %}
-                  {% if ps.visible %}
-                    <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
-                      <a href="#" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
-                          {% if request.user.is_authenticated %}
-                            {% with percentage=solved|get:ps.id %}
-                            <span class="label {% spaceless %}
-                              {% if percentage == 100 %}label-success{% endif %}
-                              {% if percentage < 100 and percentage >= 50 %}label-warning{% endif %}
-                              {% if percentage < 50 %}label-important{% endif %}
-                              {% endspaceless %}">
-                              {{ percentage }}%
-                            </span>
-                            {% endwith %}
-                          {% endif %}
-                        {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
-                        {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
-                        {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
-                      </a>
-                      <a href="{% url problem_set ps.id %}">
-                        {{ ps.title }}
-                      </a>
-                    </li>
-                  {% endif %}
-                {% endif %}
-              {% endfor %}
-              {% empty %}
-                Preden začnete reševati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.
-              {% endfor %}
+              {% if user.is_staff %}
+                {% include 'sidebar/staff.html' %}
+              {% else %}
+                {% include 'sidebar/student.html' %}
+              {% endif %}
             </ul>
           </div><!--/.well -->
         </div><!--/span-->
