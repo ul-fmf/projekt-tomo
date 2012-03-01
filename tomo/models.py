@@ -17,6 +17,18 @@ class QuerySetManager(models.Manager):
     def get_query_set(self):
         return self.model.QuerySet(self.model)
 
+class Language(models.Model):
+    name = models.CharField(max_length=70)
+    student_file = models.CharField(max_length=70)
+    teacher_file = models.CharField(max_length=70)
+    extension = models.CharField(max_length=4)
+
+    def __unicode__(self):
+        return u'{0}'.format(self.name)
+
+    class Meta:
+        ordering = ['name']
+
 class Course(models.Model):
     name = models.CharField(max_length=70)
     shortname = models.CharField(max_length=10)
@@ -24,17 +36,10 @@ class Course(models.Model):
     students = models.ManyToManyField(User, related_name='courses', blank=True)
     teachers = models.ManyToManyField(User, related_name='taught_courses', blank=True)
     timestamp = models.DateTimeField(auto_now=True)
-
-    def recent(self):
-        return self.problem_sets.reverse()[:3]
     
     @classmethod
     def user_courses(self, user):
         return user.courses if user.is_authenticated() else self.objects
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('course', [str(self.id)])
 
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.shortname)
@@ -53,10 +58,10 @@ class ProblemSet(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     visible = models.BooleanField()
-    timestamp = models.DateTimeField(auto_now=True)
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
     objects = QuerySetManager()
+    timestamp = models.DateTimeField(auto_now=True)
 
     @models.permalink
     def get_absolute_url(self):
@@ -76,13 +81,6 @@ class ProblemSet(models.Model):
             return
 
     class QuerySet(QuerySet):
-        def get_for_user(self, problem_set_id, user):
-            problem_set = ProblemSet.objects.get(id=problem_set_id)
-            if problem_set.visible or user.is_staff:
-                return problem_set
-            else:
-                raise PermissionDenied
-
         def success(self, user):
             if user.is_authenticated():
                 correct = dict(
@@ -112,18 +110,6 @@ class ProblemSet(models.Model):
     class Meta:
         order_with_respect_to = 'course'
 
-class Language(models.Model):
-    name = models.CharField(max_length=70)
-    student_file = models.CharField(max_length=70)
-    teacher_file = models.CharField(max_length=70)
-    extension = models.CharField(max_length=4)
-
-    def __unicode__(self):
-        return u'{0}'.format(self.name)
-
-    class Meta:
-        ordering = ['name']
-
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')
     language = models.ForeignKey(Language, related_name='problems')
@@ -141,46 +127,12 @@ class Problem(models.Model):
         self.problem_set.save()
         super(Problem, self).save(*args, **kwargs)
 
-    def visible(self, user):
-        return self.problem_set.visible or user.is_staff
-
     def filename(self):
         return u'{0}.{1}'.format(slugify(self.title), self.language.extension)
 
     def get_absolute_url(self):
         return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
 
-    class QuerySet(QuerySet):
-        def get_for_user(self, problem_id, user):
-            problem = Problem.objects.get(id=problem_id)
-            if problem.problem_set.visible or user.is_staff:
-                return problem
-            else:
-                raise PermissionDenied
-        def success(self, user):
-            if user.is_authenticated():
-                correct = dict(
-                    Attempt.objects.filter(
-                        active=True, correct=True, part__problem__in=self,
-                        submission__user=user
-                    ).values(
-                        'part__problem'
-                    ).order_by(
-                        'part__problem'
-                    ).annotate(
-                        correct_count=models.Count('part__problem')
-                    ).values_list('part__problem', 'correct_count')
-                )
-                total = dict(
-                    self.annotate(
-                        part_count=models.Count('parts')
-                    ).values_list('id', 'part_count')
-                )
-                success = dict((problem_id, int(100 * correct.get(problem_id, 0) / tot if tot else 0)) for
-                            problem_id, tot in total.items())
-                return success
-            else:
-                return {}
     class Meta:
         order_with_respect_to = 'problem_set'
 

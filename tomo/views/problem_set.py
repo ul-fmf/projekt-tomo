@@ -12,7 +12,8 @@ from tomo.utils import *
 from tomo.views.problem import student_contents, teacher_contents
 
 def view_problem_set(request, problem_set_id):
-    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    verify(request.user.is_staff or problem_set.visible)
     problems = problem_set.problems.all()
     attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
     return render(request, "problem_set.html", {
@@ -27,7 +28,7 @@ def view_problem_set(request, problem_set_id):
 
 @staff_member_required
 def view_statistics(request, problem_set_id, limit):
-    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
     user_ids = set()
     limit = int(limit)
@@ -63,7 +64,8 @@ def view_statistics(request, problem_set_id, limit):
     })
 
 def student_zip(request, problem_set_id):
-    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    verify(request.user.is_staff or problem_set.visible)
     archivename = slugify(problem_set.title)
     files = []
     for i, problem in enumerate(problem_set.problems.all()):
@@ -75,7 +77,7 @@ def student_zip(request, problem_set_id):
 
 @staff_member_required
 def teacher_zip(request, problem_set_id):
-    problem_set = ProblemSet.objects.get_for_user(problem_set_id, request.user)
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
     archivename = slugify(problem_set.title)
     files = []
     for problem in problem_set.problems.all():

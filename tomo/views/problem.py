@@ -44,7 +44,8 @@ def student_contents(request, problem, user, authenticated):
                             context_instance=RequestContext(request, context))
 
 def student_download(request, problem_id):
-    problem = Problem.objects.get_for_user(problem_id, request.user)
+    problem = get_object_or_404(Problem, id=problem_id)
+    verify(request.user.is_staff or problem.problem_set.visible)
     contents = student_contents(request, problem, request.user,
                                  request.user.is_authenticated())
     return plain_text(problem.filename(), contents)
@@ -52,13 +53,14 @@ def student_download(request, problem_id):
 def api_student_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
-    problem = Problem.objects.get_for_user(data['problem'], user)
+    problem = get_object_or_404(Problem, id=data['problem'])
+    verify(user.is_staff or problem.problem_set.visible)
     contents = student_contents(request, problem, user, True)
     return HttpResponse(contents)
 
 @staff_member_required
 def student_archive_download(request, problem_id, user_id):
-    problem = Problem.objects.get_for_user(problem_id, request.user)
+    problem = get_object_or_404(Problem, id=problem_id)
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
     filename = "{0}-{1}.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
@@ -106,7 +108,8 @@ def student_upload(request):
 
     download = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=download['user'])
-    problem = Problem.objects.get_for_user(download['problem'], user)
+    problem = get_object_or_404(Problem, id=download['problem'])
+    verify(user.is_staff or problem.problem_set.visible)
 
     submission = Submission(user=user, problem=problem,
                             preamble=post['preamble'], source=post['source'])
@@ -191,14 +194,14 @@ def teacher_contents(request, problem, user):
 
 @staff_member_required
 def teacher_download(request, problem_id=None):
-    problem = Problem.objects.get_for_user(problem_id, request.user)
+    problem = get_object_or_404(Problem, id=problem_id)
     return plain_text(problem.filename(), teacher_contents(request, problem, request.user))
 
 def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
     verify(user.is_staff)
-    problem = Problem.objects.get_for_user(data['problem'], user)
+    problem = get_object_or_404(Problem, id=problem_id)
     contents = teacher_contents(request, problem, user)
     return HttpResponse(contents)
 
