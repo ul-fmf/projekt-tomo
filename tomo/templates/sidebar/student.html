@@ -5,7 +5,7 @@
 {% for ps in course.problem_sets.all %}
     {% if ps.visible %}
       <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
-        <a href="#" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+        <a href="#" class="status" style="margin-left: 100px" title="Rešitve so {{ ps.get_solution_visibility_display }}">
             {% if request.user.is_authenticated %}
               {% with percentage=solved|get:ps.id %}
               <span class="label {% spaceless %}

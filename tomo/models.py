@@ -118,7 +118,6 @@ class Problem(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
     preamble = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
-    objects = QuerySetManager()
 
     def __unicode__(self):
         return u'{0}'.format(self.title)
