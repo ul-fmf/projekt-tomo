@@ -283,10 +283,10 @@ def teacher_upload(request):
         problem.title = post['title']
         problem.description = post['description']
         problem.preamble = post['preamble']
-        problem.save()
         for part in new_parts:
             part.save()
         problem.set_part_order([part.id for part in new_parts])
+        problem.save()
 
         return HttpResponse(json.dumps({
                     'message': "\n".join(messages),
