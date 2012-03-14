@@ -201,7 +201,7 @@ def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
     verify(user.is_staff)
-    problem = get_object_or_404(Problem, id=problem_id)
+    problem = get_object_or_404(Problem, id=data['problem'])
     contents = teacher_contents(request, problem, user)
     return HttpResponse(contents)
 
