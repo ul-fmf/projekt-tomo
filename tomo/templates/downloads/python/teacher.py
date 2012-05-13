@@ -5,6 +5,7 @@
 {% load my_tags %}
 
 import json, os, re, sys, shutil
+from contextlib import contextmanager
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
