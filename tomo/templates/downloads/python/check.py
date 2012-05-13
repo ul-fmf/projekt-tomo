@@ -118,6 +118,33 @@ class Check:
                 return False
 
     @staticmethod
+    @contextmanager
+    def in_out_file(in_lines, given_lines, filename_in="_in", filename_out="_out"):
+        with open(filename_in, "w") as f:
+            for line in in_lines:
+                print(line, file=f)
+        yield filename_in, filename_out
+        with open(filename_out) as f:
+            out_lines = f.readlines()
+        os.remove(filename_in)
+        os.remove(filename_out)
+        len_out, len_given = len(out_lines), len(given_lines)
+        if len_out < len_given:
+            out_lines += (len_given - len_out) * ["\n"]
+        else:
+            given_lines += (len_out - len_given) * ["\n"]
+        equal = True
+        line_width = max(len(out_line.rstrip()) for out_line in out_lines + ["je izhodna datoteka enaka"])
+        diff = ["{0}   | namesto:".format("je izhodna datoteka enaka".ljust(line_width))]
+        for out, given in zip(out_lines, given_lines):
+            out, given = out.rstrip(), given.rstrip()
+            if out != given:
+                equal = False
+            diff.append("{0} {1} {2}".format(out.ljust(line_width), "|" if out == given else "*", given))
+        if not equal:
+            Check.error("Pri vhodni datoteki\n  {0}\n{1}".format("\n  ".join(in_lines), "\n  ".join(diff)))
+
+    @staticmethod
     def summarize():
         for i, part in enumerate(Check.parts):
             if not part['solution'].strip():

@@ -1,12 +1,9 @@
 ČIMPREJ
 
-- procenti na firefoxu so hecni
-- oštevilčenje datotek
 - Py datoteke MIME type
 
 - podpora za Mathematico
 
-- na stran s statistiko dodaj stolpec s časom oddaje
 - na statistiki naredi urejanje po stolpcih
 
 - kontaktiranje študentov glede rešitev
