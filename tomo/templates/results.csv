@@ -22,4 +22,5 @@
   {% endfor %}
   {% if not forloop.last %},{% endif %}
 {% endfor %}
-{% endfilter %}{% endfor %}
+{% endfilter %}
+{% endfor %}
