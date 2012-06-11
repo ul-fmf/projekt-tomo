@@ -32,12 +32,12 @@ def unpack(text, sig):
     verify(sign(text) == sig)
     return json.loads(text)
 
-def plain_text(name, contents):
+def plain_text(name, contents, mimetype='text/plain'):
     """
     Returns a response that downloads a plain text file with the given name and
     contents.
     """
-    response = HttpResponse(mimetype='text/plain; charset=utf-8')
+    response = HttpResponse(mimetype='{0}; charset=utf-8'.format(mimetype))
     response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
     response.write(contents)
     return response

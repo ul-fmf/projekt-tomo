@@ -6,6 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 
 from tomo.models import *
 from tomo.utils import *
@@ -62,6 +63,29 @@ def view_statistics(request, problem_set_id, limit):
         'limits': limits,
         'limit': limit
     })
+
+@staff_member_required
+def results_csv(request, problem_set_id):
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    attempts = {}
+    user_ids = set()
+    active_attempts = Attempt.objects.active().for_problem_set(problem_set)
+    for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
+        user_id = attempt.submission.user_id
+        user_ids.add(user_id)
+        user_attempts = attempts.get(user_id, {})
+        user_attempts[attempt.part_id] = attempt
+        attempts[user_id] = user_attempts
+    context = {
+        'problem_set': problem_set,
+        'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
+        'problems': problem_set.problems,
+        'attempts': attempts
+    }
+    filename = "{0}.csv".format(slugify(problem_set.title))
+    contents = render_to_string("results.csv",
+                                context_instance=RequestContext(request, context))
+    return plain_text(filename, contents, mimetype='text/csv')
 
 def student_zip(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)

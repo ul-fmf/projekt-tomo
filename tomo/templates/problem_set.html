@@ -29,6 +29,7 @@
   {% if request.user.is_staff %}
     <a href="{% url teacher_zip problem_set.id %}" class="btn btn-primary"><i class="icon-edit icon-white"></i> Uredi sklop</a>
     <a href="{% url student_zip problem_set.id %}" class="btn"><i class="icon-check"></i> Reši sklop</a>
+    <a href="{% url results_csv problem_set.id %}" class="btn"><i class="icon-th"></i> Shrani rezultate</a>
   {% else %}
     {% if request.user.is_authenticated %}
       <a href="{% url student_zip problem_set.id %}" class="btn btn-primary"><i class="icon-check icon-white"></i> Reši sklop</a>

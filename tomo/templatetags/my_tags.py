@@ -62,6 +62,11 @@ def indent(source, indent):
     return ("\n" + indent).join(source.splitlines())
 
 @register.filter
+@stringfilter
+def remove_spaces(source):
+    return source.replace(" ", "").replace("\n", "")
+
+@register.filter
 def get(d, key):
     return d.get(key, None)
 
