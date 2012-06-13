@@ -1,4 +1,4 @@
-{% load my_tags %}Ime in priimek,{% filter remove_spaces %}
+{% load my_tags %}Ime,Priimek,{% filter remove_spaces %}
 {% for problem in problems.all %}
   {% for part in problem.parts.all %}
     {{ forloop.parentloop.counter }}.{{ forloop.counter }}
@@ -6,7 +6,7 @@
   {% endfor %}
   {% if not forloop.last %},{% endif %}
 {% endfor %}{% endfilter %}
-{% for user in users %}{{ user.get_full_name }},{% filter remove_spaces %}
+{% for user in users %}{{ user.first_name }},{{ user.last_name }},{% filter remove_spaces %}
 {% for problem in problems.all %}
   {% for part in problem.parts.all %}
     {% with attempts|get:user.id|get:part.id as attempt %}
