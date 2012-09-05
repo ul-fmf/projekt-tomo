@@ -257,8 +257,8 @@ def _check():
             backup_filename = "{0}.{1}".format(_filename, index)
             shutil.copy(_filename, backup_filename)
             r = urlopen(response['update'])
-            with open(_filename, 'w', encoding='utf-8') as f:
-                f.write(r.read().decode('utf-8'))
+            with open(_filename, 'w', encoding='utf-8') as _f:
+                _f.write(r.read().decode('utf-8'))
             print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
     except HTTPError as r:

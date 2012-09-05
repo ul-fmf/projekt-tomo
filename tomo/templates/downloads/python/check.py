@@ -120,12 +120,12 @@ class Check:
     @staticmethod
     @contextmanager
     def in_out_file(in_lines, given_lines, filename_in="_in", filename_out="_out"):
-        with open(filename_in, "w") as f:
+        with open(filename_in, "w") as _f:
             for line in in_lines:
-                print(line, file=f)
+                print(line, file=_f)
         yield filename_in, filename_out
-        with open(filename_out) as f:
-            out_lines = f.readlines()
+        with open(filename_out) as _f:
+            out_lines = _f.readlines()
         os.remove(filename_in)
         os.remove(filename_out)
         len_out, len_given = len(out_lines), len(given_lines)
