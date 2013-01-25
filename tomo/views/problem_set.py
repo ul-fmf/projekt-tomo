@@ -87,6 +87,7 @@ def results_csv(request, problem_set_id):
                                 context_instance=RequestContext(request, context))
     return plain_text(filename, contents, mimetype='text/csv')
 
+
 def student_zip(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
     verify(request.user.is_staff or problem_set.visible)

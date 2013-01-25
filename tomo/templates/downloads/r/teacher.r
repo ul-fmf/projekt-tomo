@@ -3,10 +3,50 @@
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 ##########################################################################
 {% load my_tags %}
-{% include 'downloads/r/rjson.r' %}
-{% include 'downloads/r/library.r' %}
 {% include 'downloads/r/check.r' %}
 
+##########################################################################
+# Od tu naprej je navodilo naloge
+
+#######################################################################@@#
+# {{ problem.title }} {% if problem.description %}
+#
+# {{ problem.description|indent:"# "|safe }}{% endif %}
+#######################################################################@@#
+
+{{ problem.preamble|safe }}
+
+{% for part in parts %}
+##################################################################@{{ part.id|stringformat:'06d'}}#
+# {{ part.description|indent:"# "|safe }}
+##################################################################{{ part.id|stringformat:'06d'}}@#
+{{ part.solution|safe }}
+
+check$part()
+{{ part.validation|safe }}
+
+{% endfor %}
+
+# ##################################################################@000000#
+# # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
+# ##################################################################000000@#
+#
+# sem napisite resitev
+#
+# check$part()
+#
+# check$equal(testni_primer, resitev)
+#
+# check$challenge(testni_primer_1)
+# check$challenge(testni_primer_2)
+# check$challenge(testni_primer_3)
+# ...
+
+#######################################################################@@#
+# Od tu naprej ničesar ne spreminjajte.
+
+{% include 'downloads/r/rjson.r' %}
+{% include 'downloads/r/library.r' %}
 .filename <- get_current_filename()
 .source <- paste(readLines(.filename, encoding = "UTF-8"), collapse="\n")
 
@@ -67,46 +107,6 @@ if(length(problem_match) == 0)
 title <- strip(problem_match[1, 3])
 description <- super_strip(problem_match[1, 5])
 preamble <- strip(problem_match[1, 7])
-
-##########################################################################
-# Od tu naprej je navodilo naloge
-
-#######################################################################@@#
-# {{ problem.title }} {% if problem.description %}
-#
-# {{ problem.description|indent:"# "|safe }}{% endif %}
-#######################################################################@@#
-
-{{ problem.preamble|safe }}
-
-{% for part in parts %}
-##################################################################@{{ part.id|stringformat:'06d'}}#
-# {{ part.description|indent:"# "|safe }}
-##################################################################{{ part.id|stringformat:'06d'}}@#
-{{ part.solution|safe }}
-
-check$part()
-{{ part.validation|safe }}
-
-{% endfor %}
-
-# ##################################################################@000000#
-# # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
-# ##################################################################000000@#
-#
-# sem napisite resitev
-#
-# check$part()
-#
-# check$equal(testni_primer, resitev)
-#
-# check$challenge(testni_primer_1)
-# check$challenge(testni_primer_2)
-# check$challenge(testni_primer_3)
-# ...
-
-#######################################################################@@#
-# Od tu naprej ničesar ne spreminjajte.
 
 check$summarize()
 if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {

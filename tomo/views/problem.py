@@ -43,6 +43,38 @@ def student_contents(request, problem, user, authenticated):
     return render_to_string(problem.language.student_file,
                             context_instance=RequestContext(request, context))
 
+def moss_contents(request, problem, user):
+    context = {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'user': user,
+    }
+    return render_to_string(problem.language.student_file.replace("student", "moss"),
+                            context_instance=RequestContext(request, context))
+
+@staff_member_required
+def moss_zip(request, problem_id):
+    problem = get_object_or_404(Problem, id=problem_id)
+    attempts = {}
+    user_ids = set()
+    active_attempts = Attempt.objects.active().for_problem(problem)
+    for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
+        user_id = attempt.submission.user_id
+        user_ids.add(user_id)
+        user_attempts = attempts.get(user_id, {})
+        user_attempts[attempt.part_id] = attempt
+        attempts[user_id] = user_attempts
+    users = User.objects.filter(id__in=user_ids)
+    archivename = slugify(problem.title)
+    files = []
+    for user in users.all():
+        username = user.get_full_name() or user.username
+        filename = "{0}/{1}".format(archivename, slugify(username))
+        contents = moss_contents(request, problem, user).encode('utf-8')
+        files.append((filename, contents))
+    return zip_archive(archivename, files)
+
 def student_download(request, problem_id):
     problem = get_object_or_404(Problem, id=problem_id)
     verify(request.user.is_staff or problem.problem_set.visible)
