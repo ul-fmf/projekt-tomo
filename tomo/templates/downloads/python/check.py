@@ -28,6 +28,31 @@ class Check:
         Check.current['challenge'].append(pair)
 
     @staticmethod
+    def execute(example, env={}, use_globals=True, do_eval=False, catch_exception=False):
+        local_env = {}
+        local_env.update(env)
+        global_env = globals() if use_globals else {}
+        old_stdout, old_stderr = sys.stdout, sys.stderr
+        new_stdout, new_stderr = io.StringIO(), io.StringIO()
+        exec_info = {'env': local_env}
+        try:
+            sys.stdout, sys.stderr = new_stdout, new_stderr
+            if do_eval:
+                exec_info['value'] = eval(example, global_env, local_env)
+            else:
+                exec(example, global_env, local_env)
+        except Exception as e:
+            if catch_exception:
+                exec_info['exception'] = e
+            else:
+                raise e
+        finally:
+            sys.stdout, sys.stderr = old_stdout, old_stderr
+        exec_info['stdout'] = new_stdout.getvalue()
+        exec_info['stderr'] = new_stderr.getvalue()
+        return exec_info
+
+    @staticmethod
     def run(example, state, message=None, env={}, clean=lambda x: x):
         code = "\n".join(example)
         example = "  >>> " + "\n  >>> ".join(example)
