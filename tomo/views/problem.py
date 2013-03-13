@@ -164,7 +164,6 @@ def student_upload(request):
             if not incorrect:
                 if len(attempt_challenge) != len(part_challenge):
                     incorrect = "različno število izzivov"
-                    update = True
                 else:
                     for (j, ((k, x), (_, y))) in enumerate(zip(attempt_challenge, part_challenge)):
                         if x != y:
