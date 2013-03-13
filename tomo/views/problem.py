@@ -163,14 +163,14 @@ def student_upload(request):
             incorrect = ("testi" if errors else None)
             if not incorrect:
                 if len(attempt_challenge) != len(part_challenge):
-                    incorrect = "različno število izzivov"
+                    incorrect = 'Število izvedenih testov je {0} namesto {1}'.format(len(attempt_challenge), len(part_challenge))
                 else:
-                    for (j, ((k, x), (_, y))) in enumerate(zip(attempt_challenge, part_challenge)):
+                    for (j, ((hint, x), (_, y))) in enumerate(zip(attempt_challenge, part_challenge)):
                         if x != y:
-                            incorrect = "izziv #{0} - {1}".format(j + 1, k)
+                            incorrect = 'Namig: {0}'.format(hint) if hint else ''
                             break
             correct = (incorrect is None)
-            if incorrect:
+            if not correct:
                 rejected.append((i + 1, incorrect))
             new = Attempt(part=part, submission=submission,
                           solution=solution, errors=json.dumps(errors),

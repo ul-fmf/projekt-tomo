@@ -23,7 +23,7 @@ class Check:
         Check.current['errors'].append(msg.format(*args, **kwargs))
 
     @staticmethod
-    def challenge(x, k=None):
+    def challenge(x, k=""):
         pair = (str(k), str(Check.canonize(x)))
         Check.current['challenge'].append(pair)
 
@@ -179,6 +179,7 @@ class Check:
                 for e in part['errors']:
                     print("- {0}".format("\n  ".join(e.splitlines())))
             elif 'rejection' in part:
-                print('Podnaloga {0} je zavrnjena. ({1})'.format(i + 1, part['rejection']))
+                reason = ' ({0})'.format(part['rejection']) if part['rejection'] else ''
+                print('Podnaloga {0} je zavrnjena.{1}'.format(i + 1, reason))
             else:
                 print('Podnaloga {0} je pravilno rešena.'.format(i + 1))

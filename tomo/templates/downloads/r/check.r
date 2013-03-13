@@ -25,7 +25,7 @@ check$error <- function(msg, ...) {
     c(check$parts[[check$part.counter]]$errors, sprintf(msg, ...))
 }
 
-check$challenge <- function(x, k = NA) {
+check$challenge <- function(x, k = "") {
   pair <- c(toString(k), toString(check$canonize(x)))
   check$parts[[check$part.counter]]$challenge<<-
     c(check$parts[[check$part.counter]]$challenge, list(pair))
@@ -121,7 +121,10 @@ check$summarize <- function() {
       cat("Podnaloga", i, "ni prestala vseh testov:\n")
       cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep = "")
     } else if ("rejection" %in% names(check$parts[[i]])) {
-      cat("Podnaloga ", i, " je zavrnjena. (", check$parts[[i]]$rejection, ")\n", sep = "")
+      if(check$parts[[i]]$rejection != "")
+        cat("Podnaloga ", i, " je zavrnjena.\n", sep = "")
+      else
+        cat("Podnaloga ", i, " je zavrnjena.", check$parts[[i]]$rejection, "\n", sep = "")
     } else {
       cat("Podnaloga", i, "je pravilno rešena.\n")
     }
