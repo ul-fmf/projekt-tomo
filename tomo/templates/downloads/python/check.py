@@ -144,30 +144,37 @@ class Check:
 
     @staticmethod
     @contextmanager
-    def in_out_file(in_lines, given_lines, filename_in="_in", filename_out="_out"):
-        with open(filename_in, "w") as _f:
-            for line in in_lines:
+    def in_file(filename, content):
+        with open(filename, "w") as _f:
+            for line in content:
                 print(line, file=_f)
-        yield filename_in, filename_out
-        with open(filename_out) as _f:
+        old_errors = Check.current["errors"][:]
+        yield
+        new_errors = Check.current["errors"][len(old_errors):]
+        Check.current["errors"] = old_errors
+        if new_errors:
+            new_errors = ["\n    ".join(error.split("\n")) for error in new_errors]
+            Check.error("Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}".format(filename, "\n  ".join(content), "\n- ".join(new_errors)))
+
+    @staticmethod
+    def out_file(filename, content):
+        with open(filename) as _f:
             out_lines = _f.readlines()
-        os.remove(filename_in)
-        os.remove(filename_out)
-        len_out, len_given = len(out_lines), len(given_lines)
+        len_out, len_given = len(out_lines), len(content)
         if len_out < len_given:
             out_lines += (len_given - len_out) * ["\n"]
         else:
-            given_lines += (len_out - len_given) * ["\n"]
+            content += (len_out - len_given) * ["\n"]
         equal = True
-        line_width = max(len(out_line.rstrip()) for out_line in out_lines + ["je izhodna datoteka enaka"])
-        diff = ["{0}   | namesto:".format("je izhodna datoteka enaka".ljust(line_width))]
-        for out, given in zip(out_lines, given_lines):
+        line_width = max(len(out_line.rstrip()) for out_line in out_lines + ["je enaka"])
+        diff = []
+        for out, given in zip(out_lines, content):
             out, given = out.rstrip(), given.rstrip()
             if out != given:
                 equal = False
             diff.append("{0} {1} {2}".format(out.ljust(line_width), "|" if out == given else "*", given))
         if not equal:
-            Check.error("Pri vhodni datoteki\n  {0}\n{1}".format("\n  ".join(in_lines), "\n  ".join(diff)))
+            Check.error("Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}", filename, (line_width - 7) * " ", "\n  ".join(diff))
 
     @staticmethod
     def summarize():
