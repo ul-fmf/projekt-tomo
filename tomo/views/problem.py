@@ -53,6 +53,16 @@ def moss_contents(request, problem, user):
     return render_to_string(problem.language.student_file.replace("student", "moss"),
                             context_instance=RequestContext(request, context))
 
+def mass_contents(request, problem, user):
+    context = {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'user': user,
+    }
+    return render_to_string(problem.language.student_file.replace("student", "mass"),
+                            context_instance=RequestContext(request, context))
+
 @staff_member_required
 def moss_zip(request, problem_id):
     problem = get_object_or_404(Problem, id=problem_id)
