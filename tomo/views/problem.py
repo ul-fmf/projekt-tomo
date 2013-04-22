@@ -70,8 +70,30 @@ def moss_zip(request, problem_id):
     files = []
     for user in users.all():
         username = user.get_full_name() or user.username
-        filename = "{0}/{1}".format(archivename, slugify(username))
+        filename = "{0}/{1}.{2}".format(archivename, slugify(username), problem.language.extension)
         contents = moss_contents(request, problem, user).encode('utf-8')
+        files.append((filename, contents))
+    return zip_archive(archivename, files)
+
+@staff_member_required
+def mass_zip(request, problem_id):
+    problem = get_object_or_404(Problem, id=problem_id)
+    attempts = {}
+    user_ids = set()
+    active_attempts = Attempt.objects.active().for_problem(problem)
+    for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
+        user_id = attempt.submission.user_id
+        user_ids.add(user_id)
+        user_attempts = attempts.get(user_id, {})
+        user_attempts[attempt.part_id] = attempt
+        attempts[user_id] = user_attempts
+    users = User.objects.filter(id__in=user_ids)
+    archivename = slugify(problem.title)
+    files = []
+    for user in users.all():
+        username = user.get_full_name() or user.username
+        filename = "{0}/{1}.{2}".format(archivename, slugify(username), problem.language.extension)
+        contents = mass_contents(request, problem, user).encode('utf-8')
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
