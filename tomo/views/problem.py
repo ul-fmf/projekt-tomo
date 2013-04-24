@@ -76,7 +76,7 @@ def moss_zip(request, problem_id):
         user_attempts[attempt.part_id] = attempt
         attempts[user_id] = user_attempts
     users = User.objects.filter(id__in=user_ids)
-    archivename = slugify(problem.title)
+    archivename = "{0}-moss".format(slugify(problem.title))
     files = []
     for user in users.all():
         username = user.get_full_name() or user.username
@@ -98,7 +98,7 @@ def mass_zip(request, problem_id):
         user_attempts[attempt.part_id] = attempt
         attempts[user_id] = user_attempts
     users = User.objects.filter(id__in=user_ids)
-    archivename = slugify(problem.title)
+    archivename = "{0}-ocene".format(slugify(problem.title))
     files = []
     for user in users.all():
         username = user.get_full_name() or user.username

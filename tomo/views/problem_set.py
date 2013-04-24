@@ -103,7 +103,7 @@ def student_zip(request, problem_set_id):
 @staff_member_required
 def teacher_zip(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    archivename = slugify(problem_set.title)
+    archivename = "{0}-edit".format(slugify(problem_set.title))
     files = []
     for problem in problem_set.problems.all():
         filename = "{0}/{1}".format(archivename, problem.filename()) # Select your files here.
