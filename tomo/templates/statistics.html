@@ -51,7 +51,10 @@
       {% for user in users %}
       {% if user.id in problem_attempts %}
       <tr>
-        <td><a class="icon-download" href="{% url student_archive_download problem.id user.id %}"></a></td>
+        <td>
+          <a class="icon-download" href="{% url student_archive_download problem.id user.id %}"></a>
+          <a class="icon-time" href="{% url student_history_download problem.id user.id %}"></a>
+        </td>
         <td>{{ user.get_full_name }}</td>
         {% with problem_attempts|get:user.id as user_attempts %}
         {% for part in problem.parts.all %}
