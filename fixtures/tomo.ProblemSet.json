@@ -1,0 +1,886 @@
+[
+  {
+    "pk": 17, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "### Prepisovanje\r\n\r\nKakr\u0161nokoli prepisovanje pomeni **razveljavitev celotne doma\u010de naloge** za vse vpletene, **tudi za avtorje re\u0161itev**.\r\n\r\n### Roki za oddajo doma\u010dih nalog\r\n\r\n1. doma\u010da naloga: 9. november\r\n2. doma\u010da naloga: 14. december\r\n3. doma\u010da naloga: 4. januar\r\n4. doma\u010da naloga: 15. februar\r\n\r\nOd roka oddaje do objave rezultatov bodo naloge za\u010dasno nedosegljive. Po objavi rezultatov boste do nalog lahko spet dostopali, vendar kasnej\u0161e spremembe ne bodo ve\u010d vplivale na oceno.\r\n\r\n", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2013-02-16 16:55:08", 
+      "title": "Doma\u010de naloge", 
+      "visible": false, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 7, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "Naloge v tem sklopu predpostavljajo osnovno znanje programiranja. Namenjene so predvsem spoznavanju programskega jezika Python. Pri re\u0161evanju nalog si pomagajte z naslednjimi viri:\r\n\r\n* [Dokumentacija za Python](http://docs.python.org/py3k/)\r\n* [Python tutorial](http://docs.python.org/py3k/tutorial/index.html)\r\n* [Python cheat sheets](http://devcheatsheet.com/tag/python/)\r\n\r\nPozor, te naloge so za Python 3. \u010ce uporabljate Python 2, boste naleteli na te\u017eave.\r\n\r\nNaloge re\u0161ujte z okoljem IDLE. Asistent vam bo pokazal, kako v IDLE za\u017eenemo datoteko in kako uporabljamo Tomo.", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-11-05 17:03:08", 
+      "title": "Uvod v Python", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 82, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "### Prepisovanje\r\n\r\nKakr\u0161nokoli prepisovanje pomeni **razveljavitev celotne doma\u010de naloge** za vse vpletene, **tudi za avtorje re\u0161itev**.\r\n\r\n### Roki za oddajo doma\u010dih nalog\r\n\r\n1. doma\u010da naloga: 16. november 2012\r\n2. doma\u010da naloga: 27. januar 2013\r\n\r\nOd roka oddaje do objave rezultatov bodo naloge za\u010dasno nedosegljive. Po objavi rezultatov boste do nalog lahko spet dostopali, vendar kasnej\u0161e spremembe ne bodo ve\u010d vplivale na oceno.\r\n", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2013-01-28 11:16:05", 
+      "title": "Doma\u010de naloge", 
+      "visible": false, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 61, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "Preden za\u010dnemo spoznavati Python, bomo spoznali okolje, v katerem bomo delali.\r\nS spodnjim gumbom na svoj ra\u010dunalnik prenesite arhiv, ki vsebuje mapo z nalogami.\r\nMapo shranite na primerno mesto, na primer `U:\\\\Uvod v programiranje\\delovno-okolje\\`.\r\nNato desno kliknite na datoteko `oddajanje-resitev.py` ter izberite _Edit with IDLE 3.1_", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-02-18 08:53:01", 
+      "title": "Delovno okolje", 
+      "visible": true, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 2, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 0, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-10-16 09:50:37", 
+      "title": "Ponovitev Pythona", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 15, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "Variacije na temo bisekcije.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-10 16:55:51", 
+      "title": "Bisekcija", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 9, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-02 11:47:06", 
+      "title": "Iskanje", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 78, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-10-16 09:50:34", 
+      "title": "Ponovitev Pythona", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 4, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-07 08:52:46", 
+      "title": "Osnovno programiranje", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 37, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 1, 
+      "description": "V nizih lahko uporabljamo `'enojne'` ali `\"dvojne\"` narekovaje.\r\nNize lahko se\u0161tevamo in mno\u017eimo s \u0161tevilom.\r\nPreskok v novo vrsto predstavimo s posebnim znakom `\"\\n\"`.\r\n\r\n    >>> 'b' + 2 * \"an\" + \"a\"\r\n    'banana'\r\n    >>> print('banana')\r\n    banana\r\n    >>> print('ban\\n ana')\r\n    ban\r\n     ana", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-02-25 02:16:56", 
+      "title": "Izpis na zaslon", 
+      "visible": true, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 79, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-29 10:54:26", 
+      "title": "Deli in vladaj", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 5, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "Osnovna podatkovna struktura v R-ju so vektorji.\r\nTi predstavljajo sezname elementov enakega tipa, na primer seznam samih \u0161tevil ali samih nizov.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-19 13:00:50", 
+      "title": "Vektorji", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 6, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "Algoritmov za urejanje tabel je malo morje.\r\nNa teh vajah bomo implementirali urejanja z izbiranjem, z vstavljanjem in z zlivanjem.\r\nVsaka naloga je opremljena tudi z video lekcijo, splo\u0161ni uvod na temo urejanja podatkov pa najdete\r\nv videolekciji [Urejanje tabel](http://vimeo.com/30660945).", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-07 08:52:59", 
+      "title": "Urejanje", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 39, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-02-25 04:08:28", 
+      "title": "Operacije", 
+      "visible": true, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 16, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 2, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-21 14:22:14", 
+      "title": "Deli in vladaj", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 84, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "Poskusite nekaj funkcij iz [prvega sklopa](http://tomo.fmf.uni-lj.si/problem_set/4/) uporabiti na vektorjih.\r\nKot vidite, ukazi, ki uporabljajo aritmeti\u010dne [funkcije](http://tomo.fmf.uni-lj.si/problem_set/4/#problem-16), na primer `stopinje(c(0, pi / 2, pi))` ali `zaokrozi(celziji(0 : 100))` delujejo brez te\u017eav. Ukazi, ki pa uporabljajo funkcije s [krmilnimi stavki](http://tomo.fmf.uni-lj.si/problem_set/4/#problem-17), kot na primer `fibonacci(1 : 20)` pa ne.\r\n\r\nKje je te\u017eava? Vzemimo program:\r\n\r\n    if(zunanja.temperatura > 15) {\r\n        cat(\"Zunaj je toplo.\\n\")\r\n    } else {\r\n        cat(\"Zunaj je mraz.\\n\")\r\n    }\r\n\r\n\u010ce je vrednost spremenljivke `zunanja.temperatura` enaka `10` ali `20`, vemo, kaj bo program storil.\r\nKaj pa se zgodi, \u010de spremenljivko nastavimo na vektor `c(0, 10, 20, 30, 40)`? V tem primeru R ne ve, katero vejo pogojnega stavka naj izvede. V tem primeru izbere le prvo komponento vektorja (torej `0`) in s tem drugo vejo, ostale komponente pa ignorira. Zato nam tudi izpi\u0161e opozorilo `the condition has length > 1 and only the first element will be used`. Podobno se zgodi pri zanki `while`.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-26 10:51:21", 
+      "title": "Uporaba funkcij na vektorjih", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 19, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-01-04 13:27:49", 
+      "title": "Dinami\u010dno programiranje", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 64, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:50", 
+      "title": "Funkcije", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 88, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-01-15 07:54:13", 
+      "title": "Osnovne podatkovne strukture", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 14, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 3, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-12 08:54:44", 
+      "title": "Objektno programiranje", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 26, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "Uvod v objektno programiranje v pythonu.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-14 14:57:42", 
+      "title": "Razredi", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 8, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-05 10:20:13", 
+      "title": "Matrike in razporeditve", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 66, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "Ogledali si bomo logi\u010dne izraze v Pythonu.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:51", 
+      "title": "Logi\u010dne operacije", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 20, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-29 12:43:28", 
+      "title": "Drevesa", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 86, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 4, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-11-29 10:55:29", 
+      "title": "Sestopanje", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 13, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 5, 
+      "description": "Z ukazom `apply(raz, d, f)` funkcijo `f` uporabimo na vsaki podrazporeditvi\r\nrazporeditve `raz` s fiksirano dimenzijo `d`. Na primer, \u010de je `raz`\r\ndvodimenzionalna, lahko z ukazom `apply(raz, 1, f)` funkcijo `f` uporabimo po\r\nvrsticah, z ukazom `apply(raz, 2, f)` po stolpcih, z ukazom\r\n`apply(raz, c(1, 2), f)` pa na vseh elementih.\r\n\r\n    raz <- outer(1 : 5, 1 : 5, \"^\")\r\n    raz\r\n    apply(raz, 1, sum) # vsote vrstic\r\n    apply(raz, 2, sum) # vsote stolpcev\r\n    apply(raz, c(1, 2), sum) # identiteta, saj je sum(raz[i, j]) = raz[i, j]\r\n\r\n\u010ce je razporeditev ve\u010ddimenzionalna, je postopek enak. Na primer, \u010de je\r\nrazporeditev \u0161tiridimenzionalna, bo ukaz `apply(raz, c(1, 3), f)` fiksiral\r\nprvo in tretjo dimenzijo ter vrnil dvodimenzionalno razporeditev, kjer bo\r\nv `i`-ti vrstici in `j`-tem stolpcu element `f(raz[i, ,j , ])`, torej `f`,\r\nuporabljen na razporeditvi vseh elementov, ki imajo 1. indeks enak `i`,\r\n3. indeks pa enak `j`.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-18 11:01:52", 
+      "title": "Uporaba funkcij na razporeditvah", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 87, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 5, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-01-15 09:48:43", 
+      "title": "Dinami\u010dno programiranje", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 41, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 5, 
+      "description": "Za za\u010detek bomo obravnavali samo preprosto obliko pogojnega stavka:\r\n\r\n     if pogoj:\r\n        ukazi1\r\n     else:\r\n        ukazi2\r\n\r\nPri tem je `pogoj` nek logi\u010dni izraz, del z `else` pa je neobvezen. \u010ce je `pogoj` resni\u010den, se\r\nizvedejo samo ukazi `ukazi1`, sicer pa se izvedejo samo ukazi `ukazi2` (\u010de obstajajo).\r\nPogojne stavke lahko tudi gnezdimo, vendar moramo paziti na zamikanje. To je \u0161e posebej\r\npomembno v primerih kot je\r\n\r\n     if pogoj1:\r\n        ukazi1\r\n        if pogoj2:\r\n            ukazi2\r\n     else:\r\n        ukazi3\r\n\r\nsaj je od zamikanja odvisno, kam pa\u0161e `else` (v zgornjem primeru spada pod `pogoj1`).", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:51", 
+      "title": "Pogojni stavek", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 28, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 5, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-03 16:37:49", 
+      "title": "Iteratorji in generatorji", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 24, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 5, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-06 06:49:50", 
+      "title": "Regularni izrazi", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 63, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 6, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-09-28 14:03:35", 
+      "title": "Problem maksimalnega pretoka", 
+      "visible": false, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 18, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 6, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-11-07 09:49:55", 
+      "title": "Izjeme", 
+      "visible": false, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 22, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 6, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-19 09:02:15", 
+      "title": "Naklju\u010dna \u0161tevila in razpredelnice", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 42, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 6, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:52", 
+      "title": "Zanke", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 21, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 6, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-01-04 13:27:44", 
+      "title": "Sestopanje", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 43, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 7, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:53", 
+      "title": "Nizi", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 90, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 7, 
+      "description": "Grafe bomo v Pythonu predstavili s slovarjem slovarjev, v katerem so klju\u010di vozli\u0161\u010da grafa, vrednosti pa slovarji, v katerih so klju\u010di sosedi, vrednosti pa obi\u010dajno cene povezav.", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-01-15 08:09:35", 
+      "title": "Grafi", 
+      "visible": true, 
+      "course": 5
+    }
+  }, 
+  {
+    "pk": 36, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 7, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-06 06:49:47", 
+      "title": "1. pisni izpit (2011/12)", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 27, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 7, 
+      "description": "V R-ju ri\u0161emo v dveh korakih. Najprej z nari\u0161emo osnovni graf.\r\nTa je lahko razli\u010dnih vrst:\r\n\r\n   - z ukazom `plot(x, y)` nari\u0161emo graf to\u010dk s koordinatami,\r\n     podanimi z vektorjema `x` in `y`. S spremembo parametra `type`\r\n     podrobneje dolo\u010damo na\u010din risanja: `type = \"l\"` to\u010dke\r\n     pove\u017ee s \u010drtami, `type = \"s\"` stopni\u010dasto in podobno.\r\n   - z ukazi kot so `hist`, `piechart`, `barplot`, `curve` pa ri\u0161emo\r\n     diagrame, primerne za posebno predstavitev podatkov. Nekaj jih bomo\r\n     spoznali na naslednjih vajah.\r\n\r\nVsaki\u010d, ko nari\u0161emo osnovni graf, se stari graf pobri\u0161e.\r\n\r\n    # 500-krat si na razli\u010dne na\u010dine izberimo naklju\u010dno x in y koordinato\r\n    plot(runif(500), runif(500))\r\n    plot(runif(500), rnorm(500))\r\n    plot(rnorm(500), rnorm(500))\r\n    # Slika naklju\u010dnega sprehoda v ravnini.\r\n    plot(cumsum(runif(30, -1, 1)), cumsum(runif(30, -1, 1)), type = \"l\")\r\n    # ukaz curve je napisan tako, da namesto  function(x) f(x) pi\u0161ete kar f(x)\r\n    curve(sin(x), -2 * pi, 2 * pi)\r\n\r\nNato z dodatnimi ukazi na osnovni graf dodajamo druge elemente:\r\n\r\n- z ukazom `points(x, y)` nari\u0161emo to\u010dke, podane z vektorjema `x` in `y`;\r\n- z ukazom `lines(x, y)` podobno nari\u0161emo \u010drte;\r\n- z ukazom `abline(n, k)` nari\u0161emo premico z naklonom `k` in za\u010detno\r\n  vrednostjo `n`;\r\n- z ukazom `abline(h = y)` nari\u0161emo vodoravne premice skozi to\u010dke `y`;\r\n- z ukazom `abline(v = x)` podobno ri\u0161emo navpi\u010dne premice;\r\n- z ukazom `polygon(x, y)` nari\u0161emo ve\u010dkotnik z ogli\u0161\u010di v to\u010dkah,\r\n  podanih z vektorjema `x` in `y`;\r\n- z ukazom `rect(x1, y1, x2, y2)` nari\u0161emo pravokotnike z nasprotnima\r\n  ogli\u0161\u010di (`x1`, `y1`) in (`x2`, `y2`);\r\n- z ukazom `text(x, y, tekst)` na koordinate `(x, y)` napi\u0161emo tekst.\r\n\r\n\u010ce kot parameter type podamo `\"n\"`, se graf ne nari\u0161e. Tak ukaz je primeren\r\nza nastavitev koordinatnega sistema.\r\n\r\n    plot(c(-2 * pi, 2 * pi), c(-1, 1), type = \"n\", xlab = \"x\", ylab = \"sin(x)\")\r\n    x <- seq(-2 * pi, 2 * pi, 0.05)\r\n    lines(x, sin(x))\r\n    izbrani.x <- seq(-2, 2, 0.25) * pi\r\n    points(izbrani.x, sin(izbrani.x))\r\n\r\nSkoraj vsakemu od zgornjih ukazov lahko podamo ve\u010d dodatnih parametrov:\r\n- parameter `bg` nastavi barvo ozadja. Barve lahko podamo z imeni\r\n  (`\"white\"`, `\"red\"`, `\"green\"`, ...), z RGB komponentami;\r\n  (na primer `\"#00F16B\"`), ali s pomo\u010djo funkcij `rgb`, `hsv`, `hcl`, ...\r\n- parameter `bty` nastavi tip okvirja. Mo\u017ene vrednosti so\r\n  `\"o\"`, `\"l\"`, `\"7\"`, `\"c\"`, `\"u\"`, `\"]\"` in `\"n\"`. V zadnjem primeru\r\n  se okvir ne nari\u0161e, v ostalih pa ima obliko kot pripadajo\u010da velika\r\n  tiskana \u010drka;\r\n- parameter `col` nastavi barvo, s katero ri\u0161emo. Barve so podane na enak\r\n  na\u010din kot pri parametru `bg`;\r\n- parameter `fg` nastavi barvo ospredja. Barve so podane na enak na\u010din kot\r\n  pri parametru `bg`;\r\n- parameter `lty` nastavi vrsto \u010drt: prazna (`\"blank\"`), polna (`\"solid\"`),\r\n  \u010drtkana (`\"dashed\"`), to\u010dkasta (`\"dotted\"`), me\u0161ana (`\"dotdash\"`) in\r\n  podobno;\r\n- parameter `lwd` nastavi debelino \u010drt;\r\n- parameter `pch` nastavi znak, s katerim ozna\u010dujemo to\u010dke.\r\n\r\nParametrov je \u0161e veliko ve\u010d. Vse si lahko ogledate pri vgrajeni pomo\u010di za\r\nukaz `par`.\r\n\r\nZ ukazom `legend` nari\u0161emo legendo:\r\n\r\n- prvi parameter pove lokacijo legende: `\"topleft\"`, `\"bottomright\"`, ...\r\n- nato za vsak element v legendi napi\u0161emo barvo, tip \u010drte in oznako to\u010dk;\r\n- s parametrom `merged = TRUE` oznake to\u010dk nari\u0161emo na \u010drto.\r\n\r\nPrimer:\r\n  \r\n    plot(c(-2 * pi, 2 * pi), c(-1, 1), type = \"n\", xlab = \"x\", ylab = \"sin(x)\")\r\n    x <- seq(-2 * pi, 2 * pi, 0.05)\r\n    abline(h = seq(-2, 2, 0.5), v = -6 : 6, col = \"gray\", lty = \"dotted\")\r\n    points(0, 0, col = \"gray\")\r\n    lines(x, sin(x))\r\n    points(c(-3 * pi / 2, pi / 2), c(1, 1), col = \"red\", pch = 2)\r\n    points(c(-pi / 2, 3 * pi / 2), c(-1, -1), col = \"green\", pch = 6)\r\n    legend(\"bottomleft\",\r\n           legend = c(\"graf\", \"maksimum\", \"minimum\", \"koordinate\"),\r\n           col = c(\"black\", \"red\", \"green\", \"gray\"),\r\n           lty = c(\"solid\", \"blank\", \"blank\", \"dotted\"),\r\n           pch = c(-1, 2, 6, 1),\r\n           bg = \"white\")\r\n", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-01-02 09:44:25", 
+      "title": "Risanje", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 29, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 7, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-17 16:22:49", 
+      "title": "Drevesa", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 30, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 8, 
+      "description": "Metoda Monte Carlo je strokovno ime za to, da neko \u0161tevilo, ki ga je te\u017eko izra\u010dunati, ocenimo tako, da izmerimo verjetnost nekega dogodka.\r\n\r\n", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-01-09 08:21:46", 
+      "title": "Metoda Monte Carlo", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 33, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 8, 
+      "description": "*Opomba:* Stre\u017enik Tomo ne more preveriti, ali ste pravilno re\u0161ili naloge, v katerih se uporablja Tkinter, zato bo vse re\u0161itve vedno sprejel kot pravilne.", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-01-18 13:52:54", 
+      "title": "Tkinter", 
+      "visible": true, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 60, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 8, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-06 06:49:47", 
+      "title": "2. pisni izpit (2011/12)", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 44, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 8, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:55", 
+      "title": "Seznami", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 32, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 9, 
+      "description": "S [portala Prostor](http://e-prostor.gov.si/fileadmin/BREZPLACNI_POD/RPE/OB.zip) ali pa [spletne u\u010dilnice](http://ucilnica.fmf.uni-lj.si/mod/resource/view.php?id=4519) shranite SHP datoteko z zemljevidom slovenskih ob\u010din ter jo odkompresirajte tja, kamor boste shranili datoteke z nalogami.", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2013-01-16 08:46:53", 
+      "title": "Zemljevidi", 
+      "visible": true, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 35, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 9, 
+      "description": "Za osnovo pri re\u0161evanju naloge uporabimo program `optimizator.py`, ki z metodo lokalne optimizacije i\u0161\u010de minimalno energetsko stanje delcev, ki drug an drugega delujejo z neko silo:\r\n\r\n\r\n    #!/usr/bin/python\r\n    # -*- encoding: utf-8 -*-\r\n\r\n    from tkinter import *\r\n    import random\r\n    import math\r\n\r\n    # Dimenzije canvasa\r\n    (WIDTH, HEIGHT) = (500, 500)\r\n\r\n    def razdalja(p,q):\r\n        \"\"\"Razdalja med to\u010dkama p in q v ravnini.\"\"\"\r\n        (px,py) = p\r\n        (qx,qy) = q\r\n        return math.sqrt((px-qx)*(px-qx) + (py-qy)*(py-qy))\r\n\r\n\r\n    ######################################################################\r\n    # Optimizacija delcev, ki delujejo drug na drugega z dano silo.\r\n    # Optimizacijski problem sam poskrbi, da se animira v canvasu in da se\r\n    # izpisujejo podatki o problemu v polje info. Optimizacijski problem\r\n    # mora vsebovati metodo stop(self), s katero ga ustavimo.\r\n\r\n    class Delci():\r\n        ime = \"Delci\"\r\n\r\n        def __init__(self, n, info, canvas):\r\n            self.info = info\r\n            self.canvas = canvas\r\n            self.korak = 0\r\n            self.vozlisce = [(random.random(), random.random()) for i in range(n)]\r\n            self.krogec = []\r\n            for p in self.vozlisce:\r\n                x = WIDTH * p[0]\r\n                y = HEIGHT * p[1]\r\n                self.krogec.append(canvas.create_oval(x-3, y-3, x+3, y+3))\r\n            self.animacija() # Aktiviraj animacijo\r\n\r\n\r\n        def potencial(self, x):\r\n            \"\"\"Potencialna energija delca glede na drugi delec, ki je od njega oddaljen x.\"\"\"\r\n            zlobniFaktor = 0.0 # Ve\u010dji faktor povzor\u010di ve\u010dje hrib\u010dke v energijski funkciji\r\n            return 1/(50*x) + zlobniFaktor * math.cos(8 * math.pi * x) + x\r\n\r\n        def energija(self):\r\n            \"\"\"Potencialna energija sistema.\"\"\"\r\n            e = 0.0\r\n            for p in self.vozlisce:\r\n                for q in self.vozlisce:\r\n                    if p != q: e = e + self.potencial(razdalja(p,q))\r\n            return e\r\n\r\n        def spremembaEnergije(self, k, p):\r\n            \"\"\"Sprememba v energiji, \u010de k-to to\u010dko prestavimo v p.\"\"\"\r\n            de = 0.0\r\n            q = self.vozlisce[k] # Trenutna pozicija k-te to\u010dke\r\n            for (j,r) in enumerate(self.vozlisce):\r\n                if j != k:\r\n                    de = de + self.potencial(razdalja(r,p)) # Novi prispevek pri\u0161tejemo\r\n                    de = de - self.potencial(razdalja(r,q)) # Stari prispevek od\u0161tejemo\r\n            return de\r\n\r\n        def perturbacija(self, p):\r\n            \"\"\"Za polozaj p, ki je par oblike (x,y), vrne nakljucen rahlo spremenjen polozaj.\"\"\"\r\n            d = 0.02\r\n            x, y = (p[0] + random.uniform(-d, d), p[1] + random.uniform(-d, d))\r\n            return max(0,min(x,1)), max(0,min(y,1))\r\n\r\n        def optimiraj(self):\r\n            for (k,p) in enumerate(self.vozlisce):\r\n                q = self.perturbacija(p)\r\n                if self.spremembaEnergije(k,q) < 0.0:\r\n                    self.vozlisce[k] = q\r\n\r\n        def stop(self):\r\n            self.canvas.after_cancel(self.after_id)\r\n\r\n        def animacija(self):\r\n            self.korak = self.korak + 1\r\n            self.optimiraj()\r\n            for (k,id) in enumerate(self.krogec):\r\n                x = WIDTH * self.vozlisce[k][0]\r\n                y = HEIGHT * self.vozlisce[k][1]\r\n                self.canvas.coords(id, x-3, y-3, x+3, y+3)\r\n            self.info.set(\"i = %d, energija = %g\" % (self.korak, self.energija()))\r\n            self.after_id = self.canvas.after(10, self.animacija)\r\n\r\n    # Glavna aplikacija\r\n\r\n    class Optimizator():\r\n        def __init__(self, master, problemi):\r\n            # Seznam vseh optimizacijskih problemov\r\n            self.problemi = problemi\r\n        \r\n            # Trenutno izbrani problem\r\n            self.problem = self.problemi[0]\r\n            self.aktivna_instanca = None # Trenutno aktivna instanca problema\r\n\r\n            # Ime trenutno izbranega problema\r\n            self.selected = StringVar(master, value=self.problem.ime)\r\n\r\n            # Podatki o stanju problema\r\n            self.info = StringVar(master, value=\"\")\r\n            Label(master, textvariable=self.info).grid(row=0, column=1, columnspan=5)\r\n\r\n            # Podro\u010dje za risanje\r\n            self.canvas = Canvas(master, width=WIDTH, height=HEIGHT)\r\n            self.canvas.grid(row=1, column=0, columnspan=5)\r\n\r\n            # Menu za izbiro problema\r\n            self.selection = Menubutton(master,\r\n                                        textvariable=self.selected,\r\n                                        relief = RAISED)\r\n            menu = Menu(self.selection, tearoff=0)\r\n            for p in self.problemi:\r\n                def select(p=p):\r\n                    self.problem = p\r\n                    self.selected.set(p.ime)\r\n                menu.add_command(label=p.ime, command=select)\r\n            self.selection[\"menu\"] = menu\r\n            self.selection.grid(row=2, column=0)\r\n\r\n            # Velikost problema in gumb za ponovni za\u010detek\r\n            self.velikost = IntVar(master, value=5)\r\n            Label(master, text = \"n = \").grid(row=2, column=2)\r\n            Entry(master, textvariable = self.velikost).grid(row=2, column=3)\r\n            Button(master, text = \"Posodobi\", command = self.restart).grid(row=2, column=4)\r\n\r\n            # Aktiviraj optimizacijo\r\n            self.restart()\r\n\r\n        def restart(self):\r\n            if self.aktivna_instanca is not None: self.aktivna_instanca.stop()\r\n            self.canvas.delete(ALL)           \r\n            self.aktivna_instanca = self.problem(self.velikost.get(), self.info, self.canvas)\r\n\r\n\r\n    # GLAVNI PROGRAM\r\n\r\n    # V nabor lahko dodamo nove optimizacijske probleme\r\n    problemi = (Delci, )\r\n\r\n    root = Tk()\r\n    root.title(\"Optimizator\")\r\n    application = Optimizator(root, problemi)\r\n    root.mainloop()  # to vrstico zakomentiramo, ce poganjamo iz IDLE\r\n", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-09-28 14:11:29", 
+      "title": "Lokalna optimizacija", 
+      "visible": false, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 46, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 9, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:55", 
+      "title": "\u0160e o zankah; izpeljani seznami", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 72, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 9, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-06 06:49:48", 
+      "title": "3. pisni izpit (2011/12)", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 89, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 10, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-12-17 14:01:53", 
+      "title": "Zaloga", 
+      "visible": false, 
+      "course": 1
+    }
+  }, 
+  {
+    "pk": 75, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 10, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2012-12-06 06:49:49", 
+      "title": "4. pisni izpit (2011/12)", 
+      "visible": true, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 59, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 10, 
+      "description": "Prvi izpit, 10.2.2012", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2012-03-01 13:55:04", 
+      "title": "Izpit1", 
+      "visible": false, 
+      "course": 3
+    }
+  }, 
+  {
+    "pk": 47, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 10, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:56", 
+      "title": "Nabori, mno\u017eice, slovarji", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 83, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 11, 
+      "description": "", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2012-12-10 18:47:06", 
+      "title": "1. kolokvij (2012/13)", 
+      "visible": false, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 49, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 11, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:35:58", 
+      "title": "Datoteke", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 40, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 12, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:00", 
+      "title": "Rekurzija in anonimne funkcije", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 92, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 12, 
+      "description": "", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2013-02-04 12:14:41", 
+      "title": "1. pisni izpit (2012/13)", 
+      "visible": false, 
+      "course": 2
+    }
+  }, 
+  {
+    "pk": 68, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 13, 
+      "description": "Naloge v tem sklopu predpostavljajo znanje dosedanje snovi. Namenjene so spoznavanju \u017eelvje grafike in utrjevanju rekurzije. Pri re\u0161evanju nalog si pomagajte s spletno u\u010dilnico in uradno dokumentacijo:\r\n\r\n * [Spletna u\u010dilnica](http://ucilnica.fmf.uni-lj.si/mod/resource/view.php?id=14018)", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:01", 
+      "title": "\u017delvja grafika", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 58, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 14, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:02", 
+      "title": "1. izpit (2010/11)", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 71, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 15, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:03", 
+      "title": "1. izpit (2011/12) \u2013 finan\u010dniki", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 70, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 16, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:04", 
+      "title": "1. izpit (2011/12) \u2013 matematiki", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 69, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 17, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:08", 
+      "title": "1. izpit (2011/12) \u2013 pedagogi", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 73, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 18, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:09", 
+      "title": "2. izpit (2011/12) \u2013 prva skupina ", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 74, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 19, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:10", 
+      "title": "2. izpit (2011/12) \u2013 druga skupina", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 76, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 20, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:12", 
+      "title": "3. izpit (2011/12)", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 77, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 21, 
+      "description": "", 
+      "solution_visibility": "vidne", 
+      "timestamp": "2013-02-18 08:36:12", 
+      "title": "3. izpit (2011/12) \u2013 druga skupina", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 91, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 22, 
+      "description": "", 
+      "solution_visibility": "skrite", 
+      "timestamp": "2013-01-18 15:53:37", 
+      "title": "4. izpit (2011/12)", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 62, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 23, 
+      "description": "Tomotova zaloga nalog", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-11-28 17:07:23", 
+      "title": "Zaloga", 
+      "visible": false, 
+      "course": 4
+    }
+  }, 
+  {
+    "pk": 67, 
+    "model": "tomo.problemset", 
+    "fields": {
+      "_order": 24, 
+      "description": "", 
+      "solution_visibility": "pogojno", 
+      "timestamp": "2012-03-27 08:53:13", 
+      "title": "Kvizi", 
+      "visible": false, 
+      "course": 4
+    }
+  }
+]
