@@ -118,7 +118,7 @@ def set_project(project_name):
 def manage(command):
     with cd(env.home):
         with prefix('source virtualenv/bin/activate'):
-            return sudo('./manage.py {0}'.format(command))
+            return sudo('./manage.py {0} --settings=project.settings.{1}'.format(command, env.project_name))
 
 def postgres(command):
     sudo('su -c "{0}" postgres'.format(command))
