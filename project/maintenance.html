@@ -12,8 +12,7 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link rel="stylesheet" href="http://tomo.fmf.uni-lj.si/static/bootstrap.css">
-    <link rel="stylesheet" href="http://yandex.st/highlightjs/6.1/styles/default.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
     <style type="text/css">
       /* Override some defaults */
       html, body {
@@ -143,32 +142,6 @@
       }
     </style>
 
-    <!-- Le javascript -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"] ]
-        }
-      });
-    </script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script src="http://tomo.fmf.uni-lj.si/static/jquery.js"></script>
-    <script src="http://tomo.fmf.uni-lj.si/static/bootstrap-dropdown.js"></script>
-    <script src="http://tomo.fmf.uni-lj.si/static/bootstrap-modal.js"></script>
-    <script type='text/javascript'>
-      $(document).ready(
-        function() {
-          $('pre code').each(
-            function() {
-              $(this).addClass('python');
-            }
-          );
-        }
-      );
-    </script>
-    <script type="text/javascript" src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-
     <!-- Le fav and touch icons -->
     <!-- <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
@@ -178,10 +151,10 @@
 
   <body>
 
-    <div class="topbar">
-      <div class="fill">
-        <div class="container">
-          <a class="brand" href="{% url homepage %}">Tomo</a>
+   <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand">Tomo</a>
         </div>
       </div>
     </div>
@@ -190,25 +163,21 @@
       <div class="content">
         <div class="row">
           <div class="span14">
-            <div class="page-header">
-              <h1>Tomo trenutno ni dosegljiv</h1>
 
-            </div>
-            <p>
-              Tomo zaradi vzdrževanja trenutno ni dosegljiv.
-              Prosimo, poskusite kasneje.
-            </p>
+            <!-- <div class="hero-unit"> -->
+              <h1>Projekt Tomo ravno posodabljamo</h1>
+              <p>
+                Zaradi vzdrževanja Projekt Tomo trenutno ni dosegljiv.
+                Prosimo, poskusite kasneje.
+              </p>
+            <!-- </div> -->
+
           </div>
         </div>
       </div>
 
       <footer>
-        <p>Tomo ponosno uporablja
-          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a>,
-          <a href="http://www.mathjax.org/">MathJax</a> in
-          <a href="http://softwaremaniacs.org/soft/highlight/en/">highlight.js</a>
-        <p>
-        <p>&copy; Matija Pretnar 2011</p>
+        <p>&copy; Andrej Bauer, Matija Pretnar 2013</p>
       </footer>
     </div> <!-- /container -->
 
