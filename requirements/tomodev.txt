@@ -1,6 +1,5 @@
 -r common.txt
-Fabric==1.6.0
+distribute==0.6.10
 django-debug-toolbar==0.9.4
-paramiko==1.10.1
-pycrypto==2.6
-ssh==1.8.0
+psycopg2==2.4.2
+python-ldap==2.4.4
