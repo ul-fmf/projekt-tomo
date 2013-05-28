@@ -31,3 +31,7 @@ application = WSGIHandler()
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
 # application = HelloWorldApplication(application)
+
+from libs.wsgi import maintenance
+application = maintenance(application, lock=os.path.join(base_path, 'lock'),
+                          message=os.path.join(base_path, 'maintenance.html'))
