@@ -34,11 +34,11 @@ def setup():
 
 @task
 def production():
-    set_project('tomo-production')
+    set_project('tomoprod')
 
 @task
-def std():
-    set_project('std-production')
+def std_production():
+    set_project('tomostd')
 
 @task
 def lock():
