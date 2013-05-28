@@ -88,6 +88,7 @@ def get_dump():
 @task
 def edit_apache():
     edit('/etc/apache2/sites-available/tomo.fmf.uni-lj.si', use_sudo=True)
+    restart_apache()
 
 @task
 def restart_apache():
