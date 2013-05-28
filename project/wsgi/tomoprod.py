@@ -14,14 +14,19 @@ framework.
 
 """
 import os
+import site
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings.tomoprod")
+os.environ["DJANGO_SETTINGS_MODULE"] = "project.settings.tomoprod"
+base_path = "/srv/tomoprod"
+
+site.addsitedir(base_path)
+site.addsitedir(os.path.join(base_path, "virtualenv/lib/python2.6/site-packages"))
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+from django.core.handlers.wsgi import WSGIHandler
+application = WSGIHandler()
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
