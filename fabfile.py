@@ -125,7 +125,7 @@ def postgres(command):
 
 def restart():
     with cd(env.home):
-        sudo('touch project/wsgi.py')
+        sudo('touch project/wsgi/{project_name}.py'.format(**env))
 
 def edit(remote_file, use_sudo=False):
     _, temporary_filename = tempfile.mkstemp(suffix=os.path.splitext(remote_file)[1])
