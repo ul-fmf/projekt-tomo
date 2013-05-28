@@ -86,10 +86,6 @@ def get_dump():
             f.write(json)
 
 @task
-def edit_settings():
-    edit(os.path.join(env.home, 'project/settings.py'), use_sudo=True)
-
-@task
 def edit_apache():
     edit('/etc/apache2/sites-available/tomo.fmf.uni-lj.si', use_sudo=True)
 
@@ -117,11 +113,6 @@ def reset_local():
 def set_project(project_name):
     env.project_name = project_name
     env.home = os.path.join(env.srv_directory, project_name)
-
-def git(command, subdir=""):
-    with cd(env.home):
-        with cd(subdir):
-            return sudo('git {0}'.format(command))
 
 def manage(command):
     with cd(env.home):
