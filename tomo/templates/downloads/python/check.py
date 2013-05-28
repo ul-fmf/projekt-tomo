@@ -143,6 +143,68 @@ class Check:
                 return False
 
     @staticmethod
+    def generator(example, good_values, should_stop=False, further_iter=0, env={},
+                  clean=lambda x: x, precision=1.0e-6, strict_float=False, strict_list=True):
+        from types import GeneratorType
+        
+        def difference(x, y):
+            if x == y: return None
+            elif (type(x) != type(y) and
+                    (strict_float or not (type(y) in [int, float, complex] and type(x) in [int, float, complex])) and
+                    (strict_list or not (type(y) in [list, tuple] and type(x) in [list, tuple]))):
+                return "različna tipa"
+            elif type(y) in [int, float, complex]:
+                return ("numerična napaka" if abs(x - y) > precision else None)
+            elif type(y) in [tuple,list]:
+                if len(y) != len(x): return "napačna dolžina seznama"
+                else:
+                    for (u, v) in zip(x, y):
+                        msg = difference(u, v)
+                        if msg: return msg
+                    return None
+            elif type(y) is dict:
+                if len(y) != len(x): return "napačna dolžina slovarja"
+                else:
+                    for (k, v) in y.items():
+                        if k not in x: return "manjkajoči ključ v slovarju"
+                        msg = difference(x[k], v)
+                        if msg: return msg
+                    return None
+            else: return "različni vrednosti"
+
+        local = locals()
+        local.update(env)
+        gen = eval(example, globals(), local)
+        if not isinstance(gen, GeneratorType):
+            Check.error("{0} ni generator.", example)
+            return False
+
+        iter_counter = 0
+        try:
+            for correct_ans in good_values:
+                iter_counter += 1
+                student_ans = gen.__next__()
+                reason = difference(clean(correct_ans), clean(student_ans))
+                if reason:
+                    Check.error("Element #{0}, ki ga vrne generator {1} ni pravilen: {2!r} namesto {3!r} ({4}).",
+                                iter_counter, example, student_ans, correct_ans, reason)
+                    return False
+            for i in range(further_iter):
+                iter_counter += 1
+                gen.__next__() # we will not validate it
+        except StopIteration:
+            Check.error("Generator {0} se prehitro izteče.", example)
+            return False
+        
+        if should_stop:
+            try:
+                gen.__next__()
+                Check.error("Generator {0} se ne izteče (dovolj zgodaj).", example)
+            except StopIteration:
+                pass # this is fine
+        return True
+
+    @staticmethod
     @contextmanager
     def in_file(filename, content):
         with open(filename, "w") as _f:
