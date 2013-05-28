@@ -1,0 +1,4 @@
+-r common.txt
+distribute==0.6.10
+psycopg2==2.4.2
+python-ldap==2.4.4
