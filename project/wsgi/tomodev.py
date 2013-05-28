@@ -14,8 +14,13 @@ framework.
 
 """
 import os
+import site
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings.tomodev")
+
+base_path = os.path.abspath("../..")
+site.addsitedir(base_path)
+site.addsitedir(os.path.join(base_path, 'virtualenv/lib/python2.6/site-packages'))
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
