@@ -1,6 +1,6 @@
 .DS_Store
 *.pyc
-static/MathJax
+static
 tomo
 tomo.db
 virtualenv
