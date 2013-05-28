@@ -43,13 +43,13 @@ def std():
 @task
 def lock():
     with cd(env.home):
-        sudo('touch project/lock')
+        sudo('touch lock')
     restart()
 
 @task
 def unlock():
     with cd(env.home):
-        sudo('rm project/lock')
+        sudo('rm lock')
     restart()
 
 @task
