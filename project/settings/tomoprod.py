@@ -1,4 +1,5 @@
-from common import *
+from project.settings.common import *
+
 ##############################################################################
 # Copy this file to settings.py and update it to match your configuration.
 ##############################################################################
