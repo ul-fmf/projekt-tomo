@@ -17,8 +17,8 @@ import os
 import site
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings.tomodev")
+base_path = "/srv/tomodev"
 
-base_path = os.path.abspath("../..")
 site.addsitedir(base_path)
 site.addsitedir(os.path.join(base_path, 'virtualenv/lib/python2.6/site-packages'))
 
