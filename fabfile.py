@@ -30,6 +30,9 @@ def setup():
         with prefix('source virtualenv/bin/activate'):
             sudo('pip install -r requirements/{project_name}.txt'.format(**env))
         sudo('git clone {tomo_repository}'.format(**env))
+        sudo('mkdir static')
+        with cd('static'):
+            sudo('git clone https://github.com/mathjax/MathJax')
     update()
 
 @task
@@ -55,11 +58,23 @@ def unlock():
 @task
 def update():
     lock()
-    with cd('tomo'):
-        git('pull')
+    with cd(env.home):
+        sudo('git pull')
+        with cd('tomo'):
+            sudo('git pull')
     manage('collectstatic --noinput')
     manage('syncdb')
     manage('migrate')
+    unlock()
+
+@task
+def update_all():
+    lock()
+    with cd(env.home):
+        with prefix('source virtualenv/bin/activate'):
+            sudo('pip install -r requirements/{project_name}.txt'.format(**env))
+        with cd('static/MathJax'):
+            sudo('git pull')
     unlock()
 
 @task
