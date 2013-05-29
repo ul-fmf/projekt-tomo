@@ -33,7 +33,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
     fieldsets = (
         (None, {
-            'fields': (('user', 'problem'), )
+            'fields': (('user', 'problem', 'ip'), )
         }),
         ('Source', {
             'classes': ('collapse', ),

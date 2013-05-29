@@ -159,6 +159,7 @@ class Submission(models.Model):
     user = models.ForeignKey(User, related_name='submissions')
     problem = models.ForeignKey(Problem, related_name='submissions')
     timestamp = models.DateTimeField(auto_now_add=True)
+    ip = models.IPAddressField()
     preamble = models.TextField(blank=True)
     source = models.TextField(blank=True)
 
