@@ -36,6 +36,15 @@ def setup():
     update()
 
 @task
+def setup_local():
+    env.project_name = "local"
+    local('virtualenv --no-site-packages virtualenv')
+    with prefix('source virtualenv/bin/activate'):
+        local('pip install -r requirements/{project_name}.txt'.format(**env))
+    local('git clone {tomo_repository}'.format(**env))
+    update_local()
+
+@task
 def production():
     set_project('tomoprod')
 
@@ -102,12 +111,16 @@ def reset_tomodev():
         postgres("createdb -T tomo tomodev")
 
 @task
-def reset_local():
-    local('touch tomo.db')
-    local('rm tomo.db')
+def update_local():
     local('./manage.py syncdb --noinput')
     local('./manage.py migrate')
     local('./manage.py loaddata fixtures/*.json')
+
+@task
+def reset_local():
+    local('touch tomo.db')
+    local('rm tomo.db')
+    update_local()
 
 # Auxiliary commands
 
