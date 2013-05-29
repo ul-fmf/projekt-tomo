@@ -218,7 +218,7 @@ def student_upload(request):
     problem = get_object_or_404(Problem, id=download['problem'])
     verify(user.is_staff or problem.problem_set.visible)
 
-    submission = Submission(user=user, problem=problem,
+    submission = Submission(user=user, problem=problem, ip=request.META['REMOTE_ADDR'],
                             preamble=post['preamble'], source=post['source'])
     submission.save()
 
