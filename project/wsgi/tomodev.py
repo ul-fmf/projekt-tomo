@@ -34,4 +34,4 @@ application = WSGIHandler()
 
 from libs.wsgi import maintenance
 application = maintenance(application, lock=os.path.join(base_path, 'lock'),
-                          message=os.path.join(base_path, 'maintenance.html'))
+                          message=os.path.join(base_path, 'project/maintenance.html'))
