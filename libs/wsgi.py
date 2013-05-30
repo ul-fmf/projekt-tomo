@@ -1,3 +1,5 @@
+import os
+
 def maintenance(application, lock, message):
     if os.path.exists(lock):
         return application
