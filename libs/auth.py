@@ -6,6 +6,8 @@ import ldap
 
 class ActiveDirectoryBackend:
 
+  supports_anonymous_user = False
+    
   def authenticate(self,username=None,password=None):
     if username:
       username = username.lower()
