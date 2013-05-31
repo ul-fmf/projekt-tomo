@@ -61,7 +61,7 @@ class ProblemSet(models.Model):
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
     objects = QuerySetManager()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now=True, db_index=True)
 
     @models.permalink
     def get_absolute_url(self):
