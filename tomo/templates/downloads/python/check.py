@@ -216,7 +216,7 @@ class Check:
         Check.current["errors"] = old_errors
         if new_errors:
             new_errors = ["\n    ".join(error.split("\n")) for error in new_errors]
-            Check.error("Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}".format(filename, "\n  ".join(content), "\n- ".join(new_errors)))
+            Check.error("Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}", filename, "\n  ".join(content), "\n- ".join(new_errors))
 
     @staticmethod
     def out_file(filename, content):
