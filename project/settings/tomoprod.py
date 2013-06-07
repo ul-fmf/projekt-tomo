@@ -4,6 +4,8 @@ from project.settings.common import *
 # Copy this file to settings.py and update it to match your configuration.
 ##############################################################################
 
+SESSION_COOKIE_NAME = 'sessionprodid'
+
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
