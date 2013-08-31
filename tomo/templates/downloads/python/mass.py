@@ -10,7 +10,7 @@
 ##################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}) 
 # NAPAČNA REŠITEV: {% if attempt.error_list %}{% for error in attempt.error_list %}
-# * {{ error|safe|indent:"#   "}}{% endfor %}{% else %}
+# * {{ error|indent:"#   "|safe}}{% endfor %}{% else %}
 # * zavrnjen izziv{% endif %}
 ##################################################################{{ part.id|stringformat:'06d'}}@#
 {{ attempt.solution|safe }}{% endif %}{% if not attempt.solution %}
