@@ -122,9 +122,9 @@ check$summarize <- function() {
       cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep = "")
     } else if ("rejection" %in% names(check$parts[[i]])) {
       if(check$parts[[i]]$rejection != "")
-        cat("Podnaloga ", i, " je zavrnjena.\n", sep = "")
+        cat("Podnaloga ", i, " je zavrnjena. (", check$parts[[i]]$rejection, ")\n", sep = "")
       else
-        cat("Podnaloga ", i, " je zavrnjena.", check$parts[[i]]$rejection, "\n", sep = "")
+        cat("Podnaloga ", i, " je zavrnjena.\n", sep = "")
     } else {
       cat("Podnaloga", i, "je pravilno rešena.\n")
     }
