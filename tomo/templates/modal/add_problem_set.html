@@ -1,0 +1,26 @@
+{% load cache %}
+{% cache 1000000 add-problem-set 1 course.id course.timestamp %}
+<div class="modal fade" id="add-problem-set">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      Dodajanje sklopa k predmetu {{ course.name }}
+    </h3>
+  </div>
+
+  <form action="{% url "create_set" %}" method="post">
+  <div class="modal-body">
+    {% csrf_token %}
+    <input type="hidden" name="course" value="{{ course.id }}" />
+    <label>Naslov</label>
+    <input size="30" type="text" name="title" />
+    <label>Opis</label>
+    <textarea rows="3" name="description"></textarea>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Dodaj</button>
+  </div>
+  </form>
+</div>
+{% endcache %}

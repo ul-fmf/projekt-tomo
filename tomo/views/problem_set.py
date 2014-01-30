@@ -136,3 +136,13 @@ def toggle_visible(request, problem_set_id):
     problem_set.visible = not problem_set.visible
     problem_set.save()
     return redirect(request.META.get('HTTP_REFERER', problem_set))
+
+@staff_member_required
+def create(request):
+    verify(request.method == 'POST')
+    course = get_object_or_404(Course, id=request.POST['course'])
+    problem_set = ProblemSet(course=course, title=request.POST['title'],
+                             description=request.POST['description'],
+                             visible=False, solution_visibility='pogojno')
+    problem_set.save()
+    return redirect(problem_set)
