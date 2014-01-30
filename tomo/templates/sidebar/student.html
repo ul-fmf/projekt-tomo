@@ -21,7 +21,7 @@
           {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
           {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
         </a>
-        <a href="{% url problem_set ps.id %}">
+        <a href="{% url "problem_set" ps.id %}">
           {{ ps.title }}
         </a>
       </li>

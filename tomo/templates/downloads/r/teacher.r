@@ -123,7 +123,7 @@ if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
       preamble = preamble,
       parts = check$parts
     )
-    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url teacher_upload %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
+    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url "teacher_upload" %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
     cat(response$message, "\n")
     if("update" %in% names(response)) {

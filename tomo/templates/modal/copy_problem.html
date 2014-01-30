@@ -7,7 +7,7 @@
     </h3>
   </div>
 
-  <form action="{% url copy %}" method="post">
+  <form action="{% url "copy" %}" method="post">
   <div class="modal-body">
       {% csrf_token %}
       <input type="hidden" name="problem_id" value="{{ problem.id }}">

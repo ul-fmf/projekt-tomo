@@ -8,7 +8,7 @@
     </h3>
   </div>
 
-  <form action="{% url create %}" method="post">
+  <form action="{% url "create" %}" method="post">
   <div class="modal-body">
     {% csrf_token %}
     <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />

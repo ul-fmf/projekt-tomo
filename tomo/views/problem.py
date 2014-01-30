@@ -211,7 +211,7 @@ def student_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    post = json.loads(request.raw_post_data)
+    post = json.loads(request.body)
 
     download = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=download['user'])
@@ -316,7 +316,7 @@ def teacher_upload(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    post = json.loads(request.raw_post_data)
+    post = json.loads(request.body)
 
     data = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=data['user'])

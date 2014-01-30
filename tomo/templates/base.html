@@ -29,7 +29,7 @@
    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="{% url homepage %}">Tomo{% if debug %} – razvojna različica{% endif %}</a>
+          <a class="brand" href="{% url "homepage" %}">Tomo{% if debug %} – razvojna različica{% endif %}</a>
           {% if user.is_authenticated %}
           <ul class="nav pull-right">
             <li class="dropdown">
@@ -37,12 +37,12 @@
               <ul class="dropdown-menu">
                 <li><a data-toggle="modal" href="#settings-form">Nastavitve</a></li>
                 <li class="divider"></li>
-                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
+                <li><a href="{% url "django.contrib.auth.views.logout" %}">Odjavite se</a></li>
               </ul>
             </li>
           </ul>
           {% else %}
-            <form method='post' action="{% url django.contrib.auth.views.login %}" class="navbar-form pull-right">
+            <form method='post' action="{% url "django.contrib.auth.views.login" %}" class="navbar-form pull-right">
               {% csrf_token %}
               <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
               <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">

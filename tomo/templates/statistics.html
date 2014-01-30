@@ -12,17 +12,17 @@
 
   <ul class="nav nav-tabs">
     <li>
-      <a href="{% url problem_set problem_set.id %}">Naloga</a>
+      <a href="{% url "problem_set" problem_set.id %}">Naloga</a>
     </li>
     <li class="active">
-      <a href="{% url view_statistics problem_set.id 120 %}">Statistika</a>
+      <a href="{% url "view_statistics" problem_set.id 120 %}">Statistika</a>
     </li>
   </ul>
 
   <ul class="nav nav-pills">
     {% for desc, lim in limits %}
     <li{% if lim == limit %} class="active"{% endif %}>
-      <a href="{% url view_statistics problem_set.id lim %}">{{ desc }}</a>
+      <a href="{% url "view_statistics" problem_set.id lim %}">{{ desc }}</a>
     </li>
     {% endfor %}
   </ul>
@@ -52,8 +52,8 @@
       {% if user.id in problem_attempts %}
       <tr>
         <td>
-          <a class="icon-download" href="{% url student_archive_download problem.id user.id %}"></a>
-          <a class="icon-time" href="{% url student_history_download problem.id user.id %}"></a>
+          <a class="icon-download" href="{% url "student_archive_download" problem.id user.id %}"></a>
+          <a class="icon-time" href="{% url "student_history_download" problem.id user.id %}"></a>
         </td>
         <td>{{ user.get_full_name }}</td>
         {% with problem_attempts|get:user.id as user_attempts %}

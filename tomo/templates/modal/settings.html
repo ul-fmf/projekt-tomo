@@ -6,7 +6,7 @@
     </h3>
   </div>
 
-  <form method="POST" action="{% url settings %}">
+  <form method="POST" action="{% url "settings" %}">
   <div class="modal-body">
     {% csrf_token %}
     <h4>Moji predmeti</h4>
