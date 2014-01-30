@@ -1,0 +1,49 @@
+<div class="modal fade" id="solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}" style="width: 700px; margin: -250px 0 0 -352px;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      {% if user %}
+        {{ user.get_full_name }}, {{ problem.title }}, podnaloga {{ forloop.counter }}
+      {% else %}
+        {{ problem.title }}, podnaloga {{ forloop.counter }}
+      {% endif %}
+    </h3>
+  </div>
+
+  <div class="modal-body solution-view">
+    <h4>Oddana rešitev</h4>
+    {% if attempt.solution %}
+    <pre><code>{{ attempt.solution }}</code></pre>
+      {% with attempt.error_list as errors %}
+      {% if errors %}
+        <h4>Napake</h4>
+        <ul>
+        {% for error in attempt.error_list %}
+        <li><pre>{{ error }}</pre></li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+      {% endwith %}
+    {% else %}
+    <p>Rešitev ni bila oddana.</p>
+    {% endif %}
+
+    <h4>Uradna rešitev</h4>
+    {% if request.user.is_staff %}
+      <pre><code>{{ part.solution }}</code></pre>
+    {% else %}
+      {% if problem_set.solution_visibility == 'vidne' or problem_set.solution_visibility == 'pogojno' and attempt.correct %}
+        <pre><code>{{ part.solution }}</code></pre>
+      {% endif %}
+      {% if problem_set.solution_visibility == 'pogojno' and not attempt.correct %}
+        <p>Uradno rešitev boste lahko videli šele takrat, ko boste nalogo pravilno rešili.</p>
+      {% endif %}
+      {% if problem_set.solution_visibility == 'skrite' %}
+        <p>Uradne rešitve so skrite.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="modal-footer">
+  </div>
+</div>

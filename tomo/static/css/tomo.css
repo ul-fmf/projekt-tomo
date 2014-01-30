@@ -1,0 +1,72 @@
+.btn-mini {
+  padding: 2px 6px;
+  font-size: 11px;
+  line-height: 14px;
+}
+.btn-small .icon {
+  margin-top: -3px;
+}
+
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+.sidebar-nav {
+  padding: 9px 0;
+}
+
+pre code {
+  background-color: inherit;
+  line-height: inherit;
+  border: 0;
+}
+
+.hidden a {
+  color: #bbb;
+}
+
+.status, .action {
+  float: right;
+}
+
+.status {
+  background-image: url(../img/glyphicons-halflings-gray.png);
+}
+
+.nav > li > a.action, .nav > li > a.status, .nav > li.active > a.action, .nav > li.active > a.status {
+  background: transparent;
+  padding: 3px;
+}
+
+.nav > li > a.action, .action {
+  margin-left: 5px;
+}
+
+.nav > li > a.status, .status {
+  margin-left: 9px;
+}
+
+.nav > li.active > a.action:hover > i, .nav > li.active > a.status:hover > i {
+  background-image: url(../img/glyphicons-halflings.png);
+}
+
+.nav > li.active > a.action > i, .nav > li.active > a.status > i {
+  background-image: url(../img/glyphicons-halflings-white.png);
+}
+
+.nav > li > a.action > i, .action, .nav > li.active > a.action > i {
+  background-image: none;
+}
+
+.nav > li:hover > a.action > i, .nav > li > a.status > i, *:hover > .action {
+  background-image: url(../img/glyphicons-halflings-gray.png);
+}
+
+.nav > li > a.action:hover > i, .nav > li > a.status:hover > i, .status:hover, .action:hover {
+  background-image: url(../img/glyphicons-halflings.png);
+}
+
+.solution-view {
+  overflow: auto;
+  max-height: 400px;
+}

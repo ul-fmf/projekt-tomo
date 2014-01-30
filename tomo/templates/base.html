@@ -1,0 +1,114 @@
+{% load my_tags %}
+<!DOCTYPE html>
+<html lang="si">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}Tomo{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="Matija Pretnar">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="{{ STATIC_URL }}js/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ STATIC_URL }}css/prettify.css" rel="stylesheet">
+    <link href="{{ STATIC_URL}}css/tomo.css" rel="stylesheet">
+
+    <!-- Le fav and touch icons -->
+    <!-- <link rel="shortcut icon" href="images/favicon.ico"> -->
+    <!-- <link rel="apple-touch-icon" href="images/apple-touch-icon.png"> -->
+    <!-- <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png"> -->
+    <!-- <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png"> -->
+  </head>
+
+  <body>
+
+   <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="{% url homepage %}">Tomo{% if debug %} – razvojna različica{% endif %}</a>
+          {% if user.is_authenticated %}
+          <ul class="nav pull-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.get_full_name }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a data-toggle="modal" href="#settings-form">Nastavitve</a></li>
+                <li class="divider"></li>
+                <li><a href="{% url django.contrib.auth.views.logout %}">Odjavite se</a></li>
+              </ul>
+            </li>
+          </ul>
+          {% else %}
+            <form method='post' action="{% url django.contrib.auth.views.login %}" class="navbar-form pull-right">
+              {% csrf_token %}
+              <input class="input-small" id="id_username" name="username" type="text" placeholder="KovacM">
+              <input class="input-small" id="id_password" name="password" type="password" placeholder="Triglav.1">
+              <input type='hidden' name='next' value='{{ next|default:request.path }}' >
+              <button class="btn" type="submit">Prijavite se</button>
+            </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div id="sidebar" class="span3">
+          <div class="well sidebar-nav">
+            <ul class="nav nav-list">
+              {% if user.is_staff %}
+                {% include 'sidebar/staff.html' %}
+              {% else %}
+                {% include 'sidebar/student.html' %}
+              {% endif %}
+            </ul>
+          </div><!--/.well -->
+        </div><!--/span-->
+
+        <div id="contents" class="span9">
+          {% if form.errors %}
+            <div class="alert alert-error fade in" data-alert="alert" >
+              <h4 class="alert-heading alert-error">Napaka ob prijavi!</h4>
+              Uporabite enako uporabniško ime in geslo kot ju na študentskih računalnikih, na primer <code>KovacM</code> in <code>Triglav.1</code>.
+            </div>
+          {% endif %}
+
+          {% block content %}
+          {% endblock %}
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Tomo ponosno uporablja
+          <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a> in
+          <a href="http://www.mathjax.org/">MathJax</a>.
+        <p>
+        <p>&copy; Andrej Bauer, Matija Pretnar 2013</p>
+      </footer>
+    
+    {% include 'modal/settings.html' %}
+
+    </div><!--/.fluid-container-->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"] ]
+        }
+      });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="{{ STATIC_URL }}js/jquery.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/prettify.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL }}js/tomo.js" type="text/javascript"></script>
+  </body>
+</html>

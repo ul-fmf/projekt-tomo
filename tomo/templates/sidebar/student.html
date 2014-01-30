@@ -1,0 +1,32 @@
+{% load my_tags %}
+
+{% for course in courses.all %}
+<li class="nav-header">{{ course.name }}</li>
+{% for ps in course.problem_sets.all %}
+    {% if ps.visible %}
+      <li{% if ps.id == problem_set.id %} class="active"{% endif %}>
+        <a href="#" class="status" style="margin-left: -100px" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+            {% if request.user.is_authenticated %}
+              {% with percentage=solved|get:ps.id %}
+              <span class="label {% spaceless %}
+                {% if percentage == 100 %}label-success{% endif %}
+                {% if percentage < 100 and percentage >= 50 %}label-warning{% endif %}
+                {% if percentage < 50 %}label-important{% endif %}
+                {% endspaceless %}">
+                {{ percentage }}%
+              </span>
+              {% endwith %}
+            {% endif %}
+          {% if ps.solution_visibility == 'skrite' %}<i class="icon-ban-circle"></i>{% endif %}
+          {% if ps.solution_visibility == 'pogojno' %}<i class="icon-remove-circle"></i>{% endif %}
+          {% if ps.solution_visibility == 'vidne' %}<i class="icon-ok-circle"></i>{% endif %}
+        </a>
+        <a href="{% url problem_set ps.id %}">
+          {{ ps.title }}
+        </a>
+      </li>
+    {% endif %}
+{% endfor %}
+{% empty %}
+  Preden začnete reševati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.
+{% endfor %}

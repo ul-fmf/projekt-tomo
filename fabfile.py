@@ -19,7 +19,6 @@ FIXTURES = [
 
 env.srv_directory = '/srv/'
 env.project_repository = 'git@git.fmf.uni-lj.si:matijapretnar/projekt-tomo.git'
-env.tomo_repository = 'git@github.com:matijapretnar/tomo.git'
 
 @task
 def setup():
@@ -29,7 +28,6 @@ def setup():
         sudo('virtualenv --no-site-packages virtualenv')
         with prefix('source virtualenv/bin/activate'):
             sudo('pip install -r requirements/{project_name}.txt'.format(**env))
-        sudo('git clone {tomo_repository}'.format(**env))
         sudo('mkdir static')
         with cd('static'):
             sudo('git clone https://github.com/mathjax/MathJax')
@@ -41,7 +39,6 @@ def setup_local():
     local('virtualenv --no-site-packages virtualenv')
     with prefix('source virtualenv/bin/activate'):
         local('pip install -r requirements/{project_name}.txt'.format(**env))
-    local('git clone {tomo_repository}'.format(**env))
     update_local()
 
 @task
@@ -69,8 +66,6 @@ def update():
     lock()
     with cd(env.home):
         sudo('git pull')
-        with cd('tomo'):
-            sudo('git pull')
     manage('collectstatic --noinput')
     manage('syncdb')
     manage('migrate')

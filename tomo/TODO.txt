@@ -1,0 +1,38 @@
+ČIMPREJ
+
+- Py datoteke MIME type
+
+- podpora za Mathematico
+
+- na statistiki naredi urejanje po stolpcih
+
+- kontaktiranje študentov glede rešitev
+- kontaktiranje avtorjev glede nalog
+
+PREDEN TOMO DAMO NA VOLJO DRUGIM UČITELJEM
+
+- pomoč
+- ločitev administratorjev in učiteljev
+- kopiranje problem-setov med predmeti
+
+
+
+KO BO ČAS
+
+- CSS za printanje
+- favicon
+- Mathjax config v tomo.js
+
+- razni bugi, za katere upamo, da jih ne nabašemo:
+    - preveri Transfer-Encoding: chunked v R-ju
+    - Ctrl-M-ji se pojavijo vsakič, ko editiram nalogo preko djangoadmin (MacOS, Chrome).
+
+- statistika:
+    - statistika za posameznega študenta
+    - spisek najboljših
+
+- podpora za obskurne jezike:
+    - matlab
+    - Haskell
+    - Ocaml
+    - Javo

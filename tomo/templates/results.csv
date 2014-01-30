@@ -1,0 +1,26 @@
+{% load my_tags %}Ime,Priimek,{% filter remove_spaces %}
+{% for problem in problems.all %}
+  {% for part in problem.parts.all %}
+    {{ forloop.parentloop.counter }}.{{ forloop.counter }}
+    {% if not forloop.last %},{% endif %}
+  {% endfor %}
+  {% if not forloop.last %},{% endif %}
+{% endfor %}{% endfilter %}
+{% for user in users %}{{ user.first_name }},{{ user.last_name }},{% filter remove_spaces %}
+{% for problem in problems.all %}
+  {% for part in problem.parts.all %}
+    {% with attempts|get:user.id|get:part.id as attempt %}
+      {% if attempt %}
+        {% if attempt.correct %}
+          1
+        {% else %}
+          0
+        {% endif %}
+      {% endif %}
+    {% endwith %}
+    {% if not forloop.last %},{% endif %}
+  {% endfor %}
+  {% if not forloop.last %},{% endif %}
+{% endfor %}
+{% endfilter %}
+{% endfor %}

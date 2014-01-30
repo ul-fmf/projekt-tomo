@@ -1,0 +1,23 @@
+{% load cache %}
+{% cache 1000000 anonymous-problem-set 1 problem_set.id problem_set.timestamp %}
+<div class="modal fade" id="anonymous-download-problem-set-{{ problem_set.id }}">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      {{ problem_set.title }}
+    </h3>
+  </div>
+
+  <div class="modal-body">
+    <p>
+      Če se ne morete prijaviti, lahko naloge rešujete z začasnimi datotekami.
+      V tem primeru se vaše rešitve <strong>ne bodo shranile na strežnik</strong>.
+      Ko se boste lahko spet prijavili, boste naloge morali ponovno prenesti ter vanje prepisati začasne rešitve.
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <a href="{% url student_zip problem_set.id %}" class="btn btn-secondary"><i class="icon-check"></i> Reši sklop</a>
+  </div>
+</div>
+{% endcache %}

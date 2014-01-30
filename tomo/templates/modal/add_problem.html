@@ -1,0 +1,30 @@
+{% load cache %}
+{% cache 1000000 add-problem 1 problem_set.id problem_set.timestamp %}
+<div class="modal fade" id="add-problem">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>
+      Dodajanje naloge v sklop {{ problem_set.title }}
+    </h3>
+  </div>
+
+  <form action="{% url create %}" method="post">
+  <div class="modal-body">
+    {% csrf_token %}
+    <input type="hidden" name="problem_set" value="{{ problem_set.id }}" />
+    <label>Naslov</label>
+    <input size="30" type="text" name="title" />
+    <label>Jezik</label>
+    <select name="language" id="language">
+    {% for language in languages.all %}
+      <option value="{{ language.id }}" {% if language == problem_set.default_language %}selected{% endif %}>{{ language.name }}</option>
+    {% endfor %}
+    </select>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary">Dodaj</button>
+  </div>
+  </form>
+</div>
+{% endcache %}
