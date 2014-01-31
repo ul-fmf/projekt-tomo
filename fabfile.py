@@ -8,8 +8,8 @@ env.hosts = ['matija@tyrion.fmf.uni-lj.si']
 
 FIXTURES = [
     # 'auth.User',
-    'tomo.Course',
-    'tomo.ProblemSet',
+    'course.Course',
+    'course.ProblemSet',
     # 'tomo.Language',
     'tomo.Problem',
     'tomo.Part',

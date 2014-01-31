@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url, include
 from django.contrib import admin
 admin.autodiscover()
 
-from tomo.models import Course
+from courses.models import Course
 
 urlpatterns = patterns('',
     # This seems wrong as it uses a template from tomo app.

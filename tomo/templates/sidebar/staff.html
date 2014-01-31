@@ -12,10 +12,10 @@
       <a href="{% url "toggle_visible" ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
         <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
       </a>
-      <a href="{% url "admin:tomo_problemset_delete" ps.id %}" class="action" title="Pobriši">
+      <a href="{% url "admin:courses_problemset_delete" ps.id %}" class="action" title="Pobriši">
         <i class="icon-trash"></i>
       </a>
-      <a href="{% url "admin:tomo_problemset_change" ps.id %}" class="action" title="Napredno…">
+      <a href="{% url "admin:courses_problemset_change" ps.id %}" class="action" title="Napredno…">
         <i class="icon-cog"></i>
       </a>
       <a href="{% url "move_problem_set" ps.id -1 %}" class="action" title="Premakni gor">

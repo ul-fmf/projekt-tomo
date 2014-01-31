@@ -8,6 +8,7 @@ from django.shortcuts import render
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 
+from courses.models import Course, ProblemSet
 from tomo.models import *
 from tomo.utils import *
 from tomo.views.problem import student_contents, teacher_contents
