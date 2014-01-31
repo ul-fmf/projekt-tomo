@@ -18,7 +18,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.tomo.fmf.uni-lj.si']
 
 
 # Application definition

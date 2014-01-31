@@ -18,7 +18,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.tomo.fmf.uni-lj.si']
 
 
 # Application definition
@@ -32,8 +32,8 @@ WSGI_APPLICATION = 'project.wsgi.tomostd.application'
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tomo',
-        'USER': 'tomostd',
+        'NAME': 'tomostd',
+        'USER': 'tomo',
         'PASSWORD': '',
         'HOST': '',
         'PORT': '',
