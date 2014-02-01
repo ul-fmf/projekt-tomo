@@ -115,27 +115,19 @@ def teacher_zip(request, problem_set_id):
 @staff_member_required
 def move(request, problem_set_id, shift):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    order = problem_set.course.get_problemset_order()
-    old = order.index(problem_set.id)
-    new = max(0, min(old + int(shift), len(order) - 1))
-    order.insert(new, order.pop(old))
-    problem_set.course.set_problemset_order(order)
-    problem_set.course.save()
+    problem_set.move(shift)
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
 @staff_member_required
 def toggle_solution_visibility(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    next = {'skrite': 'pogojno', 'pogojno': 'vidne', 'vidne': 'skrite'}
-    problem_set.solution_visibility = next[problem_set.solution_visibility]
-    problem_set.save()
+    problem_set.toggle_solution_visibility()
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
 @staff_member_required
 def toggle_visible(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    problem_set.visible = not problem_set.visible
-    problem_set.save()
+    problem_set.toggle_visible()
     return redirect(request.META.get('HTTP_REFERER', problem_set))
 
 @staff_member_required

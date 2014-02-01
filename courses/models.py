@@ -54,6 +54,22 @@ class ProblemSet(models.Model):
         except Problem.DoesNotExist:
             return
 
+    def move(self, shift):
+        order = self.course.get_problemset_order()
+        old = order.index(self.id)
+        new = max(0, min(old + int(shift), len(order) - 1))
+        order.insert(new, order.pop(old))
+        self.course.set_problemset_order(order)
+        self.course.save()
+
+    def toggle_solution_visibility(self):
+        next = {'skrite': 'pogojno', 'pogojno': 'vidne', 'vidne': 'skrite'}
+        self.solution_visibility = next[self.solution_visibility]
+        self.save()
+
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
 
     @classmethod
     def success(self, user):
