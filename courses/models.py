@@ -1,20 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.query import QuerySet
 from tomo.models import Attempt
-
-
-class QuerySetManager(models.Manager):
-    """A re-usable Manager to access a custom QuerySet"""
-    def __getattr__(self, attr, *args):
-        try:
-            return getattr(self.__class__, attr, *args)
-        except AttributeError:
-            return getattr(self.get_query_set(), attr, *args)
-
-    def get_query_set(self):
-        return self.model.QuerySet(self.model)
 
 
 class Course(models.Model):
@@ -48,7 +35,6 @@ class ProblemSet(models.Model):
     visible = models.BooleanField()
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
-    objects = QuerySetManager()
     timestamp = models.DateTimeField(auto_now=True, db_index=True)
 
     @models.permalink
@@ -68,32 +54,31 @@ class ProblemSet(models.Model):
         except Problem.DoesNotExist:
             return
 
-    class QuerySet(QuerySet):
-        def success(self, user):
-            if user.is_authenticated():
-                correct = dict(
-                    Attempt.objects.filter(
-                        active=True, correct=True, part__problem__problem_set__in=self,
-                        submission__user=user
-                    ).values(
-                        'part__problem__problem_set'
-                    ).order_by(
-                        'part__problem__problem_set'
-                    ).annotate(
-                        correct_count=models.Count('part__problem__problem_set')
-                    ).values_list('part__problem__problem_set', 'correct_count')
-                )
-                total = dict(
-                    self.annotate(
-                        part_count=models.Count('problems__parts')
-                    ).values_list('id', 'part_count')
-                )
-                success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
-                            problem_set_id, tot in total.items())
-                return success
-            else:
-                return {}
 
+    @classmethod
+    def success(self, user):
+        if user.is_authenticated():
+            correct = dict(
+                Attempt.objects.filter(
+                    active=True, correct=True, submission__user=user
+                ).values(
+                    'part__problem__problem_set'
+                ).order_by(
+                    'part__problem__problem_set'
+                ).annotate(
+                    correct_count=models.Count('part__problem__problem_set')
+                ).values_list('part__problem__problem_set', 'correct_count')
+            )
+            total = dict(
+                ProblemSet.objects.annotate(
+                    part_count=models.Count('problems__parts')
+                ).values_list('id', 'part_count')
+            )
+            success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
+                        problem_set_id, tot in total.items())
+            return success
+        else:
+            return {}
 
     class Meta:
         order_with_respect_to = 'course'

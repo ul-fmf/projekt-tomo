@@ -7,7 +7,7 @@ def homepage(request):
     return render(request, "home.html", {
         'courses': Course.user_courses(request.user),
         'all_courses': Course.objects.all(),
-        'solved': ProblemSet.objects.success(request.user),
+        'solved': ProblemSet.success(request.user),
     })
 
 def settings(request):

@@ -23,7 +23,7 @@ def view_problem_set(request, problem_set_id):
         'problem_set': problem_set,
         'problems': problems,
         'all_courses': Course.objects.all(),
-        'solved': ProblemSet.objects.success(request.user),
+        'solved': ProblemSet.success(request.user),
         'attempts': attempts,
         'languages': Language.objects
     })
