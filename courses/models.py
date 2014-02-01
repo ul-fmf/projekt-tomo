@@ -32,7 +32,7 @@ class ProblemSet(models.Model):
     course = models.ForeignKey(Course, related_name='problem_sets')
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    visible = models.BooleanField()
+    visible = models.BooleanField(default=False)
     solution_visibility = models.CharField(max_length=20, default='pogojno',
                                            choices=SOLUTION_VISIBILITY)
     timestamp = models.DateTimeField(auto_now=True, db_index=True)
@@ -62,13 +62,13 @@ class ProblemSet(models.Model):
         self.course.set_problemset_order(order)
         self.course.save()
 
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
+
     def toggle_solution_visibility(self):
         next = {'skrite': 'pogojno', 'pogojno': 'vidne', 'vidne': 'skrite'}
         self.solution_visibility = next[self.solution_visibility]
-        self.save()
-
-    def toggle_visible(self):
-        self.visible = not self.visible
         self.save()
 
     @classmethod
