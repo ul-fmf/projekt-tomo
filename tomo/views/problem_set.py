@@ -113,24 +113,6 @@ def teacher_zip(request, problem_set_id):
     return zip_archive(archivename, files)
 
 @staff_member_required
-def move(request, problem_set_id, shift):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    problem_set.move(shift)
-    return redirect(request.META.get('HTTP_REFERER', problem_set))
-
-@staff_member_required
-def toggle_solution_visibility(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    problem_set.toggle_solution_visibility()
-    return redirect(request.META.get('HTTP_REFERER', problem_set))
-
-@staff_member_required
-def toggle_visible(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    problem_set.toggle_visible()
-    return redirect(request.META.get('HTTP_REFERER', problem_set))
-
-@staff_member_required
 def create(request):
     verify(request.method == 'POST')
     course = get_object_or_404(Course, id=request.POST['course'])
