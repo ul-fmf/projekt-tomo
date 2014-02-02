@@ -65,28 +65,62 @@ def view_statistics(request, problem_set_id, limit):
         'limit': limit
     })
 
+
+def moss_contents(request, problem, user):
+    context = {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'user': user,
+    }
+    return render_to_string(problem.language.student_file.replace("student", "moss"),
+                            context_instance=RequestContext(request, context))
+
+def mass_contents(request, problem, user):
+    context = {
+        'problem': problem,
+        'parts': problem.parts.all(),
+        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'user': user,
+    }
+    return render_to_string(problem.language.student_file.replace("student", "mass"),
+                            context_instance=RequestContext(request, context))
+
 @staff_member_required
-def results_csv(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+def results_zip(request, problem_set_id):
+    problemset = get_object_or_404(ProblemSet, id=problem_set_id)
     attempts = {}
     user_ids = set()
-    active_attempts = Attempt.objects.active().for_problem_set(problem_set)
+    active_attempts = Attempt.objects.active().for_problem_set(problemset)
     for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
         user_id = attempt.submission.user_id
         user_ids.add(user_id)
         user_attempts = attempts.get(user_id, {})
         user_attempts[attempt.part_id] = attempt
         attempts[user_id] = user_attempts
+    users = User.objects.filter(id__in=user_ids)
+    archivename = "{0}-results".format(slugify(problemset.title))
+    files = []
+    for problem in problemset.problems.all():
+        for user in users.all():
+            username = user.get_full_name() or user.username
+            filename = "{0}/{1}-moss/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
+            contents = moss_contents(request, problem, user).encode('utf-8')
+            files.append((filename, contents))
+            filename = "{0}/{1}/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
+            contents = mass_contents(request, problem, user).encode('utf-8')
+            files.append((filename, contents))
     context = {
-        'problem_set': problem_set,
+        'problem_set': problemset,
         'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
-        'problems': problem_set.problems,
+        'problems': problemset.problems,
         'attempts': attempts
     }
-    filename = "{0}.csv".format(slugify(problem_set.title))
+    filename = "{0}/{0}.csv".format(archivename)
     contents = render_to_string("results.csv",
                                 context_instance=RequestContext(request, context))
-    return plain_text(filename, contents, mimetype='text/csv')
+    files.append((filename, contents))
+    return zip_archive(archivename, files)
 
 
 def student_zip(request, problem_set_id):
