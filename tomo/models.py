@@ -101,10 +101,11 @@ class Attempt(models.Model):
             return self.filter(active=True)
 
         def for_problem(self, problem):
-            return self.filter(part__problem=problem)
+            return self.filter(part_id__in=problem.parts.all())
 
         def for_problem_set(self, problem_set):
-            return self.filter(part__problem__problem_set=problem_set)
+            part_ids = Part.objects.filter(problem__problem_set=problem_set)
+            return self.filter(part_id__in=part_ids)
 
         def user_attempts(self, user):
             if user.is_authenticated():
