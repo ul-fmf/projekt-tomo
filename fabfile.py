@@ -8,8 +8,8 @@ env.hosts = ['matija@tyrion.fmf.uni-lj.si']
 
 FIXTURES = [
     # 'auth.User',
-    'course.Course',
-    'course.ProblemSet',
+    'courses.Course',
+    'courses.ProblemSet',
     # 'tomo.Language',
     'tomo.Problem',
     'tomo.Part',
@@ -113,8 +113,8 @@ def update_local():
 
 @task
 def reset_local():
-    local('touch tomo.db')
-    local('rm tomo.db')
+    local('touch project/db.sqlite3')
+    local('rm project/db.sqlite3')
     update_local()
 
 # Auxiliary commands

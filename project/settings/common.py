@@ -19,8 +19,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
 )
 
-SOUTH_TESTS_MIGRATE = False
-
 # Application definition
 
 INSTALLED_APPS = (

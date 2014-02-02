@@ -1,7 +1,7 @@
 [
   {
     "pk": 5, 
-    "model": "tomo.course", 
+    "model": "courses.course", 
     "fields": {
       "name": "Podatkovne strukture in algoritmi", 
       "students": [
@@ -54,7 +54,7 @@
   }, 
   {
     "pk": 1, 
-    "model": "tomo.course", 
+    "model": "courses.course", 
     "fields": {
       "name": "Programiranje 1 (finan\u010dna matematika)", 
       "students": [
@@ -223,7 +223,7 @@
   }, 
   {
     "pk": 2, 
-    "model": "tomo.course", 
+    "model": "courses.course", 
     "fields": {
       "name": "Programiranje 1 (matematika)", 
       "students": [
@@ -327,7 +327,7 @@
   }, 
   {
     "pk": 3, 
-    "model": "tomo.course", 
+    "model": "courses.course", 
     "fields": {
       "name": "Ra\u010dunalni\u0161tvo (fizika)", 
       "students": [
@@ -443,7 +443,7 @@
   }, 
   {
     "pk": 4, 
-    "model": "tomo.course", 
+    "model": "courses.course", 
     "fields": {
       "name": "Uvod v programiranje", 
       "students": [
