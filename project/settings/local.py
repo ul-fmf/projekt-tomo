@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS += (
     'debug_toolbar',
+    'django_coverage',
 )
 
 WSGI_APPLICATION = 'project.wsgi.local.application'

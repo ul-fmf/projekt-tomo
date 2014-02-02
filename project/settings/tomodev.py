@@ -10,7 +10,7 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 # DEBUG_PROPAGATE_EXCEPTIONS = True
 
-INTERNAL_IPS = ('193.2.67.32',)
+INTERNAL_IPS = ('89.212.210.72',)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
