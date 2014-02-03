@@ -26,6 +26,14 @@ class Language(models.Model):
     def __unicode__(self):
         return u'{0}'.format(self.name)
 
+    @property
+    def mass_file(self):
+        return self.student_file.replace("student", "mass")
+
+    @property
+    def moss_file(self):
+        return self.student_file.replace("student", "moss")
+
     class Meta:
         ordering = ['name']
 
