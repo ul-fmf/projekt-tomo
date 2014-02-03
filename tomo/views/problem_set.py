@@ -66,21 +66,21 @@ def view_statistics(request, problem_set_id, limit):
     })
 
 
-def moss_contents(request, problem, user):
+def moss_contents(request, problem, user, parts, attempts):
     context = {
         'problem': problem,
-        'parts': problem.parts.all(),
-        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'parts': parts,
+        'attempts': attempts,
         'user': user,
     }
     return render_to_string(problem.language.student_file.replace("student", "moss"),
                             context_instance=RequestContext(request, context))
 
-def mass_contents(request, problem, user):
+def mass_contents(request, problem, user, parts, attempts):
     context = {
         'problem': problem,
-        'parts': problem.parts.all(),
-        'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
+        'parts': parts,
+        'attempts': attempts,
         'user': user,
     }
     return render_to_string(problem.language.student_file.replace("student", "mass"),
@@ -92,7 +92,7 @@ def results_zip(request, problem_set_id):
     attempts = {}
     user_ids = set()
     active_attempts = Attempt.objects.active().for_problem_set(problemset)
-    for attempt in active_attempts.select_related('submission__user', 'part__problem_id'):
+    for attempt in active_attempts.select_related('submission__user_id'):
         user_id = attempt.submission.user_id
         user_ids.add(user_id)
         user_attempts = attempts.get(user_id, {})
@@ -102,13 +102,15 @@ def results_zip(request, problem_set_id):
     archivename = "{0}-results".format(slugify(problemset.title))
     files = []
     for problem in problemset.problems.all():
+        parts = problem.parts.all()
         for user in users.all():
+            user_attempts = attempts[user.id]
             username = user.get_full_name() or user.username
             filename = "{0}/{1}-moss/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
-            contents = moss_contents(request, problem, user).encode('utf-8')
+            contents = moss_contents(request, problem, user, parts, user_attempts).encode('utf-8')
             files.append((filename, contents))
             filename = "{0}/{1}/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
-            contents = mass_contents(request, problem, user).encode('utf-8')
+            contents = mass_contents(request, problem, user, parts, user_attempts).encode('utf-8')
             files.append((filename, contents))
     context = {
         'problem_set': problemset,
