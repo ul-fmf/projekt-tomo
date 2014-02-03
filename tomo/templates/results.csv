@@ -1,15 +1,15 @@
 {% load my_tags %}Ime,Priimek,{% filter remove_spaces %}
-{% for problem in problems.all %}
-  {% for part in problem.parts.all %}
+{% for problem in problems %}
+  {% for part_id in problem %}
     {{ forloop.parentloop.counter }}.{{ forloop.counter }}
     {% if not forloop.last %},{% endif %}
   {% endfor %}
   {% if not forloop.last %},{% endif %}
 {% endfor %}{% endfilter %}
 {% for user in users %}{{ user.first_name }},{{ user.last_name }},{% filter remove_spaces %}
-{% for problem in problems.all %}
-  {% for part in problem.parts.all %}
-    {% with attempts|get:user.id|get:part.id as attempt %}
+{% for problem in problems %}
+  {% for part_id in problem %}
+    {% with attempts|get:user.id|get:part_id as attempt %}
       {% if attempt %}
         {% if attempt.correct %}
           1

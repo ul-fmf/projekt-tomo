@@ -115,7 +115,7 @@ def results_zip(request, problem_set_id):
     context = {
         'problem_set': problemset,
         'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
-        'problems': problemset.problems,
+        'problems': [[part.id for part in problem.parts.all()] for problem in problemset.problems.all()],
         'attempts': attempts
     }
     filename = "{0}/{0}.csv".format(archivename)
