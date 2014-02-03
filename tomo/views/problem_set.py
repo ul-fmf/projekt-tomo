@@ -94,10 +94,10 @@ def results_zip(request, problem_set_id):
                 'user': user,
             }
             mass_filename = "{0}/{1}/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
-            mass_contents = render_to_string(mass_template, context).encode('utf-8')
+            mass_contents = render_to_string(mass_template, context)
             files.append((mass_filename, mass_contents))
             moss_filename = "{0}/{1}-moss/{2}.{3}".format(archivename, slugify(problem.title), slugify(username), problem.language.extension)
-            moss_contents = render_to_string(moss_template, context).encode('utf-8')
+            moss_contents = render_to_string(moss_template, context)
             files.append((moss_filename, moss_contents))
     context = {
         'problem_set': problemset,
@@ -107,7 +107,7 @@ def results_zip(request, problem_set_id):
     }
     filename = "{0}/{0}.csv".format(archivename)
     contents = render_to_string("results.csv",
-                                context_instance=RequestContext(request, context)).encode('utf-8')
+                                context_instance=RequestContext(request, context))
     files.append((filename, contents))
     return zip_archive(archivename, files)
 
@@ -120,7 +120,7 @@ def student_zip(request, problem_set_id):
     for i, problem in enumerate(problem_set.problems.all()):
         filename = "{0}/{1:02d}-{2}".format(archivename, i + 1, problem.filename())
         contents = student_contents(request, problem, request.user,
-                                    request.user.is_authenticated()).encode('utf-8')
+                                    request.user.is_authenticated())
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
@@ -131,7 +131,7 @@ def teacher_zip(request, problem_set_id):
     files = []
     for problem in problem_set.problems.all():
         filename = "{0}/{1}".format(archivename, problem.filename()) # Select your files here.
-        contents = teacher_contents(request, problem, request.user).encode('utf-8')
+        contents = teacher_contents(request, problem, request.user)
         files.append((filename, contents))
     return zip_archive(archivename, files)
 

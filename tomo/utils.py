@@ -51,7 +51,7 @@ def zip_archive(name, files):
     temp = tempfile.TemporaryFile()
     archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
     for n, contents in files:
-        archive.writestr(n, contents)
+        archive.writestr(n, contents.encode('utf-8'))
     archive.close()
     wrapper = FileWrapper(temp)
     response = HttpResponse(wrapper, content_type='application/zip')
