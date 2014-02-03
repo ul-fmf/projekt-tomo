@@ -120,7 +120,7 @@ def results_zip(request, problem_set_id):
     }
     filename = "{0}/{0}.csv".format(archivename)
     contents = render_to_string("results.csv",
-                                context_instance=RequestContext(request, context))
+                                context_instance=RequestContext(request, context)).encode('utf-8')
     files.append((filename, contents))
     return zip_archive(archivename, files)
 
