@@ -22,12 +22,16 @@ from django.http import HttpResponse
 
 
 def verify(cond):
-    if not cond: raise PermissionDenied
+    if not cond:
+        raise PermissionDenied
+
 def sign(text):
     return hashlib.md5(text + settings.SECRET_KEY).hexdigest()
+
 def pack(data):
     text = json.dumps(data)
     return (text, sign(text))
+
 def unpack(text, sig):
     verify(sign(text) == sig)
     return json.loads(text)
@@ -55,8 +59,7 @@ def zip_archive(name, files):
     archive.close()
     wrapper = FileWrapper(temp)
     response = HttpResponse(wrapper, content_type='application/zip')
-    response['Content-Disposition'] = \
-        'attachment; filename={0}.zip'.format(name)
+    response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(name)
     response['Content-Length'] = temp.tell()
     temp.seek(0)
     return response
