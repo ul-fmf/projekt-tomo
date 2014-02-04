@@ -40,9 +40,9 @@
   {% endif %}
 
   {% for problem in problems %}
-    {% include 'modal/copy_problem.html' %}
     <hr />
     {% if request.user.is_staff %}
+      {% include 'modal/copy_problem.html' %}
       <h2 id="problem-{{ problem.id }}">
         {{ problem.title }}
         <a class="icon-edit status" href="{% url "teacher_download" problem.id %}" title="Uredi nalogo"></a>
@@ -61,10 +61,10 @@
           <a class="icon-check status" href="{% url "student_download" problem.id %}" title="Reši nalogo"></a>
         {% else %}
           <a class="icon-check status" href="#anonymous-download-problem-{{ problem.id }}" data-toggle="modal" title="Reši nalogo"></a>
+          {% include 'modal/anonymous_problem.html' %}
         {% endif %}
       </h2>
       </div>
-      {% include 'modal/anonymous_problem.html' %}
     {% endif %}
 
     {{ problem.description|tex_markdown|safe }}

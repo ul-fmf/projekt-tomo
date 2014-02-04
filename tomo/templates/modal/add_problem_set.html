@@ -1,6 +1,6 @@
 {% load cache %}
 {% cache 1000000 add-problem-set 1 course.id course.timestamp %}
-<div class="modal fade" id="add-problem-set">
+<div class="modal fade" id="add-problem-set-{{ course.id }}">
   <div class="modal-header">
     <a class="close" data-dismiss="modal">×</a>
     <h3>

@@ -29,7 +29,7 @@
 {% endfor %}
     <li>
     {% include "modal/add_problem_set.html" %}
-    <a href="#add-problem-set" data-toggle="modal">+ dodaj sklop</a>
+    <a href="#add-problem-set-{{ course.id }}" data-toggle="modal">+ dodaj sklop</a>
     </li>
 {% empty %}
   Preden začnete sestavljati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.

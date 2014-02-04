@@ -91,7 +91,9 @@
         <p>&copy; Andrej Bauer, Matija Pretnar 2013</p>
       </footer>
     
+    {% if user.is_authenticated %}
     {% include 'modal/settings.html' %}
+    {% endif %}
 
     </div><!--/.fluid-container-->
 
