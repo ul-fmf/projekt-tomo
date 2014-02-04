@@ -18,19 +18,11 @@ from tomo.utils import *
 
 
 def student_contents(request, problem, user, authenticated):
-    if user.is_authenticated():
-        try:
-            sub = Submission.objects.filter(user=user, problem=problem).latest('timestamp')
-            preamble = sub.preamble
-        except Submission.DoesNotExist:
-            preamble = u"\n{0}\n".format(problem.preamble)
-    else:
-        preamble = u"\n{0}\n".format(problem.preamble)
     context = {
         'problem': problem,
         'parts': problem.parts.all(),
         'attempts': Attempt.objects.for_problem(problem).user_attempts(user),
-        'preamble': preamble,
+        'preamble': problem.preamble_for(user),
         'authenticated': authenticated,
         'user': user,
     }

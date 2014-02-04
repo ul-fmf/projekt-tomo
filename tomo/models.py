@@ -60,6 +60,17 @@ class Problem(models.Model):
     def get_absolute_url(self):
         return "{0}#problem-{1}".format(self.problem_set.get_absolute_url(), self.id)
 
+    def preamble_for(self, user):
+        if user.is_authenticated():
+            try:
+                sub = Submission.objects.filter(user=user, problem=self).latest('timestamp')
+                preamble = sub.preamble
+            except Submission.DoesNotExist:
+                preamble = u"\n{0}\n".format(problem.preamble)
+        else:
+            preamble = u"\n{0}\n".format(problem.preamble)
+
+
     class Meta:
         order_with_respect_to = 'problem_set'
 
