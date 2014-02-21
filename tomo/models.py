@@ -66,9 +66,10 @@ class Problem(models.Model):
                 sub = Submission.objects.filter(user=user, problem=self).latest('timestamp')
                 preamble = sub.preamble
             except Submission.DoesNotExist:
-                preamble = u"\n{0}\n".format(problem.preamble)
+                preamble = u"\n{0}\n".format(self.preamble)
         else:
-            preamble = u"\n{0}\n".format(problem.preamble)
+            preamble = u"\n{0}\n".format(self.preamble)
+        return preamble
 
 
     class Meta:
