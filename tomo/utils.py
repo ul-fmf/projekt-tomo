@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from tomo.utils import *
 from tomo.models import *
+from courses.models import *
 
 import tempfile, zipfile
 

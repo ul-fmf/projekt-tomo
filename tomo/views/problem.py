@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from tomo.models import *
 from tomo.utils import *
+from courses.models import *
 
 
 def student_contents(request, problem, user, authenticated):
