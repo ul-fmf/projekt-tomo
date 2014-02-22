@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 from django.contrib.auth.models import User
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.db.models.query import QuerySet
 from django.template.defaultfilters import slugify

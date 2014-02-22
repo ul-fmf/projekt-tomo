@@ -1,21 +1,19 @@
 # -*- coding: utf-8 -*-
 import json
 from copy import deepcopy
-
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.http import urlencode
 from django.views.decorators.csrf import csrf_exempt
-
-from tomo.models import *
-from tomo.utils import *
-from courses.models import *
+from tomo.utils import verify, pack, unpack, plain_text
+from tomo.models import Language, Problem, Part, Submission, Attempt
+from courses.models import ProblemSet
 
 
 def student_contents(request, problem, user, authenticated):

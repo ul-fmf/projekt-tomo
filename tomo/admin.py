@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from tomo.models import Language, Problem, Part, Submission, Attempt
+from .models import Language, Problem, Part, Submission, Attempt
 
 class PartInline(admin.StackedInline):
     model = Part

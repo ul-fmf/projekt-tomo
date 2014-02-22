@@ -1,17 +1,15 @@
 # -*- coding: utf-8 -*-
 import datetime
-
-from django.core.cache import cache
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-
 from courses.models import Course, ProblemSet
-from tomo.models import *
-from tomo.utils import *
-from tomo.views.problem import student_contents, teacher_contents
+from tomo.utils import verify, zip_archive
+from tomo.models import Language, Attempt
+from .problem import student_contents, teacher_contents
 
 def view_problem_set(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)

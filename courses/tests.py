@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from .models import Course, ProblemSet
 
+
 class ProblemSetCase(TestCase):
     def setUp(self):
         course = Course.objects.create()

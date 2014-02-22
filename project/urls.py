@@ -1,9 +1,8 @@
 from django.conf.urls import patterns, url, include
-
 from django.contrib import admin
-admin.autodiscover()
-
 from courses.models import Course
+
+admin.autodiscover()
 
 urlpatterns = patterns('',
     # This seems wrong as it uses a template from tomo app.
