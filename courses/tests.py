@@ -4,6 +4,22 @@ from django.test import TestCase
 from .models import Course, ProblemSet
 
 
+class CourseCase(TestCase):
+    def setUp(self):
+        course = Course.objects.create()
+        teacher = User.objects.create_user('teacher', '', 'teacher')
+        course.teachers.add(teacher)
+        student = User.objects.create_user('student', '', 'student')
+        course.students.add(student)
+
+    def test_course_has_teacher(self):
+        course = Course.objects.get(id=1)
+        teacher = User.objects.get(username='teacher')
+        student = User.objects.get(username='student')
+        self.assertTrue(course.has_teacher(teacher))
+        self.assertFalse(course.has_teacher(student))
+
+
 class ProblemSetCase(TestCase):
     def setUp(self):
         course = Course.objects.create()
@@ -40,18 +56,18 @@ class ProblemSetCase(TestCase):
 
     def test_problemset_toggle_visible(self):
         problemset = ProblemSet.objects.get(id=1)
-        self.assertEqual(problemset.visible, False)
+        self.assertFalse(problemset.visible)
         problemset.toggle_visible()
-        self.assertEqual(problemset.visible, True)
+        self.assertTrue(problemset.visible)
         problemset.toggle_visible()
-        self.assertEqual(problemset.visible, False)
+        self.assertFalse(problemset.visible)
 
     def test_problemset_toggle_visible_view(self):
         self.client.login(username='admin', password='admin')
         response = self.client.get(reverse('courses.views.problemset_toggle_visible', args=[1]))
         self.assertEqual(response.status_code, 302)
         problemset = ProblemSet.objects.get(id=1)
-        self.assertEqual(problemset.visible, True)
+        self.assertTrue(problemset.visible)
 
     def test_problemset_toggle_solution_visibility(self):
         problemset = ProblemSet.objects.get(id=1)

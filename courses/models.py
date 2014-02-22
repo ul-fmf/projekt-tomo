@@ -16,6 +16,9 @@ class Course(models.Model):
     def user_courses(self, user):
         return user.courses if user.is_authenticated() else self.objects
 
+    def has_teacher(self, user):
+        return user.is_authenticated() and user in self.teachers.all()
+
     def __unicode__(self):
         return u'{0} ({1})'.format(self.name, self.shortname)
 
