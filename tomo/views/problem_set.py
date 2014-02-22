@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import datetime
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import RequestContext
@@ -13,7 +12,8 @@ from .problem import student_contents, teacher_contents
 
 def view_problem_set(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    verify(request.user.is_staff or problem_set.visible)
+    user_is_teacher = problem_set.course.has_teacher(request.user)
+    verify(user_is_teacher or problem_set.visible)
     problems = problem_set.problems.all()
     attempts = Attempt.objects.for_problem_set(problem_set).user_attempts(request.user)
     return render(request, "problem_set.html", {
@@ -22,13 +22,14 @@ def view_problem_set(request, problem_set_id):
         'problems': problems,
         'all_courses': Course.objects.all(),
         'solved': ProblemSet.success(request.user),
+        'teacher': user_is_teacher,
         'attempts': attempts,
         'languages': Language.objects
     })
 
-@staff_member_required
 def view_statistics(request, problem_set_id, limit):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    verify(problem_set.course.has_teacher(request.user))
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
     user_ids = set()
     limit = int(limit)
@@ -60,13 +61,14 @@ def view_statistics(request, problem_set_id, limit):
         'attempts': attempts,
         'success': success,
         'limits': limits,
-        'limit': limit
+        'limit': limit,
+        'teacher': True
     })
 
 
-@staff_member_required
 def results_zip(request, problem_set_id):
     problemset = get_object_or_404(ProblemSet, id=problem_set_id)
+    verify(problemset.course.has_teacher(request.user))
     attempts = {}
     user_ids = set()
     active_attempts = Attempt.objects.active().for_problem_set(problemset)
@@ -112,7 +114,7 @@ def results_zip(request, problem_set_id):
 
 def student_zip(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
-    verify(request.user.is_staff or problem_set.visible)
+    verify(problem_set.course.has_teacher(request.user) or problem_set.visible)
     archivename = slugify(problem_set.title)
     files = []
     for i, problem in enumerate(problem_set.problems.all()):
@@ -122,9 +124,9 @@ def student_zip(request, problem_set_id):
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
-@staff_member_required
 def teacher_zip(request, problem_set_id):
     problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+    verify(problem_set.course.has_teacher(request.user))
     archivename = "{0}-edit".format(slugify(problem_set.title))
     files = []
     for problem in problem_set.problems.all():
@@ -133,10 +135,10 @@ def teacher_zip(request, problem_set_id):
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
-@staff_member_required
 def create(request):
     verify(request.method == 'POST')
     course = get_object_or_404(Course, id=request.POST['course'])
+    verify(course.has_teacher(request.user))
     problem_set = ProblemSet(course=course, title=request.POST['title'],
                              description=request.POST['description'],
                              visible=False, solution_visibility='pogojno')

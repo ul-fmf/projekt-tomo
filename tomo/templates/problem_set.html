@@ -15,7 +15,7 @@
 
   {{ problem_set.description|tex_markdown|safe }}
 
-  {% if request.user.is_staff %}
+  {% if teacher %}
   <ul class="nav nav-tabs">
     <li class="active">
       <a href="{% url "problem_set" problem_set.id %}">Naloge</a>
@@ -26,7 +26,7 @@
   </ul>
   {% endif %}
 
-  {% if request.user.is_staff %}
+  {% if teacher %}
     <a href="{% url "teacher_zip" problem_set.id %}" class="btn btn-primary"><i class="icon-edit icon-white"></i> Uredi sklop</a>
     <a href="{% url "student_zip" problem_set.id %}" class="btn"><i class="icon-check"></i> Reši sklop</a>
     <a href="{% url "results_zip" problem_set.id %}" class="btn"><i class="icon-th"></i> Shrani rezultate</a>
@@ -41,7 +41,7 @@
 
   {% for problem in problems %}
     <hr />
-    {% if request.user.is_staff %}
+    {% if teacher %}
       {% include 'modal/copy_problem.html' %}
       <h2 id="problem-{{ problem.id }}">
         {{ problem.title }}
@@ -75,7 +75,7 @@
           <div class="part">
           <h4>
             <a class="icon-search status" data-toggle="modal" title="Poglejte rešitev" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}"></a>
-            {% if request.user.is_staff %}
+            {% if teacher %}
             <a class="icon-trash action" href="{% url "admin:tomo_part_delete" part.id %}" title="Pobriši podnalogo"></a>
             {% endif %}
             Podnaloga {{ forloop.counter }}
@@ -93,7 +93,7 @@
     {% endfor %}
   {% endfor %}
 
-  {% if request.user.is_staff %}
+  {% if teacher %}
     <hr />
     {% include "modal/add_problem.html" %}
     <a href="#add-problem" data-toggle="modal"><button class="btn"><i class="icon-plus"></i> Dodaj nalogo</button></a>

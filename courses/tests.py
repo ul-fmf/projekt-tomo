@@ -26,9 +26,10 @@ class ProblemSetCase(TestCase):
         ProblemSet.objects.create(course=course)
         ProblemSet.objects.create(course=course)
         ProblemSet.objects.create(course=course)
-        user = User.objects.create_user('admin', '', 'admin')
-        user.is_staff = True
-        user.save()
+        teacher = User.objects.create_user('teacher', '', 'teacher')
+        course.teachers.add(teacher)
+        student = User.objects.create_user('student', '', 'student')
+        course.students.add(student)
 
     def test_problemset_move(self):
         course = Course.objects.get(id=1)
@@ -46,7 +47,7 @@ class ProblemSetCase(TestCase):
         self.assertEqual(course.get_problemset_order(), [1, 2, 3])
 
     def test_problemset_move_view(self):
-        self.client.login(username='admin', password='admin')
+        self.client.login(username='teacher', password='teacher')
         response = self.client.get(reverse('courses.views.problemset_move', args=[2, 1]))
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('courses.views.problemset_move', args=[3, -1]))
@@ -63,7 +64,7 @@ class ProblemSetCase(TestCase):
         self.assertFalse(problemset.visible)
 
     def test_problemset_toggle_visible_view(self):
-        self.client.login(username='admin', password='admin')
+        self.client.login(username='teacher', password='teacher')
         response = self.client.get(reverse('courses.views.problemset_toggle_visible', args=[1]))
         self.assertEqual(response.status_code, 302)
         problemset = ProblemSet.objects.get(id=1)
@@ -80,10 +81,19 @@ class ProblemSetCase(TestCase):
         self.assertEqual(problemset.solution_visibility, 'pogojno')
 
     def test_problemset_toggle_solution_visibility_view(self):
-        self.client.login(username='admin', password='admin')
+        self.client.login(username='teacher', password='teacher')
         response = self.client.get(reverse('courses.views.problemset_toggle_solution_visibility', args=[1]))
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse('courses.views.problemset_toggle_solution_visibility', args=[1]))
         self.assertEqual(response.status_code, 302)
         problemset = ProblemSet.objects.get(id=1)
         self.assertEqual(problemset.solution_visibility, 'skrite')
+
+    def test_problemset_student_edit(self):
+        self.client.login(username='student', password='student')
+        response = self.client.get(reverse('courses.views.problemset_move', args=[2, 1]))
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('courses.views.problemset_toggle_visible', args=[1]))
+        self.assertEqual(response.status_code, 403)
+        response = self.client.get(reverse('courses.views.problemset_toggle_solution_visibility', args=[1]))
+        self.assertEqual(response.status_code, 403)

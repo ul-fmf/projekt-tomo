@@ -29,7 +29,7 @@
     {% endif %}
 
     <h4>Uradna rešitev</h4>
-    {% if request.user.is_staff %}
+    {% if teacher %}
       <pre><code>{{ part.solution }}</code></pre>
     {% else %}
       {% if problem_set.solution_visibility == 'vidne' or problem_set.solution_visibility == 'pogojno' and attempt.correct %}

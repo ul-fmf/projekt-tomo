@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
 from copy import deepcopy
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseNotAllowed
@@ -34,9 +33,9 @@ def student_contents(request, problem, user, authenticated):
     return render_to_string(problem.language.student_file,
                             context_instance=RequestContext(request, context))
 
-@staff_member_required
 def student_history_download(request, problem_id, user_id):
     problem = get_object_or_404(Problem, id=problem_id)
+    verify(problem.problem_set.course.has_teacher(request.user))
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
     filename = "{0}-{1}-history.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
@@ -59,7 +58,7 @@ def student_history_download(request, problem_id, user_id):
 
 def student_download(request, problem_id):
     problem = get_object_or_404(Problem, id=problem_id)
-    verify(request.user.is_staff or problem.problem_set.visible)
+    verify(problem.problem_set.course.has_teacher(request.user) or problem.problem_set.visible)
     contents = student_contents(request, problem, request.user,
                                  request.user.is_authenticated())
     return plain_text(problem.filename(), contents)
@@ -68,22 +67,22 @@ def api_student_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
     problem = get_object_or_404(Problem, id=data['problem'])
-    verify(user.is_staff or problem.problem_set.visible)
+    verify(problem.problem_set.course.has_teacher(user) or problem.problem_set.visible)
     contents = student_contents(request, problem, user, True)
     return HttpResponse(contents)
 
-@staff_member_required
 def student_archive_download(request, problem_id, user_id):
     problem = get_object_or_404(Problem, id=problem_id)
+    verify(problem.problem_set.course.has_teacher(request.user))
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
     filename = "{0}-{1}.{2}".format(slugify(problem.title), slugify(username), problem.language.extension)
     contents = student_contents(request, problem, user, False)
     return plain_text(filename, contents)
 
-@staff_member_required
 def move(request, problem_id, shift):
     problem = get_object_or_404(Problem, id=problem_id)
+    verify(problem.problem_set.course.has_teacher(request.user))
     order = problem.problem_set.get_problem_order()
     old = order.index(problem.id)
     new = max(0, min(old + int(shift), len(order) - 1))
@@ -92,13 +91,13 @@ def move(request, problem_id, shift):
     problem.problem_set.save()
     return redirect(request.META.get('HTTP_REFERER', problem))
 
-@staff_member_required
 def copy(request):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
     problem = get_object_or_404(Problem, id=request.POST['problem_id'])
     problem_set = get_object_or_404(ProblemSet, id=request.POST['problem_set_id'])
+    verify(problem_set.course.has_teacher(request.user))
 
     new_problem = deepcopy(problem)
     new_problem.id = None
@@ -123,7 +122,7 @@ def student_upload(request):
     download = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=download['user'])
     problem = get_object_or_404(Problem, id=download['problem'])
-    verify(user.is_staff or problem.problem_set.visible)
+    verify(problem.problem_set.course.has_teacher(user) or problem.problem_set.visible)
 
     submission = Submission(user=user, problem=problem, ip=request.META['REMOTE_ADDR'],
                             preamble=post['preamble'], source=post['source'])
@@ -181,10 +180,10 @@ def student_upload(request):
 
     return HttpResponse(json.dumps(response))
 
-@staff_member_required
 def create(request):
     verify(request.method == 'POST')
     problem_set = get_object_or_404(ProblemSet, id=request.POST['problem_set'])
+    verify(problem_set.course.has_teacher(request.user))
     language = get_object_or_404(Language, id=request.POST['language'])
     problem = Problem(author=request.user, problem_set=problem_set,
                       language=language, title=request.POST['title'])
@@ -205,16 +204,16 @@ def teacher_contents(request, problem, user):
     return render_to_string(problem.language.teacher_file,
                             context_instance=RequestContext(request, context))
 
-@staff_member_required
 def teacher_download(request, problem_id=None):
     problem = get_object_or_404(Problem, id=problem_id)
+    verify(problem.problem_set.course.has_teacher(request.user))
     return plain_text(problem.filename(), teacher_contents(request, problem, request.user))
 
 def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])
     user = get_object_or_404(User, id=data['user'])
-    verify(user.is_staff)
     problem = get_object_or_404(Problem, id=data['problem'])
+    verify(problem.problem_set.course.has_teacher(user))
     contents = teacher_contents(request, problem, user)
     return HttpResponse(contents)
 
@@ -227,9 +226,9 @@ def teacher_upload(request):
 
     data = unpack(post['data'], post['signature'])
     user = get_object_or_404(User, id=data['user'])
-    verify(user.is_staff)
 
     problem = get_object_or_404(Problem, id=data['problem'])
+    verify(problem.problem_set.course.has_teacher(user))
 
     old_parts = dict((part.id, part) for part in problem.parts.all())
     new_parts = []
