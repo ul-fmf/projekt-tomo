@@ -1,6 +1,5 @@
 {% load my_tags %}
 
-{% for course in courses.all %}
 <li class="nav-header">{{ course.name }}</li>
 {% for ps in course.problem_sets.all %}
     <li class="{% if ps.id == problem_set.id %}active{% endif %} {% if not ps.visible %}hidden{% endif %}">
@@ -31,6 +30,4 @@
     {% include "modal/add_problem_set.html" %}
     <a href="#add-problem-set-{{ course.id }}" data-toggle="modal">+ dodaj sklop</a>
     </li>
-{% empty %}
-  Preden začnete sestavljati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.
-{% endfor %}
+

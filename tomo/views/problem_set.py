@@ -59,6 +59,7 @@ def view_statistics(request, problem_set_id, limit):
         'users': User.objects.filter(id__in=user_ids).order_by('last_name'),
         'problems': problem_set.problems,
         'attempts': attempts,
+        'solved': ProblemSet.success(request.user),
         'success': success,
         'limits': limits,
         'limit': limit,

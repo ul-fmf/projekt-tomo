@@ -59,11 +59,17 @@
         <div id="sidebar" class="span3">
           <div class="well sidebar-nav">
             <ul class="nav nav-list">
-              {% if user.is_staff %}
+              {% with user.taught_courses.all as taught %}
+              {% for course in courses.all %}
+              {% if course in taught %}
                 {% include 'sidebar/staff.html' %}
               {% else %}
                 {% include 'sidebar/student.html' %}
               {% endif %}
+              {% empty %}
+                Preden začnete reševati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.
+              {% endfor %}
+              {% endwith %}
             </ul>
           </div><!--/.well -->
         </div><!--/span-->

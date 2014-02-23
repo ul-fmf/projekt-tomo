@@ -1,6 +1,5 @@
 {% load my_tags %}
 
-{% for course in courses.all %}
 <li class="nav-header">{{ course.name }}</li>
 {% for ps in course.problem_sets.all %}
     {% if ps.visible %}
@@ -26,7 +25,4 @@
         </a>
       </li>
     {% endif %}
-{% endfor %}
-{% empty %}
-  Preden začnete reševati naloge, v <a href="#settings-form" data-toggle="modal" style="display: inline">nastavitvah</a> izberite predmete, pri katerih sodelujete.
 {% endfor %}

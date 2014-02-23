@@ -10,13 +10,15 @@
   <div class="modal-body">
     {% csrf_token %}
     <h4>Moji predmeti</h4>
+    {% with request.user.courses.all as user_courses %}
     {% for course in all_courses %}
       <label class="checkbox">
-        <input type="checkbox" name="my_courses" value="{{ course.id }}" {% if course in request.user.courses.all %}checked{% endif %}>
+        <input type="checkbox" name="my_courses" value="{{ course.id }}" {% if course in user_courses %}checked{% endif %}>
           {{ course.name }}
           <span class="help-block">{{ course.description }}</span>
       </label>
     {% endfor %}
+    {% endwith %}
   </div>
 
   <div class="modal-footer">
