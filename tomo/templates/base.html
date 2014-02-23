@@ -62,7 +62,7 @@
               {% with user.taught_courses.all as taught %}
               {% for course in courses.all %}
               {% if course in taught %}
-                {% include 'sidebar/staff.html' %}
+                {% include 'sidebar/teacher.html' %}
               {% else %}
                 {% include 'sidebar/student.html' %}
               {% endif %}
