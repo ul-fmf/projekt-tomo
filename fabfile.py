@@ -64,7 +64,8 @@ def unlock():
 def update():
     lock()
     with cd(env.home):
-        sudo('git pull')
+        sudo('git fetch')
+        sudo('git reset --hard origin/master')
     manage('collectstatic --noinput')
     manage('syncdb')
     manage('migrate')
