@@ -2,7 +2,7 @@
 import json
 from copy import deepcopy
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect
 from django.template import RequestContext
@@ -10,6 +10,7 @@ from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.http import urlencode
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.edit import DeleteView
 from tomo.utils import verify, pack, unpack, plain_text
 from tomo.models import Language, Problem, Part, Submission, Attempt
 from courses.models import ProblemSet
@@ -208,6 +209,17 @@ def teacher_download(request, problem_id=None):
     problem = get_object_or_404(Problem, id=problem_id)
     verify(problem.problem_set.course.has_teacher(request.user))
     return plain_text(problem.filename(), teacher_contents(request, problem, request.user))
+
+class PartDelete(DeleteView):
+    model = Part
+    def get_success_url(self):
+        return self.object.problem.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(PartDelete, self).get_context_data(**kwargs)
+        attempts = self.object.attempts.filter(active=True).select_related('submission__timestamp', 'submission__user').order_by('submission__timestamp')
+        context['attempts'] = attempts
+        return context
 
 def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])

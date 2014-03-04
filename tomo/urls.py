@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, url, include
+from .views.problem import PartDelete
 
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
@@ -29,6 +30,11 @@ urlpatterns = patterns('',
         url(r'^upload/teacher/$', 'teacher_upload', name='teacher_upload'),
         url(r'^upload/student/$', 'student_upload', name='student_upload'),
     ))),
+    (r'^part/', include(patterns('tomo.views.problem',
+        (r'^(?P<pk>\d+)/', include(patterns('tomo.views.problem',
+            url(r'^delete/$', PartDelete.as_view(), name='part_delete')
+        )))
+    )))
 )
 
 if settings.DEBUG:

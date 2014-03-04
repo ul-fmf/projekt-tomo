@@ -76,7 +76,7 @@
           <h4>
             <a class="icon-search status" data-toggle="modal" title="Poglejte rešitev" href="#solutions-{{ problem.id }}-{{ part.id }}-{{ user.id }}"></a>
             {% if teacher %}
-            <a class="icon-trash action" href="{% url "admin:tomo_part_delete" part.id %}" title="Pobriši podnalogo"></a>
+            <a class="icon-trash action" href="{% url "part_delete" part.id %}" title="Pobriši podnalogo"></a>
             {% endif %}
             Podnaloga {{ forloop.counter }}
             {% if attempt.correct %}
