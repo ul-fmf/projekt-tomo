@@ -9,7 +9,7 @@
 <p>Ste prepričani, da želite pobrisati sledečo podnalogo?</p>
 
 <div class="well">
-  {{ object.description|tex_markdown|safe }}
+  {{ object.description|tex_markdown|safe|truncatewords_html:50 }}
 </div>
 
 {% if attempts %}
