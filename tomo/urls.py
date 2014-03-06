@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, url, include
-from .views.problem import PartDelete
+from .views.problem import PartDelete, ProblemDelete
 
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
@@ -16,12 +16,13 @@ urlpatterns = patterns('',
         url(r'^create/$', 'create', name='create_set'),
     ))),
     (r'^problem/', include(patterns('tomo.views.problem',
-        (r'^(?P<problem_id>\d+)/', include(patterns('tomo.views.problem',
+        (r'^(?P<pk>\d+)/', include(patterns('tomo.views.problem',
             url(r'^student/$', 'student_download', name='student_download'),
             url(r'^(?P<user_id>\d+)/$', 'student_archive_download', name='student_archive_download'),
             url(r'^(?P<user_id>\d+)/history/$', 'student_history_download', name='student_history_download'),
             url(r'^teacher/$', 'teacher_download', name='teacher_download'),
             url(r'^move/(?P<shift>-?\d+)/$', 'move', name='move_problem'),
+            url(r'^delete/$', ProblemDelete.as_view(), name='problem_delete')
         ))),
         url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
         url(r'^api/teacher/$', 'api_teacher_contents', name='api_teacher_contents'),

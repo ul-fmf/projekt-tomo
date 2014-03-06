@@ -34,8 +34,8 @@ def student_contents(request, problem, user, authenticated):
     return render_to_string(problem.language.student_file,
                             context_instance=RequestContext(request, context))
 
-def student_history_download(request, problem_id, user_id):
-    problem = get_object_or_404(Problem, id=problem_id)
+def student_history_download(request, pk, user_id):
+    problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user))
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
@@ -57,8 +57,8 @@ def student_history_download(request, problem_id, user_id):
     return plain_text(filename, render_to_string(problem.language.student_file.replace("student", "history"),
                             context_instance=RequestContext(request, context)))
 
-def student_download(request, problem_id):
-    problem = get_object_or_404(Problem, id=problem_id)
+def student_download(request, pk):
+    problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user) or problem.problem_set.visible)
     contents = student_contents(request, problem, request.user,
                                  request.user.is_authenticated())
@@ -72,8 +72,8 @@ def api_student_contents(request):
     contents = student_contents(request, problem, user, True)
     return HttpResponse(contents)
 
-def student_archive_download(request, problem_id, user_id):
-    problem = get_object_or_404(Problem, id=problem_id)
+def student_archive_download(request, pk, user_id):
+    problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user))
     user = get_object_or_404(User, id=user_id)
     username = user.get_full_name() or user.username
@@ -81,8 +81,8 @@ def student_archive_download(request, problem_id, user_id):
     contents = student_contents(request, problem, user, False)
     return plain_text(filename, contents)
 
-def move(request, problem_id, shift):
-    problem = get_object_or_404(Problem, id=problem_id)
+def move(request, pk, shift):
+    problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user))
     order = problem.problem_set.get_problem_order()
     old = order.index(problem.id)
@@ -205,8 +205,8 @@ def teacher_contents(request, problem, user):
     return render_to_string(problem.language.teacher_file,
                             context_instance=RequestContext(request, context))
 
-def teacher_download(request, problem_id=None):
-    problem = get_object_or_404(Problem, id=problem_id)
+def teacher_download(request, pk=None):
+    problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user))
     return plain_text(problem.filename(), teacher_contents(request, problem, request.user))
 
@@ -219,6 +219,31 @@ class PartDelete(DeleteView):
         context = super(PartDelete, self).get_context_data(**kwargs)
         attempts = self.object.attempts.filter(active=True).select_related('submission__timestamp', 'submission__user').order_by('submission__timestamp')
         context['attempts'] = attempts
+        return context
+
+class ProblemDelete(DeleteView):
+    model = Problem
+    def get_success_url(self):
+        return self.object.problem_set.get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemDelete, self).get_context_data(**kwargs)
+        attempts = {}
+        submissions = {}
+        user_ids = set()
+        active_attempts = Attempt.objects.active().for_problem(self.object)
+        for attempt in active_attempts.select_related('submission__user'):
+            user_id = attempt.submission.user_id
+            user_ids.add(user_id)
+            user_attempts = attempts.get(user_id, {})
+            user_attempts[attempt.part_id] = attempt
+            attempts[user_id] = user_attempts
+            submissions[user_id] = attempt.submission
+        parts = self.object.parts.all()
+        sorted_attempts = []
+        for user in User.objects.filter(id__in=user_ids).order_by('last_name'):
+            sorted_attempts.append((user, submissions[user.id], [attempts[user.id].get(part.id) for part in parts]))
+        context['attempts'] = sorted_attempts
         return context
 
 def api_teacher_contents(request):
