@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block contents %}
-<p>Ste prepričani, da želite pobrisati nalogo?</p>
+<p>Ste prepričani, da želite pobrisati nalogo <em>{{ object.title }}</em>?</p>
 
 <div class="well">
     {{ object.description|tex_markdown|safe|truncatewords_html:50 }}
