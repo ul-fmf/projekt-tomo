@@ -2,9 +2,11 @@
 import datetime
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.views.generic.edit import DeleteView
 from courses.models import Course, ProblemSet
 from tomo.utils import verify, zip_archive
 from tomo.models import Language, Attempt
@@ -145,3 +147,34 @@ def create(request):
                              visible=False, solution_visibility='pogojno')
     problem_set.save()
     return redirect(problem_set)
+
+
+class ProblemSetDelete(DeleteView):
+    model = ProblemSet
+    success_url = reverse_lazy('tomo.views.homepage')
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetDelete, self).get_context_data(**kwargs)
+        problems = self.object.problems.all()
+        attempts = dict((problem.id, {}) for problem in problems)
+        timestamps = dict((problem.id, {}) for problem in problems)
+        user_ids = dict((problem.id, set()) for problem in problems)
+        sorted_attempts = dict((problem.id, []) for problem in problems)
+        active_attempts = Attempt.objects.active().for_problem_set(self.object)
+        exists = False
+        for attempt in active_attempts.select_related('submission__user_id', 'submission__timestamp', 'part__problem_id'):
+            exists = True
+            user_id = attempt.submission.user_id
+            problem_id = attempt.part.problem_id
+            user_ids[problem_id].add(user_id)
+            user_attempts = attempts[problem_id].get(user_id, {})
+            user_attempts[attempt.part_id] = attempt
+            attempts[problem_id][user_id] = user_attempts
+            timestamps[problem_id][user_id] = attempt.submission.timestamp
+        for problem in problems:
+            parts = problem.parts.all()
+            for user in User.objects.filter(id__in=user_ids[problem.id]).order_by('last_name'):
+                sorted_attempts[problem.id].append((user, timestamps[problem.id][user.id], [attempts[problem.id][user.id].get(part.id) for part in parts]))
+        context['attempts'] = [(problem, sorted_attempts[problem.id]) for problem in problems]
+        context['exists'] = exists
+        return context

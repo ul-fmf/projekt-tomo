@@ -11,7 +11,7 @@
       <a href="{% url "courses.views.problemset_toggle_visible" ps.id %}" class="status" rel="tooltip" title="Sklop je {% if ps.visible %}viden{% else %}skrit{% endif %}">
         <i class="icon-eye-{% if ps.visible %}open{% else %}close{% endif %}"></i>
       </a>
-      <a href="{% url "admin:courses_problemset_delete" ps.id %}" class="action" title="Pobriši">
+      <a href="{% url "problemset_delete" ps.id %}" class="action" title="Pobriši">
         <i class="icon-trash"></i>
       </a>
       <a href="{% url "admin:courses_problemset_change" ps.id %}" class="action" title="Napredno…">
