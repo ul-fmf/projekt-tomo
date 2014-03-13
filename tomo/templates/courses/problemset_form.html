@@ -2,7 +2,11 @@
 {% load my_tags %}
 
 {% block title %}
-  Dodajanje sklopa v predmet {{ course.name }}
+  {% if form.instance.pk %}
+    Urejanje sklopa <em>{{ form.instance.title }}</em>
+  {% else %}
+    Dodajanje naloge v predmet <em>{{ course.name }}</em>
+  {% endif %}
 {% endblock %}
 
 {% block contents %}
@@ -12,6 +16,6 @@
 
 {% block footer %}
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Dodaj</button>
+    <button type="submit" class="btn btn-primary">{{ form.instance.pk|yesno:"Uredi,Dodaj" }}</button>
   </form>
 {% endblock %}
