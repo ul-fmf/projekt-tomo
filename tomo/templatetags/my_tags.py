@@ -34,14 +34,6 @@ def tex_markdown(source):
     return md.convert(source)
 tex_markdown.is_safe = True
 
-@register.filter
-@stringfilter
-def remove_markdown(source):
-    lines = source.splitlines()
-    lines = [line[4:] if line.startswith("    ") else line for line in lines]
-    lines = [line.replace('`', '') for line in lines]
-    return "\n# ".join(lines)
-
 @register.simple_tag
 def koncnica(stevilo, ednina, dvojina, trojina, mnozina):
     ostanek = stevilo % 100
