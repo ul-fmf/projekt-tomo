@@ -215,6 +215,11 @@ class PartDelete(DeleteView):
     def get_success_url(self):
         return self.object.problem.get_absolute_url()
 
+    def get_object(self, *args, **kwargs):
+        obj = super(PartDelete, self).get_object(*args, **kwargs)
+        verify(obj.problem.problem_set.course.has_teacher(self.request.user))
+        return obj
+
     def get_context_data(self, **kwargs):
         context = super(PartDelete, self).get_context_data(**kwargs)
         attempts = self.object.attempts.filter(active=True).select_related('submission__timestamp', 'submission__user').order_by('submission__timestamp')
@@ -225,6 +230,11 @@ class ProblemDelete(DeleteView):
     model = Problem
     def get_success_url(self):
         return self.object.problem_set.get_absolute_url()
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemDelete, self).get_object(*args, **kwargs)
+        verify(obj.problem_set.course.has_teacher(self.request.user))
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super(ProblemDelete, self).get_context_data(**kwargs)
