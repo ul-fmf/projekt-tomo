@@ -1,19 +1,22 @@
 from django.conf import settings
 from django.conf.urls import patterns, url, include
 from .views.problem import PartDelete, ProblemCreate, ProblemDelete, ProblemUpdate
+from .views.problem_set import ProblemSetCreate, ProblemSetUpdate, ProblemSetDelete
 
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
     url(r'^settings/$', 'tomo.views.settings', name='settings'),
     (r'^problem_set/', include(patterns('tomo.views.problem_set',
-        (r'^(?P<problem_set_id>\d+)/', include(patterns('tomo.views.problem_set',
+        (r'^(?P<pk>\d+)/', include(patterns('tomo.views.problem_set',
             url(r'^$', 'view_problem_set', name='problem_set'),
             url(r'^student/$', 'student_zip', name='student_zip'),
             url(r'^teacher/$', 'teacher_zip', name='teacher_zip'),
             url(r'^stats/(?P<limit>\d+)$', 'view_statistics', name='view_statistics'),
             url(r'^results/$', 'results_zip', name='results_zip'),
+            url(r'^delete/$', ProblemSetDelete.as_view(), name='problemset_delete'),
+            url(r'^update/$', ProblemSetUpdate.as_view(), name='problemset_update'),
         ))),
-        url(r'^create/$', 'create', name='create_set'),
+        url(r'^create/(?P<course_id>\d+)/$', ProblemSetCreate.as_view(), name='problemset_create'),
     ))),
     (r'^problem/', include(patterns('tomo.views.problem',
         (r'^(?P<pk>\d+)/', include(patterns('tomo.views.problem',

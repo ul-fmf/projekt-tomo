@@ -6,14 +6,14 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.template import RequestContext
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from courses.models import Course, ProblemSet
 from tomo.utils import verify, zip_archive
 from tomo.models import Language, Attempt
 from .problem import student_contents, teacher_contents
 
-def view_problem_set(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+def view_problem_set(request, pk):
+    problem_set = get_object_or_404(ProblemSet, id=pk)
     user_is_teacher = problem_set.course.has_teacher(request.user)
     verify(user_is_teacher or problem_set.visible)
     problems = problem_set.problems.all()
@@ -29,8 +29,8 @@ def view_problem_set(request, problem_set_id):
         'languages': Language.objects
     })
 
-def view_statistics(request, problem_set_id, limit):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+def view_statistics(request, pk, limit):
+    problem_set = get_object_or_404(ProblemSet, id=pk)
     verify(problem_set.course.has_teacher(request.user))
     attempts = dict((problem.id, {}) for problem in problem_set.problems.all())
     user_ids = set()
@@ -69,8 +69,8 @@ def view_statistics(request, problem_set_id, limit):
     })
 
 
-def results_zip(request, problem_set_id):
-    problemset = get_object_or_404(ProblemSet, id=problem_set_id)
+def results_zip(request, pk):
+    problemset = get_object_or_404(ProblemSet, id=pk)
     verify(problemset.course.has_teacher(request.user))
     attempts = {}
     user_ids = set()
@@ -115,8 +115,8 @@ def results_zip(request, problem_set_id):
     return zip_archive(archivename, files)
 
 
-def student_zip(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+def student_zip(request, pk):
+    problem_set = get_object_or_404(ProblemSet, id=pk)
     verify(problem_set.course.has_teacher(request.user) or problem_set.visible)
     archivename = slugify(problem_set.title)
     files = []
@@ -127,8 +127,8 @@ def student_zip(request, problem_set_id):
         files.append((filename, contents))
     return zip_archive(archivename, files)
 
-def teacher_zip(request, problem_set_id):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_id)
+def teacher_zip(request, pk):
+    problem_set = get_object_or_404(ProblemSet, id=pk)
     verify(problem_set.course.has_teacher(request.user))
     archivename = "{0}-edit".format(slugify(problem_set.title))
     files = []
@@ -178,3 +178,38 @@ class ProblemSetDelete(DeleteView):
         context['attempts'] = [(problem, sorted_attempts[problem.id]) for problem in problems]
         context['exists'] = exists
         return context
+
+
+class ProblemSetCreate(CreateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetCreate, self).get_context_data(**kwargs)
+        course = get_object_or_404(Course, id=self.kwargs['course_id'])
+        context['course'] = course
+        return context
+
+    def form_valid(self, form):
+        course = get_object_or_404(Course, id=self.kwargs['course_id'])
+        form.instance.author = self.request.user
+        form.instance.course = course
+        verify(course.has_teacher(self.request.user))
+        return super(ProblemSetCreate, self).form_valid(form)
+
+
+class ProblemSetUpdate(UpdateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
+        verify(obj.course.has_teacher(self.request.user))
+        return obj
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(ProblemSetUpdate, self).form_valid(form)
+
+
+

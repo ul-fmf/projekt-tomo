@@ -14,7 +14,7 @@
       <a href="{% url "problemset_delete" ps.id %}" class="action" title="Pobriši">
         <i class="icon-trash"></i>
       </a>
-      <a href="{% url "admin:courses_problemset_change" ps.id %}" class="action" title="Napredno…">
+      <a href="{% url "problemset_update" ps.id %}" class="action" title="Napredno…">
         <i class="icon-cog"></i>
       </a>
       <a href="{% url "courses.views.problemset_move" ps.id -1 %}" class="action" title="Premakni gor">
@@ -27,7 +27,6 @@
     </li>
 {% endfor %}
     <li>
-    {% include "modal/add_problem_set.html" %}
-    <a href="#add-problem-set-{{ course.id }}" data-toggle="modal">+ dodaj sklop</a>
+    <a href="{% url "problemset_create" course.id %}">+ dodaj sklop</a>
     </li>
 
