@@ -10,7 +10,7 @@ from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.http import urlencode
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic.edit import DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from tomo.utils import verify, pack, unpack, plain_text
 from tomo.models import Language, Problem, Part, Submission, Attempt
 from courses.models import ProblemSet
@@ -255,6 +255,39 @@ class ProblemDelete(DeleteView):
             sorted_attempts.append((user, submissions[user.id], [attempts[user.id].get(part.id) for part in parts]))
         context['attempts'] = sorted_attempts
         return context
+
+
+class ProblemCreate(CreateView):
+    model = Problem
+    fields = ['title', 'language', 'description']
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemCreate, self).get_context_data(**kwargs)
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs['problem_set_id'])
+        context['problem_set'] = problem_set
+        return context
+
+    def form_valid(self, form):
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs['problem_set_id'])
+        form.instance.author = self.request.user
+        form.instance.problem_set = problem_set
+        verify(problem_set.course.has_teacher(self.request.user))
+        return super(ProblemCreate, self).form_valid(form)
+
+
+class ProblemUpdate(UpdateView):
+    model = Problem
+    fields = ['title', 'language', 'description']
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
+        verify(obj.problem_set.course.has_teacher(self.request.user))
+        return obj
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(ProblemUpdate, self).form_valid(form)
+
 
 def api_teacher_contents(request):
     data = unpack(request.GET['data'], request.GET['signature'])

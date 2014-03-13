@@ -1,0 +1,17 @@
+{% extends 'modal.html' %}
+{% load my_tags %}
+
+{% block title %}
+  Dodajanje naloge v sklop {{ problem_set.title }}
+{% endblock %}
+
+{% block contents %}
+  <form action="" method="post">
+ {{ form.as_ul }}
+{% endblock %}
+
+{% block footer %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Dodaj</button>
+  </form>
+{% endblock %}

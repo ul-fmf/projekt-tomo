@@ -47,7 +47,7 @@
         {{ problem.title }}
         <a class="icon-edit status" href="{% url "teacher_download" problem.id %}" title="Uredi nalogo"></a>
         <a class="icon-check status" href="{% url "student_download" problem.id %}" title="Reši nalogo"></a>
-        <a class="icon-cog action" href="{% url "admin:tomo_problem_change" problem.id %}" title="Napredne nastavitve naloge…"></a>
+        <a class="icon-cog action" href="{% url "problem_update" problem.id %}" title="Napredne nastavitve naloge…"></a>
         <a class="icon-trash action" href="{% url "problem_delete" problem.id %}" title="Pobriši nalogo"></a>
         <a class="icon-share-alt action" data-toggle="modal" href="#copy-problem-{{ problem.id }}" title="Kopiraj nalogo"></a>
         <a class="icon-arrow-up action" href="{% url "move_problem" problem.id -1 %}" title="Premakni gor"></a>
@@ -95,8 +95,7 @@
 
   {% if teacher %}
     <hr />
-    {% include "modal/add_problem.html" %}
-    <a href="#add-problem" data-toggle="modal"><button class="btn"><i class="icon-plus"></i> Dodaj nalogo</button></a>
+    <a href="{% url "problem_create" problem_set.id %}"><button class="btn"><i class="icon-plus"></i> Dodaj nalogo</button></a>
   {% endif %}
 
 

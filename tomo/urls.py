@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.conf.urls import patterns, url, include
-from .views.problem import PartDelete, ProblemDelete
+from .views.problem import PartDelete, ProblemCreate, ProblemDelete, ProblemUpdate
 
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
@@ -22,12 +22,13 @@ urlpatterns = patterns('',
             url(r'^(?P<user_id>\d+)/history/$', 'student_history_download', name='student_history_download'),
             url(r'^teacher/$', 'teacher_download', name='teacher_download'),
             url(r'^move/(?P<shift>-?\d+)/$', 'move', name='move_problem'),
-            url(r'^delete/$', ProblemDelete.as_view(), name='problem_delete')
+            url(r'^delete/$', ProblemDelete.as_view(), name='problem_delete'),
+            url(r'^update/$', ProblemUpdate.as_view(), name='problem_update'),
         ))),
         url(r'^api/student/$', 'api_student_contents', name='api_student_contents'),
         url(r'^api/teacher/$', 'api_teacher_contents', name='api_teacher_contents'),
-        url(r'^create/$', 'create', name='create'),
         url(r'^copy/$', 'copy', name='copy'),
+        url(r'^create/(?P<problem_set_id>\d+)/$', ProblemCreate.as_view(), name='problem_create'),
         url(r'^upload/teacher/$', 'teacher_upload', name='teacher_upload'),
         url(r'^upload/student/$', 'student_upload', name='student_upload'),
     ))),
