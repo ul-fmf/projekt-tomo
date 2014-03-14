@@ -1,11 +1,11 @@
 {% load my_tags %}#######################################################################@@#
 # {{ problem.title }} {% if problem.description %}
 #
-# {{ problem.description|indent:"# "|safe }}{% endif %}
+# {{ problem.description|remove_markdown|safe }}{% endif %}
 #######################################################################@@#
 {{ preamble|safe }}{% for part in parts %}
 ##################################################################@{{ part.id|stringformat:'06d'}}#
-# {{ forloop.counter }}) {{ part.description|indent:"# "|safe }}
+# {{ forloop.counter }}) {{ part.description|remove_markdown|safe }}
 ##################################################################{{ part.id|stringformat:'06d'}}@#
 {% with attempts|get:part.id as attempt %}{% if attempt.solution %}{{ attempt.solution|safe }}{% else %}
 
