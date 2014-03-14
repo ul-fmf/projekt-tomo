@@ -69,7 +69,7 @@ check$equal <- function(example, value = NA, exception = NA,
 
   if(!is.na(exception)) {
     tryCatch({
-      eval(example)
+      returned <- eval(example)
       check$error("Izraz %s vrne %s namesto da bi sprožil izjemo '%s'.",
                   deparse(example), pretty.print(returned), exception)
     }, error = function(e) {

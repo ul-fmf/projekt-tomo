@@ -119,7 +119,7 @@ class Check:
 
         if exception:
             try:
-                eval(example, globals(), local)
+                returned = eval(example, globals(), local)
             except Exception as e:
                 if e.__class__ != exception.__class__ or e.args != exception.args:
                     Check.error("Izraz {0} sproži izjemo {1!r} namesto {2!r}.",
