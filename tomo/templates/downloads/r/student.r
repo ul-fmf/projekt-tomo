@@ -263,7 +263,7 @@ get_current_filename <- function () {
     source = "" # sending source somehow causes problems on the server side.
   )
   tryCatch({
-    r <- postJSON(host='{{ request.META.SERVER_NAME }}', path='{% url "student_upload" %}', port={{ request.META.SERVER_PORT }}, json=enc2utf8(toJSON(post)))
+    r <- postJSON(path='{% url "student_upload" %}', json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
     cat('Rešitve so shranjene.\n')
     for(rejected in response$rejected)

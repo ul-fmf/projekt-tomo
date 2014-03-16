@@ -243,7 +243,8 @@ def _check():
         'source': _source,
     }).encode('utf-8')
     try:
-        r = urlopen('http://{{ request.META.SERVER_NAME }}:{{ request.META.SERVER_PORT }}{% url "student_upload" %}', post)
+        host = "{{ request.get_host }}".split(":")[0]
+        r = urlopen('http://' + host + ':{{ unsafe_port }}{% url "student_upload" %}', post)
         response = json.loads(r.read().decode('utf-8'))
         print('Rešitve so shranjene.')
         for (k, e) in response['rejected']:

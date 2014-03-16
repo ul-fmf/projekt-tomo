@@ -52,3 +52,5 @@ DATABASES = {
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+UNSAFE_PORT = 8000

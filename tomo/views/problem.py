@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 from copy import deepcopy
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseNotAllowed
@@ -24,6 +25,7 @@ def student_contents(request, problem, user, authenticated):
         'preamble': problem.preamble_for(user),
         'authenticated': authenticated,
         'user': user,
+        'unsafe_port': settings.UNSAFE_PORT,
     }
     if authenticated:
         context['data'], context['signature'] = pack({
@@ -174,8 +176,12 @@ def student_upload(request):
             'user': user.id,
             'problem': problem.id,
         })
-        response['update'] = '{0}?{1}'.format(
-            request.build_absolute_uri(reverse('api_student_contents')),
+
+        host = request.get_host().split(":")[0]
+        response['update'] = 'http://{0}:{1}{2}?{3}'.format(
+            host,
+            settings.UNSAFE_PORT,
+            reverse('api_student_contents'),
             urlencode({'data': data, 'signature': sig})
         )
 
@@ -196,6 +202,7 @@ def teacher_contents(request, problem, user):
         'problem': problem,
         'parts': problem.parts.all(),
         'user': user,
+        'unsafe_port': settings.UNSAFE_PORT,
     })
     context['data'], context['signature'] = pack({
         'user': user.id,
@@ -318,8 +325,11 @@ def teacher_upload(request):
         'user': user.id,
         'problem': problem.id,
     })
-    update_url = '{0}?{1}'.format(
-        request.build_absolute_uri(reverse('api_teacher_contents')),
+    host = request.get_host().split(":")[0]
+    update_url = 'http://{0}:{1}{2}?{3}'.format(
+        host,
+        settings.UNSAFE_PORT,
+        reverse('api_teacher_contents'),
         urlencode({'data': update_data, 'signature': sig})
     )
 

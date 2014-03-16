@@ -107,7 +107,8 @@ else:
             'parts': Check.parts,
         }).encode('utf-8')
         try:
-            r = urlopen('http://{{ request.META.HTTP_HOST }}{% url "teacher_upload" %}', post)
+            host = "{{ request.get_host }}".split(":")[0]
+            r = urlopen('http://' + host + ':{{ unsafe_port }}{% url "teacher_upload" %}', post)
             response = json.loads(r.read().decode('utf-8'))
             print(response['message'])
             if 'update' in response:

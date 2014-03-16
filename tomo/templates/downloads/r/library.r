@@ -38,8 +38,10 @@ get_current_filename <- function () {
   }
 }
 
-postJSON <-function(host, path, port=80, json) {
-  con <- socketConnection(host=host, port=port, server=FALSE, blocking=TRUE)
+postJSON <-function(path, json) {
+  host_parts <- regex_break(".*", c(".*?", "(:\\d+)?"), "{{ request.get_host }}")
+  host <- host_parts[1, 1]
+  con <- socketConnection(host=host, port={{ unsafe_port }}, server=FALSE, blocking=TRUE)
   post <- paste(
     "POST ", path, " HTTP/1.1\r\n",
     "Host: ", host, "\r\n",
