@@ -21,6 +21,10 @@ pre code {
   border: 0;
 }
 
+code {
+  white-space: pre;
+}
+
 .hidden a {
   color: #bbb;
 }
