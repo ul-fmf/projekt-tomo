@@ -140,7 +140,7 @@ class Check:
                             example, returned, value, reason)
                 return False
             else:
-                return False
+                return True
 
     @staticmethod
     def generator(example, good_values, should_stop=False, further_iter=0, env={},
