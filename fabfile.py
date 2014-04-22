@@ -9,9 +9,9 @@ FIXTURES = [
     # 'auth.User',
     'courses.Course',
     'courses.ProblemSet',
-    # 'tomo.Language',
-    'tomo.Problem',
-    'tomo.Part',
+    # 'problems.Language',
+    'problems.Problem',
+    'problems.Part',
     # 'tomo.Submission',
     # 'tomo.Attempt',
 ]

@@ -1,7 +1,7 @@
 [
   {
     "pk": 2,
-    "model": "tomo.language",
+    "model": "problems.language",
     "fields": {
       "teacher_file": "downloads/python/teacher.py",
       "student_file": "downloads/python/student.py",
@@ -11,7 +11,7 @@
   },
   {
     "pk": 1,
-    "model": "tomo.language",
+    "model": "problems.language",
     "fields": {
       "teacher_file": "downloads/r/teacher.r",
       "student_file": "downloads/r/student.r",

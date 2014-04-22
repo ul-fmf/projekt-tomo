@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Language, Problem, Part, Submission, Attempt
+from problems.models import Language, Problem, Part
+from .models import Submission, Attempt
 
 class PartInline(admin.StackedInline):
     model = Part

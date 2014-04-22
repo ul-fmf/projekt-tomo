@@ -8,29 +8,37 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Renaming model 'Course'
-        db.rename_table(u'tomo_course', u'courses_course')
+        # Deleting model 'Problem'
+        db.rename_table(u'tomo_problem', u'problems_problem')
 
-        # Renaming model 'ProblemSet'
-        db.rename_table(u'tomo_problemset', u'courses_problemset')
+        # Deleting model 'Language'
+        db.rename_table(u'tomo_language', u'problems_language')
 
-        # Renaming M2M table for field students on 'Course'
-        db.rename_table(db.shorten_name(u'tomo_course_students'), db.shorten_name(u'courses_course_students'))
+        # Deleting model 'Part'
+        db.rename_table(u'tomo_part', u'problems_part')
 
-        # Renaming M2M table for field teachers on 'Course'
-        db.rename_table(db.shorten_name(u'tomo_course_teachers'), db.shorten_name(u'courses_course_teachers'))
 
+        # Changing field 'Submission.problem'
+        db.alter_column(u'tomo_submission', 'problem_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['problems.Problem']))
+
+        # Changing field 'Attempt.part'
+        db.alter_column(u'tomo_attempt', 'part_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['problems.Part']))
 
     def backwards(self, orm):
-        # Renaming model 'Course'
-        db.rename_table(u'courses_course', u'tomo_course')
+        # Deleting model 'Problem'
+        db.rename_table(u'problems_problem', u'tomo_problem')
 
-        # Renaming model 'ProblemSet'
-        db.rename_table(u'courses_problemset', u'tomo_problemset')
+        # Deleting model 'Language'
+        db.rename_table(u'problems_language', u'tomo_language')
 
-        # Renaming M2M table for field students on 'Course'
-        db.rename_table(db.shorten_name(u'courses_course_students'), db.shorten_name(u'tomo_course_students'))
-        db.rename_table(db.shorten_name(u'courses_course_teachers'), db.shorten_name(u'tomo_course_teachers'))
+        # Deleting model 'Part'
+        db.rename_table(u'problems_part', u'tomo_part')
+
+        # Changing field 'Submission.problem'
+        db.alter_column(u'tomo_submission', 'problem_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tomo.Problem']))
+
+        # Changing field 'Attempt.part'
+        db.alter_column(u'tomo_attempt', 'part_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tomo.Part']))
 
     models = {
         u'auth.group': {
@@ -88,19 +96,9 @@ class Migration(SchemaMigration):
             'solution_visibility': ('django.db.models.fields.CharField', [], {'default': "'pogojno'", 'max_length': '20'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'db_index': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
-            'visible': ('django.db.models.fields.BooleanField', [], {})
+            'visible': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        u'tomo.attempt': {
-            'Meta': {'ordering': "['submission']", 'object_name': 'Attempt'},
-            'active': ('django.db.models.fields.BooleanField', [], {}),
-            'correct': ('django.db.models.fields.BooleanField', [], {}),
-            'errors': ('django.db.models.fields.TextField', [], {'default': "'{}'"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'part': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['tomo.Part']"}),
-            'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'submission': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['tomo.Submission']"})
-        },
-        u'tomo.language': {
+        u'problems.language': {
             'Meta': {'ordering': "['name']", 'object_name': 'Language'},
             'extension': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -108,39 +106,49 @@ class Migration(SchemaMigration):
             'student_file': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
             'teacher_file': ('django.db.models.fields.CharField', [], {'max_length': '70'})
         },
-        u'tomo.part': {
+        u'problems.part': {
             'Meta': {'ordering': "(u'_order',)", 'object_name': 'Part'},
             '_order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'challenge': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'parts'", 'to': u"orm['tomo.Problem']"}),
+            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'parts'", 'to': u"orm['problems.Problem']"}),
             'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'validation': ('django.db.models.fields.TextField', [], {'blank': 'True'})
         },
-        u'tomo.problem': {
+        u'problems.problem': {
             'Meta': {'ordering': "(u'_order',)", 'object_name': 'Problem'},
             '_order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['auth.User']"}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['tomo.Language']"}),
+            'language': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['problems.Language']"}),
             'preamble': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'problem_set': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['courses.ProblemSet']"}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '70'})
+        },
+        u'tomo.attempt': {
+            'Meta': {'ordering': "['submission']", 'object_name': 'Attempt'},
+            'active': ('django.db.models.fields.BooleanField', [], {}),
+            'correct': ('django.db.models.fields.BooleanField', [], {}),
+            'errors': ('django.db.models.fields.TextField', [], {'default': "'{}'"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'part': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['problems.Part']"}),
+            'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
+            'submission': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['tomo.Submission']"})
         },
         u'tomo.submission': {
             'Meta': {'ordering': "['-id']", 'object_name': 'Submission'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
             'preamble': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['tomo.Problem']"}),
+            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['problems.Problem']"}),
             'source': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['auth.User']"})
         }
     }
 
-    complete_apps = ['tomo', 'courses']
+    complete_apps = ['tomo']
