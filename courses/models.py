@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
-from tomo.models import Attempt
+from submissions.models import Attempt
 from problems.models import Language, Problem
 
 

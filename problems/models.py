@@ -2,7 +2,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.template.defaultfilters import slugify
-import tomo.models
+import submissions.models
 
 
 class Language(models.Model):
@@ -51,9 +51,9 @@ class Problem(models.Model):
     def preamble_for(self, user):
         if user.is_authenticated():
             try:
-                sub = tomo.models.Submission.objects.filter(user=user, problem=self).latest('timestamp')
+                sub = submissions.models.Submission.objects.filter(user=user, problem=self).latest('timestamp')
                 preamble = sub.preamble
-            except tomo.models.Submission.DoesNotExist:
+            except submissions.models.Submission.DoesNotExist:
                 preamble = u"\n{0}\n".format(self.preamble)
         else:
             preamble = u"\n{0}\n".format(self.preamble)

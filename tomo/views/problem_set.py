@@ -10,7 +10,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from courses.models import Course, ProblemSet
 from tomo.utils import verify, zip_archive
 from problems.models import Language
-from tomo.models import Attempt
+from submissions.models import Attempt
 from .problem import student_contents, teacher_contents
 
 def view_problem_set(request, pk):

@@ -14,7 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from tomo.utils import verify, pack, unpack, plain_text
 from problems.models import Language, Problem, Part
-from tomo.models import Submission, Attempt
+from submissions.models import Submission, Attempt
 from courses.models import ProblemSet
 
 
