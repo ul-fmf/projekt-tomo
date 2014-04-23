@@ -1,17 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import User
 from django.db import models
-from submissions.models import Attempt
 from problems.models import Language, Problem
+from submissions.models import Attempt
 
 
 class Course(models.Model):
     name = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    students = models.ManyToManyField(User, related_name='courses', blank=True)
-    teachers = models.ManyToManyField(User, related_name='taught_courses', blank=True)
+    students = models.ManyToManyField(User, blank=True,
+                                      related_name='courses')
+    teachers = models.ManyToManyField(User, blank=True,
+                                      related_name='taught_courses')
     timestamp = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         ordering = ['name']
 
@@ -40,6 +42,12 @@ class ProblemSet(models.Model):
                                            choices=SOLUTION_VISIBILITY)
     timestamp = models.DateTimeField(auto_now=True, db_index=True)
 
+    class Meta:
+        order_with_respect_to = 'course'
+
+    def __unicode__(self):
+        return u'{0}'.format(self.title)
+
     @models.permalink
     def get_absolute_url(self):
         return ('problem_set', [str(self.id)])
@@ -48,12 +56,13 @@ class ProblemSet(models.Model):
         self.course.save()
         super(ProblemSet, self).save(*args, **kwargs)
 
-    def __unicode__(self):
-        return u'{0}'.format(self.title)
-
     def default_language(self):
         try:
-            return Language.objects.filter(problems__problem_set=self).latest('problems__timestamp')
+            return Language.objects.filter(
+                problems__problem_set=self
+            ).latest(
+                'problems__timestamp'
+            )
         except Problem.DoesNotExist:
             return
 
@@ -93,11 +102,11 @@ class ProblemSet(models.Model):
                     part_count=models.Count('problems__parts')
                 ).values_list('id', 'part_count')
             )
-            success = dict((problem_set_id, int(100 * correct.get(problem_set_id, 0) / tot if tot else 0)) for
-                        problem_set_id, tot in total.items())
+            success = dict(
+                (problem_set_id,
+                 int(100 * correct.get(problem_set_id, 0) / tot if tot else 0))
+                for problem_set_id, tot in total.items()
+            )
             return success
         else:
             return {}
-
-    class Meta:
-        order_with_respect_to = 'course'

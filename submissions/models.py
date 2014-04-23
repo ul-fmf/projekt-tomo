@@ -38,6 +38,9 @@ class Attempt(models.Model):
     active = models.BooleanField()
     objects = QuerySetManager()
 
+    class Meta:
+        ordering = ['submission']
+
     class QuerySet(QuerySet):
         def active(self):
             return self.filter(active=True)
@@ -58,6 +61,3 @@ class Attempt(models.Model):
 
     def error_list(self):
         return json.loads(self.errors)
-
-    class Meta:
-        ordering = ['submission']
