@@ -7,24 +7,23 @@ from problems.models import Language, Problem
 
 class Course(models.Model):
     name = models.CharField(max_length=70)
-    shortname = models.CharField(max_length=10)
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, related_name='courses', blank=True)
     teachers = models.ManyToManyField(User, related_name='taught_courses', blank=True)
     timestamp = models.DateTimeField(auto_now=True)
     
+    class Meta:
+        ordering = ['name']
+
+    def __unicode__(self):
+        return u'{0}'.format(self.name)
+
     @classmethod
     def user_courses(self, user):
         return user.courses if user.is_authenticated() else self.objects
 
     def has_teacher(self, user):
         return user.is_authenticated() and user in self.teachers.all()
-
-    def __unicode__(self):
-        return u'{0} ({1})'.format(self.name, self.shortname)
-
-    class Meta:
-        ordering = ['name']
 
 
 class ProblemSet(models.Model):
