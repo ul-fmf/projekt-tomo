@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     depends_on = (
-        ("tomo", "0007_drop_submissions"),
+        ("tomo", "0006_drop_problems"),
     )
 
     def forwards(self, orm):
@@ -105,27 +105,7 @@ class Migration(SchemaMigration):
             'problem_set': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['courses.ProblemSet']"}),
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '70'})
-        },
-        u'submissions.attempt': {
-            'Meta': {'ordering': "['submission']", 'object_name': 'Attempt'},
-            'active': ('django.db.models.fields.BooleanField', [], {}),
-            'correct': ('django.db.models.fields.BooleanField', [], {}),
-            'errors': ('django.db.models.fields.TextField', [], {'default': "'{}'"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'part': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['problems.Part']"}),
-            'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'submission': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['submissions.Submission']"})
-        },
-        u'submissions.submission': {
-            'Meta': {'ordering': "['-id']", 'object_name': 'Submission'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
-            'preamble': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['problems.Problem']"}),
-            'source': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['auth.User']"})
         }
     }
 
-    complete_apps = ['submissions']
+    complete_apps = ['problems']

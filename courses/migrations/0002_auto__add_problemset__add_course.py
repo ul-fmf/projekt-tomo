@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     depends_on = (
-        ("tomo", "0007_drop_submissions"),
+        ("tomo", "0005_auto__del_course__del_problemset__chg_field_problem_problem_set"),
     )
 
     def forwards(self, orm):
@@ -16,6 +16,7 @@ class Migration(SchemaMigration):
 
     def backwards(self, orm):
         pass
+
 
     models = {
         u'auth.group': {
@@ -74,58 +75,7 @@ class Migration(SchemaMigration):
             'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'db_index': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
             'visible': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
-        },
-        u'problems.language': {
-            'Meta': {'ordering': "['name']", 'object_name': 'Language'},
-            'extension': ('django.db.models.fields.CharField', [], {'max_length': '4'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
-            'student_file': ('django.db.models.fields.CharField', [], {'max_length': '70'}),
-            'teacher_file': ('django.db.models.fields.CharField', [], {'max_length': '70'})
-        },
-        u'problems.part': {
-            'Meta': {'ordering': "(u'_order',)", 'object_name': 'Part'},
-            '_order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'challenge': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'parts'", 'to': u"orm['problems.Problem']"}),
-            'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'validation': ('django.db.models.fields.TextField', [], {'blank': 'True'})
-        },
-        u'problems.problem': {
-            'Meta': {'ordering': "(u'_order',)", 'object_name': 'Problem'},
-            '_order': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['auth.User']"}),
-            'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'language': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['problems.Language']"}),
-            'preamble': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'problem_set': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'problems'", 'to': u"orm['courses.ProblemSet']"}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '70'})
-        },
-        u'submissions.attempt': {
-            'Meta': {'ordering': "['submission']", 'object_name': 'Attempt'},
-            'active': ('django.db.models.fields.BooleanField', [], {}),
-            'correct': ('django.db.models.fields.BooleanField', [], {}),
-            'errors': ('django.db.models.fields.TextField', [], {'default': "'{}'"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'part': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['problems.Part']"}),
-            'solution': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'submission': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'attempts'", 'to': u"orm['submissions.Submission']"})
-        },
-        u'submissions.submission': {
-            'Meta': {'ordering': "['-id']", 'object_name': 'Submission'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
-            'preamble': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'problem': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['problems.Problem']"}),
-            'source': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'submissions'", 'to': u"orm['auth.User']"})
         }
     }
 
-    complete_apps = ['submissions']
+    complete_apps = ['courses']
