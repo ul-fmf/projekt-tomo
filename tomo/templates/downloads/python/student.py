@@ -239,8 +239,7 @@ def _check():
         'data': '{{ data|safe }}',
         'signature': '{{ signature }}',
         'preamble': _preamble,
-        'attempts': Check.parts,
-        'source': _source,
+        'attempts': Check.parts
     }).encode('utf-8')
     try:
         host = "{{ request.get_host }}".split(":")[0]

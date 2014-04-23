@@ -16,7 +16,7 @@ class SubmissionAdmin(admin.ModelAdmin):
         }),
         ('Source', {
             'classes': ('collapse', ),
-            'fields': ('preamble', 'source', )
+            'fields': ('preamble',)
         })
     )
     inlines = [AttemptInline]

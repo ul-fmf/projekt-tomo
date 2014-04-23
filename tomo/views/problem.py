@@ -129,7 +129,7 @@ def student_upload(request):
     verify(problem.problem_set.course.has_teacher(user) or problem.problem_set.visible)
 
     submission = Submission(user=user, problem=problem, ip=request.META['REMOTE_ADDR'],
-                            preamble=post['preamble'], source=post['source'])
+                            preamble=post['preamble'])
     submission.save()
 
     attempts = dict((attempt['part'], attempt) for attempt in post['attempts'])
