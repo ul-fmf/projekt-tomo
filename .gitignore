@@ -1,5 +1,4 @@
 .DS_Store
 *.pyc
-project/db.sqlite3
 static
 virtualenv
