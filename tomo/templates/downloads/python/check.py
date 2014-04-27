@@ -237,6 +237,8 @@ class Check:
             diff.append("{0} {1} {2}".format(out.ljust(line_width), "|" if out == given else "*", given))
         if not equal:
             Check.error("Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}", filename, (line_width - 7) * " ", "\n  ".join(diff))
+            return False
+        return True
 
     @staticmethod
     def summarize():
