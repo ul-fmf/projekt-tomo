@@ -4,7 +4,6 @@ from .views.problem import PartDelete
 
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
-    url(r'^settings/$', 'tomo.views.settings', name='settings'),
     (r'^problem_set/', include(patterns('tomo.views.problem_set',
         (r'^(?P<problem_set_id>\d+)/', include(patterns('tomo.views.problem_set',
             url(r'^$', 'view_problem_set', name='problem_set'),

@@ -8,9 +8,3 @@ def homepage(request):
         'all_courses': Course.objects.all(),
         'solved': ProblemSet.success(request.user),
     })
-
-def settings(request):
-    if request.method == "POST":
-        request.user.courses = Course.objects.filter(id__in=request.POST.getlist('my_courses'))
-        request.user.save()
-    return redirect('homepage')
