@@ -93,6 +93,7 @@ def results_zip(request, pk):
             username = user.get_full_name() or user.username
             context = {
                 'problem': problem,
+                'preamble': problem.preamble_for(user),
                 'parts': parts,
                 'attempts': attempts[user.id],
                 'user': user,
