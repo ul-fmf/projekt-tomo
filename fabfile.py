@@ -45,6 +45,10 @@ def production():
     set_project('tomoprod')
 
 @task
+def tomo1415():
+    set_project('tomo1415')
+
+@task
 def std_production():
     set_project('tomostd')
 
@@ -102,8 +106,8 @@ def restart_apache():
 def reset_tomodev():
     if confirm('Are you sure you want to reset the staging database?',
                default=False):
-        postgres("dropdb tomodev")
-        postgres("createdb -T tomo tomodev")
+        # postgres("dropdb tomodev")
+        postgres("createdb -T tomo tomo1415")
 
 @task
 def update_local():
