@@ -206,8 +206,8 @@ class Check:
 
     @staticmethod
     @contextmanager
-    def in_file(filename, content):
-        with open(filename, "w") as _f:
+    def in_file(filename, content, encoding=None):
+        with open(filename, "w", encoding=encoding) as _f:
             for line in content:
                 print(line, file=_f)
         old_errors = Check.current["errors"][:]
@@ -219,8 +219,8 @@ class Check:
             Check.error("Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}", filename, "\n  ".join(content), "\n- ".join(new_errors))
 
     @staticmethod
-    def out_file(filename, content):
-        with open(filename) as _f:
+    def out_file(filename, content, encoding=None):
+        with open(filename, encoding=encoding) as _f:
             out_lines = _f.readlines()
         len_out, len_given = len(out_lines), len(content)
         if len_out < len_given:
