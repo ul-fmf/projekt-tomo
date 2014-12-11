@@ -12,9 +12,9 @@ class QuerySetManager(models.Manager):
         try:
             return getattr(self.__class__, attr, *args)
         except AttributeError:
-            return getattr(self.get_query_set(), attr, *args)
+            return getattr(self.get_queryset(), attr, *args)
 
-    def get_query_set(self):
+    def get_queryset(self):
         return self.model.QuerySet(self.model)
 
 
@@ -34,8 +34,8 @@ class Attempt(models.Model):
     submission = models.ForeignKey(Submission, related_name='attempts')
     solution = models.TextField(blank=True)
     errors = models.TextField(default="{}")
-    correct = models.BooleanField()
-    active = models.BooleanField()
+    correct = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
     objects = QuerySetManager()
 
     class Meta:
