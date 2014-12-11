@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
+import io
 import json
 import tempfile
 import zipfile
@@ -8,7 +9,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.servers.basehttp import FileWrapper
 from django.http import HttpResponse
 
-
+ 
 def verify(cond):
     if not cond:
         raise PermissionDenied
@@ -28,12 +29,12 @@ def unpack(text, sig):
     return json.loads(text)
 
 
-def plain_text(name, contents, mimetype='text/plain'):
+def plain_text(name, contents, content_type='text/plain'):
     """
     Returns a response that downloads a plain text file with the given name and
     contents.
     """
-    response = HttpResponse(mimetype='{0}; charset=utf-8'.format(mimetype))
+    response = HttpResponse(content_type='{0}; charset=utf-8'.format(content_type))
     response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
     response.write(contents)
     return response
@@ -45,14 +46,12 @@ def zip_archive(name, files):
     containing the given iterable of files, each represented by a pair, where
     the first component gives the name and the second one gives the contents.
     """
-    temp = tempfile.TemporaryFile()
+    temp = io.BytesIO()
     archive = zipfile.ZipFile(temp, 'w', zipfile.ZIP_DEFLATED)
     for n, contents in files:
         archive.writestr(n, contents.encode('utf-8'))
     archive.close()
-    wrapper = FileWrapper(temp)
-    response = HttpResponse(wrapper, content_type='application/zip')
+    response = HttpResponse(temp.getvalue(), content_type="application/x-zip-compressed")
     response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(name)
-    response['Content-Length'] = temp.tell()
-    temp.seek(0)
     return response
+
