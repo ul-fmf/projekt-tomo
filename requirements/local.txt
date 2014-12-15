@@ -1,5 +1,4 @@
 -r common.txt
-coverage==3.7.1
-django-coverage==1.2.4
-django-debug-toolbar==1.0.1
-psycopg2==2.5.2
+coverage >= 3.7.1
+django-coverage >= 1.2.4
+django-debug-toolbar >= 1.2.2

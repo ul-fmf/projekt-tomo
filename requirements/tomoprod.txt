@@ -1,3 +1,2 @@
 -r common.txt
-psycopg2==2.5.2
-python-ldap==2.4.13
+python-ldap >= 2.4.18
