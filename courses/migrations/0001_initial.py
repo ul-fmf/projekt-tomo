@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Course',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=70)),
                 ('description', models.TextField(blank=True)),
                 ('timestamp', models.DateTimeField(auto_now=True)),
@@ -30,11 +30,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProblemSet',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=70)),
                 ('description', models.TextField(blank=True)),
                 ('visible', models.BooleanField(default=False)),
-                ('solution_visibility', models.CharField(max_length=20, choices=[('skrite', 'skrite'), ('pogojno', 'vidne, ko je naloga rešena'), ('vidne', 'vidne')], default='pogojno')),
+                ('solution_visibility', models.CharField(default=b'pogojno', max_length=20, choices=[(b'skrite', b'skrite'), (b'pogojno', b'vidne, ko je naloga re\xc5\xa1ena'), (b'vidne', b'vidne')])),
                 ('timestamp', models.DateTimeField(auto_now=True, db_index=True)),
                 ('course', models.ForeignKey(related_name='problem_sets', to='courses.Course')),
             ],

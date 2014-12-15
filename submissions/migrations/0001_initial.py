@@ -16,9 +16,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Attempt',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('solution', models.TextField(blank=True)),
-                ('errors', models.TextField(default='{}')),
+                ('errors', models.TextField(default=b'{}')),
                 ('correct', models.BooleanField(default=False)),
                 ('active', models.BooleanField(default=False)),
                 ('part', models.ForeignKey(related_name='attempts', to='problems.Part')),
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Submission',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('timestamp', models.DateTimeField(auto_now_add=True)),
                 ('ip', models.IPAddressField()),
                 ('preamble', models.TextField(blank=True)),
