@@ -12,10 +12,6 @@ DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 INTERNAL_IPS = ('89.212.210.72',)
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
