@@ -4,18 +4,6 @@ from fabric.api import *
 from fabric.contrib.console import confirm
 
 env.hosts = ['matija@tyrion.fmf.uni-lj.si']
-
-FIXTURES = [
-    # 'auth.User',
-    'courses.Course',
-    'courses.ProblemSet',
-    # 'problems.Language',
-    'problems.Problem',
-    'problems.Part',
-    # 'tomo.Submission',
-    # 'tomo.Attempt',
-]
-
 env.srv_directory = '/srv/'
 env.project_repository = 'git@git.fmf.uni-lj.si:matijapretnar/projekt-tomo.git'
 
@@ -80,13 +68,6 @@ def update_all():
             sudo('pip install -r requirements/{project_name}.txt'.format(**env))
     unlock()
 
-@task
-def get_dump():
-    for fixture in FIXTURES:
-        with hide('stdout'):
-            json = manage('dumpdata --indent=2 {0}'.format(fixture))
-        with open('fixtures/{0}.json'.format(fixture), 'w') as f:
-            f.write(json)
 
 @task
 def edit_apache():
@@ -108,7 +89,6 @@ def reset_tomodev():
 def update_local():
     local('./manage.py syncdb --noinput')
     local('./manage.py migrate')
-    local('./manage.py loaddata fixtures/*.json')
 
 @task
 def reset_local():
