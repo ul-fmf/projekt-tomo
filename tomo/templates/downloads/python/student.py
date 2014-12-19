@@ -261,11 +261,10 @@ def _check():
                 _f.write(r.read().decode('utf-8'))
             print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
-    except URLError as r:
+    except URLError:
         print('Pri shranjevanju je prišlo do napake.')
         Check.summarize()
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
-        Check.error = r.read().decode('utf-8')
     {% else %}
     Check.summarize()
     print('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
