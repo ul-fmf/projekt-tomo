@@ -183,7 +183,7 @@
 
 import io, json, os, re, sys, shutil, traceback
 from contextlib import contextmanager
-from urllib.error import HTTPError
+from urllib.error import URLError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 {% include 'downloads/python/check.py' %}
@@ -261,7 +261,7 @@ def _check():
                 _f.write(r.read().decode('utf-8'))
             print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
-    except HTTPError as r:
+    except URLError as r:
         print('Pri shranjevanju je prišlo do napake.')
         Check.summarize()
         print('Pri shranjevanju je prišlo do napake. Poskusite znova.')
