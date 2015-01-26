@@ -38,3 +38,20 @@ class Part(models.Model):
     def __unicode__(self):
         description = shorten(self.description)
         return u'{0}/#{1:06d} ({2})'.format(self.problem, self.id, description)
+
+    def check_secret(self, secret):
+        '''
+        Checks whether a submitted secret corresponds to the official one.
+
+        The function accepts a secret (list of strings) and returns the pair:
+        True, None -- if secret matches the official one
+        False, None -- if secret has an incorrect length
+        False, i -- if secret first differs from the official one at index i
+        '''
+        official_secret = json.loads(self.secret)
+        if len(official_secret) != len(secret):
+            return False, None
+        for s1, (s2, i) in zip(official_secret, enumerate(secret)):
+            if s1 != s2:
+                return False, i
+        return True, None
