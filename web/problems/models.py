@@ -1,3 +1,5 @@
+import json
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -25,6 +27,13 @@ class Part(models.Model):
 
     class Meta:
         order_with_respect_to = 'problem'
+
+    def clean(self):
+        try:
+            json.loads(self.secret)
+        except:
+            # TODO: log exception
+            raise ValidationError('Secret must be a valid JSON string.')
 
     def __unicode__(self):
         description = shorten(self.description)
