@@ -10,6 +10,18 @@ def shorten(s, max_length=50):
         return u'{0}...'.format(s[:50])
 
 
+def is_json_string_list(s):
+    try:
+        val = json.loads(s)
+    except ValueError:
+        raise ValidationError('Not a JSON value.')
+    if type(val) is not list:
+        raise ValidationError('Not a JSON list.')
+    for x in val:
+        if type(x) is not unicode:
+            raise ValidationError('Not a JSON list of strings.')
+
+
 class Problem(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
@@ -23,17 +35,10 @@ class Part(models.Model):
     description = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
-    secret = models.TextField(default="[]")
+    secret = models.TextField(default="[]", validators=[is_json_string_list])
 
     class Meta:
         order_with_respect_to = 'problem'
-
-    def clean(self):
-        try:
-            json.loads(self.secret)
-        except:
-            # TODO: log exception
-            raise ValidationError('Secret must be a valid JSON string.')
 
     def __unicode__(self):
         description = shorten(self.description)
