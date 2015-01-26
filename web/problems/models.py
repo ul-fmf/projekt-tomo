@@ -1,5 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 
+import json
 
 def shorten(s, max_length=50):
     if len(s) < max_length:
@@ -14,7 +16,7 @@ class Problem(models.Model):
 
     def __unicode__(self):
         return self.title
-
+    
 
 class Part(models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
@@ -25,7 +27,15 @@ class Part(models.Model):
 
     class Meta:
         order_with_respect_to = 'problem'
-
+    
+    def clean(self):
+        try:
+            json.loads(self.secret)
+        except Exception:
+        #TODO: log exception
+            raise ValidationError('Secret must be a valid JSON string.')
+    
     def __unicode__(self):
         description = shorten(self.description)
         return u'{0}/#{1:06d} ({2})'.format(self.problem, self.id, description)
+    
