@@ -56,7 +56,7 @@ class Part(models.Model):
         official_secret = json.loads(self.secret)
         if len(official_secret) != len(secret):
             return False, None
-        for s1, (s2, i) in zip(official_secret, enumerate(secret)):
+        for s1, (i, s2) in zip(official_secret, enumerate(secret)):
             if s1 != s2:
                 return False, i
         return True, None
