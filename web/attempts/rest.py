@@ -1,14 +1,17 @@
 import json
-from rest_framework import serializers, viewsets
-from rest_framework.fields import CharField
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.serializers import ModelSerializer
+from rest_framework.response import Response
+from rest_framework import fields, decorators, validators
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
 from .models import Attempt
 
 
-class AttemptSerializer(serializers.ModelSerializer):
+class AttemptSerializer(ModelSerializer):
     """
     Serialize an Attempt object.
     """
-    secret = CharField(write_only=True)
+    secret = fields.CharField(write_only=True)
 
     class Meta:
         model = Attempt
@@ -30,9 +33,28 @@ class AttemptSerializer(serializers.ModelSerializer):
         return super(AttemptSerializer, self).update(instance, validated_data)
 
 
-class AttemptViewSet(viewsets.ModelViewSet):
+class AttemptViewSet(ModelViewSet):
     """
     A viewset for viewing and editing Attempt instances.
     """
     serializer_class = AttemptSerializer
     queryset = Attempt.objects.all()
+
+    @decorators.list_route(methods=['post'])
+    def submit(self, request):
+        serializer = AttemptSerializer(data=request.data)
+        def _f(validator):
+            not isinstance(validator, validators.UniqueTogetherValidator)
+        serializer.validators = filter(_f, serializer.validators)
+        if serializer.is_valid():
+            AttemptSerializer.check_secret(serializer.validated_data)
+            created = Attempt.objects.update_or_create(
+                              user=serializer.validated_data['user'],
+                              part=serializer.validated_data['part'],
+                              defaults=serializer.validated_data)[1]
+            status = HTTP_201_CREATED if created else HTTP_200_OK
+            response = {'status': 'submission saved'}
+            return Response(json.dumps(response), status=status)
+        else:
+            return Response(serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
