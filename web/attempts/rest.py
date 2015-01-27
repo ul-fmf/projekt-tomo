@@ -1,17 +1,22 @@
 import json
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Field
 from rest_framework.response import Response
 from rest_framework import fields, decorators, validators
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from .models import Attempt
 
 
+class WritableJSONField(Field):
+    def to_internal_value(self, data):
+        return data
+
+
 class AttemptSerializer(ModelSerializer):
     """
     Serialize an Attempt object.
     """
-    secret = fields.CharField(write_only=True)
+    secret = WritableJSONField(write_only=True, required=False)
 
     class Meta:
         model = Attempt
@@ -19,7 +24,7 @@ class AttemptSerializer(ModelSerializer):
     @staticmethod
     def check_secret(validated_data):
         # Check and remove secret from the validated_data dictionary
-        user_secret = json.loads(validated_data.pop('secret', '[]'))
+        user_secret = validated_data.pop('secret', '[]')
         secret_matches, hint = validated_data['part'].check_secret(user_secret)
         if not secret_matches:
             validated_data['accepted'] = False
