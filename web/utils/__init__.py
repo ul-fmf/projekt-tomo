@@ -3,6 +3,12 @@ from django.core.exceptions import ValidationError
 
 
 def is_json_string_list(s):
+    '''
+    Checks if the string s represents a list of strings in JSON.
+
+    The function does nothing if s represents a valid list of strings,
+    or raises a suitable ValidationError if not.
+    '''
     try:
         val = json.loads(s)
     except:
