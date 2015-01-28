@@ -22,8 +22,7 @@ class Part(models.Model):
         order_with_respect_to = 'problem'
 
     def __unicode__(self):
-        description = shorten(self.description)
-        return u'{0}/#{1:06d} ({2})'.format(self.problem, self.id, description)
+        return u'#{0:06d} ({1})'.format(self.pk, shorten(self.description))
 
     def check_secret(self, secret):
         '''
