@@ -7,8 +7,8 @@ class Attempt(models.Model):
     user = models.ForeignKey(User, related_name='attempts')
     part = models.ForeignKey(Part, related_name='attempts')
     solution = models.TextField(blank=True)
-    accepted = models.BooleanField(default=False)
     feedback = models.TextField(blank=True)
+    valid = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('user', 'part')
