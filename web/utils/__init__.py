@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 def is_json_string_list(s):
     try:
         val = json.loads(s)
-    except ValueError:
+    except:
         raise ValidationError('Not a JSON value.')
     if type(val) is not list:
         raise ValidationError('Not a JSON list.')
@@ -15,7 +15,7 @@ def is_json_string_list(s):
 
 
 def shorten(s, max_length=50):
-    if len(s) < max_length:
+    if len(s) <= max_length:
         return s
     else:
-        return u'{0}...'.format(s[:50])
+        return u'{0}...'.format(s[:max_length])
