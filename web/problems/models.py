@@ -1,6 +1,6 @@
 import json
 from django.db import models
-from utils import is_json_string_list, shorten
+from utils import is_json_string_list, truncate
 
 
 class Problem(models.Model):
@@ -22,7 +22,7 @@ class Part(models.Model):
         order_with_respect_to = 'problem'
 
     def __unicode__(self):
-        return u'#{0:06d} ({1})'.format(self.pk, shorten(self.description))
+        return u'#{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def check_secret(self, secret):
         '''

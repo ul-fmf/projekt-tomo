@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from . import is_json_string_list, shorten
+from . import is_json_string_list, truncate
 
 
 class IsJSONStringListTestCase(TestCase):
@@ -39,13 +39,16 @@ class IsJSONStringListTestCase(TestCase):
         self.assertIsNone(is_json_string_list('["1", "2", "3"]'))
 
 
-class ShortenTestCase(TestCase):
-    def test_shorten(self):
-        self.assertEqual(shorten(50 * "X"), 50 * "X")
-        self.assertEqual(shorten(51 * "X"), 50 * "X" + "...")
-        self.assertEqual(shorten("Long string"), "Long string")
-        self.assertEqual(shorten("Long string", max_length=11), "Long string")
-        self.assertEqual(shorten("Long string", max_length=9), "Long stri...")
-        self.assertEqual(shorten("Long string", max_length=5), "Long ...")
-        self.assertEqual(shorten("Long string", max_length=1), "L...")
-        self.assertEqual(shorten("", max_length=0), "")
+class TruncateTestCase(TestCase):
+    def test_truncate(self):
+        self.assertEqual(truncate(50 * "X"), 50 * "X")
+        self.assertEqual(truncate(51 * "X"), 47 * "X" + "...")
+        self.assertEqual(truncate("Long string"), "Long string")
+        self.assertEqual(truncate("Long string", max_length=11), "Long string")
+        self.assertEqual(truncate("Long string", max_length=9), "Long s...")
+        self.assertEqual(truncate("Long string", max_length=5), "Lo...")
+        self.assertEqual(truncate("Long string", max_length=3), "...")
+        with self.assertRaisesRegexp(ValueError, 'Indicator longer than maximum length.'):
+            self.assertEqual(truncate("Long string", max_length=1), "L...")
+        self.assertEqual(truncate("String", max_length=0, indicator=""), "")
+        self.assertEqual(truncate("", max_length=0), "")
