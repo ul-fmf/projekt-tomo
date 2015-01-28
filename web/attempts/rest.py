@@ -19,7 +19,7 @@ class AttemptSerializer(serializers.ModelSerializer):
         user_secret = json.loads(validated_data.pop('secret', '[]'))
         secret_matches, hint = validated_data['part'].check_secret(user_secret)
         if not secret_matches:
-            validated_data['accepted'] = False
+            validated_data['valid'] = False
 
     def create(self, validated_data):
         self.check_secret(validated_data)

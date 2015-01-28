@@ -7,13 +7,13 @@ class AttemptAdmin(admin.ModelAdmin):
         'user',
         'problem',
         'part',
-        'accepted',
+        'valid',
     )
     list_filter = (
         'user',
         'part__problem',
         'part',
-        'accepted',
+        'valid',
     )
     search_fields = (
         'part__pk',
