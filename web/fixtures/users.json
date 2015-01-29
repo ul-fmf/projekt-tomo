@@ -1,0 +1,74 @@
+[
+{
+  "fields": {
+    "username": "matija",
+    "first_name": "Matija",
+    "last_name": "Pretnar",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2015-01-28T13:16:15Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$15000$fEuS7I8zLkyn$gnoFQHtoNTnMQODuoOQzYgjbfzKx/ZBjuCgsme0Rg+E=",
+    "email": "matija.pretnar@fmf.uni-lj.si",
+    "date_joined": "2015-01-26T09:29:35Z"
+  },
+  "model": "users.user",
+  "pk": 1
+},
+{
+  "fields": {
+    "username": "sonja",
+    "first_name": "Sonja",
+    "last_name": "Jer\u0161e",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2015-01-28T13:15:29Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$15000$PjGb9vWB5UIL$p7kJeBLCOexzCi4fUMvWdaWJJw1vB6yoV3668A1ofpo=",
+    "email": "sonja@jerse.info",
+    "date_joined": "2015-01-28T13:12:09Z"
+  },
+  "model": "users.user",
+  "pk": 2
+},
+{
+  "fields": {
+    "username": "gregor",
+    "first_name": "Gregor",
+    "last_name": "Jer\u0161e",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2015-01-28T13:15:41Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$15000$Agb8fFZyDvtw$aexMxy0TeKhEX8CMtxusp70TUiWIVfMwnRRjdy5Jcz8=",
+    "email": "gregor@jerse.info",
+    "date_joined": "2015-01-28T13:14:54Z"
+  },
+  "model": "users.user",
+  "pk": 3
+},
+{
+  "fields": {
+    "username": "lokar",
+    "first_name": "Matija",
+    "last_name": "Lokar",
+    "is_active": true,
+    "is_superuser": true,
+    "is_staff": true,
+    "last_login": "2015-01-28T13:15:52Z",
+    "groups": [],
+    "user_permissions": [],
+    "password": "pbkdf2_sha256$15000$1dxwwF357lFz$0teKMEQ4vrRa2hBd5impH/4G6XN/u0Tvr0Qo5qvE+Xs=",
+    "email": "matija.lokar@fmf.uni-lj.si",
+    "date_joined": "2015-01-28T13:15:07Z"
+  },
+  "model": "users.user",
+  "pk": 4
+}
+]
