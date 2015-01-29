@@ -1,25 +1,6 @@
 import json
-from django.core.exceptions import ValidationError
 from django.db import models
-
-
-def shorten(s, max_length=50):
-    if len(s) < max_length:
-        return s
-    else:
-        return u'{0}...'.format(s[:50])
-
-
-def is_json_string_list(s):
-    try:
-        val = json.loads(s)
-    except ValueError:
-        raise ValidationError('Not a JSON value.')
-    if type(val) is not list:
-        raise ValidationError('Not a JSON list.')
-    for x in val:
-        if type(x) is not unicode:
-            raise ValidationError('Not a JSON list of strings.')
+from utils import is_json_string_list, truncate
 
 
 class Problem(models.Model):
@@ -41,8 +22,7 @@ class Part(models.Model):
         order_with_respect_to = 'problem'
 
     def __unicode__(self):
-        description = shorten(self.description)
-        return u'{0}/#{1:06d} ({2})'.format(self.problem, self.id, description)
+        return u'#{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def check_secret(self, secret):
         '''
@@ -56,7 +36,7 @@ class Part(models.Model):
         official_secret = json.loads(self.secret)
         if len(official_secret) != len(secret):
             return False, None
-        for i in range(len(secret)):            
+        for i in range(len(secret)):
             if secret[i] != official_secret[i]:
                 return False, i
         return True, None
