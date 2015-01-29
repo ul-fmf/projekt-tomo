@@ -1,10 +1,11 @@
 import json
+from django.db import transaction
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.serializers import ModelSerializer, Field
+from rest_framework import validators, decorators, status
 from rest_framework.response import Response
-from rest_framework import fields, decorators, validators
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from .models import Attempt
+from rest_framework.authentication import TokenAuthentication
 
 
 class WritableJSONField(Field):
@@ -25,7 +26,7 @@ class AttemptSerializer(ModelSerializer):
     def check_secret(validated_data):
         # Check and remove secret from the validated_data dictionary
         user_secret = validated_data.pop('secret', '[]')
-        secret_matches, hint = validated_data['part'].check_secret(user_secret)
+        secret_matches = validated_data['part'].check_secret(user_secret)[0]
         if not secret_matches:
             validated_data['accepted'] = False
 
@@ -45,21 +46,23 @@ class AttemptViewSet(ModelViewSet):
     serializer_class = AttemptSerializer
     queryset = Attempt.objects.all()
 
-    @decorators.list_route(methods=['post'])
+    @decorators.list_route(methods=['post'], authentication_classes=[TokenAuthentication])
+    @transaction.atomic    
     def submit(self, request):
-        serializer = AttemptSerializer(data=request.data)
+        serializer = AttemptSerializer(data=request.data, many=True)
         def _f(validator):
             return not isinstance(validator, validators.UniqueTogetherValidator)
-        serializer.validators = filter(_f, serializer.validators)
+        serializer.child.validators = filter(_f, serializer.child.validators)
+        
         if serializer.is_valid():
-            AttemptSerializer.check_secret(serializer.validated_data)
-            created = Attempt.objects.update_or_create(
-                              user=serializer.validated_data['user'],
-                              part=serializer.validated_data['part'],
-                              defaults=serializer.validated_data)[1]
-            status = HTTP_201_CREATED if created else HTTP_200_OK
+            for attempt in serializer.validated_data:
+                AttemptSerializer.check_secret(attempt)
+                Attempt.objects.update_or_create(
+                        user=request.user,
+                        part=attempt['part'],
+                        defaults=attempt)
             response = {'status': 'submission saved'}
-            return Response(json.dumps(response), status=status)
+            return Response(json.dumps(response), status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors,
-                            status=HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_400_BAD_REQUEST)
