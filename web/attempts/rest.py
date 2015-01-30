@@ -78,7 +78,9 @@ class AttemptViewSet(ModelViewSet):
                         user=request.user,
                         part=attempt_data['part'],
                         defaults=attempt_data)[0])
-            data = AttemptSerializer(attempts, many=True).data
+            data = {
+                'attempts': AttemptSerializer(attempts, many=True).data
+            }
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
