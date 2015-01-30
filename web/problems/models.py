@@ -1,5 +1,7 @@
 import json
 from django.db import models
+from django.template.loader import render_to_string
+from rest_framework.authtoken.models import Token
 from utils import is_json_string_list, truncate
 
 
@@ -9,6 +11,24 @@ class Problem(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def user_solutions(self, user):
+        attempts = user.attempts.filter(part__problem=self)
+        solutions = {}
+        for attempt in attempts:
+            solutions[attempt.part.id] = attempt.solution
+        return solutions
+
+    def attempt_file(self, user=None):
+        authentication_token = Token.objects.get(user=user) if user else None
+        solutions = self.user_solutions(user) if user else {}
+        parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
+        return render_to_string("python/attempt.py", {
+            "problem": self,
+            "parts": parts,
+            "submission_url": "http://localhost:8000/attempt/submit/",
+            "authentication_token": authentication_token
+        })
 
 
 class Part(models.Model):
@@ -22,7 +42,7 @@ class Part(models.Model):
         order_with_respect_to = 'problem'
 
     def __unicode__(self):
-        return u'#{0:06d} ({1})'.format(self.pk, truncate(self.description))
+        return u'@{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def check_secret(self, secret):
         '''

@@ -1,5 +1,6 @@
 import json
 from django.core.exceptions import ValidationError
+from django.template.defaultfilters import stringfilter, register
 
 
 def is_json_string_list(s):
@@ -35,3 +36,9 @@ def truncate(s, max_length=50, indicator="..."):
         raise ValueError('Indicator longer than maximum length.')
     else:
         return u'{0}{1}'.format(s[:max_length - len(indicator)], indicator)
+
+
+@register.filter
+@stringfilter
+def indent(source, indent):
+    return ("\n" + indent).join(source.splitlines())
