@@ -1,11 +1,10 @@
-import json
 from django.db import transaction
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.serializers import ModelSerializer, Field
 from rest_framework import validators, decorators, status
-from rest_framework.response import Response
-from .models import Attempt
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.response import Response
+from rest_framework.serializers import ModelSerializer, Field
+from rest_framework.viewsets import ModelViewSet
+from .models import Attempt
 
 
 class WritableJSONField(Field):
@@ -47,22 +46,29 @@ class AttemptViewSet(ModelViewSet):
     queryset = Attempt.objects.all()
 
     @decorators.list_route(methods=['post'], authentication_classes=[TokenAuthentication])
-    @transaction.atomic    
+    @transaction.atomic
     def submit(self, request):
-        serializer = AttemptSerializer(data=request.data, many=True)
+        serializer = AttemptSerializer(data=request.data, many=True, partial=True)
+
         def _f(validator):
             return not isinstance(validator, validators.UniqueTogetherValidator)
         serializer.child.validators = filter(_f, serializer.child.validators)
-        
+
         if serializer.is_valid():
-            for attempt in serializer.validated_data:
-                AttemptSerializer.check_secret(attempt)
-                Attempt.objects.update_or_create(
+            attempts = []
+            for attempt_data in serializer.validated_data:
+                AttemptSerializer.check_secret(attempt_data)
+                attempt, _ = Attempt.objects.update_or_create(
                         user=request.user,
-                        part=attempt['part'],
-                        defaults=attempt)
-            response = {'status': 'submission saved'}
-            return Response(json.dumps(response), status=status.HTTP_200_OK)
+                        part=attempt_data['part'],
+                        defaults=attempt_data)
+                attempts.append({
+                    'part': attempt.part.pk,
+                    'solution': attempt.solution,
+                    'valid': attempt.valid,
+                    'feedback': attempt.feedback,
+                })
+            response = {'attempts': attempts}
+            return Response(response, status=status.HTTP_200_OK)
         else:
-            return Response(serializer.errors,
-                            status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
