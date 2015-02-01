@@ -12,12 +12,11 @@ class Problem(models.Model):
     def __unicode__(self):
         return self.title
 
+    def user_attempts(self, user):
+        return user.attempts.filter(part__problem=self)
+
     def user_solutions(self, user):
-        attempts = user.attempts.filter(part__problem=self)
-        solutions = {}
-        for attempt in attempts:
-            solutions[attempt.part.id] = attempt.solution
-        return solutions
+        return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)} 
 
     def attempt_file(self, user=None):
         authentication_token = Token.objects.get(user=user) if user else None
