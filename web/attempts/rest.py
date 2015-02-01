@@ -1,4 +1,3 @@
-import json
 from django.db import transaction
 from rest_framework import validators, decorators, status
 from rest_framework.authentication import TokenAuthentication
@@ -11,19 +10,6 @@ from .models import Attempt
 class WritableJSONField(Field):
     def to_internal_value(self, data):
         return data
-        
-
-class JSONStringField(Field):
-    """
-    Store a JSON object in a TextField.
-    When object is received store its json dump.
-    When object is retrieved load JSON object from string representation. 
-    """
-    def to_internal_value(self, data):
-        return json.dumps(data)
-    
-    def to_representation(self, value):
-        return json.loads(value)
 
 
 class AttemptSerializer(ModelSerializer):
@@ -31,7 +17,6 @@ class AttemptSerializer(ModelSerializer):
     Serialize an Attempt object.
     """
     secret = WritableJSONField(write_only=True, required=False)
-    feedback = JSONStringField()
 
     class Meta:
         model = Attempt
@@ -73,12 +58,17 @@ class AttemptViewSet(ModelViewSet):
             attempts = []
             for attempt_data in serializer.validated_data:
                 AttemptSerializer.check_secret(attempt_data)
-                attempts.append(
-                    Attempt.objects.update_or_create(
+                attempt, _ = Attempt.objects.update_or_create(
                         user=request.user,
                         part=attempt_data['part'],
-                        defaults=attempt_data)[0])
-            data = AttemptSerializer(attempts, many=True).data
-            return Response(data, status=status.HTTP_200_OK)
+                        defaults=attempt_data)
+                attempts.append({
+                    'part': attempt.part.pk,
+                    'solution': attempt.solution,
+                    'valid': attempt.valid,
+                    'feedback': attempt.feedback,
+                })
+            response = {'attempts': attempts}
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
