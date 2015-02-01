@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+<header>
+<h1>Prikaz nalog</h1>
+</header>
+
+<nav>
+{% if problem_list %}
+    <ul>
+    {% for problem in problem_list %}
+        <li><a href="{% url 'problem_detail' problem.id %}" target="blank">{{ problem.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Ni nobenih nalog za prikaz.</p>
+{% endif %}
+</nav>
+<section>
+
+</section>
+</body>
+</html>
