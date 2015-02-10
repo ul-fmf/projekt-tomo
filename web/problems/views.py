@@ -43,15 +43,3 @@ def return_problem_file(request, problem_id):
     # ..and correct content-disposition
     resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
     return resp
-    
-    
-    """ Create new file, write assignment data in it and return the file"""
-    problem = Problem.objects.get(pk=problem_id)
-    with open('/tmp/problem_file.txt', 'w') as f:
-        problem_file = File(f)
-        problem_file.write(problem.attempt_file(problem))
-    #serve the file
-    response = HttpResponse(buffer.getvalue(), mimetype='application/x-zip-compressed')
-    response['Content-Disposition'] = 'attachment; filename="'+problem.title+'.zip"'
-    return response
-    
