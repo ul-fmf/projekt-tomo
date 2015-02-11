@@ -6,6 +6,7 @@ import zipfile
 import StringIO
 
 from problems.models import Problem, Part
+from utils.views import plain_text
 
 
 def problem_list(request):
@@ -28,18 +29,7 @@ def problem_detail(request, problem_id):
 
 def return_problem_file(request, problem_id):
     problem = Problem.objects.get(pk=problem_id)
-    content = problem.attempt_file(request.user)
-    zip_filename = "problem_{0}.zip".format(problem.id)
-    # Open StringIO to grab in-memory ZIP contents
-    s = StringIO.StringIO()
-    # The zip compressor
-    zf = zipfile.ZipFile(s, "w")
-    zf.writestr("problem_{0}.py".format(problem.id), content.encode("utf-8"))
-    # Must close zip for all contents to be written
-    zf.close()
+    user = request.user if request.user.is_authenticated() else None
+    filename, contents = problem.attempt_file(user)
+    return plain_text(filename, contents)
 
-    # Grab ZIP file from in-memory, make response with correct MIME-type
-    resp = HttpResponse(s.getvalue(), content_type="application/x-zip-compressed")
-    # ..and correct content-disposition
-    resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
-    return resp
