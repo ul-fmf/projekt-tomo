@@ -1,5 +1,6 @@
 import json
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from rest_framework.authtoken.models import Token
 from utils import is_json_string_list, truncate
@@ -22,12 +23,14 @@ class Problem(models.Model):
         authentication_token = Token.objects.get(user=user) if user else None
         solutions = self.user_solutions(user) if user else {}
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
-        return render_to_string("python/attempt.py", {
+        filename = "{0}.py".format(slugify(self.title))
+        contents = render_to_string("python/attempt.py", {
             "problem": self,
             "parts": parts,
             "submission_url": "http://localhost:8000/attempt/submit/",
             "authentication_token": authentication_token
         })
+        return filename, contents
 
 
 class Part(models.Model):
