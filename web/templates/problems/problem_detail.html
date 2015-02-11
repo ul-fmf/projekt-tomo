@@ -1,0 +1,13 @@
+<h1>{{ problem.title }}</h1>
+
+</br>
+{{problem.description}}
+
+<ul>
+{% for part in problem.parts.all %}
+    <li>{{ part.description }}</li>
+{% endfor %}
+</ul>
+
+
+<a href="{% url 'problem_attempt_file' problem.id %}">Prenesi nalogo</a>
