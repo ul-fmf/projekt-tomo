@@ -91,3 +91,7 @@ STATIC_URL = '/static/'
 # Custom settings
 
 AUTH_USER_MODEL = 'users.User'
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
