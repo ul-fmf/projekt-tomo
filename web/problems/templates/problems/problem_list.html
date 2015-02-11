@@ -6,9 +6,9 @@
 </header>
 
 <nav>
-{% if problem_list %}
+{% if problems %}
     <ul>
-    {% for problem in problem_list %}
+    {% for problem in problems %}
         <li><a href="{% url 'problem_detail' problem.id %}" target="blank">{{ problem.title }}</a></li>
     {% endfor %}
     </ul>
