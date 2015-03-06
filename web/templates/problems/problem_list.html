@@ -1,8 +1,10 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends 'base.html' %}
+
+{% block body %}
 <header>
-<h1>Prikaz nalog</h1>
+    <h1>
+        {% block title %}Prikaz nalog{% endblock %}
+    </h1>
 </header>
 
 <nav>
@@ -16,8 +18,4 @@
     <p>Ni nobenih nalog za prikaz.</p>
 {% endif %}
 </nav>
-<section>
-
-</section>
-</body>
-</html>
+{% endblock %}

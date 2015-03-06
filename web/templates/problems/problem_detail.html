@@ -1,6 +1,12 @@
-<h1>{{ problem.title }}</h1>
+{% extends 'base.html' %}
 
-</br>
+{% block body %}
+<header>
+    <h1>
+        {% block title %}{{ problem.title }}{% endblock %}
+    </h1>
+</header>
+
 {{ problem.description|latex_markdown }}
 
 <ul>
@@ -9,5 +15,5 @@
 {% endfor %}
 </ul>
 
-
 <a href="{% url 'problem_attempt_file' problem.id %}">Prenesi nalogo</a>
+{% endblock %}
