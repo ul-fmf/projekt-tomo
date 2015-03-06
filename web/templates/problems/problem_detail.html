@@ -1,11 +1,11 @@
 <h1>{{ problem.title }}</h1>
 
 </br>
-{{problem.description}}
+{{ problem.description|latex_markdown }}
 
 <ul>
 {% for part in problem.parts.all %}
-    <li>{{ part.description }}</li>
+    <li>{{ part.description|latex_markdown }}</li>
 {% endfor %}
 </ul>
 

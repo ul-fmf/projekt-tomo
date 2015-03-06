@@ -1,6 +1,8 @@
 import json
+import markdown
 from django.core.exceptions import ValidationError
 from django.template.defaultfilters import stringfilter, register
+from django.utils.safestring import mark_safe
 
 
 def is_json_string_list(s):
@@ -42,3 +44,33 @@ def truncate(s, max_length=50, indicator="..."):
 @stringfilter
 def indent(source, indent):
     return ("\n" + indent).join(source.splitlines())
+
+
+# This code is taken from https://github.com/mayoff/python-markdown-mathjax/
+# It is suppossed to be in mdx_mathjax.py, which furthermore has to be on
+# PYTHONPATH because that is how markdown extensions work in Python.
+#
+# We, however, want to bundle it with app, that is why we copy the code here.
+# We hope that the author does not mind.
+class MathJaxPattern(markdown.inlinepatterns.Pattern):
+    def __init__(self):
+        markdown.inlinepatterns.Pattern.__init__(self, r'(?<!\\)(\$\$?)(.+?)\2')
+
+    def handleMatch(self, m):
+        node = markdown.util.etree.Element('mathjax')
+        node.text = markdown.util.AtomicString(m.group(2) + m.group(3) + m.group(2))
+        return node
+
+
+class MathJaxExtension(markdown.Extension):
+    def extendMarkdown(self, md, md_globals):
+        # Needs to come before escape matching because \ is pretty important in LaTeX
+        md.inlinePatterns.add('mathjax', MathJaxPattern(), '<escape')
+
+md = markdown.Markdown(extensions=[MathJaxExtension()])
+
+
+@register.filter
+@stringfilter
+def latex_markdown(source):
+    return mark_safe(md.convert(source))
