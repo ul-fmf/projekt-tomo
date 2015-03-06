@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, render
-from problems.models import Problem
 from utils.views import plain_text
+from .models import Problem
 
 
 def problem_list(request):

@@ -17,7 +17,7 @@ class Problem(models.Model):
         return user.attempts.filter(part__problem=self)
 
     def user_solutions(self, user):
-        return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)} 
+        return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
     def attempt_file(self, user=None):
         authentication_token = Token.objects.get(user=user) if user else None
