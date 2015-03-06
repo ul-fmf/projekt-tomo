@@ -10,14 +10,15 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0vb+-_-52phz@ii^cxr+mlgvmn6fctd+v5qpnv&k+-00#u-==0'
+with open(os.path.join(os.path.dirname(BASE_DIR), 'secret_key.txt')) as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -55,7 +56,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'web.urls'
 
-WSGI_APPLICATION = 'web.wsgi.application'
+WSGI_APPLICATION = 'web.wsgi.dev.application'
 
 
 # Database
@@ -63,10 +64,15 @@ WSGI_APPLICATION = 'web.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'tomodev',
+        'USER': 'tomo',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
     }
 }
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
@@ -85,13 +91,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/dev/static/'
 
 
 # Custom settings
 
 AUTH_USER_MODEL = 'users.User'
 
+STATIC_ROOT = '/srv/tomodev/static/'
+
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
+)
+
+AD_DNS_NAME = 'warpout.fmf.uni-lj.si'
+AD_LDAP_PORT = 389
+AD_SEARCH_DN = 'ou=uporabniki,dc=std,dc=fmf,dc=uni-lj,dc=si'
+AD_NT4_DOMAIN = 'std'
+AD_SEARCH_FIELDS = ['mail', 'givenName', 'sn', 'sAMAccountName']
+AD_LDAP_URL = 'ldap://%s:%s' % (AD_DNS_NAME, AD_LDAP_PORT)
+AUTHENTICATION_BACKENDS = (
+    'utils.auth.ActiveDirectoryBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
