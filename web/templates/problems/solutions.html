@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Rešitve{% endblock %}
+
+{% block content %}
+
+{% comment %}
+TODO: tabela resitev: na levi ucenceve, na desni uradne
+{% endcomment %}
+
+  <div class="table-responsive">          
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Vaše rešitve</th>
+            <th>Uradne rešitve</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for {% for part, attempt in part_attempt %} %}
+          <tr>
+            <td colspan="2">podnaloga {{ forloop.counter }}</td>          
+          </tr>
+          <tr>
+          {% if 
+            <td>attempt.solution</td>
+            <td>part.solution</td>
+          </tr>
+	{% endfor %}
+        </tbody>
+      </table>
+      </div>
+
+{% endblock %} {# content #}
