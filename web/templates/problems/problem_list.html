@@ -1,21 +1,41 @@
 {% extends 'base.html' %}
 
-{% block body %}
-<header>
-    <h1>
-        {% block title %}Prikaz nalog{% endblock %}
-    </h1>
-</header>
+{% block title %}Tomo - naloge{% endblock %} {# TODO: kasneje spremeni v {{ assembly.title }} #}
 
-<nav>
-{% if problems %}
-    <ul>
-    {% for problem in problems %}
-        <li><a href="{% url 'problem_detail' problem.id %}" target="blank">{{ problem.title }}</a></li>
-    {% endfor %}
+{% block content %}
+  {% comment "navigacija" %} 'Navigacija v obliki bredacrumbs' 
+  <nav class="navbar navbar-default">
+    <ul class="breadcrumb">
+
+        <li><a href={% url 'detail' question.id %}"my_courses.html">Moji predmeti</a></li>
+
+        <li><a href="assembly_list.html"></a>{{ course.title }}</li>
+
+        <li class="active">{{ assembly.title }}</li>
     </ul>
-{% else %}
+  </nav>
+  {% endcomment %} {# navigacija #}
+  
+  {% if problems %}
+  {# prikaz vseh nalog iz sklopa #}
+    {% for problem in problems %}
+    <div style="outline: 2px solid black">
+        <h1>{{ problem.title }}</h1>
+	</br>
+	{{ problem.description|latex_markdown }}
+
+		{% for part in problem.parts.all %}
+		  <h3>Podnaloga {{ forloop.counter }} </h3>
+		  {{ part.description|latex_markdown }}
+		{% endfor %}
+	<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}"
+	   role="button">Prenesi nalogo</a>
+	   <br/>
+	</div>
+    {% endfor %}
+   
+  {% else %}
     <p>Ni nobenih nalog za prikaz.</p>
-{% endif %}
-</nav>
-{% endblock %}
+  {% endif %}
+
+{% endblock %} {# content #}
