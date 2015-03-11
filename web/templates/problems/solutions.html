@@ -17,16 +17,23 @@ TODO: tabela resitev: na levi ucenceve, na desni uradne
           </tr>
         </thead>
         <tbody>
-        {% for {% for part, attempt in part_attempt %} %}
+        {% for part, attempt in part_attempt.items %}
           <tr>
             <td colspan="2">podnaloga {{ forloop.counter }}</td>          
           </tr>
           <tr>
-          {% if 
-            <td>attempt.solution</td>
-            <td>part.solution</td>
+          {% if attempt == 0 %}
+              <td>Tega dela naloge še nisi poskusil reševati.</td>
+              <td>Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</td>
+          {% elif not attempt.valid %}
+              <td>{{ attempt.solution|latex_markdown }}</td>
+              <td>Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</td>
+          {% else %}
+             <td>{{ attempt.solution|latex_markdown }}</td>
+             <td>{{ part.solution|latex_markdown }}</td>
+          {% endif %}
           </tr>
-	{% endfor %}
+	    {% endfor %}
         </tbody>
       </table>
       </div>

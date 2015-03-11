@@ -26,6 +26,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
+LOGIN_URL = '/problems/welcome/'
 
 # Application definition
 
@@ -41,7 +42,7 @@ INSTALLED_APPS = (
     'users',
     'problems',
     'attempts',
-    #'bootstrap3',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (

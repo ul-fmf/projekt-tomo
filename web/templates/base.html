@@ -10,6 +10,8 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">
   </head>
   <body>
+    {% block navigation %}
+    {% endblock %}
     <div class="container">
       {% block body %}  {% block content %}{% endblock %}  {% endblock %}
     </div><!-- /.container -->
