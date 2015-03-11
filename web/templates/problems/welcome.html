@@ -1,6 +1,18 @@
-{% extends 'base.html' %} {# {% load bootstrap3 %} #}
+{% extends 'base.html' %}  
+{% load bootstrap3 %} 
 
 {% block title %}Dobrodošli!{% endblock %}
+
+{% block navigation %}
+<!--    <nav class="navbar navbar-default navbar-fixed-top">
+	  <div class="container">
+	      <ol class="breadcrumb">
+	         <li><a href="problem_list.html">Naloge</li>
+	      </ol>
+	  </div>
+	</nav>
+	 -->
+{% endblock %}
 
 {% block content %}
       <div class="jumbotron">
@@ -12,25 +24,14 @@
     
     
     <!-- vnos uporabniškega imena in gesla -->
-    {{ form.non_field_errors }}
-    <form role="form" action="/problems/welcome/"method="post" class="form-horizontal">
+    <form role="form" action="/problems/welcome/" method="post">
     	{% csrf_token %}
-        <div class="form-group fieldWrapper">
-	          <label for="{{ form.username.id_for_label }}" class="col-sm-2 control-label">Uporabniško ime:</label>
-		      <div class="col-sm-10"> 
-                {# {% bootstrap_field form.username %} #}
-                {{ form.username }}
-              </div>    
-        </div>
-        <div class="form-group fieldWrapper">
-	          <label for="{{ form.password.id_for_label }}" class="col-sm-2 control-label">Geslo:</label>
-	          <div class="col-sm-10">
-                  {# {% bootstrap_field form.password %} #}
-                  {{ form.password }}
-              </div> 
-        </div>
-        
-        <button type="submit" class="btn btn-default">Prijavite se</button>
+    	{% bootstrap_form form layout='inline' %}
+    	{% buttons %}
+	        <button type="submit" class="btn btn-default">
+	            Prijavite se
+	        </button>
+	    {% endbuttons %}
       </form>
-{% endblock %} {# content #}
+{% endblock %}
   

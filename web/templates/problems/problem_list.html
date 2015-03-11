@@ -6,36 +6,70 @@
   {% comment "navigacija" %} 'Navigacija v obliki bredacrumbs' 
   <nav class="navbar navbar-default">
     <ul class="breadcrumb">
-
         <li><a href={% url 'detail' question.id %}"my_courses.html">Moji predmeti</a></li>
-
         <li><a href="assembly_list.html"></a>{{ course.title }}</li>
-
         <li class="active">{{ assembly.title }}</li>
     </ul>
   </nav>
   {% endcomment %} {# navigacija #}
-  
-  {% if problems %}
-  {# prikaz vseh nalog iz sklopa #}
-    {% for problem in problems %}
-    <div style="outline: 2px solid black">
-        <h1>{{ problem.title }}</h1>
-	</br>
-	{{ problem.description|latex_markdown }}
 
-		{% for part in problem.parts.all %}
-		  <h3>Podnaloga {{ forloop.counter }} </h3>
-		  {{ part.description|latex_markdown }}
-		{% endfor %}
-	<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}"
-	   role="button">Prenesi nalogo</a>
-	   <br/>
+{# prikaz vseh nalog iz sklopa #}
+{% for problem in problems %}  
+	{% if problem.id in valid_problems_ids %}
+		<div class="panel panel-success">
+	{% elif problem.id in invalid_problems_ids %}
+		<div class="panel panel-danger">
+	{% elif problem.id in half_valid_problems_ids %}
+		<div class="panel panel-warning">
+	{% else %}
+		<div class="panel panel-default">
+	{% endif %}
+		<div class="panel-heading">
+			<h4>
+				{{ problem.title }}
+			</h4>
+		</div>
+  		{% if problem.description and problem.description.strip %}
+		<div class="panel-body">
+  	    	<p>	
+  	       		{{ problem.description|latex_markdown }}
+  	    	</p>
+ 		</div>
+  	    {% endif %}
+	  	<ul class="list-group">
+			{% for part in problem.parts.all %}
+	    	<li class="list-group-item">
+	      		<p>
+	      			{{ forloop.counter }}. podnaloga    				  
+    				{% if part.id in valid_parts_ids %}
+    				  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #00FF00"></span>
+    				{% elif  part.id in invalid_parts_ids %}
+    				  <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #FF0000"></span>
+    				{% endif %}
+    				<!-- 
+	      			<span class="glyphicon glyphicon-ok" aria-hidden="true" style="color: #00FF00"></span>
+	      			<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #00FF00"></span>
+	      			<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #FF0000"></span>
+	      			<span class="glyphicon glyphicon-remove" aria-hidden="true" style="color: #FF0000"></span>
+	      			<span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FF0000"></span>
+	      			 -->
+	      		</p> 
+	      		{{ part.description|latex_markdown }}
+	    	</li>
+			{% endfor %}
+   			<li class="list-group-item">
+   				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+					<div class="btn-group" role="group" aria-label="Download">
+						<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
+							Prenesi nalogo
+						</a>
+					</div>
+					<div class="btn-group" role="group" aria-label="Solutions">
+	    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">Rešitve</a>
+					</div>
+  				</div>      
+   			</li>
+   	  	</ul>
 	</div>
     {% endfor %}
-   
-  {% else %}
-    <p>Ni nobenih nalog za prikaz.</p>
-  {% endif %}
-
 {% endblock %} {# content #}
