@@ -3,7 +3,6 @@ from problems import views
 
 
 urlpatterns = patterns('',
-    url(r'^welcome/$', views.welcome, name='welcome'),
     #url(r'^$', views.not_yet_enrolled, name='not_yet_enrolled'),
     #url(r'^$', views.course_list, name='course_list'),
     #url(r'^$', views.my_courses, name='my_courses'),

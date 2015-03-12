@@ -24,8 +24,9 @@
     
     
     <!-- vnos uporabniškega imena in gesla -->
-    <form role="form" action="/problems/welcome/" method="post">
+    <form role="form" action="{% url "django.contrib.auth.views.login" %}" method="post">
     	{% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
     	{% bootstrap_form form layout='inline' %}
     	{% buttons %}
 	        <button type="submit" class="btn btn-default">
