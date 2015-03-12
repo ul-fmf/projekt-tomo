@@ -3,13 +3,16 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from attempts.rest import AttemptViewSet
 from problems.rest import ProblemViewSet
+from problems.views import problem_list
 
 
 router = DefaultRouter()
 router.register(r'attempts', AttemptViewSet)
 router.register(r'problems', ProblemViewSet)
 
+
 urlpatterns = patterns('',
+    url(r'^$', problem_list),
     url(r'^accounts/', include(patterns('django.contrib.auth.views',
         url(r'^login/$', 'login', {'template_name': 'login.html'}),
         url(r'^logout/$', 'logout', {'next_page': '/'}),
