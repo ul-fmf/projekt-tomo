@@ -10,6 +10,10 @@ router.register(r'attempts', AttemptViewSet)
 router.register(r'problems', ProblemViewSet)
 
 urlpatterns = patterns('',
+    url(r'^accounts/', include(patterns('django.contrib.auth.views',
+        url(r'^login/$', 'login', {'template_name': 'login.html'}),
+        url(r'^logout/$', 'logout', {'next_page': '/'}),
+    ))),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include(router.urls)),
