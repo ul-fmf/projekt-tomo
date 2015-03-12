@@ -38,11 +38,12 @@ def problem_attempt_file(request, problem_pk):
 @login_required
 def problem_solution(request, problem_pk):
     """Show problem solution."""
-    parts = get_list_or_404(Part, problem=problem_pk)
-    user = request.user if request.user.is_authenticated() else None
-    attempts = user.attempts.filter(part__problem__id=problem_pk)
+    problem = Problem.objects.get(pk=problem_pk)
+    parts = problem.parts.all()
+    #parts = get_list_or_404(Part, problem=problem_pk)
+    attempts = request.user.attempts.filter(part__problem__id=problem_pk)
     part_attempt = {}
 
     for part in parts:
         part_attempt[part] = attempts.filter(part=part)
-    return render(request, 'problems/solutions.html', part_attempt)
+    return render(request, 'problems/solutions.html', {'part_attempt':  part_attempt })
