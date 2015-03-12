@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'users',
     'problems',
     'attempts',
-    #'bootstrap3',
+    'bootstrap3',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -100,6 +100,9 @@ STATIC_URL = '/dev/static/'
 AUTH_USER_MODEL = 'users.User'
 
 STATIC_ROOT = '/srv/tomodev/static/'
+
+LOGIN_URL = '/dev/accounts/login/'
+LOGOUT_URL = '/dev/accounts/logout/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
