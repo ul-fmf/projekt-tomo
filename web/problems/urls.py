@@ -10,7 +10,6 @@ urlpatterns = patterns('',
     #url(r'^$', views.assembly_list, name='assembly_list'),
     url(r'^problem_list/$', views.problem_list, name='problem_list'),
     # ex: /problems/5/
-    #url(r'^(?P<problem_pk>\d+)/$', views.problem_detail, name='problem_detail'),
     url(r'^(?P<problem_pk>\d+)/solutions/$', views.problem_solution, name='problem_solution'),
     url(r'^(?P<problem_pk>\d+)/download/$', views.problem_attempt_file, name='problem_attempt_file'),
 )
