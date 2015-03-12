@@ -26,8 +26,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-LOGIN_URL = '/problems/welcome/'
-
 # Application definition
 
 INSTALLED_APPS = (
