@@ -17,7 +17,7 @@ pod predmeti še povezava na seznam vseh ostalih predmetov
 	{% if problems %}
     <ul>
     {% for problem in problems %}
-        <li><a href="{% url 'problem_detail' problem.id %}" target="blank">{{ problem.title }}</a></li>
+        <li>{{ problem.title }}</li>
     {% endfor %}
     </ul>
 {% else %}

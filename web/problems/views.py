@@ -67,14 +67,6 @@ def problem_list(request):
     })
 
 
-#def problem_detail(request, problem_pk):
-#    """Show problem details such as description and parts."""
-#    problem = get_object_or_404(Problem, pk=problem_pk)
-#    return render(request, 'problems/problem_detail.html', {
-#        'problem': problem
-#    })
-
-
 def problem_attempt_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
