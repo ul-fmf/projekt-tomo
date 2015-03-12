@@ -5,7 +5,14 @@
 {% block content %}
 
 {% comment %}
+{% if enrolled_courses %}
 TODO: seznam vseh predmetov, v katere je uporabnik vpisan, pod vsakim predmetom seznam zadnjih treh sklopov v predmetu in povezava na seznam vseh sklopov tega predmeta
+{% else %}
+      <div class="jumbotron">
+    <p>Joj, v noben predmet še nisi vpisan. <br/> Na spodnjem seznamu izberi predmet in se vpiši.
+    </p>
+      </div> 
+{% endif %}
 pod predmeti še povezava na seznam vseh ostalih predmetov
 
 {% endcomment %}
