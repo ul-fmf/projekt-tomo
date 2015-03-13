@@ -8,34 +8,38 @@
 TODO: tabela resitev: na levi ucenceve, na desni uradne
 {% endcomment %}
 
-  <div class="table-responsive">          
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Vaše rešitve</th>
-            <th>Uradne rešitve</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for part, attempt in part_attempt.items %}
-          <tr>
-            <td colspan="2">podnaloga {{ forloop.counter }}</td>          
-          </tr>
-          <tr>
-          {% if attempt == 0 %}
-              <td>Tega dela naloge še nisi poskusil reševati.</td>
-              <td>Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</td>
-          {% elif not attempt.valid %}
-              <td>{{ attempt.solution|latex_markdown }}</td>
-              <td>Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</td>
-          {% else %}
-             <td>{{ attempt.solution|latex_markdown }}</td>
-             <td>{{ part.solution|latex_markdown }}</td>
-          {% endif %}
-          </tr>
-	    {% endfor %}
-        </tbody>
-      </table>
-      </div>
+
+<div class="panel panel-default">
+ 	<!-- Default panel contents -->
+ 	<div class="panel-heading">
+ 		<div class="row">
+			<div class="col-xs-6"><p>Vaša rešitev</p></div>
+			<div class="col-xs-6"><p>Uradna rešitev</p></div>
+  		</div>
+  	</div>
+
+  	<ul class="list-group">
+		{% for part, attempt in part_attempt.items %}
+		<li class="list-group-item">
+			<div class="row">
+				<div class="col-xs-12"><p>{{ forloop.counter }}. podnaloga</p></div>
+			</div>
+		    <div class="row">
+		    	{% if attempt.count == 0 %}
+		        <div class="col-xs-6">Tega dela naloge še nisi poskusil reševati.</div>
+		        <div class="col-xs-6">Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</div>
+		     	{% elif not attempt.0.valid %}
+		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
+		        <div class="col-xs-6">Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</div>
+		    	{% else %}
+		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
+		        <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+		     	{% endif %}
+		     </div>
+		</li>
+    	{% endfor %}
+  	</ul>
+</div>
+
 
 {% endblock %} {# content #}
