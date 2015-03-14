@@ -3,12 +3,14 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from rest_framework.authtoken.models import Token
+from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 
 
 class Problem(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
+    history = HistoricalRecords()
 
     def __unicode__(self):
         return self.title
@@ -39,6 +41,7 @@ class Part(models.Model):
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     secret = models.TextField(default="[]", validators=[is_json_string_list])
+    history = HistoricalRecords()
 
     class Meta:
         order_with_respect_to = 'problem'

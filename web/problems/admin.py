@@ -1,4 +1,5 @@
 from django.contrib import admin
+from simple_history.admin import SimpleHistoryAdmin
 from .models import Problem, Part
 
 
@@ -7,7 +8,7 @@ class PartInline(admin.StackedInline):
     extra = 0
 
 
-class ProblemAdmin(admin.ModelAdmin):
+class ProblemAdmin(SimpleHistoryAdmin):
     inlines = (
         PartInline,
     )
