@@ -4,17 +4,12 @@
 
 {% block content %}
 
-{% comment %}
-TODO: tabela resitev: na levi ucenceve, na desni uradne
-{% endcomment %}
-
-
 <div class="panel panel-default">
  	<!-- Default panel contents -->
  	<div class="panel-heading">
  		<div class="row">
-			<div class="col-xs-6"><p>Vaša rešitev</p></div>
-			<div class="col-xs-6"><p>Uradna rešitev</p></div>
+			<div class="col-xs-6 text-center"><p>Vaša rešitev</p></div>
+			<div class="col-xs-6 text-center"><p>Uradna rešitev</p></div>
   		</div>
   	</div>
 
@@ -26,11 +21,10 @@ TODO: tabela resitev: na levi ucenceve, na desni uradne
 			</div>
 		    <div class="row">
 		    	{% if attempt.count == 0 %}
-		        <div class="col-xs-6">Tega dela naloge še nisi poskusil reševati.</div>
-		        <div class="col-xs-6">Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</div>
+		        <div class="col-xs-12 text-center">Tega dela naloge še niste reševali, zato uradna rešitev ni prikazana.</div>
 		     	{% elif not attempt.0.valid %}
 		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
-		        <div class="col-xs-6">Tega dela naloge še nisi pravilno rešil, zato uradna rešitev ni prikazana.</div>
+		        <div class="col-xs-6 text-center">Tega dela naloge še niste pravilno rešili, zato uradna rešitev ni prikazana.</div>
 		    	{% else %}
 		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
 		        <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
@@ -41,5 +35,4 @@ TODO: tabela resitev: na levi ucenceve, na desni uradne
   	</ul>
 </div>
 
-
-{% endblock %} {# content #}
+{% endblock content %}
