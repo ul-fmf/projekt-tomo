@@ -71,10 +71,10 @@ class Check:
     def summarize():
         for i, part in enumerate(Check.parts):
             if not Check.has_solution(part):
-                print('Naloga {0}) je brez rešitve.'.format(i + 1))
+                print('{0}. podnaloga je brez rešitve.'.format(i + 1))
             elif not part['valid']:
-                print('Naloga {0}) nima veljavne rešitve.'.format(i + 1))
+                print('{0}. podnaloga nima veljavne rešitve.'.format(i + 1))
             else:
-                print('Naloga {0}) ima veljavno rešitev.'.format(i + 1))
+                print('{0}. podnaloga ima veljavno rešitev.'.format(i + 1))
             for message in part['feedback']:
                 print("  - {0}".format("\n    ".join(message.splitlines())))

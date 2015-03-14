@@ -3,7 +3,7 @@
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
-# Naloga {{ forloop.counter }})
+# {{ forloop.counter }}. podnaloga
 # {{ part.description|indent:"# "|safe }}
 # =============================================================================
 {{ solution_attempt|safe }}{% endfor %}
