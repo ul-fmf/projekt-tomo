@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 from problems.models import Part
 from users.models import User
 from utils import is_json_string_list
@@ -10,6 +11,7 @@ class Attempt(models.Model):
     solution = models.TextField(blank=True)
     valid = models.BooleanField(default=False)
     feedback = models.TextField(default="[]", validators=[is_json_string_list])
+    history = HistoricalRecords()
 
     class Meta:
         unique_together = ('user', 'part')
