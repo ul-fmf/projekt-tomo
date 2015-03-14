@@ -8,8 +8,8 @@ from utils.views import plain_text
 def problem_list(request):
     """Show a list of all problems."""
     user_attempts = request.user.attempts.all()
-    valid_parts_ids = user_attempts.filter(valid=True).values_list('id', flat=True)
-    invalid_parts_ids = user_attempts.filter(valid=False).values_list('id', flat=True)
+    valid_parts_ids = user_attempts.filter(valid=True).values_list('part_id', flat=True)
+    invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
     problems = Problem.objects.all()
     invalid_problems_ids = problems.filter(parts__id__in=invalid_parts_ids).values_list('id', flat=True)    
     valid_problems_ids = [p.id for p in problems
