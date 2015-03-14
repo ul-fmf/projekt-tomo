@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, get_list_or_404, render
+from rest_framework.reverse import reverse
 from problems.models import Problem, Part
 from utils.views import plain_text
 
@@ -31,7 +32,8 @@ def problem_attempt_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
     user = request.user if request.user.is_authenticated() else None
-    filename, contents = problem.attempt_file(user=user)
+    url = reverse('attempt-submit', request=request)
+    filename, contents = problem.attempt_file(url, user=user)
     return plain_text(filename, contents)
 
 

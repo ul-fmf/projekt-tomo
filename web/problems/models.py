@@ -19,7 +19,7 @@ class Problem(models.Model):
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
-    def attempt_file(self, user=None):
+    def attempt_file(self, url, user=None):
         authentication_token = Token.objects.get(user=user) if user else None
         solutions = self.user_solutions(user) if user else {}
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
@@ -27,7 +27,7 @@ class Problem(models.Model):
         contents = render_to_string("python/attempt.py", {
             "problem": self,
             "parts": parts,
-            "submission_url": "http://localhost:8000/attempt/submit/",
+            "submission_url": url,
             "authentication_token": authentication_token
         })
         return filename, contents
