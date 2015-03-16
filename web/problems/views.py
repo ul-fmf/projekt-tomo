@@ -18,7 +18,7 @@ def problem_list(request):
     half_valid_problems_ids = problems.filter(parts__id__in=valid_parts_ids).exclude(id__in=valid_problems_ids).values_list('id', flat=True)
 
     return render(request, 'problems/problem_list.html', {
-        'problems': Problem.objects.all(),
+        'problems': Problem.objects.order_by('title'),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
         'valid_problems_ids': valid_problems_ids,
