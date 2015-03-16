@@ -9,18 +9,31 @@
 
 {% block content %}
       <div class="jumbotron">
-	<h1>Pozdravljeni!</h1>
-	<p>Tomo je vaš osebni učitelj programiranja. Učite se tako, da na svojem računalniku rešujete naloge, 
-	   Tomo pa vas ves čas obvešča o poteku reševanja. 
+	<h1>Projekt Tomo</h1>
+	<p>Projekt Tomo je vaš osebni učitelj programiranja.
+     Učite se tako, da na svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku reševanja.
 	</p>
       </div> <!-- End jumbotron -->
     
     
+  <p>Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in geslom,
+    ki ju uporabljate za prijavo na študentske računalnike.
+  </p>
     <!-- vnos uporabniškega imena in gesla -->
     <form role="form" action="{% url "django.contrib.auth.views.login" %}" method="post">
     	{% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
-    	{% bootstrap_form form layout='inline' %}
+        {% if form.errors %}
+        <div class="alert alert-danger alert-dismissable alert-link">
+            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+            <strong>Napaka ob prijavi!</strong>
+            Uporabite enako uporabniško ime in geslo kot na študentskih računalnikih, na primer <code>NovakJ14</code> in <code>Triglav.1</code>.
+        </div>
+        {% endif %}
+
+<div class="form-group"><label class="sr-only" for="id_username">Uporabniško ime</label><input class="form-control" id="id_username" maxlength="254" name="username" placeholder="NovakJ14" required="required" title="" type="text" value="nt" autocomplete="off"></div>
+<div class="form-group"><label class="sr-only" for="id_password">Gelso</label><input class="form-control" id="id_password" maxlength="254" name="password" placeholder="Triglav.1" required="required" title="" type="password" value="nt" autocomplete="off"></div>
+
     	{% buttons %}
 	        <button type="submit" class="btn btn-default">
 	            Prijavite se
