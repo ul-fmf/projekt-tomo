@@ -219,14 +219,19 @@ def _validate_current_file():
         response = urllib.request.urlopen(request)
         return json.loads(response.read().decode('utf-8'))
 
-    def update_attempts(old_parts, updated_parts):
+    def update_attempts(old_parts, response):
         updates = {}
-        for part in updated_parts:
+        for part in response['attempts']:
             part['feedback'] = json.loads(part['feedback'])
             updates[part['part']] = part
         new_parts = []
         for old_part in old_parts:
             update = updates.get(old_part['part'], None)
+            wrong_index = response['wrong_indices'].get(str(old_part['part']))
+            if wrong_index is not None:
+                hint = old_part['secret'][wrong_index][1]
+                if hint:
+                    part['feedback'].append('Namig: {}'.format(hint))
             new_parts.append(update if update else old_part)
         return new_parts
 
@@ -251,7 +256,7 @@ def _validate_current_file():
         print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
     else:
         print('Rešitve so shranjene.')
-        Check.parts = update_attempts(Check.parts, response['attempts'])
+        Check.parts = update_attempts(Check.parts, response)
         if 'update' in response:
             print("Posodabljam datoteko... ", end="")
             backup_filename = backup(filename)
