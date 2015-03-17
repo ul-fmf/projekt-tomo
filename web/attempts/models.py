@@ -13,5 +13,17 @@ class Attempt(models.Model):
     feedback = models.TextField(default="[]", validators=[is_json_string_list])
     history = HistoricalRecords()
 
+    def changed_fields(self, validated_data):
+        return [attribute
+                for (attribute, value) in validated_data.items()
+                if value != getattr(self, attribute)
+                ]
+
+    def update_fields(self, dictionary):
+        changed_fields = self.changed_fields(dictionary)
+        map(lambda attribute: setattr(self, attribute, dictionary[attribute]),
+            changed_fields)
+        return changed_fields
+
     class Meta:
         unique_together = ('user', 'part')
