@@ -36,6 +36,16 @@ class Problem(models.Model):
         })
         return filename, contents
 
+    def edit_file(self, url, user=None):
+        authentication_token = Token.objects.get(user=user) if user else None
+        filename = "{0}-edit.py".format(slugify(self.title))
+        contents = render_to_string("python/edit.py", {
+            "problem": self,
+            "submission_url": url,
+            "authentication_token": authentication_token
+        })
+        return filename, contents
+
 
 class Part(models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
