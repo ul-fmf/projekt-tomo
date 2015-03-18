@@ -13,6 +13,15 @@
   {% endcomment %} {# navigacija #}
 
 {# prikaz vseh nalog iz sklopa #}
+<div class="panel-body">
+<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+    <div class="btn-group" role="group" aria-label="Download">
+        <a class="btn btn-primary btn-large" href="{% url 'all_attempt_files' %}" role="button">
+            Prenesi vse datoteke z nalogami
+        </a>
+    </div>
+</div>
+</div>
 {% for problem in problems %}  
 	{% if problem.id in valid_problems_ids %}
 		<div class="panel panel-success">

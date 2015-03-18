@@ -94,7 +94,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
-STATIC_URL = '/dev/static/'
+STATIC_URL = '/uvp/static/'
 
 
 # Custom settings
@@ -103,8 +103,8 @@ AUTH_USER_MODEL = 'users.User'
 
 STATIC_ROOT = '/srv/tomodev/static/'
 
-LOGIN_URL = '/dev/accounts/login/'
-LOGOUT_URL = '/dev/accounts/logout/'
+LOGIN_URL = '/uvp/accounts/login/'
+LOGOUT_URL = '/uvp/accounts/logout/'
 
 TEMPLATE_DIRS = (
     os.path.join(BASE_DIR, 'templates'),
