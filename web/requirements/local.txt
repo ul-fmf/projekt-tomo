@@ -2,3 +2,4 @@ django-bootstrap3>=5.1.1
 Django>=1.7.6
 djangorestframework>=3.1.0
 Markdown>=2.6.1
+django-simple-history>=1.5.4

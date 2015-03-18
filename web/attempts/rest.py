@@ -1,4 +1,5 @@
 from django.db import transaction
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import validators, decorators, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -63,14 +64,19 @@ class AttemptViewSet(ModelViewSet):
             for attempt_data in serializer.validated_data:
                 wrong_index = AttemptSerializer.check_secret(attempt_data)
                 wrong_indices[attempt_data['part'].pk] = wrong_index
-                attempts.append(
-                    Attempt.objects.update_or_create(
-                        user=request.user,
-                        part=attempt_data['part'],
-                        defaults=attempt_data)[0])
-            attempts = AttemptSerializer(attempts, many=True).data
+                updated_fields = None
+                try:
+                    attempt = Attempt.objects.get(user=request.user,
+                                                  part=attempt_data['part'])
+                    updated_fields = attempt.update_fields(attempt_data)
+                except ObjectDoesNotExist:
+                    attempt = Attempt(user=request.user, part=attempt_data['part'],
+                                      *attempt_data)
+                finally:
+                    attempt.save(update_fields=updated_fields)
+                    attempts.append(attempt)
             data = {
-                'attempts': attempts,
+                'attempts': AttemptSerializer(attempts, many=True).data,
                 'wrong_indices': wrong_indices
             }
             return Response(data, status=status.HTTP_200_OK)
