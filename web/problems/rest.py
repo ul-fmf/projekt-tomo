@@ -59,7 +59,7 @@ class ProblemViewSet(ModelViewSet):
         # with exception details.
         problem = None
         try:
-            problem = Problem.objects.get()
+            problem = Problem.objects.get(pk=problem_data['id'])
         except Exception, e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 
