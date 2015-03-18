@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, get_list_or_404, render
 from rest_framework.reverse import reverse
 from problems.models import Problem, Part
-from utils.views import plain_text
+from utils.views import plain_text, zip_archive
 
 
 @login_required
@@ -18,13 +18,23 @@ def problem_list(request):
     half_valid_problems_ids = problems.filter(parts__id__in=valid_parts_ids).exclude(id__in=valid_problems_ids).values_list('id', flat=True)
 
     return render(request, 'problems/problem_list.html', {
-        'problems': Problem.objects.all(),
+        'problems': Problem.objects.order_by('title'),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
         'valid_problems_ids': valid_problems_ids,
         'invalid_problems_ids': invalid_problems_ids,
         'half_valid_problems_ids': half_valid_problems_ids,
     })
+
+
+@login_required
+def all_attempt_files(request):
+    """Download an attempt file for a given problem."""
+    user = request.user if request.user.is_authenticated() else None
+    url = reverse('attempt-submit', request=request)
+    files = [problem.attempt_file(url, user=user) for problem in Problem.objects.all()]
+    archive_name = 'funkcije'
+    return zip_archive(archive_name, files)
 
 
 @login_required

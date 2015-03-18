@@ -28,9 +28,10 @@ class AttemptSerializer(ModelSerializer):
     def check_secret(validated_data):
         # Check and remove secret from the validated_data dictionary
         user_secret = validated_data.pop('secret', '[]')
-        secret_matches = validated_data['part'].check_secret(user_secret)[0]
+        secret_matches, wrong_index = validated_data['part'].check_secret(user_secret)
         if not secret_matches:
             validated_data['valid'] = False
+            return wrong_index
 
     def create(self, validated_data):
         self.check_secret(validated_data)
@@ -59,8 +60,10 @@ class AttemptViewSet(ModelViewSet):
 
         if serializer.is_valid():
             attempts = []
+            wrong_indices = {}
             for attempt_data in serializer.validated_data:
-                AttemptSerializer.check_secret(attempt_data)
+                wrong_index = AttemptSerializer.check_secret(attempt_data)
+                wrong_indices[attempt_data['part'].pk] = wrong_index
                 updated_fields = None
                 try:
                     attempt = Attempt.objects.get(user=request.user,
@@ -73,7 +76,8 @@ class AttemptViewSet(ModelViewSet):
                     attempt.save(update_fields=updated_fields)
                     attempts.append(attempt)
             data = {
-                'attempts': AttemptSerializer(attempts, many=True).data
+                'attempts': AttemptSerializer(attempts, many=True).data,
+                'wrong_indices': wrong_indices
             }
             return Response(data, status=status.HTTP_200_OK)
         else:
