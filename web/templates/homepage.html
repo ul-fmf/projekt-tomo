@@ -1,16 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Tomo{% endblock %}
 
-{% block navigation-left %} 
-    <li class="active"><a href="{% url 'homepage' %}">Moji predmeti <span class="sr-only">(current)</span></a></li>
-{% endblock %}
-
 {% block content %}
 {% for course in courses %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <h4>
-                {{ course.title }}
+                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
             </h4>
         </div>
     
