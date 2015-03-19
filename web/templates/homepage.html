@@ -21,7 +21,7 @@
           <li class="list-group-item"><a href="{% url 'course_detail' course.pk %}"><h5>Vsi sklopi</h5></a></li>
         </ul>
     </div>
-{% else %}
+{% empty %}
     <p>Joj, v noben predmet še nisi vpisan.</p>
 {% endfor %}
 {% endblock content %}

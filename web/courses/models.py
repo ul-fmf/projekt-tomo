@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from users.models import User
 
 
@@ -13,6 +14,9 @@ class Course(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def recent_problem_sets(self):
+        return self.problem_sets.reverse()[:3]
 
 
 class ProblemSet(models.Model):
@@ -36,3 +40,8 @@ class ProblemSet(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def attempts_archive(self, url, user):
+        files = [problem.attempt_file(url, user=user) for problem in self.problems.all()]
+        archive_name = slugify(self.title)
+        return archive_name, files
