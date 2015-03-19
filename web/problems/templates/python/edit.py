@@ -96,12 +96,26 @@ def _validate_current_file():
 
     Check.summarize()
     if all(part['valid'] for part in problem['parts']):
-        print('Shranjujem rešitve na strežnik... ', end="")
-        try:
-            url = '{{ submission_url }}'
-            token = 'Token {{ authentication_token }}'
-            response = submit_problem(problem, url, token)
-        except urllib.error.URLError:
-            print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
+        print('Naloge so pravilno sestavljene.')
+        if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
+            print('Shranjujem naloge na strežnik...', end="")
+            try:
+                url = '{{ submission_url }}'
+                token = 'Token {{ authentication_token }}'
+                response = submit_problem(problem, url, token)
+                if 'update' in response:
+                    print("Posodabljam datoteko... ", end="")
+                    backup_filename = backup(filename)
+                    r = urlopen(response['update'])
+                    with open(filename, 'w', encoding='utf-8') as f:
+                        f.write(r.read().decode('utf-8'))
+                    print("Stara datoteka je preimenovana v {0}.".format(backup_filename))
+                    print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
+            except urllib.error.URLError:
+                print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
+            else:
+                print('Naloge so shranjene.')
         else:
-            print('Rešitve so shranjene.')
+            print('Naloge niso bile shranjene.')
+    else:
+        print('Naloge so napačno sestavljene.')
