@@ -3,7 +3,8 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from attempts.rest import AttemptViewSet
 from problems.rest import ProblemViewSet
-from problems.views import problem_list
+from courses.views import homepage
+import courses.urls
 
 
 router = DefaultRouter()
@@ -12,7 +13,7 @@ router.register(r'problems', ProblemViewSet)
 
 
 urlpatterns = patterns('',
-    url(r'^$', problem_list),
+    url(r'^$', homepage, name='homepage'),
     url(r'^accounts/', include(patterns('django.contrib.auth.views',
         url(r'^login/$', 'login', {'template_name': 'login.html'}, name='login'),
         url(r'^logout/$', 'logout', name='logout'),
@@ -22,3 +23,5 @@ urlpatterns = patterns('',
     url(r'^api/', include(router.urls)),
     url(r'^problems/', include('problems.urls')),
 )
+
+urlpatterns += courses.urls.urlpatterns

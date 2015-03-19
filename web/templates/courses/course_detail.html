@@ -16,7 +16,7 @@
 	
 		<ul class="list-group">
 		  {% for problem_set in course.problem_sets.all %}
-		  <li class="list-group-item"><a href="#"><h5>{{ problem_set.title }}</h5></a></li>
+		  <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
 		  {% endfor %}
 		</ul>
 	</div>
