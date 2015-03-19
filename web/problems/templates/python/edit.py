@@ -1,6 +1,32 @@
-{% include 'python/check.py' %}
+with open(__file__, encoding='utf-8') as f:
+    source = f.read()
+exec(source[source.find("# =L=I=B=""R=A=R=Y=@="):])
+problem = extract_problem(__file__)
+Check.initialize(problem['parts'])
+
+# =============================================================================
+# {{ problem.title }}{% if problem.description %}
+#
+# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
+# =====================================================================@{{ part.id|stringformat:'06d'}}=
+# {{ part.description|indent:"# "|safe }}
+# =============================================================================
+{{ part.solution|safe }}
+
+Check.part()
+{{ part.validation|safe }}
+
+{% endfor %}
+
+# ===========================================================================@=
+
+_validate_current_file()
+
+# =L=I=B=R=A=R=Y=@=
 
 import io, json, os, re, sys, shutil, traceback, urllib.error, urllib.request
+
+{% include 'python/check.py' %}
 
 def extract_problem(filename):
     def strip_hashes(description):
@@ -39,29 +65,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': {{ problem.id|default:"None" }}
+        'id': {{ problem.id }}
     }
-
-
-filename = os.path.abspath(sys.argv[0])
-problem = extract_problem(filename)
-Check.initialize(problem['parts'])
-
-# =============================================================================
-# {{ problem.title }}{% if problem.description %}
-#
-# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
-# =====================================================================@{{ part.id|stringformat:'06d'}}=
-# {{ part.description|indent:"# "|safe }}
-# =============================================================================
-{{ part.solution|safe }}
-
-Check.part()
-{{ part.validation|safe }}
-
-{% endfor %}
-
-# ===========================================================================@=
 
 def _validate_current_file():
     def backup(filename):
@@ -100,5 +105,3 @@ def _validate_current_file():
             print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
         else:
             print('Rešitve so shranjene.')
-
-_validate_current_file()
