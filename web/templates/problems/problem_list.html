@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Tomo - naloge{% endblock %} {# TODO: kasneje spremeni v {{ assembly.title }} #}
 
-{% block content %}
-  {% comment "navigacija" %} 'Navigacija v obliki bredacrumbs' 
-  <nav class="navbar navbar-default">
-    <ul class="breadcrumb">
-        <li><a href={% url 'detail' question.id %}"my_courses.html">Moji predmeti</a></li>
-        <li><a href="assembly_list.html"></a>{{ course.title }}</li>
-        <li class="active">{{ assembly.title }}</li>
-    </ul>
-  </nav>
-  {% endcomment %} {# navigacija #}
+ 
+{% block navigation-left %} 
+	<li><a href="#">Moji predmeti</a></li>
+    <li><a href="#">Ime predmeta </a></li>
+    <li class="active"><a href="#">Naslov sklopa <span class="sr-only">(current)</span></a></li>
+{% endblock %}
 
+{% block content %}
 {# prikaz vseh nalog iz sklopa #}
 <div class="panel-body">
 <div class="btn-toolbar" role="toolbar" aria-label="Buttons">
