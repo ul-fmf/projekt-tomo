@@ -2,7 +2,6 @@
 {% block title %}Tomo – {{ course.title }}{% endblock %}
 
 {% block navigation-left %} 
-   	<li><a href="{% url 'homepage' %}">Moji predmeti</a></li>
     <li class="active"><a href="{% url 'course_detail' course.pk %}">{{ course.title }} <span class="sr-only">(current)</span></a></li>
 {% endblock %}
 
