@@ -1,0 +1,34 @@
+[
+{
+  "fields": {
+    "students": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "teachers": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "description": "",
+    "title": "Uvod v programiranje"
+  },
+  "model": "courses.course",
+  "pk": 1
+},
+{
+  "fields": {
+    "_order": 0,
+    "description": "",
+    "solution_visibility": "S",
+    "title": "Funkcije",
+    "visible": false,
+    "course": 1
+  },
+  "model": "courses.problemset",
+  "pk": 1
+}
+]
