@@ -30,7 +30,7 @@
         		</div>
         		        		 
         		<ul class="nav navbar-nav navbar-right">
-        			<li><a href="{% url 'logout' %}">{{ user.get_full_name }} (odjava)</a></li>
+        			<li><a href="{% url 'logout' %}?next={% url 'login' %}">{{ user.get_full_name }} (odjava)</a></li>
         		</ul>        		
       		</div>
     	</nav>
