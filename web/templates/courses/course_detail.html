@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Tomo – {{ course.title }}{% endblock %}
+
+{% block navigation-left %} 
+    <li class="active"><a href="{% url 'course_detail' course.pk %}">{{ course.title }} <span class="sr-only">(current)</span></a></li>
+{% endblock %}
+
+{% block content %}
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h4>
+				{{ course.title }}
+			</h4>
+		</div>
+	
+		<ul class="list-group">
+		  {% for problem_set in course.problem_sets.all %}
+		  <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
+		  {% endfor %}
+		</ul>
+	</div>
+{% endblock %} {# content #}

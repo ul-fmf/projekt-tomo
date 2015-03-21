@@ -1,22 +1,23 @@
 {% extends 'base.html' %}
-
-{% block title %}Moji predmeti{% endblock %}
+{% block title %}Tomo{% endblock %}
 
 {% block content %}
-
-{% comment %}
-{% if enrolled_courses %}
-TODO: seznam vseh predmetov, v katere je uporabnik vpisan, pod vsakim predmetom seznam zadnjih treh sklopov v predmetu in povezava na seznam vseh sklopov tega predmeta
-{% else %}
-      <div class="jumbotron">
-    <p>Joj, v noben predmet še nisi vpisan. <br/> Na spodnjem seznamu izberi predmet in se vpiši.
-    </p>
-      </div> 
-{% endif %}
-pod predmeti še povezava na seznam vseh ostalih predmetov
-
-{% endcomment %}
-
-
-
-{% endblock %} {# content #}
+{% for course in courses %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
+                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+            </h4>
+        </div>
+    
+        <ul class="list-group">
+          {% for problem_set in course.recent_problem_sets %}
+          <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
+          {% endfor %}
+          <li class="list-group-item"><a href="{% url 'course_detail' course.pk %}"><h5>Vsi sklopi</h5></a></li>
+        </ul>
+    </div>
+{% empty %}
+    <p>Joj, v noben predmet še nisi vpisan.</p>
+{% endfor %}
+{% endblock content %}

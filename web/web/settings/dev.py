@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'attempts',
     'bootstrap3',
     'simple_history',
+    'courses',
 )
 
 MIDDLEWARE_CLASSES = (
