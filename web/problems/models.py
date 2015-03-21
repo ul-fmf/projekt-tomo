@@ -5,11 +5,13 @@ from django.template.loader import render_to_string
 from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
+from courses.models import ProblemSet
 
 
 class Problem(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
+    problem_set = models.ForeignKey(ProblemSet, related_name='problems', null=True)
     history = HistoricalRecords()
 
     def __unicode__(self):

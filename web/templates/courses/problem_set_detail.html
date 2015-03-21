@@ -1,28 +1,24 @@
 {% extends 'base.html' %}
-{% block title %}Tomo - naloge{% endblock %} {# TODO: kasneje spremeni v {{ assembly.title }} #}
+{% block title %}Tomo – {{ problem_set.title }}{% endblock %}
+
+ 
+{% block navigation-left %} 
+    <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
+    <li class="active"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a></li>
+{% endblock %}
 
 {% block content %}
-  {% comment "navigacija" %} 'Navigacija v obliki bredacrumbs' 
-  <nav class="navbar navbar-default">
-    <ul class="breadcrumb">
-        <li><a href={% url 'detail' question.id %}"my_courses.html">Moji predmeti</a></li>
-        <li><a href="assembly_list.html"></a>{{ course.title }}</li>
-        <li class="active">{{ assembly.title }}</li>
-    </ul>
-  </nav>
-  {% endcomment %} {# navigacija #}
-
 {# prikaz vseh nalog iz sklopa #}
 <div class="panel-body">
 <div class="btn-toolbar" role="toolbar" aria-label="Buttons">
     <div class="btn-group" role="group" aria-label="Download">
-        <a class="btn btn-primary btn-large" href="{% url 'all_attempt_files' %}" role="button">
+        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
             Prenesi vse datoteke z nalogami
         </a>
     </div>
 </div>
 </div>
-{% for problem in problems %}  
+{% for problem in problem_set.problems.all %}  
 	{% if problem.id in valid_problems_ids %}
 		<div class="panel panel-success">
 	{% elif problem.id in invalid_problems_ids %}

@@ -26,12 +26,19 @@
             			<span class="icon-bar"></span>
             			<span class="icon-bar"></span>
           			</button>
-          			 <a class="navbar-brand" href="/uvp/">Tomo</a>
+          			 <a class="navbar-brand" href="{% url 'homepage' %}">Tomo</a>
         		</div>
-        		        		 
-        		<ul class="nav navbar-nav navbar-right">
-        			<li><a href="{% url 'logout' %}?next={% url 'login' %}">{{ user.get_full_name }} (odjava)</a></li>
-        		</ul>        		
+        		<div class="collapse navbar-collapse" id="navbar">
+        			<ul class="nav navbar-nav navbar-left">
+	        			{% block navigation-left %} 
+    	    		 	{% endblock %} 
+        			</ul>
+        			<ul class="nav navbar-nav navbar-right">
+	        			{% block navigation-right %} 
+    	    		 	{% endblock %} 
+                <li><a href="{% url 'logout' %}?next={% url 'login' %}">{{ user.get_full_name }} (odjava)</a></li>
+        			</ul>
+        			</div>        		
       		</div>
     	</nav>
     {% endblock %}
@@ -60,3 +67,4 @@
     </script>
   </body>
 </html>
+

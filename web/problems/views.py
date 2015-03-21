@@ -1,40 +1,8 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, get_list_or_404, render
+from django.shortcuts import get_object_or_404, render
 from rest_framework.reverse import reverse
-from problems.models import Problem, Part
-from utils.views import plain_text, zip_archive
-
-
-@login_required
-def problem_list(request):
-    """Show a list of all problems."""
-    user_attempts = request.user.attempts.all()
-    valid_parts_ids = user_attempts.filter(valid=True).values_list('part_id', flat=True)
-    invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
-    problems = Problem.objects.all()
-    invalid_problems_ids = problems.filter(parts__id__in=invalid_parts_ids).values_list('id', flat=True)    
-    valid_problems_ids = [p.id for p in problems
-                          if p.parts.filter(id__in=valid_parts_ids).count() == p.parts.count() and p.parts.count() > 0]
-    half_valid_problems_ids = problems.filter(parts__id__in=valid_parts_ids).exclude(id__in=valid_problems_ids).values_list('id', flat=True)
-
-    return render(request, 'problems/problem_list.html', {
-        'problems': Problem.objects.order_by('title'),
-        'valid_parts_ids': valid_parts_ids,
-        'invalid_parts_ids': invalid_parts_ids,
-        'valid_problems_ids': valid_problems_ids,
-        'invalid_problems_ids': invalid_problems_ids,
-        'half_valid_problems_ids': half_valid_problems_ids,
-    })
-
-
-@login_required
-def all_attempt_files(request):
-    """Download an attempt file for a given problem."""
-    user = request.user if request.user.is_authenticated() else None
-    url = reverse('attempt-submit', request=request)
-    files = [problem.attempt_file(url, user=user) for problem in Problem.objects.all()]
-    archive_name = 'funkcije'
-    return zip_archive(archive_name, files)
+from problems.models import Problem
+from utils.views import plain_text
 
 
 @login_required
@@ -52,10 +20,9 @@ def problem_solution(request, problem_pk):
     """Show problem solution."""
     problem = Problem.objects.get(pk=problem_pk)
     parts = problem.parts.all()
-    #parts = get_list_or_404(Part, problem=problem_pk)
     attempts = request.user.attempts.filter(part__problem__id=problem_pk)
     part_attempt = {}
 
     for part in parts:
         part_attempt[part] = attempts.filter(part=part)
-    return render(request, 'problems/solutions.html', {'part_attempt':  part_attempt })
+    return render(request, 'problems/solutions.html', {'part_attempt': part_attempt})
