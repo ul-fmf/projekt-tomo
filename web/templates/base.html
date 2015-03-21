@@ -36,7 +36,7 @@
         			<ul class="nav navbar-nav navbar-right">
 	        			{% block navigation-right %} 
     	    		 	{% endblock %} 
-        				<li><a href="{% url 'logout' %}">Logout {{ user.username }}</a></li>
+                <li><a href="{% url 'logout' %}?next={% url 'login' %}">{{ user.get_full_name }} (odjava)</a></li>
         			</ul>
         			</div>        		
       		</div>
