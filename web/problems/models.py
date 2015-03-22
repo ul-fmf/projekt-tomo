@@ -11,7 +11,7 @@ from courses.models import ProblemSet
 class Problem(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    problem_set = models.ForeignKey(ProblemSet, related_name='problems', null=True)
+    problem_set = models.ForeignKey(ProblemSet, related_name='problems')
     history = HistoricalRecords()
 
     def __unicode__(self):
