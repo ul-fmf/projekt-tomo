@@ -70,8 +70,7 @@ class AttemptViewSet(ModelViewSet):
                                                   part=attempt_data['part'])
                     updated_fields = attempt.update_fields(attempt_data)
                 except ObjectDoesNotExist:
-                    attempt = Attempt(user=request.user, part=attempt_data['part'],
-                                      *attempt_data)
+                    attempt = Attempt(user=request.user, **attempt_data)
                 finally:
                     attempt.save(update_fields=updated_fields)
                     attempts.append(attempt)
