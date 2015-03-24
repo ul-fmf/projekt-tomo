@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
 {% block title %}Tomo – {{ course.title }}{% endblock %}
 
 {% block navigation-left %} 
@@ -6,17 +8,50 @@
 {% endblock %}
 
 {% block content %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4>
-				{{ course.title }}
-			</h4>
-		</div>
-	
-		<ul class="list-group">
-		  {% for problem_set in course.problem_sets.all %}
-		  <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
-		  {% endfor %}
-		</ul>
-	</div>
-{% endblock %} {# content #}
+
+
+<!-- I think it looks beter withot title  
+<div class="row">
+  <div class="col-xs-12">
+  	<h3>
+		{{ course.title }}
+	</h3>
+  </div>
+</div>
+ -->
+
+<div class="row">
+  <div class="col-xs-12" id='mydiv'>
+  </div>
+</div>
+
+		{% for problem_set in course.annotated_problem_sets %}
+ 		  <div class="media">
+			<div class="media-left media-middle">
+			  <div style='width: 80px; height: 70px; line-height: 70px; font-size: 20px;'>
+			  	<p class="text-center percentage">{{ problem_set.percentage }}%</p>
+			  </div>
+			</div>
+			<div class="media-body media-middle">
+			  <h4 class="media-heading"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a></h4>
+			</div>
+		  </div>
+		{% endfor %}		
+		
+{% endblock content %}
+
+{% block extra_js %}
+  <script src="{% static "jquery.percentageloader-0.2.js" %}"></script>
+  <script>
+    $( document ).ready(function() {
+      $("p.percentage").each(function( div ) {
+    	  var text = $( this ).text();
+    	  var $div = $( this ).parent();
+    	  var percentage = 1.0*parseInt(text.substring(0, text.length - 1))/100;   
+    	  $div.empty();
+    	  $div.percentageLoader({width : 70, height : 70, progress : percentage});
+      });
+    });
+</script>
+
+{% endblock extra_js %}	
