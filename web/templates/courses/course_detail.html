@@ -9,8 +9,7 @@
 
 {% block content %}
 
-
-<!-- I think it looks beter withot title  
+<!-- 
 <div class="row">
   <div class="col-xs-12">
   	<h3>
@@ -18,25 +17,31 @@
 	</h3>
   </div>
 </div>
- -->
+-->
 
-<div class="row">
-  <div class="col-xs-12" id='mydiv'>
-  </div>
-</div>
-
-		{% for problem_set in course.annotated_problem_sets %}
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
+                {{ course.title }}
+            </h4>
+        </div>
+        <ul class="list-group">
+          {% for problem_set in course.annotated_problem_sets %}
+          <li class="list-group-item">
  		  <div class="media">
 			<div class="media-left media-middle">
-			  <div style='width: 80px; height: 70px; line-height: 70px; font-size: 20px;'>
+			  <div style='width: 80px; height: 60px; line-height: 60px; font-size: 20px;'>
 			  	<p class="text-center percentage">{{ problem_set.percentage }}%</p>
 			  </div>
 			</div>
 			<div class="media-body media-middle">
 			  <h4 class="media-heading"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a></h4>
 			</div>
-		  </div>
-		{% endfor %}		
+		  </div>          
+          </li>
+          {% endfor %}
+        </ul>
+    </div>
 		
 {% endblock content %}
 
@@ -49,7 +54,7 @@
     	  var $div = $( this ).parent();
     	  var percentage = 1.0*parseInt(text.substring(0, text.length - 1))/100;   
     	  $div.empty();
-    	  $div.percentageLoader({width : 70, height : 70, progress : percentage});
+    	  $div.percentageLoader({width : 60, height : 60, progress : percentage});
       });
     });
 </script>
