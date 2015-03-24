@@ -19,18 +19,22 @@ def problem_set_attempts(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    user_attempts = request.user.attempts.all()
+
+    user_attempts = request.user.attempts.filter(part__problem__problem_set__id=problem_set_pk)
     valid_parts_ids = user_attempts.filter(valid=True).values_list('part_id', flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
-    problems = problem_set.problems.all()
-    invalid_problems_ids = problems.filter(parts__id__in=invalid_parts_ids).values_list('id', flat=True)    
-    valid_problems_ids = [p.id for p in problems
-                          if p.parts.filter(id__in=valid_parts_ids).count() == p.parts.count() and p.parts.count() > 0]
-    half_valid_problems_ids = problems.filter(parts__id__in=valid_parts_ids).exclude(id__in=valid_problems_ids).values_list('id', flat=True)
+
+    attempted_problems = problem_set.attempted_problems(request.user)
+    valid_problems_ids = [problem.id for problem in problem_set.valid_problems(request.user)]
+    invalid_problems_ids = [problem.id for problem in problem_set.invalid_problems(request.user)]
+
+    half_valid_problems_ids = [problem.id for problem in attempted_problems
+                               if problem.id not in valid_problems_ids
+                               and problem.id not in invalid_problems_ids]
 
     return render(request, 'courses/problem_set_detail.html', {
         'problem_set': problem_set,
-        'problems': problems,
+        'problems': problem_set.problems.all(),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
         'valid_problems_ids': valid_problems_ids,
