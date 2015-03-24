@@ -47,6 +47,9 @@ def problem_set_detail(request, problem_set_pk):
 def course_detail(request, course_pk):
     """Show a list of all problems in a problem set."""
     course = get_object_or_404(Course, pk=course_pk)
+    course.annotated_problem_sets = list(course.problem_sets.all())
+    for problem_set in course.annotated_problem_sets:
+        problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'courses/course_detail.html', {
         'course': course
     })
