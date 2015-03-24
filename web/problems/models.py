@@ -14,6 +14,9 @@ class Problem(models.Model):
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
     history = HistoricalRecords()
 
+    class Meta:
+        order_with_respect_to = 'problem_set'
+
     def __unicode__(self):
         return self.title
 
