@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
 
  
@@ -13,7 +14,8 @@
 <div class="btn-toolbar" role="toolbar" aria-label="Buttons">
     <div class="btn-group" role="group" aria-label="Download">
         <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
-            Prenesi vse datoteke z nalogami
+        	{# Translators: Button for downloading all problem files within a problem set. #}
+            {% trans "Download all problem files" %}
         </a>
     </div>
 </div>
@@ -44,7 +46,8 @@
 			{% for part in problem.parts.all %}
 	    	<li class="list-group-item">
 	      		<p>
-	      			{{ forloop.counter }}. podnaloga    				  
+	      		    {# Translators: problem set detail #}
+	      			{{ forloop.counter }}. {% trans "part" %}    				  
     				{% if part.id in valid_parts_ids %}
     				  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #468847"></span>
     				{% elif  part.id in invalid_parts_ids %}
@@ -58,11 +61,15 @@
    				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
 					<div class="btn-group" role="group" aria-label="Download">
 						<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
-							Datoteka z nalogo
+							{# Translators: Button for downloading a single problem file. #}
+							{% trans "Download this problem file" %}
 						</a>
 					</div>
 					<div class="btn-group" role="group" aria-label="Solutions">
-	    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">Rešitve</a>
+	    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
+	    				    {# Translators: Link to page with solutions. #}
+							{% trans "Solutions" %}
+	    				</a>
 					</div>
   				</div>      
    			</li>

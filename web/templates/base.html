@@ -1,10 +1,12 @@
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Projekt Tomo{% endblock %}</title>
+    {# Translators: Default heading for pages (defined in base.html) #}
+    <title>{% block title %}{% trans "Project Tomo" %}{% endblock %}</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">
@@ -26,8 +28,9 @@
             			<span class="icon-bar"></span>
             			<span class="icon-bar"></span>
           			</button>
-          			 <a class="navbar-brand" href="{% url 'homepage' %}">Tomo</a>
+          			 <a class="navbar-brand" href="/uvp/">Tomo</a>
         		</div>
+
         		<div class="collapse navbar-collapse" id="navbar">
         			<ul class="nav navbar-nav navbar-left">
 	        			{% block navigation-left %} 
@@ -36,7 +39,12 @@
         			<ul class="nav navbar-nav navbar-right">
 	        			{% block navigation-right %} 
     	    		 	{% endblock %} 
-                <li><a href="{% url 'logout' %}?next={% url 'login' %}">{{ user.get_full_name }} (odjava)</a></li>
+        				<li>
+        					<a href="{% url 'logout' %}?next={% url 'login' %}">
+        						{# Translators: Link for logout in navigation bar (top right) #}
+        						{{ user.get_full_name }} {% trans "(logout)" %}
+        					</a>
+     	     			</li>
         			</ul>
         			</div>        		
       		</div>
@@ -68,4 +76,3 @@
     {% block extra_js %}{% endblock %}
   </body>
 </html>
-

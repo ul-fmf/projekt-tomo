@@ -1,0 +1,148 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sonja Jerše <sonja.jerse@gmail.com>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-26 21:02+0000\n"
+"PO-Revision-Date: 2015-03-26 22:04+0100\n"
+"Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3);\n"
+"X-Generator: Lokalize 1.5\n"
+
+#. Translators: Default heading for pages (defined in base.html)
+#. Translators: description of project Tomo
+#: templates/base.html:9 templates/login.html:15
+msgid "Project Tomo"
+msgstr "Projekt Tomo"
+
+#. Translators: Link for logout in navigation bar (top right)
+#: templates/base.html:51
+msgid "(logout)"
+msgstr "(odjava)"
+
+#. Translators: Button for downloading all problem files within a problem set.
+#: templates/courses/problem_set_detail.html:18
+msgid "Download all problem files"
+msgstr "Prenesi vse datoteke z nalogami"
+
+#. Translators: problem set detail
+#. Translators: in solution comparison table
+#: templates/courses/problem_set_detail.html:50
+#: templates/problems/solutions.html:29
+msgid "part"
+msgstr "podnaloga"
+
+#. Translators: Button for downloading a single problem file.
+#: templates/courses/problem_set_detail.html:65
+msgid "Download this problem file"
+msgstr "Datoteka z nalogo"
+
+#. Translators: Link to page with solutions.
+#. Translators: Title of solutions page.
+#: templates/courses/problem_set_detail.html:71
+#: templates/problems/solutions.html:4
+msgid "Solutions"
+msgstr "Rešitve"
+
+#. Translators: Link to a page with all problem lists within a course.
+#: templates/homepage.html:21
+msgid "All problem lists"
+msgstr "Vsi sklopi"
+
+#. Translators: Displays if the user is not enrolled in a single course yet.
+#: templates/homepage.html:28
+#| msgid "Oh dear, you are not enrolled in a single course yet."
+msgid "Oh dear, you are not enrolled in any course yet."
+msgstr "Ojej, v noben predmet še niste vpisani."
+
+#. Translators: Title of login page.
+#: templates/login.html:6
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+#: templates/login.html:16
+msgid ""
+" Project Tomo is your personal programming teacher. You learn by solving "
+"problems\n"
+"\t      on your computer and Tomo informs you how well you are doing. "
+msgstr ""
+"Projekt Tomo je vaš osebni učitelj programiranja. Učite se tako, da na "
+"svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku "
+"reševanja."
+
+#. Translators: must sign in
+#: templates/login.html:22
+#| msgid ""
+#| "You must sign-in before the first usage. You must use the same username "
+#| "and password \n"
+#| "\t\t      that you use on student computers."
+msgid ""
+"You must sign-in before the first use. You must use the same username and "
+"password \n"
+"\t\t      that you use on student computers."
+msgstr ""
+"Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in "
+"geslom, ki ju uporabljate za prijavo na študentske računalnike."
+
+#. Translators: sign-in error
+#: templates/login.html:33
+msgid "Sign-in error!"
+msgstr "Napaka ob prijavi!"
+
+#: templates/login.html:34
+msgid ""
+"Use the same username and password that you use on student computers,\n"
+"             for example <code>NovakJ14</code> and <code>Triglav.1</code>. "
+msgstr ""
+"Uporabite enako uporabniško ime in geslo kot na študentskih računalnikih, na "
+"primer <code>NovakJ14</code> in <code>Triglav.1</code>."
+
+#. Translators: Input for username on login page.
+#: templates/login.html:42
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#. Translators: Input for password on login page.
+#: templates/login.html:49
+msgid "Password"
+msgstr "Geslo"
+
+#. Translators: Button for sign-in on login page.
+#: templates/login.html:57
+msgid "Sign in"
+msgstr "Prijavi se"
+
+#. Translators: Title of user solutions column.
+#: templates/problems/solutions.html:14
+msgid "Your solution"
+msgstr "Vaša rešitev"
+
+#. Translators: Title of official solutions column.
+#: templates/problems/solutions.html:18
+msgid "Official solution"
+msgstr "Uradna rešitev"
+
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:36
+msgid ""
+"You have not attempted to solve this part yet. Therefore the official "
+"solution will not be displayed."
+msgstr "Tega dela naloge še niste reševali, zato uradna rešitev ni prikazana."
+
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:42
+msgid ""
+"Your solution for this part is not yet accepted. Therefore the official "
+"solution will not be displayed."
+msgstr ""
+"Tega dela naloge še niste pravilno rešili, zato uradna rešitev ni prikazana."
+
