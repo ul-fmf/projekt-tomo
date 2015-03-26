@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block title %}Tomo{% endblock %}
 
 {% block content %}
@@ -14,10 +15,16 @@
           {% for problem_set in course.annotated_problem_sets %}
           {% include 'courses/_problem_set.html' %}
           {% endfor %}
-          <li class="list-group-item"><a href="{% url 'course_detail' course.pk %}"><h5>Vsi sklopi</h5></a></li>
+          <li class="list-group-item">
+          	<a href="{% url 'course_detail' course.pk %}">
+          		{# Translators: Link to a page with all problem lists within a course. #}
+          		<h5>{% trans "All problem lists" %}</h5>
+          	</a>
+          </li>
         </ul>
     </div>
 {% empty %}
-    <p>Joj, v noben predmet še nisi vpisan.</p>
+	{# Translators: Displays if the user is not enrolled in a single course yet. #}
+    <p>{% trans "Oh dear, you are not enrolled in any course yet." %}</p>
 {% endfor %}
 {% endblock content %}

@@ -1,7 +1,9 @@
-{% extends 'base.html' %}  
+{% extends 'base.html' %}
+{% load i18n %}  
 {% load bootstrap3 %} 
 
-{% block title %}Dobrodošli!{% endblock %}
+{# Translators: Title of login page. #}
+{% block title %}{% trans "Welcome" %}{% endblock %}
 
 {% block navigation %}
 <!-- Override navigation defined in base.html -->
@@ -9,16 +11,17 @@
 
 {% block content %}
       <div class="jumbotron">
-	<h1>Projekt Tomo</h1>
-	<p>Projekt Tomo je vaš osebni učitelj programiranja.
-     Učite se tako, da na svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku reševanja.
-	</p>
+      {# Translators: description of project Tomo #}
+	  <h1>{% trans "Project Tomo" %}</h1>
+	  <p>{% blocktrans %} Project Tomo is your personal programming teacher. You learn by solving problems
+	      on your computer and Tomo informs you how well you are doing. {% endblocktrans %}
+	  </p>
       </div> <!-- End jumbotron -->
     
-    
-  <p>Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in geslom,
-    ki ju uporabljate za prijavo na študentske računalnike.
-  </p>
+     {# Translators: must sign in #}
+	  <p>{% blocktrans %}You must sign-in before the first use. You must use the same username and password 
+		      that you use on student computers.{% endblocktrans %}
+	  </p>
     <!-- vnos uporabniškega imena in gesla -->
     <form role="form" action="{% url "django.contrib.auth.views.login" %}" method="post">
     	{% csrf_token %}
@@ -26,17 +29,32 @@
         {% if form.errors %}
         <div class="alert alert-danger alert-dismissable alert-link">
             <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
-            <strong>Napaka ob prijavi!</strong>
-            Uporabite enako uporabniško ime in geslo kot na študentskih računalnikih, na primer <code>NovakJ14</code> in <code>Triglav.1</code>.
+            {# Translators: sign-in error #}
+            <strong>{% trans "Sign-in error!" %}</strong>
+            {% blocktrans %}Use the same username and password that you use on student computers,
+             for example <code>NovakJ14</code> and <code>Triglav.1</code>. {% endblocktrans %}
         </div>
         {% endif %}
 
-<div class="form-group"><label class="sr-only" for="id_username">Uporabniško ime</label><input class="form-control" id="id_username" maxlength="254" name="username" placeholder="NovakJ14" required="required" title="" type="text" autocomplete="off"></div>
-<div class="form-group"><label class="sr-only" for="id_password">Gelso</label><input class="form-control" id="id_password" maxlength="254" name="password" placeholder="Triglav.1" required="required" title="" type="password" autocomplete="off"></div>
+        <div class="form-group">
+        	<label class="sr-only" for="id_username">
+        	{# Translators: Input for username on login page. #}
+        	{% trans "Username" %}
+        	</label>
+        	<input class="form-control" id="id_username" maxlength="254" name="username" placeholder="NovakJ14" required="required" title="" type="text" autocomplete="off">
+        </div>
+        <div class="form-group">
+        	<label class="sr-only" for="id_password">
+        	{# Translators: Input for password on login page. #}
+        	{% trans "Password" %}
+        	</label>
+        	<input class="form-control" id="id_password" maxlength="254" name="password" placeholder="Triglav.1" required="required" title="" type="password" autocomplete="off">
+        </div>
 
     	{% buttons %}
 	        <button type="submit" class="btn btn-default">
-	            Prijavite se
+	        	{# Translators: Button for sign-in on login page. #}
+	            {% trans "Sign in" %}
 	        </button>
 	    {% endbuttons %}
       </form>

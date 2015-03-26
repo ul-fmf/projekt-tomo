@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-
-{% block title %}Rešitve{% endblock %}
+{% load i18n %}
+{# Translators: Title of solutions page. #}
+{% block title %}{% trans "Solutions" %}{% endblock %}
 
 {% block content %}
 
@@ -8,8 +9,14 @@
  	<!-- Default panel contents -->
  	<div class="panel-heading">
  		<div class="row">
-			<div class="col-xs-6 text-center"><p>Vaša rešitev</p></div>
-			<div class="col-xs-6 text-center"><p>Uradna rešitev</p></div>
+			<div class="col-xs-6 text-center">
+				{# Translators: Title of user solutions column. #}
+				<p>{% trans "Your solution" %}</p>
+			</div>
+			<div class="col-xs-6 text-center">
+				{# Translators: Title of official solutions column. #}
+				<p>{% trans "Official solution" %}</p>
+			</div>
   		</div>
   	</div>
 
@@ -17,18 +24,26 @@
 		{% for part in parts %}
 		<li class="list-group-item">
 			<div class="row">
-				<div class="col-xs-12"><p>{{ forloop.counter }}. podnaloga</p></div>
+				<div class="col-xs-12">
+					{# Translators: in solution comparison table #}
+					<p>{{ forloop.counter }}. {% trans "part" %}</p>
+				</div>
 			</div>
 		    <div class="row">
                 {% if part.attempt and part.attempt.valid %}
-		        <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-		        <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
                 {% elif part.attempt %}
                 <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-                <div class="col-xs-6 text-center">Tega dela naloge še niste pravilno rešili, zato uradna rešitev ni prikazana.</div>
+                <div class="col-xs-6 text-center">
+                    {# Translators: in solution comparison table #}
+                    {% trans "Your solution for this part is not yet accepted. Therefore the official solution will not be displayed." %}
+                </div>
                 {% else %}
-                <div class="col-xs-12 text-center">Tega dela naloge še niste reševali, zato uradna rešitev ni prikazana.</div>
-		     	{% endif %}
+                <div class="col-xs-12 text-center">
+		        	{# Translators: in solution comparison table #}
+		        	{% trans "You have not attempted to solve this part yet. Therefore the official solution will not be displayed." %}
+                {% endif %}
 		     </div>
 		</li>
     	{% endfor %}
