@@ -54,7 +54,10 @@ class ProblemSet(models.Model):
         number_of_all_parts = sum([problem.parts.count() for problem in self.problems.all()])
         number_of_valid_parts = sum([problem.valid_parts(user).count()
                                      for problem in self.problems.all()])
-        return int(round(100.0 * number_of_valid_parts / number_of_all_parts))
+        if number_of_all_parts == 0:
+            return None
+        else:
+            return int(round(100.0 * number_of_valid_parts / number_of_all_parts))
 
     def attempted_problems(self, user):
         return self.problems.filter(parts__attempts__user=user)
