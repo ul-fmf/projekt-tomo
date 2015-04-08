@@ -3,6 +3,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from users.models import User
 from models import Attempt, Part
+from courses.models import Course, ProblemSet
 from problems.models import Problem
 
 
@@ -11,7 +12,9 @@ class AttemptSubmitTestCase(TestCase):
     fixtures = ['users.json']
 
     def setUp(self):
-        self.problem = Problem.objects.create()
+        cour = Course.objects.create()
+        prob_set = ProblemSet.objects.create(course=cour)
+        self.problem = Problem.objects.create(problem_set=prob_set)
         self.part1 = Part(problem=self.problem, secret='["1"]')
         self.part2 = Part(problem=self.problem, secret='["1", "2"]')
         self.part3 = Part(problem=self.problem, secret='["1", "2", "3"]')
