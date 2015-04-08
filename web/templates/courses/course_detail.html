@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
+
 {% block title %}Tomo – {{ course.title }}{% endblock %}
 
 {% block navigation-left %} 
@@ -6,17 +8,28 @@
 {% endblock %}
 
 {% block content %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4>
-				{{ course.title }}
-			</h4>
-		</div>
-	
-		<ul class="list-group">
-		  {% for problem_set in course.problem_sets.all %}
-		  <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
-		  {% endfor %}
-		</ul>
-	</div>
-{% endblock %} {# content #}
+
+<!-- 
+<div class="row">
+  <div class="col-xs-12">
+  	<h3>
+		{{ course.title }}
+	</h3>
+  </div>
+</div>
+-->
+
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>
+                {{ course.title }}
+            </h4>
+        </div>
+        <ul class="list-group">
+          {% for problem_set in course.annotated_problem_sets %}
+          {% include 'courses/_problem_set.html' %}
+          {% endfor %}
+        </ul>
+    </div>
+		
+{% endblock content %}
