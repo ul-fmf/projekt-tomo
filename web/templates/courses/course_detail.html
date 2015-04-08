@@ -44,19 +44,3 @@
     </div>
 		
 {% endblock content %}
-
-{% block extra_js %}
-  <script src="{% static "jquery.percentageloader-0.2.js" %}"></script>
-  <script>
-    $( document ).ready(function() {
-      $("p.percentage").each(function( div ) {
-    	  var text = $( this ).text();
-    	  var $div = $( this ).parent();
-    	  var percentage = 1.0*parseInt(text.substring(0, text.length - 1))/100;   
-    	  $div.empty();
-    	  $div.percentageLoader({width : 60, height : 60, progress : percentage});
-      });
-    });
-</script>
-
-{% endblock extra_js %}	
