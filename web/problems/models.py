@@ -49,6 +49,38 @@ class Problem(models.Model):
         })
         return filename, contents
 
+    def valid(self, user):
+        '''
+        Check whether user has valid attempts for all parts of
+        this problem.
+        '''
+        return self.valid_parts(user).count() == self.parts.count()
+
+    def invalid(self, user):
+        '''
+        Check whether user has some invalid attempts for this problem.
+        '''
+        return self.attempted(user) and self.valid_parts(user).count() == 0
+
+    def valid_parts(self, user):
+        '''
+        Return the QuerySet object of problem parts that have valid attempt by the given
+        user.
+        '''
+        return self.parts.filter(attempts__user=user, attempts__valid=True)
+
+    def attempted_parts(self, user):
+        '''
+        Returt the queryset of all parts for which user has submitted attempts for.
+        '''
+        return user.attempts.filter(part__in=self.parts.all())
+
+    def attempted(self, user):
+        '''
+        Returt the queryset of all parts for which user has submitted attempts for.
+        '''
+        return self.attempted_parts(user).count() > 0
+
 
 class Part(models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
@@ -80,3 +112,16 @@ class Part(models.Model):
             if secret[i] != official_secret[i]:
                 return False, i
         return True, None
+
+    def valid(self, user):
+        '''
+        Check whether user has submitted attempt for this part
+        that is marked as valid.
+        '''
+        return user.attempts.filter(part=self, valid=True).count() == 1
+
+    def attempted(self, user):
+        '''
+        Check whether user has submitted attempt for this part.
+        '''
+        return user.attempts.filter(part=self).count() >= 1

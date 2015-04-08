@@ -11,8 +11,8 @@
         </div>
     
         <ul class="list-group">
-          {% for problem_set in course.recent_problem_sets %}
-          <li class="list-group-item"><a href="{% url 'problem_set_detail' problem_set.pk %}"><h5>{{ problem_set.title }}</h5></a></li>
+          {% for problem_set in course.annotated_problem_sets %}
+          {% include 'courses/_problem_set.html' %}
           {% endfor %}
           <li class="list-group-item"><a href="{% url 'course_detail' course.pk %}"><h5>Vsi sklopi</h5></a></li>
         </ul>
