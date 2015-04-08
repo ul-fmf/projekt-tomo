@@ -59,6 +59,10 @@ def course_detail(request, course_pk):
 def homepage(request):
     """Show a list of all problems in a problem set."""
     courses = Course.objects.all()
+    for course in courses:
+        course.annotated_problem_sets = list(course.recent_problem_sets())
+        for problem_set in course.annotated_problem_sets:
+            problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'homepage.html', {
         'courses': courses
     })
