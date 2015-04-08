@@ -1,5 +1,7 @@
+import os
 from fabric.api import *
 
+LOCAL_ROOT = os.path.dirname(os.path.realpath(__file__))
 TOMO_HOST = 'tomo.fmf.uni-lj.si'
 TOMO_DIR = '/srv/tomodev/'
 TOMO_VIRTUALENV = '/srv/tomodev/virtualenv'
@@ -12,7 +14,9 @@ env.hosts = [TOMO_HOST]
 @task
 def test():
     with prefix('source ~/.virtualenv/tomo/bin/activate'):
-        local('web/manage.py test')
+        with lcd(LOCAL_ROOT):
+            with lcd('web'):
+                local('./manage.py test')
 
 
 @task
@@ -43,8 +47,9 @@ def manage(command):
 
 
 def transfer_code():
-    local('rsync -chavzP --rsync-path="sudo rsync" --exclude-from=.gitignore '
-          '--delete web {}:{}'.format(TOMO_HOST, TOMO_DIR))
+    with lcd(LOCAL_ROOT):
+        local('rsync -chavzP --rsync-path="sudo rsync" --exclude-from=.gitignore '
+              '--delete web {}:{}'.format(TOMO_HOST, TOMO_DIR))
 
 
 def update_requirements():
