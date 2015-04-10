@@ -26,9 +26,9 @@ class Problem(models.Model):
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
-    def attempt_file(self, url, user=None):
-        authentication_token = Token.objects.get(user=user) if user else None
-        solutions = self.user_solutions(user) if user else {}
+    def attempt_file(self, url, user):
+        authentication_token = Token.objects.get(user=user)
+        solutions = self.user_solutions(user)
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
         filename = "{0}.py".format(slugify(self.title))
         contents = render_to_string("python/attempt.py", {
@@ -39,8 +39,8 @@ class Problem(models.Model):
         })
         return filename, contents
 
-    def edit_file(self, url, user=None):
-        authentication_token = Token.objects.get(user=user) if user else None
+    def edit_file(self, url, user):
+        authentication_token = Token.objects.get(user=user)
         filename = "{0}-edit.py".format(slugify(self.title))
         contents = render_to_string("python/edit.py", {
             "problem": self,
