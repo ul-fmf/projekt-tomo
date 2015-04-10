@@ -1,5 +1,5 @@
 # =============================================================================
-# {{ problem.title }}{% if problem.description %}
+# {{ problem.title|safe }}{% if problem.description %}
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=

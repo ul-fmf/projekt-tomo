@@ -5,7 +5,7 @@ problem = extract_problem(__file__)
 Check.initialize(problem['parts'])
 
 # =============================================================================
-# {{ problem.title }}{% if problem.description %}
+# {{ problem.title|safe }}{% if problem.description %}
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
@@ -65,7 +65,8 @@ def extract_problem(filename):
         'title': problem_match.group('title').strip(),
         'description': strip_hashes(problem_match.group('description')),
         'parts': parts,
-        'id': {{ problem.id }}
+        'id': {{ problem.id }},
+        'problem_set': {{ problem.problem_set.id }}
     }
 
 def _validate_current_file():
@@ -81,7 +82,8 @@ def _validate_current_file():
     def submit_problem(problem, url, token):
         for part in problem['parts']:
             part['secret'] = [x for (x, _) in part['secret']]
-            part['id'] = part['part']
+            if part['part']:
+                part['id'] = part['part']
             del part['part']
             del part['feedback']
             del part['valid']
