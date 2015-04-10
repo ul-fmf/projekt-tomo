@@ -42,6 +42,13 @@ class AttemptSubmitTestCase(TestCase):
                 "feedback": [],
                 "secret": ["1", "2", "3"],
                 "part": 3
+            },
+            {
+                "solution": "",
+                "valid": True,
+                "feedback": [],
+                "secret": ["1", "4", "3"],
+                "part": 3
             }
         ]
         self.user = User.objects.get(username='matija')
@@ -103,3 +110,26 @@ class AttemptSubmitTestCase(TestCase):
         attempt = Attempt.objects.get()
         self.assertTrue(self.attempts_data[1]["valid"], "Attempt data should be true")
         self.assertTrue(attempt.valid, 'Attempt must be marked as valid')
+
+    def testChangedSecret(self):
+        self.assertEqual(Attempt.objects.count(), 0, "There should be no attempts in the database")
+        response = self.client.post('/api/attempts/submit/',
+                                    [self.attempts_data[2]],
+                                    format='json'
+                                    )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Attempt.objects.count(), 1, "There should be exactly one attempt"
+                                                     " in the database")
+        attempt = Attempt.objects.get()
+        self.assertTrue(self.attempts_data[1]["valid"], "Attempt data should be true")
+        self.assertTrue(attempt.valid, 'Attempt must be marked as valid')
+        response = self.client.post('/api/attempts/submit/',
+                                    [self.attempts_data[3]],
+                                    format='json'
+                                    )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Attempt.objects.count(), 1, "There should be exactly one attempt"
+                                                     " in the database")
+        attempt = Attempt.objects.get()
+        self.assertTrue(self.attempts_data[1]["valid"], "Attempt data should be true")
+        self.assertFalse(attempt.valid, 'Attempt must be marked as valid')
