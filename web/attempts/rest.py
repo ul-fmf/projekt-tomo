@@ -9,6 +9,15 @@ from utils.rest import JSONStringField
 from .models import Attempt
 
 
+def update_fields(obj, new_values):
+    changed_fields = []
+    for field, value in new_values.items():
+        if value != getattr(obj, field):
+            setattr(obj, field, value)
+        changed_fields.append(field)
+    return changed_fields
+
+
 class WritableJSONField(Field):
     def to_internal_value(self, data):
         return data
@@ -68,7 +77,7 @@ class AttemptViewSet(ModelViewSet):
                 try:
                     attempt = Attempt.objects.get(user=request.user,
                                                   part=attempt_data['part'])
-                    updated_fields = attempt.update_fields(attempt_data)
+                    updated_fields = update_fields(attempt, attempt_data)
                 except ObjectDoesNotExist:
                     attempt = Attempt(user=request.user, **attempt_data)
                 finally:
