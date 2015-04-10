@@ -10,9 +10,8 @@ from utils.views import plain_text
 def problem_attempt_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
-    user = request.user if request.user.is_authenticated() else None
     url = reverse('attempt-submit', request=request)
-    filename, contents = problem.attempt_file(url, user=user)
+    filename, contents = problem.attempt_file(url, user=request.user)
     return plain_text(filename, contents)
 
 
@@ -20,9 +19,8 @@ def problem_attempt_file(request, problem_pk):
 def problem_edit_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
-    user = request.user if request.user.is_authenticated() else None
     url = reverse('problem-submit', request=request)
-    filename, contents = problem.edit_file(url, user=user)
+    filename, contents = problem.edit_file(url, user=request.user)
     return plain_text(filename, contents)
 
 

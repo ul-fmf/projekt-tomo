@@ -247,7 +247,6 @@ def _validate_current_file():
             Check.error("Testi sprožijo izjemo\n  {0}",
                         "\n  ".join(traceback.format_exc().split("\n"))[:-2])
 {% endfor %}
-{% if authentication_token %}
     print('Shranjujem rešitve na strežnik... ', end="")
     try:
         url = '{{ submission_url }}'
@@ -266,9 +265,6 @@ def _validate_current_file():
                 f.write(r.read().decode('utf-8'))
             print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
-{% else %}
-    print('Naloge rešujete kot anonimni uporabnik, zato rešitve niso shranjene.')
-{% endif %}
     Check.summarize()
 
 _validate_current_file()
