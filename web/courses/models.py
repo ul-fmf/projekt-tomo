@@ -20,20 +20,21 @@ class Course(models.Model):
 
 
 class ProblemSet(models.Model):
-    HIDDEN = 'H'
-    VISIBLE_WHEN_SOLVED = 'S'
-    VISIBLE = 'V'
+    SOLUTION_HIDDEN = 'H'
+    SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
+    SOLUTION_VISIBLE = 'V'
     SOLUTION_VISIBILITY_CHOICES = (
-        (HIDDEN, 'Hidden'),
-        (VISIBLE_WHEN_SOLVED, 'Visible when solved'),
-        (VISIBLE, 'Visible'),
+        (SOLUTION_HIDDEN, 'Hidden'),
+        (SOLUTION_VISIBLE_WHEN_SOLVED, 'Visible when solved'),
+        (SOLUTION_VISIBLE, 'Visible'),
     )
     course = models.ForeignKey(Course, related_name='problem_sets')
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     visible = models.BooleanField(default=False)
-    solution_visibility = models.CharField(max_length=20, default=VISIBLE_WHEN_SOLVED,
-                                           choices=SOLUTION_VISIBILITY_CHOICES)
+    solution_visibility = models.CharField(max_length=20,
+                                           choices=SOLUTION_VISIBILITY_CHOICES,
+                                           default=SOLUTION_VISIBLE_WHEN_SOLVED)
 
     class Meta:
         order_with_respect_to = 'course'
