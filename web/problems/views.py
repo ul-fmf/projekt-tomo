@@ -28,10 +28,12 @@ def problem_edit_file(request, problem_pk):
 def problem_solution(request, problem_pk):
     """Show problem solution."""
     problem = Problem.objects.get(pk=problem_pk)
-    parts = problem.parts.all()
     attempts = request.user.attempts.filter(part__problem__id=problem_pk)
-    part_attempt = {}
+    parts = problem.parts.all()
 
     for part in parts:
-        part_attempt[part] = attempts.filter(part=part)
-    return render(request, 'problems/solutions.html', {'part_attempt': part_attempt})
+        try:
+            part.attempt = attempts.get(part=part)
+        except:
+            part.attempt = None
+    return render(request, 'problems/solutions.html', {'parts': parts})

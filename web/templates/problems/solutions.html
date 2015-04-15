@@ -14,20 +14,20 @@
   	</div>
 
   	<ul class="list-group">
-		{% for part, attempt in part_attempt.items %}
+		{% for part in parts %}
 		<li class="list-group-item">
 			<div class="row">
 				<div class="col-xs-12"><p>{{ forloop.counter }}. podnaloga</p></div>
 			</div>
 		    <div class="row">
-		    	{% if attempt.count == 0 %}
-		        <div class="col-xs-12 text-center">Tega dela naloge še niste reševali, zato uradna rešitev ni prikazana.</div>
-		     	{% elif not attempt.0.valid %}
-		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
-		        <div class="col-xs-6 text-center">Tega dela naloge še niste pravilno rešili, zato uradna rešitev ni prikazana.</div>
-		    	{% else %}
-		        <div class="col-xs-6"><pre><code>{{ attempt.0.solution }}</code></pre></div>
+                {% if part.attempt and part.attempt.valid %}
+		        <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
 		        <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+                {% elif part.attempt %}
+                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+                <div class="col-xs-6 text-center">Tega dela naloge še niste pravilno rešili, zato uradna rešitev ni prikazana.</div>
+                {% else %}
+                <div class="col-xs-12 text-center">Tega dela naloge še niste reševali, zato uradna rešitev ni prikazana.</div>
 		     	{% endif %}
 		     </div>
 		</li>
