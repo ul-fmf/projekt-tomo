@@ -13,16 +13,26 @@ class ProblemAdmin(SimpleHistoryAdmin):
         PartInline,
     )
     list_display = (
+        'course',
+        'problem_set',
         'title',
         'description',
     )
     list_display_links = (
         'title',
     )
+    ordering = (
+        'problem_set__course',
+        'problem_set',
+        '_order',
+    )
     search_fields = (
         'title',
         'description',
     )
 
+    def course(self, obj):
+        return obj.problem_set.course
+    course.admin_order_field = 'problem_set__course'
 
 admin.site.register(Problem, ProblemAdmin)
