@@ -21,6 +21,12 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
+
+    def anchor(self):
+        return 'problem-{}'.format(self.pk)
+
     def user_attempts(self, user):
         return user.attempts.filter(part__problem=self)
 
@@ -96,6 +102,9 @@ class Part(OrderWithRespectToMixin, models.Model):
 
     def __unicode__(self):
         return u'@{0:06d} ({1})'.format(self.pk, truncate(self.description))
+
+    def get_absolute_url(self):
+        return self.problem.get_absolute_url()
 
     def check_secret(self, secret):
         '''

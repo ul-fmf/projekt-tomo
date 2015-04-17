@@ -43,6 +43,10 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('courses.views.problem_set_detail', args=[str(self.pk)])
+
     def attempts_archive(self, url, user):
         files = [problem.attempt_file(url, user=user) for problem in self.problems.all()]
         archive_name = slugify(self.title)
