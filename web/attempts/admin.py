@@ -11,13 +11,12 @@ class AttemptAdmin(SimpleHistoryAdmin):
         'valid',
     )
     list_filter = (
-        'user',
-        'part__problem',
-        'part',
-        'valid',
+        'part__problem__problem_set__course',
+        'part__problem__problem_set',
     )
     search_fields = (
         'part__pk',
+        'problem__problem_set__title',
         'problem__title',
         'user__username',
         'part__description',

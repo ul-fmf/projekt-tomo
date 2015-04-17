@@ -22,6 +22,7 @@ class ProblemSetAdmin(admin.ModelAdmin):
     )
     ordering = (
         'course',
+        '_order',
     )
     search_fields = (
         'title',
