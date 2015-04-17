@@ -1,6 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from users.models import User
+from utils.models import OrderWithRespectToMixin
 
 
 class Course(models.Model):
@@ -19,7 +20,7 @@ class Course(models.Model):
         return self.problem_sets.reverse()[:3]
 
 
-class ProblemSet(models.Model):
+class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
     SOLUTION_VISIBLE = 'V'

@@ -6,9 +6,10 @@ from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from courses.models import ProblemSet
+from utils.models import OrderWithRespectToMixin
 
 
-class Problem(models.Model):
+class Problem(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
@@ -82,7 +83,7 @@ class Problem(models.Model):
         return self.attempted_parts(user).count() > 0
 
 
-class Part(models.Model):
+class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
     description = models.TextField(blank=True)
     solution = models.TextField(blank=True)
