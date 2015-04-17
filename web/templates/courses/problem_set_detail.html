@@ -20,15 +20,15 @@
 </div>
 {% for problem in problem_set.problems.all %}  
 	{% if problem.id in valid_problems_ids %}
-		<div class="panel panel-success">
+		<div id="{{ problem.anchor }}" class="panel panel-success">
 	{% elif problem.id in invalid_problems_ids %}
-		<div class="panel panel-danger">
+		<div id="{{ problem.anchor }}" class="panel panel-danger">
 	{% elif problem.id in half_valid_problems_ids %}
-		<div class="panel panel-warning">
+		<div id="{{ problem.anchor }}" class="panel panel-warning">
 	{% else %}
-		<div class="panel panel-default">
+		<div id="{{ problem.anchor }}" class="panel panel-default">
 	{% endif %}
-		<div class="panel-heading">
+		<div id="{{ problem.anchor }}" class="panel-heading">
 			<h4>
 				{{ problem.title }}
 			</h4>
