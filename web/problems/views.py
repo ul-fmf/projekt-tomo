@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework.reverse import reverse
 from problems.models import Problem
@@ -22,6 +22,13 @@ def problem_edit_file(request, problem_pk):
     url = reverse('problem-submit', request=request)
     filename, contents = problem.edit_file(url, user=request.user)
     return plain_text(filename, contents)
+
+
+@staff_member_required
+def problem_move(request, problem_pk, shift):
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    problem.move(shift)
+    return redirect(problem)
 
 
 @login_required
