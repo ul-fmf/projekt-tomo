@@ -6,7 +6,8 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
-    pass
+    def teaches(self, course):
+        return self in course.teachers.all()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

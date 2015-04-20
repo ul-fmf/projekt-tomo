@@ -41,6 +41,7 @@ def problem_set_detail(request, problem_set_pk):
         'valid_problems_ids': valid_problems_ids,
         'invalid_problems_ids': invalid_problems_ids,
         'half_valid_problems_ids': half_valid_problems_ids,
+        'show_teacher_forms': request.user.teaches(problem_set.course),
     })
 
 
