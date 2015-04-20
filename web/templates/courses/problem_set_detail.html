@@ -71,6 +71,15 @@
 							{% trans "Solutions" %}
 	    				</a>
 					</div>
+                    {% if show_teacher_forms %}
+                    <div class="btn-group" role="group" aria-label="Move">
+                        <a class="btn btn-default" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up">
+                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+                        </a>
+                        <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down">
+                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+                        </a>
+                    {% endif %}
   				</div>      
    			</li>
    	  	</ul>
