@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
 from utils.views import zip_archive
@@ -66,3 +67,10 @@ def homepage(request):
     return render(request, 'homepage.html', {
         'courses': courses
     })
+
+
+@staff_member_required
+def problem_set_move(request, problem_set_pk, shift):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    problem_set.move(shift)
+    return redirect(problem_set.course)
