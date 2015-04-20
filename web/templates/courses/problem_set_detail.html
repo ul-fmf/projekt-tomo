@@ -59,12 +59,24 @@
 			{% endfor %}
    			<li class="list-group-item">
    				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+                    {% if show_teacher_forms %}
+                    <div class="btn-group" role="group" aria-label="Download">
+                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        Prenesi datoteko <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="{% url 'problem_attempt_file' problem.id %}">Datoteka za reševanje</a></li>
+                        <li><a href="{% url 'problem_edit_file' problem.id %}">Datoteka za urejanje</a></li>
+                      </ul>
+                    </div>
+                    {% else %}
 					<div class="btn-group" role="group" aria-label="Download">
 						<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
 							{# Translators: Button for downloading a single problem file. #}
 							{% trans "Download this problem file" %}
 						</a>
 					</div>
+                    {% endif %}
 					<div class="btn-group" role="group" aria-label="Solutions">
 	    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
 	    				    {# Translators: Link to page with solutions. #}
