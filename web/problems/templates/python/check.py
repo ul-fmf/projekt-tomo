@@ -57,9 +57,11 @@ class Check:
         Check.current_part['secret'].append((str(clean(x)), hint))
 
     @staticmethod
-    def equal(expression, expected_result, clean=None):
+    def equal(expression, expected_result, clean=None, env={}):
+        local_env = locals()
+        local_env.update(env)
         clean = clean or Check.clean
-        actual_result = eval(expression)
+        actual_result = eval(expression, globals(), local_env)
         if clean(actual_result) != clean(expected_result):
             Check.error("Izraz {0} vrne {1!r} namesto {2!r}.",
                         expression, actual_result, expected_result)
