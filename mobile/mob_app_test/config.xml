@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<widget xmlns     = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "si.tomo.fmf.uni-lj.onlineviewer"
+        version   = "1.0">
+
+    <name>Tomo</name>
+
+    <description>
+        Tomo Online Viewer
+    </description>
+
+    <author href="http://fmf.uni-lj.si" email="tomo@fmf.uni-lj.si">
+        Faculty of Mathematics and Physics
+    </author>
+
+    <preference name="permissions" value="none"/>
+
+    <icon src="res/icon/android/drawable-ldpi/ic_launcher.png" gap:platform="android" gap:qualifier="ldpi" />
+    <icon src="res/icon/android/drawable-mdpi/ic_launcher.png" gap:platform="android" gap:qualifier="mdpi" />
+    <icon src="res/icon/android/drawable-hdpi/ic_launcher.png" gap:platform="android" gap:qualifier="hdpi" />
+    <icon src="res/icon/android/drawable-xhdpi/ic_launcher.png" gap:platform="android" gap:qualifier="xhdpi" />
+    <icon src="res/icon/android/drawable-xxhdpi/ic_launcher.png" gap:platform="android" gap:qualifier="xxhdpi" />
+    
+    <icon src="res/icon/ios/playstore-icon.png" gap:platform="ios" gap:qualifier=""/>
+    
+    <icon src="res/icon/ios/Icon-60.png" gap:platform="ios" width="60" height="60" />
+    <icon src="res/icon/ios/Icon-72.png" gap:platform="ios" width="72" height="72" />
+    <icon src="res/icon/ios/Icon@2x.png" gap:platform="ios" width="114" height="114" />
+    <icon src="res/icon/ios/Icon-72@2x.png" gap:platform="ios" width="144" height="144" />
+    
+
+</widget>
