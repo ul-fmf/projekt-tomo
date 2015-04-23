@@ -6,8 +6,14 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
-    def teaches(self, course):
+    def can_edit_course(self, course):
         return self in course.teachers.all()
+
+    def can_edit_problem_set(self, problem_set):
+        return self.can_edit_course(problem_set.course)
+
+    def can_edit_problem(self, problem):
+        return self.can_edit_problem_set(problem.problem_set)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
