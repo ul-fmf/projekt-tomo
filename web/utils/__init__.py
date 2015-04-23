@@ -1,6 +1,6 @@
 import json
 import markdown
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.template.defaultfilters import stringfilter, register
 from django.utils.safestring import mark_safe
 
@@ -74,3 +74,8 @@ md = markdown.Markdown(extensions=[MathJaxExtension()])
 @stringfilter
 def latex_markdown(source):
     return mark_safe(md.convert(source))
+
+
+def verify(cond):
+    if not cond:
+        raise PermissionDenied
