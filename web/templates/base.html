@@ -19,18 +19,11 @@
     <div class="container">
   
     {% block navigation %}
-        <nav class="navbar navbar-default">
+        <nav class="navbar navbar-inverse">
       		<div class="container-fluid">
         		<div class="navbar-header">
-          			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            			<span class="sr-only">Toggle navigation</span>
-            			<span class="icon-bar"></span>
-            			<span class="icon-bar"></span>
-            			<span class="icon-bar"></span>
-          			</button>
           			 <a class="navbar-brand" href="/uvp/">Tomo</a>
         		</div>
-        		<div class="collapse navbar-collapse" id="myNavbar">
         			<ul class="nav navbar-nav navbar-left">
 	        			{% block navigation-left %} 
     	    		 	{% endblock %} 
@@ -44,8 +37,7 @@
         						{{ user.get_full_name }} {% trans "(logout)" %}
         					</a>
      	     			</li>
-        			</ul>
-        			</div>        		
+        			</ul>        		
       		</div>
     	</nav>
     {% endblock %}
