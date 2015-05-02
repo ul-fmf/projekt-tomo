@@ -63,11 +63,47 @@ class Check:
         clean = clean or Check.clean
         actual_result = eval(expression, globals(), local_env)
         if clean(actual_result) != clean(expected_result):
-            Check.error("Izraz {0} vrne {1!r} namesto {2!r}.",
+            Check.error('Izraz {0} vrne {1!r} namesto {2!r}.',
                         expression, actual_result, expected_result)
             return False
         else:
             return True
+
+    @staticmethod
+    @contextmanager
+    def in_file(filename, content, encoding=None):
+        with open(filename, 'w', encoding=encoding) as f:
+            for line in content:
+                print(line, file=f)
+        old_feedback = Check.current_part['feedback'][:]
+        yield
+        new_feedback = Check.current_part['feedback'][len(old_feedback):]
+        Check.current_part['feedback'] = old_feedback
+        if new_feedback:
+            new_feedback = ['\n    '.join(error.split('\n')) for error in new_feedback]
+            Check.error('Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}', filename, '\n  '.join(content), '\n- '.join(new_feedback))
+
+    @staticmethod
+    def out_file(filename, content, encoding=None):
+        with open(filename, encoding=encoding) as f:
+            out_lines = f.readlines()
+        len_out, len_given = len(out_lines), len(content)
+        if len_out < len_given:
+            out_lines += (len_given - len_out) * ['\n']
+        else:
+            content += (len_out - len_given) * ['\n']
+        equal = True
+        line_width = max(len(out_line.rstrip()) for out_line in out_lines + ['je enaka'])
+        diff = []
+        for out, given in zip(out_lines, content):
+            out, given = out.rstrip(), given.rstrip()
+            if out != given:
+                equal = False
+            diff.append('{0} {1} {2}'.format(out.ljust(line_width), '|' if out == given else '*', given))
+        if not equal:
+            Check.error('Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}', filename, (line_width - 7) * ' ', '\n  '.join(diff))
+            return False
+        return True
 
     @staticmethod
     def summarize():
@@ -79,4 +115,4 @@ class Check:
             else:
                 print('{0}. podnaloga ima veljavno rešitev.'.format(i + 1))
             for message in part['feedback']:
-                print("  - {0}".format("\n    ".join(message.splitlines())))
+                print('  - {0}'.format('\n    '.join(message.splitlines())))

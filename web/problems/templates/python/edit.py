@@ -25,6 +25,7 @@ _validate_current_file()
 # =L=I=B=R=A=R=Y=@=
 
 import io, json, os, re, sys, shutil, traceback, urllib.error, urllib.request
+from contextlib import contextmanager
 
 {% include 'python/check.py' %}
 
