@@ -70,6 +70,26 @@ class Check:
             return True
 
     @staticmethod
+    def run(statements, expected_state, clean=None, env={}):
+        code = "\n".join(statements)
+        statements = "  >>> " + "\n  >>> ".join(statements)
+        s = {}
+        s.update(env)
+        clean = clean or Check.clean
+        exec(code, globals(), s)
+        errors = []
+        for (x, v) in expected_state.items():
+            if x not in s:
+                errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
+            elif clean(s[x]) != clean(v):
+                errors.append('nastavijo {0} na {1} namesto na {2}'.format(x, v, s[x]))
+        if errors:
+            Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
+            return False
+        else:
+            return True
+
+    @staticmethod
     @contextmanager
     def in_file(filename, content, encoding=None):
         with open(filename, 'w', encoding=encoding) as f:
