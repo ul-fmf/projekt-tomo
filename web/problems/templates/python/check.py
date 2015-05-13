@@ -82,7 +82,7 @@ class Check:
             if x not in s:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
             elif clean(s[x]) != clean(v):
-                errors.append('nastavijo {0} na {1} namesto na {2}'.format(x, v, s[x]))
+                errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
             return False
