@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_nose',
     'users',
     'problems',
     'attempts',
@@ -116,3 +117,15 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.tz',
     'django.contrib.messages.context_processors.messages'
 )
+
+
+
+# Use nose to run all tests
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+# Tell nose to measure coverage on the 'problems', 'attemtps', 'courses' and 'users' apps
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=problems,attempts,courses,users',
+]
+
