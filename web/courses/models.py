@@ -16,8 +16,8 @@ class Course(models.Model):
     def __unicode__(self):
         return self.title
 
-    def recent_problem_sets(self):
-        return self.problem_sets.reverse()[:3]
+    def recent_problem_sets(self, n=3):
+        return self.problem_sets.reverse()[:n]
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
