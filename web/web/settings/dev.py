@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'simple_history',
     'courses',
+    'taggit',
 )
 
 MIDDLEWARE_CLASSES = (
