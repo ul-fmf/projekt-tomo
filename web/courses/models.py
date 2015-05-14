@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from users.models import User
 from utils.models import OrderWithRespectToMixin
+from taggit.managers import TaggableManager
 
 
 class Course(models.Model):
@@ -9,6 +10,7 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['title']
@@ -18,7 +20,13 @@ class Course(models.Model):
 
     def recent_problem_sets(self):
         return self.problem_sets.reverse()[:3]
+  
+#show users courses  
+    def user_courses(self, user):
+        return user.courses
 
+    def is_teacher(self, user):
+        return (user in self.teachers.all())
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'
@@ -36,6 +44,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     solution_visibility = models.CharField(max_length=20,
                                            choices=SOLUTION_VISIBILITY_CHOICES,
                                            default=SOLUTION_VISIBLE_WHEN_SOLVED)
+    tags = TaggableManager()
 
     class Meta:
         order_with_respect_to = 'course'

@@ -19,7 +19,7 @@
 			</div>
   		</div>
   	</div>
-
+<!-- z ikonami: velik križ, če je učitelj rešitve skril, mali križ, če so skrite ker učenec še ni pravilno rešil-->
   	<ul class="list-group">
 		{% for part in parts %}
 		<li class="list-group-item">
@@ -30,6 +30,7 @@
 				</div>
 			</div>
 		    <div class="row">
+		    <!-- preveri še, ali so rešitve nastavljene na hidden - če so, jih učenec vseeno ne sme videti -->
                 {% if part.attempt and part.attempt.valid %}
                 <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
                 <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>

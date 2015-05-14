@@ -17,10 +17,17 @@
         	{# Translators: Button for downloading all problem files within a problem set. #}
             {% trans "Download all problem files" %}
         </a>
+        {% if show_teacher_forms %}
+        <a class="btn btn-default" href="{% url 'problem_create' problem_set.id %}" role="button" aria-label="Create">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                 {# Translators: Button for creating new problem. #}
+				 {% trans "Add new problem" %}
+        </a>
+        {% endif %}
     </div>
 </div>
 </div>
-{% for problem in problem_set.problems.all %}  
+{% for problem in problem_set.problems.all %} 
 	{% if problem.id in valid_problems_ids %}
 		<div id="{{ problem.anchor }}" class="panel panel-success">
 	{% elif problem.id in invalid_problems_ids %}
@@ -91,10 +98,15 @@
                         <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down">
                             <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
                         </a>
+                        <a class="btn btn-default" href="{% url 'problem_update' problem.id %}" role="button" aria-label="Update">
+                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            {# Translators: Update problem text button. #}
+							{% trans "Update" %}
+                        </a>
+                    </div>
                     {% endif %}
   				</div>      
    			</li>
    	  	</ul>
-	</div>
-    {% endfor %}
+{% endfor %}
 {% endblock %} {# content #}
