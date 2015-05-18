@@ -126,6 +126,38 @@ class Check:
         return True
 
     @staticmethod
+    def generator(expression, expected_values, should_stop=False, further_iter=0, env={}, clean=None):
+        from types import GeneratorType
+        local_env = locals()
+        local_env.update(env)
+        clean = clean or Check.clean
+        gen = eval(expression, globals(), local_env)
+        if not isinstance(gen, GeneratorType):
+            Check.error("Izraz {0} ni generator.", expression)
+            return False
+
+        try:
+            for iteration, expected_value in enumerate(expected_values):
+                actual_value = gen.__next__()
+                if clean(actual_value) != clean(expected_value):
+                    Check.error("Vrednost #{0}, ki jo vrne generator {1} je {2!r} namesto {3!r}.",
+                                iteration, expression, actual_value, expected_value)
+                    return False
+            for _ in range(further_iter):
+                gen.__next__()  # we will not validate it
+        except StopIteration:
+            Check.error("Generator {0} se prehitro izteče.", expression)
+            return False
+        
+        if should_stop:
+            try:
+                gen.__next__()
+                Check.error("Generator {0} se ne izteče (dovolj zgodaj).", expression)
+            except StopIteration:
+                pass  # this is fine
+        return True
+
+    @staticmethod
     def summarize():
         for i, part in enumerate(Check.parts):
             if not Check.has_solution(part):
