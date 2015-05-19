@@ -138,20 +138,20 @@ class Check:
 
         try:
             for iteration, expected_value in enumerate(expected_values):
-                actual_value = gen.__next__()
+                actual_value = next(gen)
                 if clean(actual_value) != clean(expected_value):
                     Check.error("Vrednost #{0}, ki jo vrne generator {1} je {2!r} namesto {3!r}.",
                                 iteration, expression, actual_value, expected_value)
                     return False
             for _ in range(further_iter):
-                gen.__next__()  # we will not validate it
+                next(gen)  # we will not validate it
         except StopIteration:
             Check.error("Generator {0} se prehitro izteče.", expression)
             return False
         
         if should_stop:
             try:
-                gen.__next__()
+                next(gen)
                 Check.error("Generator {0} se ne izteče (dovolj zgodaj).", expression)
             except StopIteration:
                 pass  # this is fine
