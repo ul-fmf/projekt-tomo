@@ -18,15 +18,20 @@ class Course(models.Model):
     def __unicode__(self):
         return self.title
 
-    def recent_problem_sets(self):
-        return self.problem_sets.reverse()[:3]
-  
-#show users courses  
+    def recent_problem_sets(self, n=3):
+        return self.problem_sets.reverse().filter(visible=True)[:n]
+
+    #show users courses
     def user_courses(self, user):
         return user.courses
 
     def is_teacher(self, user):
         return (user in self.teachers.all())
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('course_detail', args=[str(self.pk)])
+
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'
@@ -82,3 +87,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def valid_problems(self, user):
         return [problem for problem in self.attempted_problems(user) if problem.valid(user)]
+
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()

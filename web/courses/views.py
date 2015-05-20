@@ -4,6 +4,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
 from utils.views import zip_archive
+from utils import verify
 
 
 @login_required
@@ -49,11 +50,12 @@ def problem_set_detail(request, problem_set_pk):
 def course_detail(request, course_pk):
     """Show a list of all problems in a problem set."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.annotated_problem_sets = list(course.problem_sets.all())
+    course.annotated_problem_sets = list(course.problem_sets.reverse())
     for problem_set in course.annotated_problem_sets:
         problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'courses/course_detail.html', {
-        'course': course
+        'course': course,
+        'show_teacher_forms': request.user.can_edit_course(course),
     })
 
 
@@ -70,29 +72,25 @@ def homepage(request):
     })
 
 
-@staff_member_required
+# teacher status required
 def problem_set_move(request, problem_set_pk, shift):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(problem_set.course.is_teacher(request.user))
     problem_set.move(shift)
     return redirect(problem_set.course)
 
-def problemset_move(request, pk, shift):
-    problemset = get_object_or_404(ProblemSet, id=pk)
-    verify(problemset.course.has_teacher(request.user))
-    problemset.move(shift)
-    return redirect(request.META.get('HTTP_REFERER', problemset))
 
-#na novo
-@staff_member_required
-def problemset_toggle_visible(request, problem_set_pk):
-    problemset = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    verify(problemset.course.has_teacher(request.user))
-    problemset.toggle_visible()
+# teacher status required
+def problem_set_toggle_visible(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(problem_set.course.is_teacher(request.user))
+    problem_set.toggle_visible()
     return redirect(problem_set.course)
 
-@staff_member_required
-def problemset_toggle_solution_visibility(request, problem_set_pk):
-    problemset = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    verify(problemset.course.has_teacher(request.user))
-    problemset.toggle_solution_visibility()
+
+#teacher status required
+def problem_set_toggle_solution_visibility(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(problem_set.course.is_teacher(request.user))
+    problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)

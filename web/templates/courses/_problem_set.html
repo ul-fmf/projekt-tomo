@@ -1,14 +1,23 @@
+{% if problem_set.visible or show_teacher_forms %}
 <li class="list-group-item">
-<div class="media">
-  <div class="media-left">
-    <div style='width: 80px; height: 60px; line-height: 60px; font-size: 20px;'>
-      {% with percentage=problem_set.percentage %}
-      <p class="text-center percentage text-{% if percentage < 50 %}danger{% elif percentage < 90 %}warning{% else %}success{% endif %}">{{ percentage }}<small>%</small></p>
-      {% endwith %}
+  <div class="media">
+    <div class="media-left">
+      <div style='width: 80px; height: 60px; line-height: 60px; font-size: 20px;'>
+        {% with percentage=problem_set.percentage %}
+        <p class="text-center percentage text-{% if percentage < 50 %}danger{% elif percentage < 90 %}warning{% else %}success{% endif %}">
+        	{{ percentage }}<small>%</small>
+        </p>
+        {% endwith %}
+      </div>
     </div>
-  </div>
-  <div class="media-body media-middle">
-    <h4 class="media-heading"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a></h4>
-  </div>
-</div>          
+ 	<div class="media-body media-middle">		
+	  <h4 class="media-heading">
+	    <a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+	  </h4>
+	  <a href="{% url 'problem_set_toggle_visible' problem_set.pk %}" class="status" rel="tooltip" title="Sklop je {% if problem_set.visible %}viden{% else %}skrit{% endif %}">
+	    <span class="glyphicon glyphicon-eye-{% if problem_set.visible %}open{% else %}close{% endif %}" aria-hidden="true"></span>
+	  </a>
+	</div>
+  </div>          
 </li>
+{% endif %}

@@ -41,31 +41,8 @@
 			<h4>
 				{{ problem.title }}
 			</h4>
-		</div>
-  		{% if problem.description and problem.description.strip %}
-		<div class="panel-body">
-  	    	<p>	
-  	       		{{ problem.description|latex_markdown }}
-  	    	</p>
- 		</div>
-  	    {% endif %}
-	  	<ul class="list-group">
-			{% for part in problem.parts.all %}
-	    	<li class="list-group-item">
-	      		<p>
-	      		    {# Translators: problem set detail #}
-	      			{{ forloop.counter }}. {% trans "part" %}    				  
-    				{% if part.id in valid_parts_ids %}
-    				  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #468847"></span>
-    				{% elif  part.id in invalid_parts_ids %}
-    				  <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #A31919"></span>
-    				{% endif %}
-	      		</p> 
-	      		{{ part.description|latex_markdown }}
-	    	</li>
-			{% endfor %}
-   			<li class="list-group-item">
-   				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+			
+			   				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
                     {% if show_teacher_forms %}
                     <div class="btn-group" role="group" aria-label="Download">
                       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -106,7 +83,32 @@
                     </div>
                     {% endif %}
   				</div>      
-   			</li>
+			
+			
+		</div>
+  		{% if problem.description and problem.description.strip %}
+		<div class="panel-body">
+  	    	<p>	
+  	       		{{ problem.description|latex_markdown }}
+  	    	</p>
+ 		</div>
+  	    {% endif %}
+	  	<ul class="list-group">
+			{% for part in problem.parts.all %}
+	    	<li class="list-group-item">
+	      		<p>
+	      		    {# Translators: problem set detail #}
+	      			{{ forloop.counter }}. {% trans "part" %}    				  
+    				{% if part.id in valid_parts_ids %}
+    				  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #468847"></span>
+    				{% elif  part.id in invalid_parts_ids %}
+    				  <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #A31919"></span>
+    				{% endif %}
+	      		</p> 
+	      		{{ part.description|latex_markdown }}
+	    	</li>
+			{% endfor %}
    	  	</ul>
+   	 </div>
 {% endfor %}
 {% endblock %} {# content #}
