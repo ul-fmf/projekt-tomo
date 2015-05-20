@@ -27,7 +27,7 @@ class AttemptSerializer(ModelSerializer):
     """
     Serialize an Attempt object.
     """
-    solution = CharField(trim_whitespace=False)
+    solution = CharField(allow_blank=True, trim_whitespace=False)
     secret = WritableJSONField(write_only=True, required=False)
     feedback = JSONStringField()
 
