@@ -27,28 +27,28 @@ class AttemptSubmitTestCase(TestCase):
                 "solution": "s1",
                 "valid": False,
                 "feedback": ["f1", "f2"],
-                "secret": [], "part": 1
+                "secret": [], "part": self.part1.pk
             },
             {
                 "solution": "s2",
                 "valid": True,
                 "feedback": ["Error"],
                 "secret": ["1"],
-                "part": 2
+                "part": self.part2.pk
             },
             {
                 "solution": "",
                 "valid": True,
                 "feedback": [],
                 "secret": ["1", "2", "3"],
-                "part": 3
+                "part": self.part3.pk
             },
             {
                 "solution": "",
                 "valid": True,
                 "feedback": [],
                 "secret": ["1", "4", "3"],
-                "part": 3
+                "part": self.part3.pk
             }
         ]
         self.user = User.objects.get(username='matija')
