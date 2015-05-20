@@ -8,17 +8,6 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- 
-<div class="row">
-  <div class="col-xs-12">
-  	<h3>
-		{{ course.title }}
-	</h3>
-  </div>
-</div>
--->
-
 <div class="panel panel-default">
         <div class="panel-heading">
             <h4>
@@ -27,7 +16,7 @@
         </div>
         <ul class="list-group">
           {% for problem_set in course.annotated_problem_sets %}
-          {% include 'courses/_problem_set.html' %}
+          	{% include 'courses/_problem_set.html' %}
           {% endfor %}
         </ul>
     </div>
