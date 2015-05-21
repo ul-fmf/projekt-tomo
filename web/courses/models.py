@@ -91,3 +91,10 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def toggle_visible(self):
         self.visible = not self.visible
         self.save()
+        
+    def toggle_solution_visibility(self):
+        next = {self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED, 
+                self.SOLUTION_VISIBLE_WHEN_SOLVED: self.SOLUTION_VISIBLE,
+                self.SOLUTION_VISIBLE: self.SOLUTION_HIDDEN}
+        self.solution_visibility = next[self.solution_visibility]
+        self.save()

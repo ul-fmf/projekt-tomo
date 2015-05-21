@@ -27,9 +27,27 @@
                     <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
                 </a>
              </div>
-			 <a href="{% url 'problem_set_toggle_visible' problem_set.pk %}" class="status" rel="tooltip" title="Sklop je {% if problem_set.visible %}viden{% else %}skrit{% endif %}">
-			   <span style="align-content:flex-end" class="glyphicon glyphicon-eye-{% if problem_set.visible %}open{% else %}close{% endif %}" aria-hidden="true"></span>
-			 </a>
+             <div class="btn-group" role="group" aria-label="Toggle Visibility">
+				 <a class="btn btn-default" href="{% url 'problem_set_toggle_visible' problem_set.pk %}" role="button" aria-label="Show/Hide"
+				    title="Sklop je {% if problem_set.visible %}viden{% else %}skrit{% endif %}">
+				   <span style="align-content:flex-end" class="glyphicon glyphicon-eye-{% if problem_set.visible %}open{% else %}close{% endif %}" aria-hidden="true"></span>
+				 </a>
+			 </div>
+			 <div class="btn-group" role="group" aria-label="Toggle Solution Visibility">
+			 		<a class="btn btn-default" href="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" role="button" aria-label="Set Solution Visibility"
+					   title="Rešitve so {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}skrite
+							  {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}pogojno vidne
+							  {% else %}vidne{% endif %}">
+							  {% comment %}
+								{# Translators: Toggle solution visibility button. #}
+						 		{% trans "Solution Visibility:" %}
+						 	{% endcomment %}
+				 		
+				        {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}<span class="glyphicon glyphicon-ban-circle"></span>{% endif %}
+				        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}<span class="glyphicon glyphicon-remove-circle"></span>{% endif %}
+				        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}<span class="glyphicon glyphicon-ok-circle"></span>{% endif %}
+				    </a>
+			 </div>
 			 </span>
 		  </div>
 		</div>		  
