@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
 from utils.views import zip_archive
@@ -77,6 +78,24 @@ def problem_set_move(request, problem_set_pk, shift):
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.move(shift)
     return redirect(problem_set.course)
+
+
+class ProblemSetCreate(CreateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetCreate, self).get_context_data(**kwargs)
+        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        context['course'] = course
+        return context
+
+    def form_valid(self, form):
+        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        form.instance.author = self.request.user
+        form.instance.course = course
+        verify(self.request.user.can_edit_course(course))
+        return super(ProblemSetCreate, self).form_valid(form)
  
  
 def problem_set_toggle_visible(request, problem_set_pk):

@@ -1,4 +1,4 @@
-{% if problem_set.visible or show_teacher_forms %}
+{% if problem_set.visible or show_teacher_forms%}
 <li class="list-group-item">
   <div class="media">
     <div class="media-left">
@@ -17,6 +17,7 @@
 			    <a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
 		    </h4>
 		  </div>
+		  {% if show_teacher_forms %}
 		  <div class="col-md-6">
 		  	 <span class="pull-right">
 		  	 <div class="btn-group" role="group" aria-label="Move">
@@ -50,6 +51,7 @@
 			 </div>
 			 </span>
 		  </div>
+		  {% endif %} {% comment %}end if show_teacher_forms{% endcomment %}
 		</div>		  
 	</div>
   </div>          
