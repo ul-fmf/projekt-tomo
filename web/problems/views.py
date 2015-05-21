@@ -30,7 +30,6 @@ def problem_edit_file(request, problem_pk):
     return plain_text(filename, contents)
 
 
-@staff_member_required
 def problem_move(request, problem_pk, shift):
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem_set(problem.problem_set))
@@ -38,7 +37,6 @@ def problem_move(request, problem_pk, shift):
     return redirect(problem)
 
 
-@staff_member_required
 class ProblemCreate(CreateView):
     model = Problem
     fields = ['title', 'description']
@@ -58,7 +56,6 @@ class ProblemCreate(CreateView):
         return super(ProblemCreate, self).form_valid(form)
 
 
-@staff_member_required
 class ProblemUpdate(UpdateView):
     model = Problem
     fields = ['title', 'description']
@@ -71,8 +68,8 @@ class ProblemUpdate(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(ProblemUpdate, self).form_valid(form)
- 
-@staff_member_required   
+
+
 # class ProblemDelete(DeleteView):
 #     '''
 #         Delete a problem and all it's parts and attempts.
@@ -114,6 +111,7 @@ class ProblemUpdate(UpdateView):
 def problem_solution(request, problem_pk):
     """Show problem solution."""
     problem = Problem.objects.get(pk=problem_pk)
+    problem_set = problem.problem_set
     attempts = request.user.attempts.filter(part__problem__id=problem_pk)
     parts = problem.parts.all()
     
@@ -123,4 +121,8 @@ def problem_solution(request, problem_pk):
             part.attempt = attempts.get(part=part)
         except:
             part.attempt = None
-    return render(request, 'problems/solutions.html', {'parts': parts})
+    return render(request, 'problems/solutions.html', {
+       'parts': parts,
+       'problem_set': problem_set,
+       'is_teacher': request.user.can_edit_problem_set(problem_set),
+    })

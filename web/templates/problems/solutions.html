@@ -19,7 +19,6 @@
 			</div>
   		</div>
   	</div>
-<!-- z ikonami: velik križ, če je učitelj rešitve skril, mali križ, če so skrite ker učenec še ni pravilno rešil-->
   	<ul class="list-group">
 		{% for part in parts %}
 		<li class="list-group-item">
@@ -30,22 +29,50 @@
 				</div>
 			</div>
 		    <div class="row">
-		    <!-- preveri še, ali so rešitve nastavljene na hidden - če so, jih učenec vseeno ne sme videti -->
-                {% if part.attempt and part.attempt.valid %}
-                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
-                {% elif part.attempt %}
-                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-                <div class="col-xs-6 text-center">
-                    {# Translators: in solution comparison table #}
-                    {% trans "Your solution for this part is not yet accepted. Therefore the official solution will not be displayed." %}
-                </div>
-                {% else %}
-                <div class="col-xs-12 text-center">
-		        	{# Translators: in solution comparison table #}
-		        	{% trans "You have not attempted to solve this part yet. Therefore the official solution will not be displayed." %}
-                {% endif %}
-		     </div>
+		    {% if is_teacher %}
+		    	{% if part.attempt %}
+		    		<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+		    		<div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+		    	{% else %}
+		    		<div class="col-xs-6">
+		    		{# Translators: in solution comparison table #}
+		        	{% trans "You have not attempted to solve this part yet." %}
+		        	</div>
+		        	<div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+	        	{% endif %}
+	        {% else %}
+			    {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+			    	<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+	                <div class="col-xs-6 text-center">
+	                    {# Translators: in solution comparison table #}
+	                    {% trans "Solution visibility is set to 'hidden'." %}
+	                </div>
+			    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
+			    	{% if part.attempt %}
+			    		<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+			    	{% else %}
+			    		{# Translators: in solution comparison table #}
+			        	{% trans "You have not attempted to solve this part yet." %}
+		        	{% endif %}
+	                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+			    {% else %}
+	                {% if part.attempt and part.attempt.valid %}
+	                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+	                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
+	                {% elif part.attempt %}
+	                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
+	                <div class="col-xs-6 text-center">
+	                    {# Translators: in solution comparison table #}
+	                    {% trans "Your solution for this part is not yet accepted. Therefore the official solution will not be displayed." %}
+	                </div>
+	                {% else %}
+	                <div class="col-xs-12 text-center">
+			        	{# Translators: in solution comparison table #}
+			        	{% trans "You have not attempted to solve this part yet. Therefore the official solution will not be displayed." %}
+	                {% endif %}
+			     </div> {% comment %}end row div{% endcomment%}
+			     {% endif %}
+		    {% endif %}
 		</li>
     	{% endfor %}
   	</ul>

@@ -72,25 +72,22 @@ def homepage(request):
     })
 
 
-@staff_member_required
 def problem_set_move(request, problem_set_pk, shift):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.move(shift)
     return redirect(problem_set.course)
-
-
-@staff_member_required
+ 
+ 
 def problem_set_toggle_visible(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_visible()
     return redirect(problem_set.course)
-
-
-@staff_member_required
+ 
 def problem_set_toggle_solution_visibility(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)
+
