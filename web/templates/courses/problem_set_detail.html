@@ -38,11 +38,14 @@
 		<div id="{{ problem.anchor }}" class="panel panel-default">
 	{% endif %}
 		<div id="{{ problem.anchor }}" class="panel-heading">
-			<h4>
-				{{ problem.title }}
-			</h4>
-			
-			   				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+			<div class="row">
+			  <div class="col-md-6">
+					<h4>
+						{{ problem.title }}
+					</h4>
+			  </div>
+			  <div class="col-md-6">
+				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
                     {% if show_teacher_forms %}
                     <div class="btn-group" role="group" aria-label="Download">
                       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -80,9 +83,18 @@
                             {# Translators: Update problem text button. #}
 							{% trans "Update" %}
                         </a>
+                        <!-- 
+					    <a href="{% url "courses.views.problemset_toggle_solution_visibility" ps.id %}" class="status" title="Rešitve so {{ ps.get_solution_visibility_display }}">
+					        {% if ps.solution_visibility == 'skrite' %}<span class="glyphicon glyphicon-ban-circle"></span>{% endif %}
+					        {% if ps.solution_visibility == 'pogojno' %}<span class="glyphicon glyphicon-remove-circle"></span>{% endif %}
+					        {% if ps.solution_visibility == 'vidne' %}<span class="glyphicon glyphicon-ok-circle"></span>{% endif %}
+					    </a>
+					     -->
                     </div>
                     {% endif %}
-  				</div>      
+  				  </div>     
+  				</div>
+			</div> 
 			
 			
 		</div>

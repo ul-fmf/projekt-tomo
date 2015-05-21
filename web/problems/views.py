@@ -30,7 +30,7 @@ def problem_edit_file(request, problem_pk):
     return plain_text(filename, contents)
 
 
-#teacher status required
+@staff_member_required
 def problem_move(request, problem_pk, shift):
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem_set(problem.problem_set))
@@ -38,7 +38,7 @@ def problem_move(request, problem_pk, shift):
     return redirect(problem)
 
 
-#teacher status required
+@staff_member_required
 class ProblemCreate(CreateView):
     model = Problem
     fields = ['title', 'description']
@@ -58,7 +58,7 @@ class ProblemCreate(CreateView):
         return super(ProblemCreate, self).form_valid(form)
 
 
-#teacher status required
+@staff_member_required
 class ProblemUpdate(UpdateView):
     model = Problem
     fields = ['title', 'description']
@@ -72,7 +72,7 @@ class ProblemUpdate(UpdateView):
         form.instance.author = self.request.user
         return super(ProblemUpdate, self).form_valid(form)
  
-#teacher status required   
+@staff_member_required   
 # class ProblemDelete(DeleteView):
 #     '''
 #         Delete a problem and all it's parts and attempts.
