@@ -69,7 +69,7 @@ class ProblemUpdate(UpdateView):
         form.instance.author = self.request.user
         return super(ProblemUpdate, self).form_valid(form)
 
-
+# 
 # class ProblemDelete(DeleteView):
 #     '''
 #         Delete a problem and all it's parts and attempts.
@@ -77,12 +77,12 @@ class ProblemUpdate(UpdateView):
 #     model = Problem
 #     def get_success_url(self):
 #         return self.object.problem_set.get_absolute_url()
-# 
+#  
 #     def get_object(self, *args, **kwargs):
 #         obj = super(ProblemDelete, self).get_object(*args, **kwargs)
 #         verify(self.request.user.can_edit_problem(obj))
 #         return obj
-# 
+#  
 #     def get_context_data(self, **kwargs):
 #         context = super(ProblemDelete, self).get_context_data(**kwargs)
 #         attempts = {}

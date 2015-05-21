@@ -65,6 +65,12 @@
 							</a>
 						</div>
 	                    {% endif %}
+	                    <div class="btn-group" role="group" aria-label="Solutions">
+			    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
+			    				    {# Translators: Link to page with solutions. #}
+									{% trans "Solutions" %}
+			    				</a>
+		                </div>
 						
 	                    {% if show_teacher_forms %}
 	                    <div class="btn-group" role="group" aria-label="Move">
@@ -79,13 +85,7 @@
 	                            {# Translators: Update problem text button. #}
 								{% trans "Update" %}
 	                        </a>
-	                        </div>
-	                        <div class="btn-group" role="group" aria-label="Solutions">
-			    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
-			    				    {# Translators: Link to page with solutions. #}
-									{% trans "Solutions" %}
-			    				</a>
-		                    </div>
+	                    </div>
 	                    {% endif %}
   				  </div> 
   				  </span>    
