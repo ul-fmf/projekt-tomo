@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
 from utils.views import zip_archive
+from utils import verify
 
 
 @login_required
@@ -49,11 +51,12 @@ def problem_set_detail(request, problem_set_pk):
 def course_detail(request, course_pk):
     """Show a list of all problems in a problem set."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.annotated_problem_sets = list(course.problem_sets.all())
+    course.annotated_problem_sets = list(course.problem_sets.reverse())
     for problem_set in course.annotated_problem_sets:
         problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'courses/course_detail.html', {
-        'course': course
+        'course': course,
+        'show_teacher_forms': request.user.can_edit_course(course),
     })
 
 
@@ -70,8 +73,40 @@ def homepage(request):
     })
 
 
-@staff_member_required
 def problem_set_move(request, problem_set_pk, shift):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
     problem_set.move(shift)
     return redirect(problem_set.course)
+
+
+class ProblemSetCreate(CreateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetCreate, self).get_context_data(**kwargs)
+        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        context['course'] = course
+        return context
+
+    def form_valid(self, form):
+        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        form.instance.author = self.request.user
+        form.instance.course = course
+        verify(self.request.user.can_edit_course(course))
+        return super(ProblemSetCreate, self).form_valid(form)
+ 
+ 
+def problem_set_toggle_visible(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    problem_set.toggle_visible()
+    return redirect(problem_set.course)
+ 
+def problem_set_toggle_solution_visibility(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    problem_set.toggle_solution_visibility()
+    return redirect(problem_set.course)
+

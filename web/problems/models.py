@@ -7,6 +7,7 @@ from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from courses.models import ProblemSet
 from utils.models import OrderWithRespectToMixin
+from taggit.managers import TaggableManager
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
@@ -14,6 +15,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     description = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
     history = HistoricalRecords()
+    tags = TaggableManager()
 
     class Meta:
         order_with_respect_to = 'problem_set'
@@ -78,13 +80,13 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def attempted_parts(self, user):
         '''
-        Returt the queryset of all parts for which user has submitted attempts for.
+        Return the queryset of all parts for which user has submitted attempts for.
         '''
         return user.attempts.filter(part__in=self.parts.all())
 
     def attempted(self, user):
         '''
-        Returt the queryset of all parts for which user has submitted attempts for.
+        Return the queryset of all parts for which user has submitted attempts for.
         '''
         return self.attempted_parts(user).count() > 0
 

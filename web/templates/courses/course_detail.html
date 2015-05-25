@@ -8,26 +8,28 @@
 {% endblock %}
 
 {% block content %}
-
-<!-- 
-<div class="row">
-  <div class="col-xs-12">
-  	<h3>
-		{{ course.title }}
-	</h3>
-  </div>
-</div>
--->
-
 <div class="panel panel-default">
         <div class="panel-heading">
             <h4>
                 {{ course.title }}
             </h4>
         </div>
+        
+        {% if show_teacher_forms %}
+        <div class="panel-body">
+			<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+			        <a class="btn btn-default" href="{% url 'problem_set_create' course.pk %}" role="button" aria-label="Create">
+			            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			                 {# Translators: Button for creating new problem set. #}
+							 {% trans "Add new problem set." %}
+			        </a>
+			</div>
+		</div>
+		{% endif %}
+        
         <ul class="list-group">
           {% for problem_set in course.annotated_problem_sets %}
-          {% include 'courses/_problem_set.html' %}
+          	{% include 'courses/_problem_set.html' %}
           {% endfor %}
         </ul>
     </div>
