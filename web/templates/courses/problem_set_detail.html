@@ -23,10 +23,17 @@
         	{# Translators: Button for downloading all problem files within a problem set. #}
             {% trans "Download all problem files" %}
         </a>
+        {% if show_teacher_forms %}
+        <a class="btn btn-default" href="{% url 'problem_create' problem_set.id %}" role="button" aria-label="Create">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                 {# Translators: Button for creating new problem. #}
+				 {% trans "Add new problem" %}
+        </a>
+        {% endif %}
     </div>
 </div>
 </div>
-{% for problem in problem_set.problems.all %}  
+{% for problem in problem_set.problems.all %} 
 	{% if problem.id in valid_problems_ids %}
 		<div id="{{ problem.anchor }}" class="panel panel-success">
 	{% elif problem.id in invalid_problems_ids %}
@@ -37,9 +44,61 @@
 		<div id="{{ problem.anchor }}" class="panel panel-default">
 	{% endif %}
 		<div id="{{ problem.anchor }}" class="panel-heading">
-			<h4>
-				{{ problem.title }}
-			</h4>
+			<div class="row">
+			  <div class="col-md-6">
+					<h4>
+						{{ problem.title }}
+					</h4>
+			  </div>
+			  <div class="col-md-6">
+			  <span class="pull-right">
+					<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+	                    {% if show_teacher_forms %}
+	                    <div class="btn-group" role="group" aria-label="Download">
+	                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+	                        Prenesi datoteko <span class="caret"></span>
+	                      </button>
+	                      <ul class="dropdown-menu" role="menu">
+	                        <li><a href="{% url 'problem_attempt_file' problem.id %}">Datoteka za reševanje</a></li>
+	                        <li><a href="{% url 'problem_edit_file' problem.id %}">Datoteka za urejanje</a></li>
+	                      </ul>
+	                    </div>
+	                    {% else %}
+						<div class="btn-group" role="group" aria-label="Download">
+							<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
+								{# Translators: Button for downloading a single problem file. #}
+								{% trans "Download this problem file" %}
+							</a>
+						</div>
+	                    {% endif %}
+	                    <div class="btn-group" role="group" aria-label="Solutions">
+			    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
+			    				    {# Translators: Link to page with solutions. #}
+									{% trans "Solutions" %}
+			    				</a>
+		                </div>
+						
+	                    {% if show_teacher_forms %}
+	                    <div class="btn-group" role="group" aria-label="Move">
+	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up">
+	                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
+	                        </a>
+	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down">
+	                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
+	                        </a>
+	                        <a class="btn btn-default" href="{% url 'problem_update' problem.id %}" role="button" aria-label="Update">
+	                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+	                            {# Translators: Update problem text button. #}
+								{% trans "Update" %}
+	                        </a>
+	                    </div>
+	                    {% endif %}
+  				  </div> 
+  				  </span>    
+  				</div>
+			</div>
+			
+			
 		</div>
   		{% if problem.description and problem.description.strip %}
 		<div class="panel-body">
@@ -63,44 +122,7 @@
 	      		{{ part.description|latex_markdown }}
 	    	</li>
 			{% endfor %}
-   			<li class="list-group-item">
-   				<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-                    {% if show_teacher_forms %}
-                    <div class="btn-group" role="group" aria-label="Download">
-                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        Prenesi datoteko <span class="caret"></span>
-                      </button>
-                      <ul class="dropdown-menu" role="menu">
-                        <li><a href="{% url 'problem_attempt_file' problem.id %}">Datoteka za reševanje</a></li>
-                        <li><a href="{% url 'problem_edit_file' problem.id %}">Datoteka za urejanje</a></li>
-                      </ul>
-                    </div>
-                    {% else %}
-					<div class="btn-group" role="group" aria-label="Download">
-						<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
-							{# Translators: Button for downloading a single problem file. #}
-							{% trans "Download this problem file" %}
-						</a>
-					</div>
-                    {% endif %}
-					<div class="btn-group" role="group" aria-label="Solutions">
-	    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id %}" role="button">
-	    				    {# Translators: Link to page with solutions. #}
-							{% trans "Solutions" %}
-	    				</a>
-					</div>
-                    {% if show_teacher_forms %}
-                    <div class="btn-group" role="group" aria-label="Move">
-                        <a class="btn btn-default" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up">
-                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-                        </a>
-                        <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down">
-                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-                        </a>
-                    {% endif %}
-  				</div>      
-   			</li>
    	  	</ul>
-	</div>
-    {% endfor %}
+   	 </div>
+{% endfor %}
 {% endblock %} {# content #}

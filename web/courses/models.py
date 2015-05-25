@@ -2,6 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from users.models import User
 from utils.models import OrderWithRespectToMixin
+from taggit.managers import TaggableManager
 
 
 class Course(models.Model):
@@ -9,6 +10,7 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
+    tags = TaggableManager()
 
     class Meta:
         ordering = ['title']
@@ -16,8 +18,19 @@ class Course(models.Model):
     def __unicode__(self):
         return self.title
 
-    def recent_problem_sets(self):
-        return self.problem_sets.reverse()[:3]
+    def recent_problem_sets(self, n=3):
+        return self.problem_sets.reverse().filter(visible=True)[:n]
+
+    #show users courses
+    def user_courses(self, user):
+        return user.courses
+
+    def is_teacher(self, user):
+        return (user in self.teachers.all())
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('course_detail', args=[str(self.pk)])
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
@@ -36,6 +49,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     solution_visibility = models.CharField(max_length=20,
                                            choices=SOLUTION_VISIBILITY_CHOICES,
                                            default=SOLUTION_VISIBLE_WHEN_SOLVED)
+    tags = TaggableManager()
 
     class Meta:
         order_with_respect_to = 'course'
@@ -73,3 +87,14 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def valid_problems(self, user):
         return [problem for problem in self.attempted_problems(user) if problem.valid(user)]
+
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
+        
+    def toggle_solution_visibility(self):
+        next = {self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED, 
+                self.SOLUTION_VISIBLE_WHEN_SOLVED: self.SOLUTION_VISIBLE,
+                self.SOLUTION_VISIBLE: self.SOLUTION_HIDDEN}
+        self.solution_visibility = next[self.solution_visibility]
+        self.save()
