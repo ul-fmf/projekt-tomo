@@ -15,7 +15,10 @@
  		<div class="row">
 		  <div class="col-md-6">
 		  	<h4 class="media-heading">
-			    <a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+			    <a style={% if problem_set.visible %}""{% else %}"color:#bbb"{% endif %}" 
+			         href="{% url 'problem_set_detail' problem_set.pk %}">
+			         {{ problem_set.title }}
+	         	</a>
 		    </h4>
 		  </div>
 		  {% if show_teacher_forms %}

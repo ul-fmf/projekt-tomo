@@ -104,7 +104,8 @@ class ProblemSetUpdate(UpdateView):
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
-        verify(obj.request.user.can_edit_course(obj))
+        course = obj.course
+        verify(self.request.user.can_edit_course(course))
         return obj
 
     def form_valid(self, form):
