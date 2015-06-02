@@ -85,6 +85,11 @@
 	                            {# Translators: Update problem text button. #}
 								{% trans "Update" %}
 	                        </a>
+	                        <a class="btn btn-default" href="{% url 'problem_delete' problem.id %}" role="button" aria-label="Delete">
+	                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+	                            {# Translators: Delete problem text button. #}
+								{% trans "Delete" %}
+	                        </a>
 	                    </div>
 	                    {% endif %}
   				  </div> 

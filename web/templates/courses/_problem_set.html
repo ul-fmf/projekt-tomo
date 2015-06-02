@@ -1,3 +1,4 @@
+{% load i18n %}
 {% if problem_set.visible or show_teacher_forms%}
 <li class="list-group-item">
   <div class="media">
@@ -20,6 +21,13 @@
 		  {% if show_teacher_forms %}
 		  <div class="col-md-6">
 		  	 <span class="pull-right">
+		  	 <div class="btn-group" role="group" aria-label="Update">
+	  	 		<a class="btn btn-default" href="{% url 'problem_set_update' problem_set.pk %}" role="button" aria-label="Update">
+		            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+		                 {# Translators: Button for editing problem set. #}
+						 {% trans "Edit problem set" %}
+		        </a>
+		     </div>
 		  	 <div class="btn-group" role="group" aria-label="Move">
                 <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk 1 %}" role="button" aria-label="Move Up">
                     <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
@@ -39,11 +47,6 @@
 					   title="Rešitve so {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}skrite
 							  {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}pogojno vidne
 							  {% else %}vidne{% endif %}">
-							  {% comment %}
-								{# Translators: Toggle solution visibility button. #}
-						 		{% trans "Solution Visibility:" %}
-						 	{% endcomment %}
-				 		
 				        {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}<span class="glyphicon glyphicon-ban-circle"></span>{% endif %}
 				        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}<span class="glyphicon glyphicon-remove-circle"></span>{% endif %}
 				        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}<span class="glyphicon glyphicon-ok-circle"></span>{% endif %}

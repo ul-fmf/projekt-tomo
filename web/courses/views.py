@@ -87,6 +87,7 @@ class ProblemSetCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(ProblemSetCreate, self).get_context_data(**kwargs)
         course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        verify(self.request.user.can_edit_course(course))
         context['course'] = course
         return context
 
@@ -96,7 +97,23 @@ class ProblemSetCreate(CreateView):
         form.instance.course = course
         verify(self.request.user.can_edit_course(course))
         return super(ProblemSetCreate, self).form_valid(form)
- 
+
+class ProblemSetUpdate(UpdateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
+        verify(obj.request.user.can_edit_course(obj))
+        return obj
+
+    def form_valid(self, form):
+        #problem_set = get_object_or_404(Course, id=self.kwargs['problem_set_id'])
+        form.instance.author = self.request.user
+        #form.instance.problem_set = problem_set
+        #verify(self.request.user.can_edit_problem_set(problem_set))
+        return super(ProblemSetUpdate, self).form_valid(form)
+
  
 def problem_set_toggle_visible(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
