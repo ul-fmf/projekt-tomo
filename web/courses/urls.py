@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from . import views
-from views import ProblemSetCreate
+from views import ProblemSetCreate, ProblemSetUpdate
 
 
 urlpatterns = patterns('',
@@ -10,5 +10,6 @@ urlpatterns = patterns('',
     url(r'^problem_set/(?P<problem_set_pk>\d+)/toggle_visible/$', views.problem_set_toggle_visible, name='problem_set_toggle_visible'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/toggle_solution_visibility/$', views.problem_set_toggle_solution_visibility, name='problem_set_toggle_solution_visibility'),
     url(r'^create/(?P<course_pk>\d+)/$', ProblemSetCreate.as_view(), name='problem_set_create'),
+    url(r'^update/(?P<pk>\d+)/$', ProblemSetUpdate.as_view(), name='problem_set_update'),
     url(r'^course/(?P<course_pk>\d+)/$', views.course_detail, name='course_detail'),
 )
