@@ -114,6 +114,17 @@ class ProblemSetUpdate(UpdateView):
         #form.instance.problem_set = problem_set
         #verify(self.request.user.can_edit_problem_set(problem_set))
         return super(ProblemSetUpdate, self).form_valid(form)
+    
+class ProblemSetDelete(DeleteView):
+    model = ProblemSet
+    
+    def get_success_url(self):
+        return self.object.course.get_absolute_url()
+  
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
+        verify(self.request.user.can_edit_course(obj.course))
+        return obj
 
  
 def problem_set_toggle_visible(request, problem_set_pk):
