@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
-from problems.models import Problem
+from problems.models import Problem, Part
 from attempts.models import Attempt
 from courses.models import ProblemSet
 from utils.views import plain_text
@@ -69,20 +69,21 @@ class ProblemUpdate(UpdateView):
         form.instance.author = self.request.user
         return super(ProblemUpdate, self).form_valid(form)
 
- 
+
 class ProblemDelete(DeleteView):
     '''
         Delete a problem and all it's parts and attempts.
     '''
     model = Problem
+
     def get_success_url(self):
         return self.object.problem_set.get_absolute_url()
-  
+
     def get_object(self, *args, **kwargs):
         obj = super(ProblemDelete, self).get_object(*args, **kwargs)
         verify(self.request.user.can_edit_problem(obj))
         return obj
-  
+
     def get_context_data(self, **kwargs):
         context = super(ProblemDelete, self).get_context_data(**kwargs)
         #problem_set = get_object_or_404(ProblemSet, id=self.kwargs['problem_set_id'])
@@ -90,7 +91,7 @@ class ProblemDelete(DeleteView):
 #         attempts = {}
 #         submissions = {}
 #         user_ids = set()
-        
+
 #         active_attempts = Attempt.objects.active().for_problem(self.object)
 #         for attempt in active_attempts.select_related('submission__user'):
 #             user_id = attempt.submission.user_id
@@ -109,6 +110,31 @@ class ProblemDelete(DeleteView):
 
 #teacher status required
 #TODO: problem_copy - to copy a problem
+def problem_copy(request, problem_pk):
+    original_problem = Problem.objects.get(pk=problem_pk)
+    verify(request.user.can_edit_problem_set(original_problem.problem_set))
+
+    new_problem = Problem()
+    new_problem.title = original_problem.title
+    new_problem.description = original_problem.description
+    new_problem.problem_set = original_problem.problem_set #?
+    #history new by default?
+    new_problem.tags = original_problem.tags
+    new_problem.save()
+
+    original_parts = original_problem.parts.all()
+
+    for original_part in original_parts:
+        new_part = Part()
+        new_part.problem = new_problem
+        new_part.description = original_part.description
+        new_part.solution = original_part.solution
+        new_part.validation = original_part.validation
+        new_part.secret = original_part.secret
+        new_part.save()
+
+    return redirect(new_problem.problem_set)
+
 
 @login_required
 def problem_solution(request, problem_pk):
@@ -117,8 +143,7 @@ def problem_solution(request, problem_pk):
     problem_set = problem.problem_set
     attempts = request.user.attempts.filter(part__problem__id=problem_pk)
     parts = problem.parts.all()
-    
-    
+
     for part in parts:
         try:
             part.attempt = attempts.get(part=part)
