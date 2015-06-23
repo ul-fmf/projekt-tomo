@@ -7,23 +7,24 @@ from rest_framework.authtoken.models import Token
 
 class User(AbstractUser):
     def can_edit_course(self, course):
-        return self in course.teachers.all()
+        return course.teachers.filter(pk=self.id).exists()
 
     def can_edit_problem_set(self, problem_set):
         return self.can_edit_course(problem_set.course)
 
     def can_edit_problem(self, problem):
         return self.can_edit_problem_set(problem.problem_set)
-    
+
     def can_view_course(self, course):
-        return (self in course.teachers.all() or self in course.students.all())
-    
+        return (course.teachers.filter(pk=self.id).exists() or
+                course.students.filter(pk=self.id).exists())
+
     def can_view_problem_set(self, problem_set):
         return self.can_view_course(problem_set.course)
-    
+
     def can_view_problem(self, problem):
         return self.can_view_problem_set(problem.problem_set)
-    
+
 #     def can_view_solutions(self, part):
 #         problem_set = part.problem.problem_set
 #         problem_set_visibility = problem_set.solution_visibility

@@ -28,6 +28,9 @@ class Course(models.Model):
     def is_teacher(self, user):
         return (user in self.teachers.all())
 
+    def is_student(self, user):
+        return (user in self.students.all())
+
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('course_detail', args=[str(self.pk)])

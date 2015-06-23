@@ -23,7 +23,6 @@ class BasicViewsTestCase(TestCase):
             'public':
                 [
                     ('login', dict()),
-                    ('logout', dict()),
                 ],
             'authenticated':
                 [
@@ -64,12 +63,11 @@ class BasicViewsTestCase(TestCase):
             message = message[:-1] + ' (redirects to {0}).'.format(response.url)
         self.assertEqual(response.status_code, code, message)
 
-    def assertRedirect(self, view, kwargs, redirected_view=None):
+    def assertRedirect(self, view, kwargs, redirect_view_name=None):
         url = reverse(view, kwargs=kwargs)
         response = self.client.get(url)
         self.assertCode(view, response, 302)
-        if redirected_view is not None:
-            redirect_view_name = self.redirect_view_name.get(view, redirected_view)
+        if redirect_view_name is not None:
             self.assertRedirects(response, '{0}?next={1}'.format(reverse(redirect_view_name), url))
         return response
 
@@ -146,8 +144,10 @@ class BasicViewsTestCase(TestCase):
             redirect_views = [view for view, args in self.views['teacher_redirect']]
             for view, args in chain.from_iterable(self.views.values()):
                 if view not in redirect_views:
+                    print("OK: " + view)
                     self.assertOK(view, args)
                 else:
+                    print("Redirect: " + view)
                     self.assertRedirect(view, args)
         finally:
             self.logout()
