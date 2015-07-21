@@ -3,3 +3,5 @@ db.sqlite3
 .pydevproject
 .project
 *eclipse*
+mobile/node
+*~

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}
+	{# Translators: Title of problem delete confirmation page. Brisanje naloge#}
+	{% trans "Delete problem" %} {{ object.title }}
+{% endblock %}
+
+{% block content %}
+	{# Translators: Text of problem delete confirmation page. Ste prepričani, da želite pobrisati nalogo#}
+	<p>{% trans "Are you sure you want to delete problem" %} <em>{{ object.title }}</em>?</p>
+	
+	<div class="row">
+	  	<div class="col-md-1">
+		  	<form action="" method="post">
+		    	{% csrf_token %}
+		    	<button type="submit" class="btn btn-primary btn-large">
+		    		{% trans "Yes" %}
+		    	</button>
+		 	 </form>
+	  	</div>
+	  	<div class="col-md-1">
+	  	  	<a class="btn btn-primary btn-large" href="{% url 'problem_set_detail' object.problem_set.pk %}" role="button">
+			  	{% trans "No" %}
+		  	</a>
+	  	</div>
+	  	<div class="col-md-10"></div>
+	</div>
+
+{% endblock %}
