@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-{% load i18n %}
+{% load i18n %}	              
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
-
  
 {% block navigation-left %} 
     <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
@@ -14,6 +13,7 @@
 <h3>
   {{ problem_set.title}}
 </h3>
+
 {% if problem_set.description and problem_set.description.strip %}
           {{ problem_set.description|latex_markdown }}
 {% endif %}
@@ -33,7 +33,47 @@
     </div>
 </div>
 </div>
-{% for problem in problem_set.problems.all %} 
+
+     {# comment Copy problem modal #}
+	<div id="modal_copy" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="copy_problem">
+		 <div class="modal-dialog" role="document">
+		 	<div class="modal-content">
+	            <div class="modal-header">
+	              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	              {# Translators: Title of copy problem modal.#}
+				  <h3>{% trans "Copy problem" %} <span id='modal_copy_problem_title'>problem title</span></h3>
+	            </div>
+	            <div class="modal-body">
+	              {# Translators: Text of copy problem modal.#}
+	              {% trans "Please choose a problem set to copy this problem to:" %} 
+	              {# comment TODO: list of problem sets user has right to #}
+	              <div id="problem_list_tree"></div>
+	            </div>
+	            <div class="modal-footer">
+	            
+	            
+	              <button class="btn btn-danger btn-large" id="button_copy_confirm">
+	                {# Translators: Confirm copying of a problem.#}
+	                {% trans "Copy" %}
+	              </button>
+	              <script>
+	              $('#button_copy_confirm').on('click', function () {
+	            	  selectedItem = $('#problem_list_tree').treeview('getSelected');
+		              copyProblem(selectedItem, "problem_delete" );
+		          });
+	              </script>
+	              
+	              
+	              
+	              <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">{% trans "Cancel" %}</button>
+	            </div>
+            </div>
+         </div>
+     </div>
+
+
+
+{% for problem in problem_set.problems.all %}      
 	{% if problem.id in valid_problems_ids %}
 		<div id="{{ problem.anchor }}" class="panel panel-success">
 	{% elif problem.id in invalid_problems_ids %}
@@ -91,11 +131,16 @@
 	                            {# Translators: Update problem text button. #}
 								{% trans "Update" %}
 	                        </a>
-	                        <a class="btn btn-default" href="{% url 'problem_copy' problem.id %}" role="button" aria-label="Copy">
-	                            <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
-	                            {# Translators: Copy problem text button. #}
-								{% trans "Copy" %}
-	                        </a>
+	                        <button id="button_copy_{{ problem.id }}" class="btn btn-default" aria-label="Copy">
+	                        <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
+	                        {# Translators: Copy problem text button. #}
+							{% trans "Copy" %}								
+	                        </button>	                        
+	                        <script>
+		                      $('#button_copy_{{ problem.id }}').on('click', function () {
+		                    	  openModal({{ problem.id }}, "{{ problem.title }}");
+		                      });
+		                    </script>
 	                        <a class="btn btn-default" href="{% url 'problem_delete' problem.id %}" role="button" aria-label="Delete">
 	                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 	                            {# Translators: Delete problem text button. #}
