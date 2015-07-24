@@ -110,15 +110,17 @@ class ProblemDelete(DeleteView):
 
 #teacher status required
 #TODO: problem_copy - to copy a problem
-def problem_copy(request, problem_pk):
+def problem_copy(request, problem_pk, problem_set_pk):
     original_problem = Problem.objects.get(pk=problem_pk)
     verify(request.user.can_edit_problem_set(original_problem.problem_set))
+
+    new_problem_set = ProblemSet.objects.get(pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(new_problem_set))
 
     new_problem = Problem()
     new_problem.title = original_problem.title
     new_problem.description = original_problem.description
-    new_problem.problem_set = original_problem.problem_set #?
-    #history new by default?
+    new_problem.problem_set = new_problem_set
     new_problem.tags = original_problem.tags
     new_problem.save()
 
@@ -135,6 +137,13 @@ def problem_copy(request, problem_pk):
 
     return redirect(new_problem.problem_set)
 
+
+def get_courses_and_problem_sets(request):
+    user = request.user
+    courses = user.taught_courses.values_list('course_id', flat=True)
+    problem_sets = ""
+    for course in courses:
+        problem_sets = problem_sets + course.problem_sets.values_list('problem_set_id', flat=True)
 
 @login_required
 def problem_solution(request, problem_pk):

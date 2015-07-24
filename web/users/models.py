@@ -14,16 +14,16 @@ class User(AbstractUser):
 
     def can_edit_problem(self, problem):
         return self.can_edit_problem_set(problem.problem_set)
-    
+
     def can_view_course(self, course):
         return (self in course.teachers.all() or self in course.students.all())
-    
+
     def can_view_problem_set(self, problem_set):
         return self.can_view_course(problem_set.course)
-    
+
     def can_view_problem(self, problem):
         return self.can_view_problem_set(problem.problem_set)
-    
+
 #     def can_view_solutions(self, part):
 #         problem_set = part.problem.problem_set
 #         problem_set_visibility = problem_set.solution_visibility

@@ -26,7 +26,7 @@ urlpatterns = patterns(
     url(r'^(?P<pk>\d+)/delete/',
         ProblemDelete.as_view(),
         name='problem_delete'),
-    url(r'^(?P<problem_pk>\d+)/copy/',
+    url(r'^(?P<problem_pk>\d+)/(?P<problem_set_pk>\d+)/copy/',
         views.problem_copy,
         name='problem_copy')
 )
