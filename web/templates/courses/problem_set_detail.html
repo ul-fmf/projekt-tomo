@@ -1,48 +1,42 @@
 {% extends 'base.html' %}
 {% load i18n %}	              
+{% load staticfiles %}
+
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
+
  
 {% block navigation-left %} 
     <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
     <li class="active"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a></li>
 {% endblock %}
 
+
 {% block content %}
 {# prikaz vseh nalog iz sklopa #}
 <div class="panel-body">
-<h3>
-  {{ problem_set.title}}
-</h3>
-
-{% if problem_set.description and problem_set.description.strip %}
-          {{ problem_set.description|latex_markdown }}
-{% endif %}
-<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-    <div class="btn-group" role="group" aria-label="Download">
-        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
-        	{# Translators: Button for downloading all problem files within a problem set. #}
-            {% trans "Download all problem files" %}
-        </a>
-        {% if show_teacher_forms %}
-        <a class="btn btn-default" href="{% url 'problem_create' problem_set.id %}" role="button" aria-label="Create">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-                 {# Translators: Button for creating new problem. #}
-				 {% trans "Add new problem" %}
-        </a>
-        {% endif %}
-    </div>
+	<h3>
+	  {{ problem_set.title}}
+	</h3>
+	
+	{% if problem_set.description and problem_set.description.strip %}
+	          {{ problem_set.description|latex_markdown }}
+	{% endif %}
+	<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
+	    <div class="btn-group" role="group" aria-label="Download">
+	        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
+	        	{# Translators: Button for downloading all problem files within a problem set. #}
+	            {% trans "Download all problem files" %}
+	        </a>
+	        {% if show_teacher_forms %}
+	        <a class="btn btn-default" href="{% url 'problem_create' problem_set.id %}" role="button" aria-label="Create">
+	            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+	                 {# Translators: Button for creating new problem. #}
+					 {% trans "Add new problem" %}
+	        </a>
+	        {% endif %}
+	    </div>
+	</div>
 </div>
-</div>
-
-<div class="modal fade" id="modal">
-  <div class="modal-dialog">
-    <div class="modal-content" id="modal_content">
-    </div>
-  </div>
-</div>
-
-
-
 {% for problem in problem_set.problems.all %}      
 	{% if problem.id in valid_problems_ids %}
 		<div id="{{ problem.anchor }}" class="panel panel-success">
@@ -86,8 +80,7 @@
 			    				    {# Translators: Link to page with solutions. #}
 									{% trans "Solutions" %}
 			    				</a>
-		                </div>
-						
+		                </div>						
 	                    {% if show_teacher_forms %}
 	                    <div class="btn-group" role="group" aria-label="Move">
 	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up">
@@ -101,27 +94,16 @@
 	                            {# Translators: Update problem text button. #}
 								{% trans "Update" %}
 	                        </a>
-	                        <button class="btn btn-default" aria-label="Copy" id="button_copy_{{ problem.id }}">
+	                        <button class="btn btn-default btn-for-modal" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}">
 	                        <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
 	                        {# Translators: Copy problem text button. #}
 							{% trans "Copy" %}								
-	                        </button>	                        
-	                        <script>
-		                      $('#button_copy_{{ problem.id }}').on('click', function () {
-		                    	  $("#modal_content").load(
-		                    	  	  "{% url 'problem_copy' problem.id %}",
-		                    	  	  function () {
-		                    	  	      $("#modal").modal();
-		                    	  	  }
-		                    	  );
-		                    	  
-		                      });
-		                    </script>
-	                        <a class="btn btn-default" href="{% url 'problem_delete' problem.id %}" role="button" aria-label="Delete">
+	                        </button>		                    
+	                        <button class="btn btn-default btn-for-modal" aria-label="Delete" data-url="{% url 'problem_delete' problem.id %}">
 	                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 	                            {# Translators: Delete problem text button. #}
 								{% trans "Delete" %}
-	                        </a>
+	                        </button>
 	                    </div>
 	                    {% endif %}
   				  </div> 
@@ -157,3 +139,19 @@
    	 </div>
 {% endfor %}
 {% endblock %} {# content #}
+
+{% block extra_js %}
+<!-- for Tree view -->
+<script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<script>
+$('.btn-for-modal').on('click', function () {
+	url = $(this).data("url");
+	$("#modal_content").load(
+		url,
+  	    function () {
+  	        $("#modal").modal();
+  	    }
+	);
+});
+</script>
+{% endblock %}

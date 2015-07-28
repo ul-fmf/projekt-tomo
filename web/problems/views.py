@@ -139,7 +139,6 @@ def copy_form(request, problem_pk):
             #pass  # TODO: handle errors
             response = HttpResponse("Please select a problem set.")
             return response
-
     else:
         form = CopyProblemForm()
         courses = request.user.taught_courses.all()

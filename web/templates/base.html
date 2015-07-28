@@ -11,9 +11,7 @@
     <title>{% block title %}{% trans "Project Tomo" %}{% endblock %}</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    	
+    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">    	
     <style type="text/css"> body { padding-top: 70px; }</style>  <!-- so fixed navigation bar will not overlay other content-->
   </head>
   <body>
@@ -55,16 +53,20 @@
     	</nav>
     {% endblock %}
 
-      {% block body %}  {% block content %}{% endblock %}  {% endblock %}
+    {% block modal %}
+	<div class="modal fade" id="modal" role="dialog" aria-labelledby="modal dialog">  
+	<!--  TODO: change aria-labelledby in javascript that opens modal -->
+	    <div class="modal-dialog" role="document">
+	    	<div class="modal-content" id="modal_content"></div>
+	  	</div>
+	</div>
+	{% endblock %}
+
+    {% block body %}  {% block content %}{% endblock %}  {% endblock %}
     </div><!-- /.container -->
 
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    
-    <!-- for Tree view -->
-	<script src="{% static "js/bootstrap-treeview.js" %}"></script>
-	<script src="{% static "js/treeview_functions.js" %}"></script>
-    
-    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>    
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         tex2jax: {

@@ -1,28 +1,29 @@
 {% load i18n %}	
 
-<form action="{% url 'problem_copy' problem.id %}"  method="post" id='copy_problem_form'>
-    {% csrf_token %}
-	<input type="hidden" name="problem_set_id", id="problem_set_id">
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    {# Translators: Title of copy problem modal.#}
+    <h4 class="modal-title">{% trans "Copy problem" %} {{ problem.title }}</h4>
+</div>
+<div class="modal-body">
+	{# Translators: Text of copy problem modal.#}
+	{% trans "Please choose a problem set to copy this problem to:" %}
 	
-	<div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        {# Translators: Title of copy problem modal.#}
-        <h4 class="modal-title">{% trans "Copy problem" %} {{ problem.title }}</h4>
-    </div>
-	<div class="modal-body">
-		{# Translators: Text of copy problem modal.#}
-		{% trans "Please choose a problem set to copy this problem to:" %}
-        <div id='problem_list_tree'></div>
-    </div>
-	<div class="modal-footer">
-		<button class="btn btn-primary" id="button_copy_confirm" disabled=true>
-		  {# Translators: Confirm copying of a problem.#}
-		  {% trans "Copy" %}
-		</button>
-		<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-	</div>
-	<script>
-	
+	<form action="{% url 'problem_copy' problem.id %}"  method="post" id='copy_problem_form'>
+	    {% csrf_token %}
+		<input type="hidden" name="problem_set_id", id="problem_set_id">
+	    <div id='problem_list_tree'></div>
+	</form>		            
+</div>
+<div class="modal-footer">
+	<button class="btn btn-primary" id="button_copy_confirm" disabled=true>
+	  {# Translators: Confirm copying of a problem.#}
+	  {% trans "Copy" %}
+	</button>
+	<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+</div>
+
+<script>
 function copyButtonDisabled(state) {	
 	$button = $("#button_copy_confirm");
 	$button.attr("disabled", state);
@@ -70,6 +71,4 @@ problem_tree.treeview(
 		onNodeSelected: nodeSelected,
 		onNodeUnselected: nodeUnselected,
 	});
-	</script>
-</form>		            
-	
+</script>
