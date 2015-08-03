@@ -28,11 +28,11 @@
 	            {% trans "Download all problem files" %}
 	        </a>
 	        {% if show_teacher_forms %}
-	        <a class="btn btn-default" href="{% url 'problem_create' problem_set.id %}" role="button" aria-label="Create">
+	        <button class="btn btn-default btn-for-modal" aria-label="Create" data-url="{% url 'problem_create' problem_set.id %}">
 	            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	                 {# Translators: Button for creating new problem. #}
 					 {% trans "Add new problem" %}
-	        </a>
+	        </button>
 	        {% endif %}
 	    </div>
 	</div>
@@ -89,11 +89,11 @@
 	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down">
 	                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
 	                        </a>
-	                        <a class="btn btn-default" href="{% url 'problem_update' problem.id %}" role="button" aria-label="Update">
+	                        <button class="btn btn-default btn-for-modal" aria-label="Update" data-url="{% url 'problem_update' problem.id %}">
 	                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 	                            {# Translators: Update problem text button. #}
 								{% trans "Update" %}
-	                        </a>
+	                        </button>
 	                        <button class="btn btn-default btn-for-modal" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}">
 	                        <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>
 	                        {# Translators: Copy problem text button. #}
