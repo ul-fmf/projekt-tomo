@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.forms import Form, IntegerField
+from django.forms import Form, IntegerField, CharField, Textarea
 from django.http import HttpResponse
 from rest_framework.reverse import reverse
 from problems.models import Problem, Part
@@ -38,6 +38,9 @@ def problem_move(request, problem_pk, shift):
 
 
 class ProblemCreate(CreateView):
+    '''
+    Create new problem by specifying title and description.
+    '''
     model = Problem
     fields = ['title', 'description']
 
@@ -57,8 +60,10 @@ class ProblemCreate(CreateView):
 
 
 class ProblemUpdate(UpdateView):
+    '''
+    Update problem title and description.
+    '''
     model = Problem
-    fields = ['title', 'description']
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
@@ -68,6 +73,9 @@ class ProblemUpdate(UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(ProblemUpdate, self).form_valid(form)
+
+    def get_success_url(self):
+        return self.object.problem_set.get_absolute_url()
 
 
 class ProblemDelete(DeleteView):

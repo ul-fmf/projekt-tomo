@@ -1,32 +1,75 @@
-{% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}
-  {% if form.instance.pk %}
-  	{# Translators: Title of editing form for problems. #}
-    {% trans "Edit problem" %} <em>{{ form.instance.title }}</em>
-  {% else %}
-  	{# Translators: Title of 'add new problem' form. #}
-    {% trans "Add new problem" %} <em>{{ problem_set.title }}</em>
-  {% endif %}
-{% endblock %}
+{% if form.instance.pk %}
+	<form action="{% url 'problem_update' problem.id %}"  method="post" id='edit_problem_form'>
+{% else %}
+	<form action="{% url 'problem_create' problem_set.id %}"  method="post" id='add_problem_form'>
+{% endif %}
 
-{% block content %}
-  <form action="" method="post">
-	 {{ form.as_p }}
-	 
-	 {% csrf_token %}
-	{% if form.instance.pk %}
-    <button type="submit" class="btn btn-primary">
-    	{# Translators: edit problem form button. #}
-    	{% trans "Edit" %}
-    </button>
-    {% else %}
-    <button type="submit" class="btn btn-primary">
-    	{# Translators: add new problem form button. #}
-    	{% trans "Add" %}
-   	</button>
-  {% endif %}
-  </form>
-  
-{% endblock %}
+	{% csrf_token %}
+    <input type="hidden" name="problem_set" id="id_problem_set" value="{{ form.instance.problem_set.id }}" />
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	    {# Translators: Title of problem delete confirmation page. Brisanje naloge#}
+	    <h4 class="modal-title">
+	    	{% if form.instance.pk %}
+	  			{# Translators: Title of editing form for problems. #}
+	    		{% trans "Edit problem" %} <em>{{ form.instance.title }}</em>
+  			{% else %}
+  				{# Translators: Title of 'add new problem' form. #}
+    			{% trans "Add new problem" %} <em>{{ form.instance.problem_set.title }}</em>
+  			{% endif %}
+	    </h4>
+	</div>
+	<div class="modal-body">
+	
+		{% if form.instance.problem_title.errors %}
+        <div class="alert alert-danger alert-dismissable alert-link">
+            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+            {# Translators: title error #}
+            {% blocktrans %}Please write a problem title that is not longer than {{ form.instance.problem_title.max_lenght }}
+             characters. {% endblocktrans %}
+        </div>
+        {% endif %}
+        
+        {% if form.instance.problem_description.errors %}
+        <div class="alert alert-danger alert-dismissable alert-link">
+            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+            {# Translators: title error #}
+            {% blocktrans %}Please write a problem description {% endblocktrans %}
+        </div>
+        {% endif %}
+        
+		<div class="form-group">
+        	<label for="id_problem_title">
+        	{# Translators: Label on edit/add problem form. #}
+        	{% trans "Title" %}
+        	</label>
+        	<input class="form-control" id="id_title" name="title" type="text"
+        		   required="required" value="{{ form.instance.title }}">
+        </div>
+        <div class="form-group">
+        	<label for="id_description">
+        	{# Translators: Label on edit/add problem form. #}
+        	{% trans "Description" %}
+        	</label>
+        	<textarea class="form-control" id="id_description" name="description">{{ form.instance.description }}</textarea>
+        </div>
+				            
+	</div>
+	<div class="modal-footer">
+		{% if form.instance.pk %}
+	    <button type="submit" class="btn btn-primary">
+	    	{# Translators: edit problem form button. #}
+	    	{% trans "Edit" %}
+	    </button>
+	    {% else %}
+	    <button type="submit" class="btn btn-primary">
+	    	{# Translators: add new problem form button. #}
+	    	{% trans "Add" %}
+	   	</button>
+		{% endif %}
+		<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+	</div>
+</form>	

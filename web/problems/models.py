@@ -15,7 +15,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     description = models.TextField(blank=True)
     problem_set = models.ForeignKey(ProblemSet, related_name='problems')
     history = HistoricalRecords()
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     class Meta:
         order_with_respect_to = 'problem_set'
