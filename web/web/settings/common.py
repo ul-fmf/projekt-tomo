@@ -11,6 +11,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'rest_framework.authtoken',
     'users',
+    'utils',
     'problems',
     'attempts',
     'bootstrap3',

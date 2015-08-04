@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.admin.views.decorators import staff_member_required
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
@@ -101,9 +100,13 @@ class ProblemSetCreate(CreateView):
         verify(self.request.user.can_edit_course(course))
         return super(ProblemSetCreate, self).form_valid(form)
 
+
 class ProblemSetUpdate(UpdateView):
     model = ProblemSet
     fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_success_url(self):
+        return self.object.course.get_absolute_url()
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
@@ -117,28 +120,33 @@ class ProblemSetUpdate(UpdateView):
         #form.instance.problem_set = problem_set
         #verify(self.request.user.can_edit_problem_set(problem_set))
         return super(ProblemSetUpdate, self).form_valid(form)
-    
+
+
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
-    
+
     def get_success_url(self):
         return self.object.course.get_absolute_url()
-  
+
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
         verify(self.request.user.can_edit_course(obj.course))
         return obj
 
- 
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetDelete, self).get_context_data(**kwargs)
+        return context
+
+
 def problem_set_toggle_visible(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_visible()
     return redirect(problem_set.course)
- 
+
+
 def problem_set_toggle_solution_visibility(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)
-

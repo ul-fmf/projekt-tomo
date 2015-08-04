@@ -141,17 +141,7 @@
 {% endblock %} {# content #}
 
 {% block extra_js %}
-<!-- for Tree view -->
+<!-- for Tree view and modals-->
 <script src="{% static "js/bootstrap-treeview.js" %}"></script>
-<script>
-$('.btn-for-modal').on('click', function () {
-	url = $(this).data("url");
-	$("#modal_content").load(
-		url,
-  	    function () {
-  	        $("#modal").modal();
-  	    }
-	);
-});
-</script>
+<script src="{% static "js/js_functions.js" %}"></script>
 {% endblock %}

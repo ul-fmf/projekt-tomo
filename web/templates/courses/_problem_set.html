@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load staticfiles %}
 {% if problem_set.visible or show_teacher_forms%}
 <li class="list-group-item">
   <div class="media">
@@ -32,11 +33,11 @@
 			        </a>
 			     </div>
 			     <div class="btn-group" role="group" aria-label="Delete">
-		  	 		<a class="btn btn-default" href="{% url 'problem_set_delete' problem_set.pk %}" role="button" aria-label="Delete">
+		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.id %}" aria-label="Delete">
 			            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 			                 {# Translators: Button for deleting problem set. #}
 							 {% trans "Delete" %}
-			        </a>
+			        </button>
 			     </div>
 			  	 <div class="btn-group" role="group" aria-label="Move">
 	                <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk 1 %}" role="button" aria-label="Move Up">
