@@ -3,7 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import validators, decorators, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
-from rest_framework.serializers import ModelSerializer, Field
+from rest_framework.serializers import ModelSerializer, Field, CharField
 from rest_framework.viewsets import ModelViewSet
 from utils.rest import JSONStringField
 from .models import Attempt
@@ -27,6 +27,7 @@ class AttemptSerializer(ModelSerializer):
     """
     Serialize an Attempt object.
     """
+    solution = CharField(allow_blank=True, trim_whitespace=False)
     secret = WritableJSONField(write_only=True, required=False)
     feedback = JSONStringField()
 

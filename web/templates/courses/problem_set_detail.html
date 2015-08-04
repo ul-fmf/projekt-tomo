@@ -11,6 +11,12 @@
 {% block content %}
 {# prikaz vseh nalog iz sklopa #}
 <div class="panel-body">
+<h3>
+  {{ problem_set.title}}
+</h3>
+{% if problem_set.description and problem_set.description.strip %}
+          {{ problem_set.description|latex_markdown }}
+{% endif %}
 <div class="btn-toolbar" role="toolbar" aria-label="Buttons">
     <div class="btn-group" role="group" aria-label="Download">
         <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
