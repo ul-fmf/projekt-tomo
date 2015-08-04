@@ -51,8 +51,10 @@
 			    	{% if part.attempt %}
 			    		<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
 			    	{% else %}
-			    		{# Translators: in solution comparison table #}
-			        	{% trans "You have not attempted to solve this part yet." %}
+			    		<div class="col-xs-6">
+			    			{# Translators: in solution comparison table #}
+			        		{% trans "You have not attempted to solve this part yet." %}
+			        	</div>
 		        	{% endif %}
 	                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
 			    {% else %}
