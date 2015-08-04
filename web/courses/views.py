@@ -13,7 +13,7 @@ def problem_set_attempts(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set(problem_set))
     user = request.user if request.user.is_authenticated() else None
-    url = reverse('attempt-submit', request=request)
+    url = reverse('attempts-submit', request=request)
     archive_name, files = problem_set.attempts_archive(url, user)
     return zip_archive(archive_name, files)
 

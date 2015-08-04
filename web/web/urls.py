@@ -9,9 +9,9 @@ import courses.urls
 
 
 router = DefaultRouter()
-router.register(r'attempts', AttemptViewSet, base_name='Attempts')
-router.register(r'problems', ProblemViewSet, base_name='Problems')
-router.register(r'courses', CourseViewSet, base_name='Courses')
+router.register(r'attempts', AttemptViewSet, base_name='attempts')
+router.register(r'problems', ProblemViewSet, base_name='problems')
+router.register(r'courses', CourseViewSet, base_name='courses')
 
 
 urlpatterns = patterns('',
