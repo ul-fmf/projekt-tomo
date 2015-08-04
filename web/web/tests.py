@@ -30,22 +30,22 @@ class BasicViewsTestCase(TestCase):
                 ],
             'student':
                 [
-                    ('problem_set_detail', {'problem_set_pk': 1}),
-                    ('problem_set_attempts', {'problem_set_pk': 1}),
-                    ('course_detail', {'course_pk': 1}),
-                    ('problem_solution', {'problem_pk': 1}),
-                    ('problem_attempt_file', {'problem_pk': 1}),
+                    ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
+                    ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
+                    ('course_detail', {'course_pk': self.course.pk}),
+                    ('problem_solution', {'problem_pk': self.problem.pk}),
+                    ('problem_attempt_file', {'problem_pk': self.problem.pk}),
                 ],
             'teacher':
                 [
-                    ('problem_edit_file', {'problem_pk': 1}),
+                    ('problem_edit_file', {'problem_pk': self.problem.pk}),
                 ],
             'teacher_redirect':
                 [
-                    ('problem_set_move', {'problem_set_pk': 1, 'shift': 1}),
-                    ('problem_move', {'problem_pk': 1, 'shift': 1}),
-                    ('problem_set_move', {'problem_set_pk': 1, 'shift': 1}),
-                    ('problem_move', {'problem_pk': 1, 'shift': 1}),
+                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
+                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
                 ],
         }
         self.default_redirect_view_name = 'login'
