@@ -21,7 +21,6 @@ def problem_set_attempts(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    
     user = request.user if request.user.is_authenticated() else None
 
     user_attempts = request.user.attempts.filter(part__problem__problem_set__id=problem_set_pk)

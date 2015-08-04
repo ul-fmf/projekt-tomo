@@ -26,14 +26,14 @@
 		  <div class="col-md-6">
 		  	 <span class="pull-right">
 			  	 <div class="btn-group" role="group" aria-label="Update">
-		  	 		<a class="btn btn-default" href="{% url 'problem_set_update' problem_set.pk %}" role="button" aria-label="Update">
+		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update">
 			            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 			                 {# Translators: Button for editing problem set. #}
 							 {% trans "Edit" %}
-			        </a>
+			        </button>
 			     </div>
 			     <div class="btn-group" role="group" aria-label="Delete">
-		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.id %}" aria-label="Delete">
+		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.pk %}" aria-label="Delete">
 			            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
 			                 {# Translators: Button for deleting problem set. #}
 							 {% trans "Delete" %}

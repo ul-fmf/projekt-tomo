@@ -23,7 +23,7 @@ urlpatterns = patterns(
     url(r'^problem_set/create/(?P<course_pk>\d+)/$',
         ProblemSetCreate.as_view(),
         name='problem_set_create'),
-    url(r'^problem_set/(?P<problem_set_pk>\d+)/update/$',
+    url(r'^problem_set/(?P<pk>\d+)/update/$',
         ProblemSetUpdate.as_view(),
         name='problem_set_update'),
     url(r'^problem_set/(?P<pk>\d+)/delete/$',

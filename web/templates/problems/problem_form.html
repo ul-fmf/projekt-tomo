@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load bootstrap3 %}
+
 
 {% if form.instance.pk %}
 	<form action="{% url 'problem_update' problem.id %}"  method="post" id='edit_problem_form'>
@@ -11,65 +13,29 @@
 
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	    {# Translators: Title of problem delete confirmation page. Brisanje naloge#}
 	    <h4 class="modal-title">
 	    	{% if form.instance.pk %}
 	  			{# Translators: Title of editing form for problems. #}
 	    		{% trans "Edit problem" %} <em>{{ form.instance.title }}</em>
   			{% else %}
   				{# Translators: Title of 'add new problem' form. #}
-    			{% trans "Add new problem" %} <em>{{ form.instance.problem_set.title }}</em>
+    			{% trans "Add new problem" %}
   			{% endif %}
 	    </h4>
 	</div>
 	<div class="modal-body">
-	
-		{% if form.instance.problem_title.errors %}
-        <div class="alert alert-danger alert-dismissable alert-link">
-            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
-            {# Translators: title error #}
-            {% blocktrans %}Please write a problem title that is not longer than {{ form.instance.problem_title.max_lenght }}
-             characters. {% endblocktrans %}
-        </div>
-        {% endif %}
-        
-        {% if form.instance.problem_description.errors %}
-        <div class="alert alert-danger alert-dismissable alert-link">
-            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
-            {# Translators: title error #}
-            {% blocktrans %}Please write a problem description {% endblocktrans %}
-        </div>
-        {% endif %}
-        
-		<div class="form-group">
-        	<label for="id_problem_title">
-        	{# Translators: Label on edit/add problem form. #}
-        	{% trans "Title" %}
-        	</label>
-        	<input class="form-control" id="id_title" name="title" type="text"
-        		   required="required" value="{{ form.instance.title }}">
-        </div>
-        <div class="form-group">
-        	<label for="id_description">
-        	{# Translators: Label on edit/add problem form. #}
-        	{% trans "Description" %}
-        	</label>
-        	<textarea class="form-control" id="id_description" name="description">{{ form.instance.description }}</textarea>
-        </div>
-				            
+		{% bootstrap_form form exclude="tags,problem_set" %}
 	</div>
 	<div class="modal-footer">
+		<button type="submit" class="btn btn-primary">
 		{% if form.instance.pk %}
-	    <button type="submit" class="btn btn-primary">
 	    	{# Translators: edit problem form button. #}
 	    	{% trans "Edit" %}
-	    </button>
 	    {% else %}
-	    <button type="submit" class="btn btn-primary">
 	    	{# Translators: add new problem form button. #}
 	    	{% trans "Add" %}
+    	{% endif %}
 	   	</button>
-		{% endif %}
 		<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
 	</div>
 </form>	
