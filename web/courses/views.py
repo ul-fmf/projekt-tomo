@@ -22,6 +22,7 @@ def problem_set_attempts(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    course = problem_set.course
     user = request.user if request.user.is_authenticated() else None
     verify(request.user.can_view_problem_set(problem_set))
 
@@ -45,7 +46,7 @@ def problem_set_detail(request, problem_set_pk):
         'valid_problems_ids': valid_problems_ids,
         'invalid_problems_ids': invalid_problems_ids,
         'half_valid_problems_ids': half_valid_problems_ids,
-        'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
+        'show_teacher_forms': request.user.can_edit_course(course),
         'user': user,
     })
 
@@ -73,7 +74,8 @@ def homepage(request):
         for problem_set in course.annotated_problem_sets:
             problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'homepage.html', {
-        'courses': courses
+        'courses': courses,
+        'show_teacher_forms': request.user.can_edit_course(course),
     })
 
 

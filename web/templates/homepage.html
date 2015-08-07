@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
+
 {% block title %}Tomo{% endblock %}
 
 {% block content %}
@@ -28,3 +30,9 @@
     <p>{% trans "Oh dear, you are not enrolled in any course yet." %}</p>
 {% endfor %}
 {% endblock content %}
+
+{% block extra_js %}
+<!-- for Tree view and modals-->
+<script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<script src="{% static "js/js_functions.js" %}"></script>
+{% endblock %}
