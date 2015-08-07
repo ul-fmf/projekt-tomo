@@ -12,7 +12,7 @@
 
 
 {% block content %}
-{# prikaz vseh nalog iz sklopa #}
+{# display of all problems in a problem set #}
 <div class="panel-body">
 	<h3>
 	  {{ problem_set.title}}
@@ -49,22 +49,47 @@
 	{% endif %}
 		<div id="{{ problem.anchor }}" class="panel-heading">
 			<div class="row">
-			  <div class="col-md-6">
+			  <div class="col-md-4">
 					<h4>
 						{{ problem.title }}
 					</h4>
+					<br>
+					{% if show_teacher_forms %}
+						{% for tag in problem.tags.all %}
+							<button type="button" class="btn btn-default btn-sm tag-button" id="tag_button_"> 
+								{{ tag }} 
+								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+							</button>
+						{% endfor %}
+						<button type="button" class="btn btn-default btn-sm">
+							{# Translators: Button for adding new tags #}
+							{% trans "Add tag" %}
+						</button>
+					{% else %}
+						{% for tag in problem.tags.all %}
+							<button type="button" class="btn btn-default btn-sm disabled"> {{ tag }} </button>
+						{% endfor %}
+					{% endif %}
 			  </div>
-			  <div class="col-md-6">
+			  <div class="col-md-8">
 			  <span class="pull-right">
 					<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
 	                    {% if show_teacher_forms %}
 	                    <div class="btn-group" role="group" aria-label="Download">
 	                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-	                        Prenesi datoteko <span class="caret"></span>
+	                        {# Translators: Prenesi datoteko #}
+							{% trans "Download file" %}
+	                        <span class="caret"></span>
 	                      </button>
 	                      <ul class="dropdown-menu" role="menu">
-	                        <li><a href="{% url 'problem_attempt_file' problem.id %}">Datoteka za reševanje</a></li>
-	                        <li><a href="{% url 'problem_edit_file' problem.id %}">Datoteka za urejanje</a></li>
+	                        <li><a href="{% url 'problem_attempt_file' problem.id %}">
+		                        {# Translators: Datoteka za reševanje #}
+								{% trans "File for solving" %}
+	                        </a></li>
+	                        <li><a href="{% url 'problem_edit_file' problem.id %}">
+	                        	{# Translators: Datoteka za urejanje #}
+								{% trans "File for editing" %}
+                        	</a></li>
 	                      </ul>
 	                    </div>
 	                    {% else %}

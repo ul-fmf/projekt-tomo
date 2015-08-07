@@ -1,0 +1,331 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sonja Jerše <sonja.jerse@gmail.com>, 2015.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-07 13:59+0200\n"
+"PO-Revision-Date: 2015-08-07 14:04+0100\n"
+"Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
+"Language-Team: American English <kde-i18n-doc@kde.org>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n"
+"%100==4 ? 2 : 3);\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#: courses/models.py:42
+msgid "Hidden"
+msgstr "Skrite"
+
+#: courses/models.py:43
+msgid "Visible when solved"
+msgstr "Vidne po sprejeti rešitvi"
+
+#: courses/models.py:44 courses/models.py:49
+msgid "Visible"
+msgstr "Vidne"
+
+#: courses/models.py:47
+msgid "Title"
+msgstr "Naslov"
+
+#: courses/models.py:48
+msgid "Description"
+msgstr "Opis"
+
+#: courses/models.py:51
+msgid "Solution visibility"
+msgstr "Rešitve"
+
+#. Translators: Default heading for pages (defined in base.html)
+#. Translators: description of project Tomo
+#: templates/base.html:11 templates/login.html:15
+msgid "Project Tomo"
+msgstr "Projekt Tomo"
+
+#. Translators: Link for logout in navigation bar (top right)
+#: templates/base.html:47
+msgid "(logout)"
+msgstr "(odjava)"
+
+#. Translators: Univerza v Ljubljani
+#: templates/base.html:93
+msgid "University of Ljubljana"
+msgstr "Univerza v Ljubljani"
+
+#. Translators: Evropski sklad za regionalni razvoj
+#: templates/base.html:98
+msgid "European Regional Development Fund"
+msgstr "Evropski sklad za regionalni razvoj"
+
+#. Translators: Ministrstvo za izobraževanje, znanost in šport
+#: templates/base.html:103
+msgid "Ministry of Education, Science and Sport"
+msgstr "Ministrstvo za izobraževanje, znanost in šport"
+
+#. Translators: Button for editing problem set.
+#. Translators: edit problem form button.
+#. Translators: edit problem form button.
+#: templates/courses/_problem_set.html:32
+#: templates/courses/problemset_form.html:30
+#: templates/problems/problem_form.html:33
+msgid "Edit"
+msgstr "Uredi"
+
+#. Translators: Button for deleting problem set.
+#. Translators: Delete problem text button.
+#: templates/courses/_problem_set.html:39
+#: templates/courses/problem_set_detail.html:130
+msgid "Delete"
+msgstr "Zbriši"
+
+#. Translators: Sklop je viden
+#: templates/courses/_problem_set.html:54
+msgid "Problem set is visible"
+msgstr "Sklop je viden"
+
+#. Translators: Sklop je skrit
+#: templates/courses/_problem_set.html:57
+msgid "Problem set is hidden"
+msgstr "Sklop je skrit"
+
+#. Translators: Uradne rešitve so skrite
+#: templates/courses/_problem_set.html:68
+msgid "Official solutions are hidden"
+msgstr "Uradne rešitve so skrite"
+
+#. Translators: Uradne rešitve so pogojno vidne
+#: templates/courses/_problem_set.html:71
+msgid "Official solutions are visible when solved"
+msgstr "Uradne rešitve so pogojno vidne"
+
+#. Translators: Uradne rešitve so vidne
+#: templates/courses/_problem_set.html:74
+msgid "Official solutions are visible"
+msgstr "Uradne rešitve so vidne"
+
+#. Translators: Button for creating new problem set.
+#. Translators: Title of 'add new problem set' form.
+#: templates/courses/course_detail.html:24
+#: templates/courses/problemset_form.html:19
+msgid "Add new problem set"
+msgstr "Dodaj sklop"
+
+#. Translators: Title of copy problem modal.
+#: templates/courses/problem_copy_form.html:6
+msgid "Copy problem"
+msgstr "Kopiraj nalogo"
+
+#. Translators: Text of copy problem modal.
+#: templates/courses/problem_copy_form.html:10
+msgid "Please choose a problem set to copy this problem to:"
+msgstr "Prosimo, izberite sklop, v katerega bo prekopirana ta naloga."
+
+#. Translators: Confirm copying of a problem.
+#. Translators: Copy problem text button.
+#: templates/courses/problem_copy_form.html:21
+#: templates/courses/problem_set_detail.html:125
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: templates/courses/problem_copy_form.html:23
+#: templates/courses/problemset_form.html:36
+#: templates/problems/problem_form.html:39
+msgid "Cancel"
+msgstr "Prekliči"
+
+#. Translators: Button for downloading all problem files within a problem set.
+#: templates/courses/problem_set_detail.html:28
+msgid "Download all problem files"
+msgstr "Prenesi vse datoteke z nalogami"
+
+#. Translators: Button for creating new problem.
+#. Translators: Title of 'add new problem' form.
+#: templates/courses/problem_set_detail.html:34
+#: templates/problems/problem_form.html:22
+msgid "Add new problem"
+msgstr "Dodaj nalogo"
+
+#. Translators: Button for adding new tags
+#: templates/courses/problem_set_detail.html:66
+msgid "Add tag"
+msgstr "Dodaj značko"
+
+#. Translators: Prenesi datoteko
+#: templates/courses/problem_set_detail.html:81
+msgid "Download file"
+msgstr "Prenesi datoteko"
+
+#. Translators: Datoteka za reševanje
+#: templates/courses/problem_set_detail.html:87
+msgid "File for solving"
+msgstr "Datoteka za reševanje"
+
+#. Translators: Datoteka za urejanje
+#: templates/courses/problem_set_detail.html:91
+msgid "File for editing"
+msgstr "Datoteka za urejanje"
+
+#. Translators: Button for downloading a single problem file.
+#: templates/courses/problem_set_detail.html:99
+msgid "Download this problem file"
+msgstr "Datoteka z nalogo"
+
+#. Translators: Link to page with solutions.
+#. Translators: Title of solutions page.
+#: templates/courses/problem_set_detail.html:106
+#: templates/problems/solutions.html:4
+msgid "Solutions"
+msgstr "Rešitve"
+
+#. Translators: Update problem text button.
+#: templates/courses/problem_set_detail.html:120
+msgid "Update"
+msgstr "Posodobi"
+
+#. Translators: problem set detail
+#. Translators: in solution comparison table
+#: templates/courses/problem_set_detail.html:153
+#: templates/problems/solutions.html:28
+msgid "part"
+msgstr "podnaloga"
+
+#. Translators: Title of problem delete confirmation page. Brisanje sklopa
+#: templates/courses/problemset_confirm_delete.html:9
+msgid "Delete problem set"
+msgstr "Brisanje sklopa"
+
+#. Translators: Translators: Text of problem set delete confirmation page. Ste prepričani, da želite pobrisati sklop
+#: templates/courses/problemset_confirm_delete.html:13
+msgid "Are you sure you want to delete problem set"
+msgstr "Ste prepričani, da želite pobrisati sklop"
+
+#: templates/courses/problemset_confirm_delete.html:18
+#: templates/problems/problem_confirm_delete.html:18
+msgid "Yes"
+msgstr "Da"
+
+#: templates/courses/problemset_confirm_delete.html:20
+#: templates/problems/problem_confirm_delete.html:20
+msgid "No"
+msgstr "Ne"
+
+#. Translators: Title of editing form for problems sets.
+#: templates/courses/problemset_form.html:16
+msgid "Edit problem set"
+msgstr "Uredi sklop"
+
+#. Translators: add new problem form button.
+#: templates/courses/problemset_form.html:33
+#: templates/problems/problem_form.html:36
+msgid "Add"
+msgstr "Dodaj"
+
+#. Translators: Link to a page with all problem lists within a course.
+#: templates/homepage.html:21
+msgid "All problem lists"
+msgstr "Vsi sklopi"
+
+#. Translators: Displays if the user is not enrolled in a single course yet.
+#: templates/homepage.html:28
+msgid "Oh dear, you are not enrolled in any course yet."
+msgstr "Ojej, v noben predmet še niste vpisani."
+
+#. Translators: Title of login page.
+#: templates/login.html:6
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+#: templates/login.html:16
+msgid ""
+" Project Tomo is your personal programming teacher. You learn by solving "
+"problems\n"
+"\t      on your computer and Tomo informs you how well you are doing. "
+msgstr ""
+"Projekt Tomo je vaš osebni učitelj programiranja. Učite se tako, da na "
+"svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku "
+"reševanja."
+
+#. Translators: must sign in
+#: templates/login.html:22
+msgid ""
+"You must sign-in before the first use. You must use the same username and "
+"password \n"
+"\t\t      that you use on student computers."
+msgstr ""
+"Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in "
+"geslom, ki ju uporabljate za prijavo na študentske računalnike."
+
+#. Translators: sign-in error
+#: templates/login.html:33
+msgid "Sign-in error!"
+msgstr "Napaka ob prijavi!"
+
+#: templates/login.html:34
+msgid ""
+"Use the same username and password that you use on student computers,\n"
+"             for example <code>NovakJ14</code> and <code>Triglav.1</code>. "
+msgstr ""
+"Uporabite enako uporabniško ime in geslo kot na študentskih računalnikih, na "
+"primer <code>NovakJ14</code> in <code>Triglav.1</code>."
+
+#. Translators: Input for username on login page.
+#: templates/login.html:42
+msgid "Username"
+msgstr "Uporabniško ime"
+
+#. Translators: Input for password on login page.
+#: templates/login.html:49
+msgid "Password"
+msgstr "Geslo"
+
+#. Translators: Button for sign-in on login page.
+#: templates/login.html:57
+msgid "Sign in"
+msgstr "Prijavi se"
+
+#. Translators: Title of problem delete confirmation page. Brisanje naloge
+#: templates/problems/problem_confirm_delete.html:9
+msgid "Delete problem"
+msgstr "Brisanje naloge"
+
+#. Translators: Translators: Text of problem delete confirmation page. Ste prepričani, da želite pobrisati nalogo
+#: templates/problems/problem_confirm_delete.html:13
+msgid "Are you sure you want to delete problem"
+msgstr "Ste prepričani, da želite pobrisati nalogo"
+
+#. Translators: Title of editing form for problems.
+#: templates/problems/problem_form.html:19
+msgid "Edit problem"
+msgstr "Uredi nalogo"
+
+#. Translators: Title of user solutions column.
+#: templates/problems/solutions.html:14
+msgid "Your solution"
+msgstr "Vaša rešitev"
+
+#. Translators: Title of official solutions column.
+#: templates/problems/solutions.html:18
+msgid "Official solution"
+msgstr "Uradna rešitev"
+
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:39 templates/problems/solutions.html:56
+#: templates/problems/solutions.html:73
+msgid "You have not attempted to solve this part yet."
+msgstr "Tega dela naloge še niste reševal."
+
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:48
+msgid "Solution visibility is set to 'hidden'."
+msgstr "Vidnost rešitev je nastavljena na 'Skrito'"
+
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:68
+msgid "Your solution for this part is not yet accepted."
+msgstr "Tega dela naloge še niste pravilno rešili."

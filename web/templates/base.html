@@ -89,18 +89,29 @@
 	    <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/ul.png" class="center-block" alt="Univerza v Ljubljani" style="max-width: 100%; max-height: 6em">
+          {# Translators: Univerza v Ljubljani #}
+            <img src="http://tyrion.fmf.uni-lj.si/ul.png" class="center-block" alt="{% trans 'University of Ljubljana' %}" 
+            	 style="max-width: 100%; max-height: 6em">
           </div>
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/ess.png" class="center-block" alt="Evropski sklad za regionalni razvoj" style="max-width: 100%; max-height: 6em">
+          {# Translators: Evropski sklad za regionalni razvoj #}
+            <img src="http://tyrion.fmf.uni-lj.si/ess.png" class="center-block" alt="{% trans 'European Regional Development Fund' %}" 
+            	 style="max-width: 100%; max-height: 6em">
           </div>
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/mizs.png" class="center-block" alt="Ministrstvo za izobraževanje, znanost in šport" 
-                 style="max-width: 100%; max-height: 6em">
+          {# Translators: Ministrstvo za izobraževanje, znanost in šport #}
+            <img src="http://tyrion.fmf.uni-lj.si/mizs.png" class="center-block" alt="{% trans 'Ministry of Education, Science and Sport' %}" 
+            	 style="max-width: 100%; max-height: 6em">
           </div>
         </div>
         <p>
-          Operacijo delno financira Evropska unija iz Evropskega sklada za regionalni razvoj ter Ministrstvo za izobraževanje, znanost in šport. Operacija se izvaja v okviru Operativnega programa krepitve regionalnih razvojnih potencialov v obdobju 2007&mdash;2013, razvojne prioritete: gospodarska razvojna infrastruktura; prednostne usmeritve: informacijska družba.
+        {# Translators: Text in footer. Operacijo delno financira Evropska unija iz Evropskega sklada za regionalni razvoj ter Ministrstvo za izobraževanje, 
+        znanost in šport. Operacija se izvaja v okviru Operativnega programa krepitve regionalnih razvojnih potencialov v obdobju 2007&mdash;2013, 
+        razvojne prioritete: gospodarska razvojna infrastruktura; prednostne usmeritve: informacijska družba.#}
+        {% trans "This work was funded in part by the European Union, European Regional Development Fund and the Ministry of Education, 
+        Science and Sport. The operation is implemented in the framework of the Operational Program for Strengthening Regional Development 
+        Potentials for the Period 2007 – 2013, Development priority: Economic development infrastructure, Priority theme: Information society." %}
+           
         </p>
       </div>
     </footer>
