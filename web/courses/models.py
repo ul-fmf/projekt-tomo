@@ -22,12 +22,15 @@ class Course(models.Model):
     def recent_problem_sets(self, n=3):
         return self.problem_sets.reverse().filter(visible=True)[:n]
 
-    #show users courses
+    # show users courses
     def user_courses(self, user):
         return user.courses
 
     def is_teacher(self, user):
         return (user in self.teachers.all())
+
+    def is_student(self, user):
+        return (user in self.students.all())
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
@@ -93,9 +96,9 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def toggle_visible(self):
         self.visible = not self.visible
         self.save()
-        
+
     def toggle_solution_visibility(self):
-        next = {self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED, 
+        next = {self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED,
                 self.SOLUTION_VISIBLE_WHEN_SOLVED: self.SOLUTION_VISIBLE,
                 self.SOLUTION_VISIBLE: self.SOLUTION_HIDDEN}
         self.solution_visibility = next[self.solution_visibility]
