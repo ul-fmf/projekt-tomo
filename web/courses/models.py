@@ -65,7 +65,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         return reverse('courses.views.problem_set_detail', args=[str(self.pk)])
 
     def attempts_archive(self, user):
-        files = [problem.attempt_file(user=user) for problem in self.problems.all()]
+        files = [problem.attempt_file(user) for problem in self.problems.all()]
         archive_name = slugify(self.title)
         return archive_name, files
 

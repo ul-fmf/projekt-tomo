@@ -12,8 +12,7 @@ def problem_set_attempts(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set(problem_set))
-    user = request.user if request.user.is_authenticated() else None
-    archive_name, files = problem_set.attempts_archive(user)
+    archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
 
 
