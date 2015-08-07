@@ -49,6 +49,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
+SUBMISSION_URL = 'https://www.tomo.si'
 
 AD_DNS_NAME = 'warpout.fmf.uni-lj.si'
 AD_LDAP_PORT = 389

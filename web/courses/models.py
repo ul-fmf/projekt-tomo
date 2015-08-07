@@ -64,8 +64,8 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         from django.core.urlresolvers import reverse
         return reverse('courses.views.problem_set_detail', args=[str(self.pk)])
 
-    def attempts_archive(self, url, user):
-        files = [problem.attempt_file(url, user=user) for problem in self.problems.all()]
+    def attempts_archive(self, user):
+        files = [problem.attempt_file(user=user) for problem in self.problems.all()]
         archive_name = slugify(self.title)
         return archive_name, files
 

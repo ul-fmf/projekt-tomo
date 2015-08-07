@@ -27,6 +27,7 @@ STATIC_URL = '/uvp/static/'
 LOGIN_URL = '/uvp/accounts/login/'
 LOGOUT_URL = '/uvp/accounts/logout/'
 LOGIN_REDIRECT_URL = '/uvp/'
+SUBMISSION_URL = 'https://tomo.fmf.uni-lj.si/uvp'
 
 AD_DNS_NAME = 'warpout.fmf.uni-lj.si'
 AD_LDAP_PORT = 389
