@@ -69,6 +69,11 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         archive_name = slugify(self.title)
         return archive_name, files
 
+    def edit_archive(self, user):
+        files = [problem.edit_file(user) for problem in self.problems.all()]
+        archive_name = "{0}-edit".format(slugify(self.title))
+        return archive_name, files
+
     def valid_percentage(self, user):
         '''
         Returns an integer value representing the percentage (rounded to the nearest integer)
