@@ -1,4 +1,6 @@
 import json
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -35,10 +37,11 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
-    def attempt_file(self, url, user):
+    def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
+        url = settings.SUBMISSION_URL + reverse('attempts-submit')
         filename = "{0}.py".format(slugify(self.title))
         contents = render_to_string("python/attempt.py", {
             "problem": self,
@@ -48,8 +51,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def edit_file(self, url, user):
+    def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
+        url = settings.SUBMISSION_URL + reverse('problems-submit')
         filename = "{0}-edit.py".format(slugify(self.title))
         contents = render_to_string("python/edit.py", {
             "problem": self,
