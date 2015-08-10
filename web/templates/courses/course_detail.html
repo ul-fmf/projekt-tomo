@@ -18,11 +18,11 @@
         {% if show_teacher_forms %}
         <div class="panel-body">
 			<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-			        <a class="btn btn-default" href="{% url 'problem_set_create' course.pk %}" role="button" aria-label="Create">
+			        <button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_create' course.pk %}" aria-label="Create">
 			            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 			                 {# Translators: Button for creating new problem set. #}
-							 {% trans "Add new problem set." %}
-			        </a>
+							 {% trans "Add new problem set" %}
+			        </button>
 			</div>
 		</div>
 		{% endif %}
@@ -35,3 +35,9 @@
     </div>
 		
 {% endblock content %}
+
+{% block extra_js %}
+<!-- for Tree view and modals-->
+<script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<script src="{% static "js/js_functions.js" %}"></script>
+{% endblock %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from users.models import User
 from utils.models import OrderWithRespectToMixin
@@ -41,18 +42,19 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
     SOLUTION_VISIBLE = 'V'
     SOLUTION_VISIBILITY_CHOICES = (
-        (SOLUTION_HIDDEN, 'Hidden'),
-        (SOLUTION_VISIBLE_WHEN_SOLVED, 'Visible when solved'),
-        (SOLUTION_VISIBLE, 'Visible'),
+        (SOLUTION_HIDDEN, _('Hidden')),
+        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Visible when solved')),
+        (SOLUTION_VISIBLE, _('Visible')),
     )
     course = models.ForeignKey(Course, related_name='problem_sets')
-    title = models.CharField(max_length=70)
-    description = models.TextField(blank=True)
-    visible = models.BooleanField(default=False)
+    title = models.CharField(max_length=70, verbose_name=_('Title'))
+    description = models.TextField(blank=True, verbose_name=_('Description'))
+    visible = models.BooleanField(default=False, verbose_name=_('Visible'))
     solution_visibility = models.CharField(max_length=20,
+                                           verbose_name=_('Solution visibility'),
                                            choices=SOLUTION_VISIBILITY_CHOICES,
                                            default=SOLUTION_VISIBLE_WHEN_SOLVED)
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     class Meta:
         order_with_respect_to = 'course'
@@ -64,9 +66,14 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         from django.core.urlresolvers import reverse
         return reverse('courses.views.problem_set_detail', args=[str(self.pk)])
 
-    def attempts_archive(self, url, user):
-        files = [problem.attempt_file(url, user=user) for problem in self.problems.all()]
+    def attempts_archive(self, user):
+        files = [problem.attempt_file(user) for problem in self.problems.all()]
         archive_name = slugify(self.title)
+        return archive_name, files
+
+    def edit_archive(self, user):
+        files = [problem.edit_file(user) for problem in self.problems.all()]
+        archive_name = "{0}-edit".format(slugify(self.title))
         return archive_name, files
 
     def valid_percentage(self, user):

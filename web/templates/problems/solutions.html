@@ -65,12 +65,12 @@
 	                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
 	                <div class="col-xs-6 text-center">
 	                    {# Translators: in solution comparison table #}
-	                    {% trans "Your solution for this part is not yet accepted. Therefore the official solution will not be displayed." %}
+	                    {% trans "Your solution for this part is not yet accepted." %}
 	                </div>
 	                {% else %}
 	                <div class="col-xs-12 text-center">
 			        	{# Translators: in solution comparison table #}
-			        	{% trans "You have not attempted to solve this part yet. Therefore the official solution will not be displayed." %}
+			        	{% trans "You have not attempted to solve this part yet." %}
 	                {% endif %}
 			     </div> {% comment %}end row div{% endcomment%}
 			     {% endif %}

@@ -1,4 +1,6 @@
 {% load i18n %}
+{% load staticfiles %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +11,7 @@
     <title>{% block title %}{% trans "Project Tomo" %}{% endblock %}</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">    	
     <style type="text/css"> body { padding-top: 70px; }</style>  <!-- so fixed navigation bar will not overlay other content-->
   </head>
   <body>
@@ -29,7 +31,7 @@
             			<span class="icon-bar"></span>
             			<span class="icon-bar"></span>
           			</button>
-          			 <a class="navbar-brand" href="/uvp/">Tomo</a>
+          			 <a class="navbar-brand" href="{% url 'homepage' %}">Tomo</a>
         		</div>
         		<div class="collapse navbar-collapse" id="myNavbar">
         			<ul class="nav navbar-nav navbar-left">
@@ -51,11 +53,20 @@
     	</nav>
     {% endblock %}
 
-      {% block body %}  {% block content %}{% endblock %}  {% endblock %}
+    {% block modal %}
+	<div class="modal fade" id="modal" role="dialog" aria-labelledby="modal dialog">  
+	<!--  TODO: change aria-labelledby in javascript that opens modal -->
+	    <div class="modal-dialog" role="document">
+	    	<div class="modal-content" id="modal_content"></div>
+	  	</div>
+	</div>
+	{% endblock %}
+
+    {% block body %}  {% block content %}{% endblock %}  {% endblock %}
     </div><!-- /.container -->
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>    
     <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
         tex2jax: {
@@ -78,18 +89,29 @@
 	    <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/ul.png" class="center-block" alt="Univerza v Ljubljani" style="max-width: 100%; max-height: 6em">
+          {# Translators: Univerza v Ljubljani #}
+            <img src="http://tyrion.fmf.uni-lj.si/ul.png" class="center-block" alt="{% trans 'University of Ljubljana' %}" 
+            	 title="{% trans 'University of Ljubljana' %}" style="max-width: 100%; max-height: 6em">
           </div>
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/ess.png" class="center-block" alt="Evropski sklad za regionalni razvoj" style="max-width: 100%; max-height: 6em">
+          {# Translators: Evropski sklad za regionalni razvoj #}
+            <img src="http://tyrion.fmf.uni-lj.si/ess.png" class="center-block" alt="{% trans 'European Regional Development Fund' %}" 
+            	 title="{% trans 'European Regional Development Fund' %}" style="max-width: 100%; max-height: 6em">
           </div>
           <div class="col-md-4">
-            <img src="http://tyrion.fmf.uni-lj.si/mizs.png" class="center-block" alt="Ministrstvo za izobraževanje, znanost in šport" 
-                 style="max-width: 100%; max-height: 6em">
+          {# Translators: Ministrstvo za izobraževanje, znanost in šport #}
+            <img src="http://tyrion.fmf.uni-lj.si/mizs.png" class="center-block" alt="{% trans 'Ministry of Education, Science and Sport' %}" 
+            	 title="{% trans 'Ministry of Education, Science and Sport' %}" style="max-width: 100%; max-height: 6em">
           </div>
         </div>
         <p>
-          Operacijo delno financira Evropska unija iz Evropskega sklada za regionalni razvoj ter Ministrstvo za izobraževanje, znanost in šport. Operacija se izvaja v okviru Operativnega programa krepitve regionalnih razvojnih potencialov v obdobju 2007&mdash;2013, razvojne prioritete: gospodarska razvojna infrastruktura; prednostne usmeritve: informacijska družba.
+        {# Translators: Text in footer. #}
+        {% blocktrans %}
+        This work was funded in part by the European Union, European Regional Development Fund and the Ministry of Education, 
+        Science and Sport. The operation is implemented in the framework of the Operational Program for Strengthening Regional Development 
+        Potentials for the Period 2007 – 2013, Development priority: Economic development infrastructure, Priority theme: Information society.
+        {% endblocktrans %}
+           
         </p>
       </div>
     </footer>

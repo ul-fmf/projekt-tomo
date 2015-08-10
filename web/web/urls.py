@@ -3,13 +3,15 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from attempts.rest import AttemptViewSet
 from problems.rest import ProblemViewSet
+from courses.rest import CourseViewSet
 from courses.views import homepage
 import courses.urls
 
 
 router = DefaultRouter()
-router.register(r'attempts', AttemptViewSet)
-router.register(r'problems', ProblemViewSet)
+router.register(r'attempts', AttemptViewSet, base_name='attempts')
+router.register(r'problems', ProblemViewSet, base_name='problems')
+router.register(r'courses', CourseViewSet, base_name='courses')
 
 
 urlpatterns = patterns('',

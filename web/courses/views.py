@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib.admin.views.decorators import staff_member_required
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
 from .models import Course, ProblemSet
@@ -13,9 +12,16 @@ def problem_set_attempts(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set(problem_set))
-    user = request.user if request.user.is_authenticated() else None
-    url = reverse('attempt-submit', request=request)
-    archive_name, files = problem_set.attempts_archive(url, user)
+    archive_name, files = problem_set.attempts_archive(request.user)
+    return zip_archive(archive_name, files)
+
+
+@login_required
+def problem_set_edit(request, problem_set_pk):
+    """Download an archive of edit files for a given problem set."""
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    archive_name, files = problem_set.edit_archive(request.user)
     return zip_archive(archive_name, files)
 
 
@@ -23,6 +29,8 @@ def problem_set_attempts(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    course = problem_set.course
+    user = request.user if request.user.is_authenticated() else None
     verify(request.user.can_view_problem_set(problem_set))
 
     user_attempts = request.user.attempts.filter(part__problem__problem_set__id=problem_set_pk)
@@ -45,7 +53,8 @@ def problem_set_detail(request, problem_set_pk):
         'valid_problems_ids': valid_problems_ids,
         'invalid_problems_ids': invalid_problems_ids,
         'half_valid_problems_ids': half_valid_problems_ids,
-        'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
+        'show_teacher_forms': request.user.can_edit_course(course),
+        'user': user,
     })
 
 
@@ -72,7 +81,8 @@ def homepage(request):
         for problem_set in course.annotated_problem_sets:
             problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'homepage.html', {
-        'courses': courses
+        'courses': courses,
+        'show_teacher_forms': request.user.can_edit_course(course),
     })
 
 
@@ -91,6 +101,7 @@ class ProblemSetCreate(CreateView):
     def get_context_data(self, **kwargs):
         context = super(ProblemSetCreate, self).get_context_data(**kwargs)
         course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        verify(self.request.user.can_edit_course(course))
         context['course'] = course
         return context
 
@@ -100,17 +111,54 @@ class ProblemSetCreate(CreateView):
         form.instance.course = course
         verify(self.request.user.can_edit_course(course))
         return super(ProblemSetCreate, self).form_valid(form)
- 
- 
+
+
+class ProblemSetUpdate(UpdateView):
+    model = ProblemSet
+    fields = ['title', 'description', 'visible', 'solution_visibility']
+
+    def get_success_url(self):
+        return self.object.course.get_absolute_url()
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
+        course = obj.course
+        verify(self.request.user.can_edit_course(course))
+        return obj
+
+    def form_valid(self, form):
+        #problem_set = get_object_or_404(Course, id=self.kwargs['problem_set_id'])
+        form.instance.author = self.request.user
+        #form.instance.problem_set = problem_set
+        #verify(self.request.user.can_edit_problem_set(problem_set))
+        return super(ProblemSetUpdate, self).form_valid(form)
+
+
+class ProblemSetDelete(DeleteView):
+    model = ProblemSet
+
+    def get_success_url(self):
+        return self.object.course.get_absolute_url()
+
+    def get_object(self, *args, **kwargs):
+        obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
+        verify(self.request.user.can_edit_course(obj.course))
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetDelete, self).get_context_data(**kwargs)
+        return context
+
+
 def problem_set_toggle_visible(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_visible()
     return redirect(problem_set.course)
- 
+
+
 def problem_set_toggle_solution_visibility(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)
-

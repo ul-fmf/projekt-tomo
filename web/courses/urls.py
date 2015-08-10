@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from . import views
-from views import ProblemSetCreate
+from views import ProblemSetCreate, ProblemSetUpdate, ProblemSetDelete
 
 
 urlpatterns = patterns(
@@ -11,6 +11,9 @@ urlpatterns = patterns(
     url(r'^problem_set/(?P<problem_set_pk>\d+)/download/$',
         views.problem_set_attempts,
         name='problem_set_attempts'),
+    url(r'^problem_set/(?P<problem_set_pk>\d+)/edit/$',
+        views.problem_set_edit,
+        name='problem_set_edit'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/move/(?P<shift>-?\d+)/$',
         views.problem_set_move,
         name='problem_set_move'),
@@ -20,9 +23,15 @@ urlpatterns = patterns(
     url(r'^problem_set/(?P<problem_set_pk>\d+)/toggle_solution_visibility/$',
         views.problem_set_toggle_solution_visibility,
         name='problem_set_toggle_solution_visibility'),
-    url(r'^create/(?P<course_pk>\d+)/$',
+    url(r'^problem_set/create/(?P<course_pk>\d+)/$',
         ProblemSetCreate.as_view(),
         name='problem_set_create'),
+    url(r'^problem_set/(?P<pk>\d+)/update/$',
+        ProblemSetUpdate.as_view(),
+        name='problem_set_update'),
+    url(r'^problem_set/(?P<pk>\d+)/delete/$',
+        ProblemSetDelete.as_view(),
+        name='problem_set_delete'),
     url(r'^course/(?P<course_pk>\d+)/$',
         views.course_detail,
         name='course_detail'),

@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 from . import views
-from views import ProblemUpdate
-from views import ProblemCreate
+from views import ProblemUpdate, ProblemCreate, ProblemDelete
 
 
 urlpatterns = patterns(
@@ -23,5 +22,11 @@ urlpatterns = patterns(
         name='problem_update'),
     url(r'^create/(?P<problem_set_id>\d+)/$',
         ProblemCreate.as_view(),
-        name='problem_create')
+        name='problem_create'),
+    url(r'^(?P<pk>\d+)/delete/',
+        ProblemDelete.as_view(),
+        name='problem_delete'),
+    url(r'^(?P<problem_pk>\d+)/copy/',
+        views.copy_form,
+        name='problem_copy')
 )
