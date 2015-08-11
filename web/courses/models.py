@@ -36,6 +36,18 @@ class Course(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('course_detail', args=[str(self.pk)])
 
+    def user_attempts(self, user):
+        attempts = {}
+        for attempt in user.attempts.filter(part__problem__problem_set__course=self):
+            attempts[attempt.part_id] = attempt
+        sorted_attempts = []
+        for problem_set in self.problem_sets.all().prefetch_related('problems__parts'):
+            problem_set_attempts = []
+            for problem in problem_set.problems.all():
+                problem_attempts = [attempts.get(part.pk) for part in problem.parts.all()]
+                problem_set_attempts.append((problem, problem_attempts))
+            sorted_attempts.append((problem_set, problem_set_attempts))
+        return sorted_attempts
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'

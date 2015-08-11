@@ -38,4 +38,7 @@ urlpatterns = patterns(
     url(r'^course/(?P<course_pk>\d+)/$',
         views.course_detail,
         name='course_detail'),
+    url(r'^course/(?P<course_pk>\d+)/progress/(?P<user_pk>\d+)/$',
+        views.course_progress,
+        name='course_progress'),
 )

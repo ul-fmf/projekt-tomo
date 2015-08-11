@@ -109,7 +109,11 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return sorted_attempts
 
     def progress_bar_width(self):
-        return "{0}%".format(100.0 / self.parts.count())
+        parts_count = self.parts.count()
+        if parts_count:
+            return "{0}%".format(100.0 / parts_count)
+        else:
+            return "0%"
 
 
 class Part(OrderWithRespectToMixin, models.Model):
