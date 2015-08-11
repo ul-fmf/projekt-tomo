@@ -108,6 +108,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
             sorted_attempts.append((user, user_attempts))
         return sorted_attempts
 
+    def progress_bar_width(self):
+        return "{0}%".format(100.0 / self.parts.count())
+
 
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
