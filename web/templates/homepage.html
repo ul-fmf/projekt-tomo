@@ -5,14 +5,28 @@
 {% block title %}Tomo{% endblock %}
 
 {% block content %}
-{% for course in courses %}
+
+{% for course in user_courses %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h4>
-                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
-            </h4>
-        </div>
-    
+        	<div class="row">
+			    <div class="col-md-4">
+		            <h4>
+		                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+		            </h4>
+	            </div>
+	            <div class="col-md-8">
+	            	<span class="pull-right">
+			            <form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
+			            	{% csrf_token %}
+				            <button class="btn btn-default" type="submit" aria-label="Unenroll">
+								{% trans "Unenroll" %}
+							</button>
+						</form>
+					</span>
+				</div>
+        	</div>
+   		</div>
         <ul class="list-group">
           {% for problem_set in course.annotated_problem_sets %}
           {% include 'courses/_problem_set.html' %}
@@ -25,14 +39,39 @@
           </li>
         </ul>
     </div>
-{% empty %}
-	{# Translators: Displays if the user is not enrolled in a single course yet. #}
-    <p>{% trans "Oh dear, you are not enrolled in any course yet." %}</p>
 {% endfor %}
+
+<p>{% trans "Bellow is a list of courses you are not enrolled in yet. Enroll by clicking on 'Enroll' button." %}</p>
+
+{% for course in not_user_courses %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+        	<div class="row">
+			    <div class="col-md-4">
+		            <h4>{{ course.title }}</h4>
+		        </div>
+	            <div class="col-md-8">
+	            	<span class="pull-right">
+	            		<form action="{% url 'enroll_in_course' course.pk %}"  method="post" id='enroll_in_course_form'>
+	            			{% csrf_token %}
+				            <button class="btn btn-default" type="submit" aria-label="Enroll">
+								{% trans "Enroll" %}
+							</button>
+						</form>
+					</span>
+				</div>
+			</div>
+			{{ course.description }}
+        </div>
+    </div>
+{% endfor %}
+	
+    
+    
+    
 {% endblock content %}
 
 {% block extra_js %}
-<!-- for Tree view and modals-->
-<script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<!-- for modals-->
 <script src="{% static "js/js_functions.js" %}"></script>
 {% endblock %}

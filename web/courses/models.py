@@ -11,7 +11,7 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
-    tags = TaggableManager()
+    tags = TaggableManager(blank=True)
 
     class Meta:
         ordering = ['title']

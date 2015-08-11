@@ -69,14 +69,43 @@ def course_detail(request, course_pk):
 def homepage(request):
     """Show a list of all problems in a problem set."""
     courses = Course.objects.all()
+    user = request.user
+    user_courses = []
+    not_user_courses = []
     for course in courses:
+        if (course.is_student(user) or course.is_teacher(user)):
+            user_courses.append(course)
+        else:
+            not_user_courses.append(course)
         course.annotated_problem_sets = list(course.recent_problem_sets())
         for problem_set in course.annotated_problem_sets:
             problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'homepage.html', {
-        'courses': courses,
+        'user_courses': user_courses,
+        'not_user_courses': not_user_courses,
         'show_teacher_forms': request.user.can_edit_course(course),
     })
+
+
+@login_required
+def enroll_in_course(request, course_pk):
+    """Enrolls user in a course as a student."""
+    user = request.user
+    course = get_object_or_404(Course, pk=course_pk)
+    course.students.add(user)
+    return redirect(course)
+
+
+@login_required
+def unenroll_from_course(request, course_pk):
+    """Unenrolls user (student or teacher) from a course."""
+    user = request.user
+    course = get_object_or_404(Course, pk=course_pk)
+    if (course.is_student(user)):
+        course.students.remove(user)
+    if (course.is_teacher(user)):
+        course.teachers.remove(user)
+    return redirect(homepage)
 
 
 @login_required
