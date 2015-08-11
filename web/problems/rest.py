@@ -5,6 +5,7 @@ from rest_framework import decorators, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from utils.rest import JSONStringField
+from utils.rest import DownloadMixin
 from .models import Problem, Part
 
 
@@ -29,7 +30,7 @@ class ProblemSerializer(ModelSerializer):
         model = Problem
 
 
-class ProblemViewSet(ModelViewSet):
+class ProblemViewSet(ModelViewSet, DownloadMixin):
     """
     A viewset for viewing and editing Problem instances.
     """

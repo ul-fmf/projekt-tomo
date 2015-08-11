@@ -1,7 +1,18 @@
 from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+from problems.rest import ProblemSerializer
+from utils.rest import DownloadMixin
 from .models import Course, ProblemSet
+
+
+class ProblemSetBackupSerializer(ModelSerializer):
+    """
+    Serialize an entire ProblemSet object.
+    """
+    problems = ProblemSerializer(many=True)
+
+    class Meta:
+        model = ProblemSet
 
 
 class ProblemSetSerializer(ModelSerializer):
@@ -11,6 +22,16 @@ class ProblemSetSerializer(ModelSerializer):
     class Meta:
         model = ProblemSet
         fields = ('id', 'title')
+
+
+class CourseBackupSerializer(ModelSerializer):
+    """
+    Serialize an entire ProblemSet object.
+    """
+    problem_sets = ProblemSetBackupSerializer(many=True)
+
+    class Meta:
+        model = Course
 
 
 class CourseSerializer(ModelSerializer):
@@ -24,13 +45,17 @@ class CourseSerializer(ModelSerializer):
         fields = ('id', 'title', 'problem_sets')
 
 
-class CourseViewSet(ReadOnlyModelViewSet):
+class ProblemSetViewSet(ModelViewSet, DownloadMixin):
     """
-    A viewset for (read-only) viewing Course instances.
+    A viewset for serializing/deserializing ProblemSet instances.
     """
-    serializer_class = CourseSerializer
-    permission_classes = (IsAuthenticated,)
+    serializer_class = ProblemSetBackupSerializer
+    queryset = ProblemSet.objects.all()
 
-    def get_queryset(self):
-        user = self.request.user
-        return user.taught_courses.all()
+
+class CourseViewSet(ModelViewSet, DownloadMixin):
+    """
+    A viewset for serializing/deserializing Course instances.
+    """
+    serializer_class = CourseBackupSerializer
+    queryset = Course.objects.all()
