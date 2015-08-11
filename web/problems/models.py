@@ -94,6 +94,20 @@ class Problem(OrderWithRespectToMixin, models.Model):
         '''
         return self.attempted_parts(user).count() > 0
 
+    def attempts_by_user(self):
+        attempts = {}
+        for part in self.parts.all():
+            for attempt in part.attempts.all():
+                if attempt.user in attempts:
+                    attempts[attempt.user][part] = attempt
+                else:
+                    attempts[attempt.user] = {part: attempt}
+        sorted_attempts = []
+        for user in sorted(attempts.keys(), key=lambda user:(user.last_name, user.first_name)):
+            user_attempts = [attempts[user].get(part) for part in self.parts.all()]
+            sorted_attempts.append((user, user_attempts))
+        return sorted_attempts
+
 
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')

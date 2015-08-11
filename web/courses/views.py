@@ -164,3 +164,13 @@ def problem_set_toggle_solution_visibility(request, problem_set_pk):
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)
+
+@login_required
+def problem_set_progress(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, id=problem_set_pk)
+    verify(request.user.can_view_problem_set_attempts(problem_set))
+    problems = problem_set.problems.all().prefetch_related('parts__attempts__user')
+    return render(request, "courses/problem_set_progress.html", {
+        'problem_set': problem_set,
+        'problems': problems
+    })
