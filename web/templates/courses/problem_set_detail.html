@@ -40,10 +40,10 @@
 	        {% else %}
 		    <div class="btn-group" role="group" aria-label="Download">
 	        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
- 	        </a>
-		    </div>
         	{# Translators: Button for downloading all problem files within a problem set. #}
             {% trans "Download all problem files" %}
+ 	        </a>
+		    </div>
 	        {% endif %}
 	</div>
 </div>
