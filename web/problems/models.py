@@ -1,4 +1,6 @@
 import json
+from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -35,10 +37,11 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
-    def attempt_file(self, url, user):
+    def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
+        url = settings.SUBMISSION_URL + reverse('attempts-submit')
         filename = "{0}.py".format(slugify(self.title))
         contents = render_to_string("python/attempt.py", {
             "problem": self,
@@ -48,8 +51,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def edit_file(self, url, user):
+    def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
+        url = settings.SUBMISSION_URL + reverse('problems-submit')
         filename = "{0}-edit.py".format(slugify(self.title))
         contents = render_to_string("python/edit.py", {
             "problem": self,
@@ -89,6 +93,27 @@ class Problem(OrderWithRespectToMixin, models.Model):
         Return the queryset of all parts for which user has submitted attempts for.
         '''
         return self.attempted_parts(user).count() > 0
+
+    def attempts_by_user(self):
+        attempts = {}
+        for part in self.parts.all():
+            for attempt in part.attempts.all():
+                if attempt.user in attempts:
+                    attempts[attempt.user][part] = attempt
+                else:
+                    attempts[attempt.user] = {part: attempt}
+        sorted_attempts = []
+        for user in sorted(attempts.keys(), key=lambda user:(user.last_name, user.first_name)):
+            user_attempts = [attempts[user].get(part) for part in self.parts.all()]
+            sorted_attempts.append((user, user_attempts))
+        return sorted_attempts
+
+    def progress_bar_width(self):
+        parts_count = self.parts.count()
+        if parts_count:
+            return "{0}%".format(100.0 / parts_count)
+        else:
+            return "0%"
 
 
 class Part(OrderWithRespectToMixin, models.Model):

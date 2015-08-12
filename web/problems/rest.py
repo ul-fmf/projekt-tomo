@@ -77,7 +77,9 @@ class ProblemViewSet(ModelViewSet):
             missing_ids = to_update_ids.difference(existing_ids)
             message = 'Parts with ids {0} are not in the database.'.format(missing_ids)
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
-
+        # Prepare custom sort order
+        # Assign None to ids of not already created parts
+        sort_order = [part.get('id', None) for part in parts_data]
         # First save the problem instance, use partial since essential parts data is missing
         problem_serializer = ProblemSerializer(data=problem_data, instance=problem, partial=True)
         problem_serializer.is_valid(raise_exception=False)
@@ -88,7 +90,15 @@ class ProblemViewSet(ModelViewSet):
         # Create new parts
         serializer = PartSerializer(data=parts_to_create_data, many=True)
         serializer.is_valid(raise_exception=False)
-        serializer.save()
+        created_ids = [o.id for o in serializer.save()]
+        assert sort_order.count(None) == len(created_ids)
+        # Insert ids of created tasks into sort order
+        created_position = 0
+        for i in range(len(sort_order)):
+            if sort_order[i] == None:
+                sort_order[i] = created_ids[created_position]
+                created_position += 1
+        problem.set_part_order(sort_order)
         # Update existing parts
         for parts_data in parts_to_update_data:
             part = parts_to_update.get(id=parts_data['id'])

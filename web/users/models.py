@@ -15,6 +15,12 @@ class User(AbstractUser):
     def can_edit_problem(self, problem):
         return self.can_edit_problem_set(problem.problem_set)
 
+    def can_view_course_attempts(self, course):
+        return course.teachers.filter(pk=self.id).exists()
+
+    def can_view_problem_set_attempts(self, problem_set):
+        return self.can_view_course_attempts(problem_set.course)
+
     def can_view_course(self, course):
         return (course.teachers.filter(pk=self.id).exists() or
                 course.students.filter(pk=self.id).exists())

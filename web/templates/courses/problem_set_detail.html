@@ -22,19 +22,36 @@
 	          {{ problem_set.description|latex_markdown }}
 	{% endif %}
 	<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-	    <div class="btn-group" role="group" aria-label="Download">
-	        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
-	        	{# Translators: Button for downloading all problem files within a problem set. #}
-	            {% trans "Download all problem files" %}
-	        </a>
 	        {% if show_teacher_forms %}
+            <div class="btn-group" role="group" aria-label="Download">
+              <button type="button" class="btn btn-default btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                Prenesi datoteke <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li><a href="{% url 'problem_set_attempts' problem_set.pk %}">Datoteke za reševanje</a></li>
+                <li><a href="{% url 'problem_set_edit' problem_set.pk %}">Datoteke za urejanje</a></li>
+              </ul>
+            </div>
 	        <button class="btn btn-default btn-for-modal" aria-label="Create" data-url="{% url 'problem_create' problem_set.id %}">
 	            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 	                 {# Translators: Button for creating new problem. #}
 					 {% trans "Add new problem" %}
 	        </button>
+		    <div class="btn-group" role="group" aria-label="Progress">
+	        <a class="btn btn-default btn-large" href="{% url 'problem_set_progress' problem_set.pk %}" role="button">
+	            <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>
+        	{# Translators: Button for showing the overall progress of students for the problem set. #}
+            {% trans "Show progress" %}
+ 	        </a>
+		    </div>
+	        {% else %}
+		    <div class="btn-group" role="group" aria-label="Download">
+	        <a class="btn btn-primary btn-large" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
+        	{# Translators: Button for downloading all problem files within a problem set. #}
+            {% trans "Download all problem files" %}
+ 	        </a>
+		    </div>
 	        {% endif %}
-	    </div>
 	</div>
 </div>
 {% for problem in problem_set.problems.all %}      

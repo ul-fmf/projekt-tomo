@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Tomo – {{ problem_set.title }}{% endblock %}
+
+ 
+{% block navigation-left %} 
+    <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
+    <li><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a></li>
+    <li class="active"><a href="{% url 'problem_set_progress' problem_set.pk %}">progress<span class="sr-only">(current)</span></a></li>
+{% endblock %}
+
+
+{% block content %}
+  {% for problem in problems %}
+  <h3>
+    {{ problem.title }}
+  </h3>
+
+  <table class="table table-condensed">
+    {% with progress_bar_width=problem.progress_bar_width %}
+    <tbody>
+      {% for user, attempts in problem.attempts_by_user %}
+
+      <tr>
+        <td>{{ user.get_full_name }}</td><td width='75%'>
+        <div class="progress">
+          {% for attempt in attempts %}
+            <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar
+              {% cycle '' 'progress-bar-striped' %}
+              {% if attempt %}
+                {% if attempt.valid %}
+                  progress-bar-success
+                {% else %}
+                  progress-bar-danger
+                {% endif %}
+              {% else %}
+              {% endif %}
+            ">
+            </div>
+          {% endfor %}
+        </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    {% endwith %}
+  </table>
+  {% endfor %}
+{% endblock %} {# content #}

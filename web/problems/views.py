@@ -15,8 +15,7 @@ def problem_attempt_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_view_problem(problem))
-    url = reverse('attempts-submit', request=request)
-    filename, contents = problem.attempt_file(url, user=request.user)
+    filename, contents = problem.attempt_file(user=request.user)
     return plain_text(filename, contents)
 
 
@@ -25,8 +24,7 @@ def problem_edit_file(request, problem_pk):
     """Download an attempt file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem(problem))
-    url = reverse('problems-submit', request=request)
-    filename, contents = problem.edit_file(url, user=request.user)
+    filename, contents = problem.edit_file(user=request.user)
     return plain_text(filename, contents)
 
 
