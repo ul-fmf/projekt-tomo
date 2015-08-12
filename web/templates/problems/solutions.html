@@ -1,7 +1,20 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {# Translators: Title of solutions page. #}
-{% block title %}{% trans "Solutions" %}{% endblock %}
+{% block title %}Tomo - {{ problem.title }}: {% trans "solutions" %}{% endblock %}
+
+{% block navigation-left %}
+    <li><a href="{% url 'course_detail' problem.problem_set.course.pk %}">{{ problem.problem_set.course.title }}</a></li>
+    <li><a href="{% url 'problem_set_detail' problem.problem_set.pk %}">{{ problem.problem_set.title }}</a></li>
+    <li><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></li>
+    <li><a href="">{{ user.get_full_name }}</a></li>
+    <li class="active"><a href="#">
+    	{% trans "solutions" %}	
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span></a></li>
+{% endblock %}
 
 {% block content %}
 

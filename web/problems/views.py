@@ -182,8 +182,8 @@ def problem_solution(request, problem_pk):
             part.attempt = None
     return render(request, 'problems/solutions.html',
                   {
+                      'problem': problem,
                       'parts': parts,
-                      'problem_set': problem_set,
                       'is_teacher': request.user.can_edit_problem_set(problem_set),
                   }
                   )

@@ -8,8 +8,8 @@
     <li><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></li>
     <li><a href="">{{ observed_user.get_full_name }}</a></li>
     <li class="active"><a href="{% url 'course_progress' course.pk observed_user.pk %}">
-    	{# Translators: Progress of a student in a course - heading in navigatio n#}
-    	{% trans "progress" %}
+    	{# Translators: Progress of a student in a course - heading in navigation#}
+    	{% trans "Progress" %}
     	<span class="sr-only">
     		{# Translators: current page in navigation #}
     		{% trans "(current)" %}
@@ -20,7 +20,7 @@
 {% block content %}
   {% for problem_set, problem_set_attempts in course_attempts %}
   <h3>
-    {{ problem_set.title }}
+    <a href="{{ problem_set.get_absolute_url }}">{{ problem_set.title }}</a>
   </h3>
 
   <table class="table table-condensed">
@@ -28,21 +28,26 @@
       {% for problem, problem_attempts in problem_set_attempts %}
       {% with progress_bar_width=problem.progress_bar_width %}
       <tr>
-        <td>{{ problem.title }}</td><td width='75%'>
+        <td>
+        	<a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
+       	</td><td width='75%'>
         <div class="progress">
           {% for attempt in problem_attempts %}
-            <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar
-              {% cycle '' 'progress-bar-striped' %}
-              {% if attempt %}
-                {% if attempt.valid %}
-                  progress-bar-success
-                {% else %}
-                  progress-bar-danger
-                {% endif %}
-              {% else %}
-              {% endif %}
-            ">
-            </div>
+          	{# FIX IT! IT SHOWS SOLUTION FROM USER THAT IS BROWSING THE PAGE. NEW SOLUTIONS VIEW NEEDED #}
+          	<a href="{% url 'problem_solution' problem.pk %}">
+	            <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar
+	              {% cycle '' 'progress-bar-striped' %}
+	              {% if attempt %}
+	                {% if attempt.valid %}
+	                  progress-bar-success
+	                {% else %}
+	                  progress-bar-danger
+	                {% endif %}
+	              {% else %}
+	              {% endif %}
+	            ">
+            	</div>
+           	</a>
           {% endfor %}
         </div>
         </td>
