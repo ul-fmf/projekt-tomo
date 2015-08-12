@@ -7,7 +7,13 @@
 {% block navigation-left %}
     <li><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></li>
     <li><a href="">{{ observed_user.get_full_name }}</a></li>
-    <li class="active"><a href="{% url 'course_progress' course.pk observed_user.pk %}">progress<span class="sr-only">(current)</span></a></li>
+    <li class="active"><a href="{% url 'course_progress' course.pk observed_user.pk %}">
+    	{# Translators: Progress of a student in a course - heading in navigatio n#}
+    	{% trans "progress" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span></a></li>
 {% endblock %}
 
 

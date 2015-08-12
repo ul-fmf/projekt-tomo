@@ -7,7 +7,14 @@
 {% block navigation-left %} 
     <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
     <li><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a></li>
-    <li class="active"><a href="{% url 'problem_set_progress' problem_set.pk %}">progress<span class="sr-only">(current)</span></a></li>
+    <li class="active"><a href="{% url 'problem_set_progress' problem_set.pk %}">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "progress" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+   	</a></li>
 {% endblock %}
 
 
@@ -23,7 +30,9 @@
       {% for user, attempts in problem.attempts_by_user %}
 
       <tr>
-        <td>{{ user.get_full_name }}</td><td width='75%'>
+        <td>
+        	<a href="{% url 'course_progress' problem_set.pk %}">{{ user.get_full_name }}</a>
+       	</td><td width='75%'>
         <div class="progress">
           {% for attempt in attempts %}
             <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar

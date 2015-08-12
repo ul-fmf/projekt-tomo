@@ -10,18 +10,24 @@
     <div class="panel panel-default">
         <div class="panel-heading">
         	<div class="row">
-			    <div class="col-md-4">
+			    <div class="col-md-6">
 		            <h4>
 		                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
 		            </h4>
 	            </div>
-	            <div class="col-md-8">
+	            <div class="col-md-6">
 	            	<span class="pull-right">
-			            <form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
+		            	<form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
 			            	{% csrf_token %}
 				            <button class="btn btn-default" type="submit" aria-label="Unenroll">
 								{% trans "Unenroll" %}
 							</button>
+							{% if show_teacher_forms %}
+							<a class="btn btn-primary" href="{% url 'course_users' course.pk %}" role="button">
+		            			{# Translators: Link to list of course users. #}
+			            		{% trans "Browse list of users" %}	
+		            		</a>
+		            		{% endif %}
 						</form>
 					</span>
 				</div>
