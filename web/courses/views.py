@@ -94,13 +94,7 @@ def promote_to_teacher(request, course_pk, student_pk):
     student = get_object_or_404(User, pk=student_pk)
     course.teachers.add(student)
     course.students.remove(student)
-    teachers = course.teachers.order_by('last_name', 'first_name')
-    students = course.students.order_by('last_name', 'first_name')
-    return render(request, 'courses/course_users.html', {
-        'teachers': teachers,
-        'students': students,
-        'course': course,
-    })
+    return redirect('course_users', course.pk)
 
 
 @login_required
@@ -111,13 +105,10 @@ def demote_to_student(request, course_pk, teacher_pk):
     teacher = get_object_or_404(User, pk=teacher_pk)
     course.students.add(teacher)
     course.teachers.remove(teacher)
-    teachers = course.teachers.order_by('last_name', 'first_name')
-    students = course.students.order_by('last_name', 'first_name')
-    return render(request, 'courses/course_users.html', {
-        'teachers': teachers,
-        'students': students,
-        'course': course,
-    })
+    if teacher == request.user:
+        return redirect(course)
+    else:
+        return redirect('course_users', course.pk)
 
 
 @login_required
@@ -145,22 +136,17 @@ def homepage(request):
 @login_required
 def enroll_in_course(request, course_pk):
     """Enrolls user in a course as a student."""
-    user = request.user
     course = get_object_or_404(Course, pk=course_pk)
-    if(user not in course.students):
-        course.students.add(user)
+    course.students.add(request.user)
     return redirect(course)
 
 
 @login_required
 def unenroll_from_course(request, course_pk):
     """Unenrolls user (student or teacher) from a course."""
-    user = request.user
     course = get_object_or_404(Course, pk=course_pk)
-    if (course.is_student(user)):
-        course.students.remove(user)
-    if (course.is_teacher(user)):
-        course.teachers.remove(user)
+    course.students.remove(request.user)
+    course.teachers.remove(request.user)
     return redirect(homepage)
 
 
