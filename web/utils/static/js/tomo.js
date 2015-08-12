@@ -11,3 +11,16 @@ $('.btn-for-modal').on('click', function () {
 $('.tag-button').on('click', function(){
 	$("#div1").remove();
 });
+
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [["$", "$"], ["\\(", "\\)"]]
+  }
+});
+
+$(document).ready(function() {
+  $("code").each(function() {
+      $(this).addClass("prettyprint")
+  });
+  prettyPrint();
+});
