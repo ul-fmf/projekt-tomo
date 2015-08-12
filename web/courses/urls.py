@@ -38,4 +38,13 @@ urlpatterns = patterns(
     url(r'^course/(?P<course_pk>\d+)/unenroll_from_course/$',
         views.unenroll_from_course,
         name='unenroll_from_course'),
+    url(r'^course/(?P<course_pk>\d+)/course_users/$',
+        views.course_users,
+        name='course_users'),
+    url(r'^course/(?P<course_pk>\d+)/(?P<teacher_pk>\d+)/demote_to_student$',
+        views.demote_to_student,
+        name='demote_to_student'),
+    url(r'^course/(?P<course_pk>\d+)/(?P<student_pk>\d+)/promote_to_teacher$',
+        views.promote_to_teacher,
+        name='promote_to_teacher'),
 )

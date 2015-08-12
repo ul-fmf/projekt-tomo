@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from rest_framework.reverse import reverse
-from .models import Course, ProblemSet
+from .models import Course, ProblemSet, User
 from utils.views import zip_archive
 from utils import verify
 
@@ -63,6 +63,54 @@ def course_detail(request, course_pk):
         'course': course,
         'show_teacher_forms': request.user.can_edit_course(course),
     })
+    
+
+@login_required
+def course_users(request, course_pk):
+    """Show a list of all course students and teachers"""
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_edit_course(course))
+    teachers = course.teachers.order_by('last_name', 'first_name')
+    students = course.students.order_by('last_name', 'first_name')
+    return render(request, 'courses/course_users.html', {
+        'teachers': teachers,
+        'students': students,
+        'course': course,
+    })
+
+
+@login_required
+def promote_to_teacher(request, course_pk, student_pk):
+    """Promote student to teacher in a given course"""
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_edit_course(course))
+    student = get_object_or_404(User, pk=student_pk)
+    course.teachers.add(student)
+    course.students.remove(student)
+    teachers = course.teachers.order_by('last_name', 'first_name')
+    students = course.students.order_by('last_name', 'first_name')
+    return render(request, 'courses/course_users.html', {
+        'teachers': teachers,
+        'students': students,
+        'course': course,
+    })
+
+
+@login_required
+def demote_to_student(request, course_pk, teacher_pk):
+    """Demote teacher to student in a given course"""
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_edit_course(course))
+    teacher = get_object_or_404(User, pk=teacher_pk)
+    course.students.add(teacher)
+    course.teachers.remove(teacher)
+    teachers = course.teachers.order_by('last_name', 'first_name')
+    students = course.students.order_by('last_name', 'first_name')
+    return render(request, 'courses/course_users.html', {
+        'teachers': teachers,
+        'students': students,
+        'course': course,
+    })
 
 
 @login_required
@@ -92,7 +140,8 @@ def enroll_in_course(request, course_pk):
     """Enrolls user in a course as a student."""
     user = request.user
     course = get_object_or_404(Course, pk=course_pk)
-    course.students.add(user)
+    if(user not in course.students):
+        course.students.add(user)
     return redirect(course)
 
 
