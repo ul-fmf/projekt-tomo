@@ -3,6 +3,8 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Course, ProblemSet
+from problems.models import Part
+from attempts.models import Attempt
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -78,8 +80,25 @@ def course_users(request, course_pk):
     """Show a list of all course students and teachers"""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
+    students = list(course.students.all())
+    part_count = Part.objects.filter(problem__problem_set__course=course).count()
+    attempts = Attempt.objects.filter(part__problem__problem_set__course=course)
+    from django.db.models import Count
+    valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
+    all_attempts = attempts.values('user').annotate(Count('user'))
+    def to_dict(attempts):
+        attempts_dict = {}
+        for val in attempts:
+            attempts_dict[val['user']] = val['user__count']
+        return attempts_dict
+    valid_attempts_dict = to_dict(valid_attempts)
+    all_attempts_dict = to_dict(all_attempts)
+    for student in students:
+        student.correct_percentage = "{}%".format(100.0 * valid_attempts_dict.get(student.pk, 0) / part_count)
+        student.incorrect_percentage = "{}%".format(100.0 * (all_attempts_dict.get(student.pk, 0) - valid_attempts_dict.get(student.pk, 0)) / part_count)
     return render(request, 'courses/course_users.html', {
         'course': course,
+        'students': students
     })
 
 

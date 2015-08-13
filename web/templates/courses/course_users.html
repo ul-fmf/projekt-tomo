@@ -49,23 +49,29 @@
    		</h3>
   	</div>
   	<ul class="list-group">
-		{% for student in course.students.all %}
+		{% for student in students %}
 	    <li class="list-group-item">
 	    	<div class="row">
-			    <div class="col-md-6">
-			    	<a href="{% url 'course_progress' course.pk  student.pk%}">
+			    <div class="col-md-3">
+			    	<a href="{% url 'course_progress' course.pk  student.pk %}">
 		            	{{ student.get_full_name }}
 	            	</a>
 	            </div>
-	            <div class="col-md-6">
+                <div class="col-md-8">
+                    <div class="progress" style="width: 100%">
+                        <div style="width: {{ student.correct_percentage }}" class="progress-bar progress-bar-success"></div>
+                        <div style="width: {{ student.incorrect_percentage }}" class="progress-bar progress-bar-danger"></div>
+                    </div>
+                </div>
+	            <div class="col-md-1">
 	            	<span class="pull-right">
 			            <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
 			            	{% csrf_token %}
 				            <button class="btn btn-default btn-sm" type="submit" aria-label="Promote">
 				            	<span class="glyphicon glyphicon-education" aria-hidden="true"></span>
-				            	{# Translators: Promote student to teacher - button#}
+<!-- 				            	{# Translators: Promote student to teacher - button#}
 								{% trans "Promote to teacher" %}
-							</button>
+ -->							</button>
 						</form>
 					</span>
 				</div>
