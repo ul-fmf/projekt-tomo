@@ -22,7 +22,7 @@
 				            <button class="btn btn-default" type="submit" aria-label="Unenroll">
 								{% trans "Unenroll" %}
 							</button>
-							{% if show_teacher_forms %}
+							{% if course.show_teacher_forms %}
 							<a class="btn btn-primary" href="{% url 'course_users' course.pk %}" role="button">
 		            			{# Translators: Link to list of course users. #}
 			            		{% trans "Browse list of users" %}	

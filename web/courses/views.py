@@ -111,22 +111,20 @@ def demote_to_student(request, course_pk, teacher_pk):
 @login_required
 def homepage(request):
     """Show a list of all problems in a problem set."""
-    courses = Course.objects.all()
-    user = request.user
     user_courses = []
     not_user_courses = []
-    for course in courses:
-        if (course.is_student(user) or course.is_teacher(user)):
+    for course in Course.objects.all():
+        if request.user.can_view_course(course):
             user_courses.append(course)
+            course.annotated_problem_sets = list(course.recent_problem_sets())
+            course.show_teacher_forms = request.user.can_edit_course(course)
+            for problem_set in course.annotated_problem_sets:
+                problem_set.percentage = problem_set.valid_percentage(request.user)
         else:
             not_user_courses.append(course)
-        course.annotated_problem_sets = list(course.recent_problem_sets())
-        for problem_set in course.annotated_problem_sets:
-            problem_set.percentage = problem_set.valid_percentage(request.user)
     return render(request, 'homepage.html', {
         'user_courses': user_courses,
         'not_user_courses': not_user_courses,
-        'show_teacher_forms': request.user.can_edit_course(course),
     })
 
 
