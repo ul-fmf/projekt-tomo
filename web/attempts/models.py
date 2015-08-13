@@ -10,7 +10,7 @@ class Attempt(models.Model):
     part = models.ForeignKey(Part, related_name='attempts')
     solution = models.TextField(blank=True)
     valid = models.BooleanField(default=False)
-    feedback = models.TextField(default="[]", validators=[is_json_string_list])
+    feedback = models.TextField(default='[]', validators=[is_json_string_list])
     history = HistoricalRecords()
 
     class Meta:
