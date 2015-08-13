@@ -160,54 +160,36 @@ class ProblemSetCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSetCreate, self).get_context_data(**kwargs)
-        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
-        verify(self.request.user.can_edit_course(course))
-        context['course'] = course
+        context['course_pk'] = self.kwargs['course_pk']
         return context
 
     def form_valid(self, form):
         course = get_object_or_404(Course, id=self.kwargs['course_pk'])
-        form.instance.author = self.request.user
-        form.instance.course = course
         verify(self.request.user.can_edit_course(course))
+        form.instance.course = course
         return super(ProblemSetCreate, self).form_valid(form)
 
 
 class ProblemSetUpdate(UpdateView):
     model = ProblemSet
-    fields = ['title', 'description', 'visible', 'solution_visibility']
-
-    def get_success_url(self):
-        return self.object.course.get_absolute_url()
+    fields = ['title', 'description']
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
-        course = obj.course
-        verify(self.request.user.can_edit_course(course))
+        verify(self.request.user.can_edit_problem_set(obj))
         return obj
-
-    def form_valid(self, form):
-        #problem_set = get_object_or_404(Course, id=self.kwargs['problem_set_id'])
-        form.instance.author = self.request.user
-        #form.instance.problem_set = problem_set
-        #verify(self.request.user.can_edit_problem_set(problem_set))
-        return super(ProblemSetUpdate, self).form_valid(form)
 
 
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
-
-    def get_success_url(self):
-        return self.object.course.get_absolute_url()
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
         verify(self.request.user.can_edit_course(obj.course))
         return obj
 
-    def get_context_data(self, **kwargs):
-        context = super(ProblemSetDelete, self).get_context_data(**kwargs)
-        return context
+    def get_success_url(self):
+        return self.object.course.get_absolute_url()
 
 
 @login_required
