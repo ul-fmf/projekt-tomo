@@ -19,22 +19,12 @@ class Course(models.Model):
     def __unicode__(self):
         return self.title
 
-    def recent_problem_sets(self, n=3):
-        return self.problem_sets.reverse().filter(visible=True)[:n]
-
-    # show users courses
-    def user_courses(self, user):
-        return user.courses
-
-    def is_teacher(self, user):
-        return (user in self.teachers.all())
-
-    def is_student(self, user):
-        return (user in self.students.all())
-
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('course_detail', args=[str(self.pk)])
+
+    def recent_problem_sets(self, n=3):
+        return self.problem_sets.reverse().filter(visible=True)[:n]
 
     def user_attempts(self, user):
         attempts = {}

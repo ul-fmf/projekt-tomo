@@ -224,7 +224,6 @@ def course_progress(request, course_pk, user_pk):
     course = get_object_or_404(Course, id=course_pk)
     user = get_object_or_404(User, id=user_pk)
     verify(request.user.can_view_course_attempts(course))
-    verify(course.is_student(user))
     return render(request, "courses/course_progress.html", {
         'course': course,
         'observed_user': user,
