@@ -77,11 +77,7 @@ def course_users(request, course_pk):
     """Show a list of all course students and teachers"""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
-    teachers = course.teachers.order_by('last_name', 'first_name')
-    students = course.students.order_by('last_name', 'first_name')
     return render(request, 'courses/course_users.html', {
-        'teachers': teachers,
-        'students': students,
         'course': course,
     })
 

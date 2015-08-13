@@ -6,6 +6,9 @@ from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
+    class Meta:
+        ordering = ['last_name', 'first_name']
+
     def can_edit_course(self, course):
         return course.teachers.filter(pk=self.id).exists()
 

@@ -103,7 +103,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
                 else:
                     attempts[attempt.user] = {part: attempt}
         sorted_attempts = []
-        for user in sorted(attempts.keys(), key=lambda user:(user.last_name, user.first_name)):
+        for user in sorted(attempts.keys()):
             user_attempts = [attempts[user].get(part) for part in self.parts.all()]
             sorted_attempts.append((user, user_attempts))
         return sorted_attempts

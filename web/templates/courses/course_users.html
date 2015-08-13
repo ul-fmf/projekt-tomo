@@ -17,11 +17,11 @@
    		</h3>
  	 </div>
  	 <ul class="list-group">
-		 {% for teacher in teachers.all %}
+		 {% for teacher in course.teachers.all %}
 	     <li class="list-group-item">
 	     	<div class="row">
 			    <div class="col-md-6">
-		            {{teacher.first_name}} {{teacher.last_name}}
+		            {{ teacher.get_full_name }}
 	            </div>
 	            <div class="col-md-6">
 	            	<span class="pull-right">
@@ -49,12 +49,12 @@
    		</h3>
   	</div>
   	<ul class="list-group">
-		{% for student in students.all %}
+		{% for student in course.students.all %}
 	    <li class="list-group-item">
 	    	<div class="row">
 			    <div class="col-md-6">
 			    	<a href="{% url 'course_progress' course.pk  student.pk%}">
-		            	{{student.first_name}} {{student.last_name}}
+		            	{{ student.get_full_name }}
 	            	</a>
 	            </div>
 	            <div class="col-md-6">
