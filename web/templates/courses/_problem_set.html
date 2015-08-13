@@ -52,7 +52,9 @@
 	                </a>
 	             </div>
 	             <div class="btn-group" role="group" aria-label="Toggle Visibility">
-					 <a class="btn btn-default" href="{% url 'problem_set_toggle_visible' problem_set.pk %}" role="button" aria-label="Show/Hide"
+                 <form action="{% url 'problem_set_toggle_visible' problem_set.pk %}" method="post">
+                    {% csrf_token %}
+					 <button class="btn btn-default" type="submit" aria-label="Show/Hide"
 					 	{% if problem_set.visible %}
 					 		{# Translators: Sklop je viden#}
 					 		title = "{% trans 'Problem set is visible' %}"
@@ -63,7 +65,8 @@
 					    >
 					    
 					   <span style="align-content:flex-end" class="glyphicon glyphicon-eye-{% if problem_set.visible %}open{% else %}close{% endif %}" aria-hidden="true"></span>
-					 </a>
+					 </button>
+				 </form>
 				 </div>
 				 <div class="btn-group" role="group" aria-label="Toggle Solution Visibility">
 				 		<a class="btn btn-default" href="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" role="button" aria-label="Set Solution Visibility"

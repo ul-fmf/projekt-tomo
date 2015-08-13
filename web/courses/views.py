@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Course, ProblemSet
@@ -193,6 +194,7 @@ class ProblemSetDelete(DeleteView):
 
 
 @login_required
+@require_POST
 def problem_set_toggle_visible(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
