@@ -203,6 +203,7 @@ def problem_set_toggle_visible(request, problem_set_pk):
 
 
 @login_required
+@require_POST
 def problem_set_toggle_solution_visibility(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))

@@ -68,8 +68,11 @@
 					 </button>
 				 </form>
 				 </div>
+
 				 <div class="btn-group" role="group" aria-label="Toggle Solution Visibility">
-				 		<a class="btn btn-default" href="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" role="button" aria-label="Set Solution Visibility"
+                 <form action="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" method="post">
+                    {% csrf_token %}
+				 		<button class="btn btn-default" aria-label="Set Solution Visibility"
 						  	{% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
 							  	{# Translators: Uradne rešitve so skrite #}
 							  	title = "{% trans 'Official solutions are hidden' %}"	
@@ -87,7 +90,8 @@
 					        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
 					        	<span class="glyphicon glyphicon-ok-circle"></span>
 				        	{% endif %}
-					    </a>
+					    </button>
+					   </form>
 				 </div>
 			 </span>
 		  </div>
