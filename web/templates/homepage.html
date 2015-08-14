@@ -19,11 +19,11 @@
 	            	<span class="pull-right">
 		            	<form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
 			            	{% csrf_token %}
-				            <button class="btn btn-default" type="submit" aria-label="Unenroll">
+				            <button class="btn btn-default btn-sm" type="submit" aria-label="Unenroll">
 								{% trans "Unenroll" %}
 							</button>
 							{% if show_teacher_forms %}
-							<a class="btn btn-primary" href="{% url 'course_users' course.pk %}" role="button">
+							<a class="btn btn-primary btn-sm" href="{% url 'course_users' course.pk %}" role="button">
 		            			{# Translators: Link to list of course users. #}
 			            		{% trans "Browse list of users" %}	
 		            		</a>
@@ -60,7 +60,7 @@
 	            	<span class="pull-right">
 	            		<form action="{% url 'enroll_in_course' course.pk %}"  method="post" id='enroll_in_course_form'>
 	            			{% csrf_token %}
-				            <button class="btn btn-default" type="submit" aria-label="Enroll">
+				            <button class="btn btn-default btn-sm" type="submit" aria-label="Enroll">
 								{% trans "Enroll" %}
 							</button>
 						</form>

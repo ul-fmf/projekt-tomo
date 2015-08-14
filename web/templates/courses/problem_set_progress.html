@@ -36,7 +36,7 @@
         <div class="progress">
           {% for attempt in attempts %}
           {# FIX IT! IT SHOWS SOLUTION FROM USER THAT IS BROWSING THE PAGE. NEW SOLUTIONS VIEW NEEDED #}
-          	<a href="{% url 'problem_solution' problem.pk %}">
+          	<a href="{% url 'problem_solution' problem.pk user.pk %}">
 	            <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar
 	              {% cycle '' 'progress-bar-striped' %}
 	              {% if attempt %}

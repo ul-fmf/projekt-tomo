@@ -25,29 +25,29 @@
 		  {% if show_teacher_forms %}
 		  <div class="col-md-6">
 		  	 <span class="pull-right">
-			  	 <div class="btn-group" role="group" aria-label="Update">
-		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update">
+			  	 <div class="btn-group btn-group-sm" role="group" aria-label="Update">
+		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update"
+		  	 			data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
 			            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-			                 {# Translators: Button for editing problem set. #}
-							 {% trans "Edit" %}
 			        </button>
 			     </div>
-			     <div class="btn-group" role="group" aria-label="Delete">
-		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.pk %}" aria-label="Delete">
+			     <div class="btn-group btn-group-sm" role="group" aria-label="Delete">
+		  	 		<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.pk %}" aria-label="Delete"
+		  	 			data-toggle="tooltip" title="{% trans 'Delete' %}" data-container:'body'>
 			            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-			                 {# Translators: Button for deleting problem set. #}
-							 {% trans "Delete" %}
 			        </button>
 			     </div>
-			  	 <div class="btn-group" role="group" aria-label="Move">
-	                <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk 1 %}" role="button" aria-label="Move Up">
+			  	 <div class="btn-group btn-group-sm" role="group" aria-label="Move">
+	                <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk 1 %}" role="button" aria-label="Move Up"
+	                	data-toggle="tooltip" title="{% trans 'Move up' %}" data-container:'body'>
 	                    <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
 	                </a>
-	                <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk -1 %}" role="button" aria-label="Move Down">
+	                <a class="btn btn-default" href="{% url 'problem_set_move' problem_set.pk -1 %}" role="button" aria-label="Move Down"
+	                	data-toggle="tooltip" title="{% trans 'Move down' %}" data-container:'body'>
 	                    <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
 	                </a>
 	             </div>
-	             <div class="btn-group" role="group" aria-label="Toggle Visibility">
+	             <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Visibility">
 					 <a class="btn btn-default" href="{% url 'problem_set_toggle_visible' problem_set.pk %}" role="button" aria-label="Show/Hide"
 					 	{% if problem_set.visible %}
 					 		{# Translators: Sklop je viden#}
@@ -61,7 +61,7 @@
 					   <span style="align-content:flex-end" class="glyphicon glyphicon-eye-{% if problem_set.visible %}open{% else %}close{% endif %}" aria-hidden="true"></span>
 					 </a>
 				 </div>
-				 <div class="btn-group" role="group" aria-label="Toggle Solution Visibility">
+				 <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Solution Visibility">
 				 		<a class="btn btn-default" href="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" role="button" aria-label="Set Solution Visibility"
 						  	{% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
 							  	{# Translators: Uradne rešitve so skrite #}
