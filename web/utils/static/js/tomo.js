@@ -23,4 +23,5 @@ $(document).ready(function() {
       $(this).addClass("prettyprint")
   });
   prettyPrint();
+  $('[data-toggle="tooltip"]').tooltip();
 });

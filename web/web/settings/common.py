@@ -50,6 +50,6 @@ TEMPLATE_DIRS = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locales'),
+    os.path.join(BASE_DIR, 'locale'),
 )
 

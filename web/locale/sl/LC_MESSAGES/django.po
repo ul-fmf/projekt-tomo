@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-12 10:30+0200\n"
-"PO-Revision-Date: 2015-08-12 10:31+0100\n"
+"POT-Creation-Date: 2015-08-18 11:05+0200\n"
+"PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "Language: en_US\n"
@@ -85,71 +85,84 @@ msgstr ""
 "potencialov v obdobju 2007&mdash;2013, razvojne prioritete: gospodarska "
 "razvojna infrastruktura; prednostne usmeritve: informacijska družba"
 
-#. Translators: Button for editing problem set.
 #. Translators: edit problem form button.
 #. Translators: edit problem form button.
-#: templates/courses/_problem_set.html:32
+#: templates/courses/_problem_set.html:30
 #: templates/courses/problemset_form.html:30
 #: templates/problems/problem_form.html:33
 msgid "Edit"
 msgstr "Uredi"
 
-#. Translators: Button for deleting problem set.
-#. Translators: Delete problem text button.
-#: templates/courses/_problem_set.html:39
-#: templates/courses/problem_set_detail.html:147
+#: templates/courses/_problem_set.html:36
+#: templates/courses/problem_set_detail.html:153
 msgid "Delete"
-msgstr "Zbriši"
+msgstr "Izbriši"
+
+#: templates/courses/_problem_set.html:42
+#: templates/courses/problem_set_detail.html:137
+msgid "Move up"
+msgstr "Gor"
+
+#: templates/courses/_problem_set.html:46
+#: templates/courses/problem_set_detail.html:141
+msgid "Move down"
+msgstr "Dol"
 
 #. Translators: Sklop je viden
-#: templates/courses/_problem_set.html:54
+#: templates/courses/_problem_set.html:55
 msgid "Problem set is visible"
 msgstr "Sklop je viden"
 
 #. Translators: Sklop je skrit
-#: templates/courses/_problem_set.html:57
+#: templates/courses/_problem_set.html:58
 msgid "Problem set is hidden"
 msgstr "Sklop je skrit"
 
 #. Translators: Uradne rešitve so skrite
-#: templates/courses/_problem_set.html:68
+#: templates/courses/_problem_set.html:70
 msgid "Official solutions are hidden"
 msgstr "Uradne rešitve so skrite"
 
 #. Translators: Uradne rešitve so pogojno vidne
-#: templates/courses/_problem_set.html:71
+#: templates/courses/_problem_set.html:73
 msgid "Official solutions are visible when solved"
 msgstr "Uradne rešitve so pogojno vidne"
 
 #. Translators: Uradne rešitve so vidne
-#: templates/courses/_problem_set.html:74
+#: templates/courses/_problem_set.html:76
 msgid "Official solutions are visible"
 msgstr "Uradne rešitve so vidne"
 
+#. Translators: current page in navigation
+#: templates/courses/course_detail.html:9
+#: templates/courses/course_progress.html:15
+#: templates/courses/problem_set_progress.html:15
+#: templates/problems/solutions.html:15
+msgid "(current)"
+msgstr "(trenutna)"
+
+#: templates/courses/course_detail.html:26 templates/homepage.html:23
+msgid "Unenroll"
+msgstr "Izpiši se"
+
 #. Translators: Link to list of course users.
-#: templates/courses/course_detail.html:24
+#: templates/courses/course_detail.html:31 templates/homepage.html:28
 msgid "Browse list of users"
 msgstr "Seznam vpisanih"
 
 #. Translators: Button for creating new problem set.
 #. Translators: Title of 'add new problem set' form.
-#: templates/courses/course_detail.html:38
+#: templates/courses/course_detail.html:46
 #: templates/courses/problemset_form.html:19
 msgid "Add new problem set"
 msgstr "Dodaj sklop"
 
-#. Translators: Progress of a student in a course - heading in navigatio n
+#. Translators: Progress of a student in a course - heading in navigation
 #. Translators: Progress of students in a problem set - heading in navigation
 #: templates/courses/course_progress.html:12
 #: templates/courses/problem_set_progress.html:12
-msgid "progress"
-msgstr "napredek"
-
-#. Translators: current page in navigation
-#: templates/courses/course_progress.html:15
-#: templates/courses/problem_set_progress.html:15
-msgid "(current)"
-msgstr "(trenutna)"
+msgid "Progress"
+msgstr "Napredek"
 
 #. Translators: List of all teachers in a course - heading
 #: templates/courses/course_users.html:16
@@ -182,9 +195,8 @@ msgid "Please choose a problem set to copy this problem to:"
 msgstr "Prosimo, izberite sklop, v katerega bo prekopirana ta naloga."
 
 #. Translators: Confirm copying of a problem.
-#. Translators: Copy problem text button.
 #: templates/courses/problem_copy_form.html:21
-#: templates/courses/problem_set_detail.html:142
+#: templates/courses/problem_set_detail.html:149
 msgid "Copy"
 msgstr "Kopiraj"
 
@@ -194,64 +206,77 @@ msgstr "Kopiraj"
 msgid "Cancel"
 msgstr "Prekliči"
 
+#. Translators: Prenesi datoteke
+#: templates/courses/problem_set_detail.html:29
+msgid "Download all files"
+msgstr "Prenesi vse datoteke"
+
+#. Translators: Datoteke za reševanje
+#: templates/courses/problem_set_detail.html:35
+msgid "Files for solving"
+msgstr "Datoteke za reševanje"
+
+#. Translators: Datoteke za urejanje
+#: templates/courses/problem_set_detail.html:39
+msgid "Files for editing"
+msgstr "Datoteke za urejanje"
+
 #. Translators: Button for creating new problem.
 #. Translators: Title of 'add new problem' form.
-#: templates/courses/problem_set_detail.html:38
+#: templates/courses/problem_set_detail.html:46
 #: templates/problems/problem_form.html:22
 msgid "Add new problem"
 msgstr "Dodaj nalogo"
 
 #. Translators: Button for showing the overall progress of students for the problem set.
-#: templates/courses/problem_set_detail.html:44
+#: templates/courses/problem_set_detail.html:52
 msgid "Show progress"
 msgstr "Prikaži napredek"
 
 #. Translators: Button for downloading all problem files within a problem set.
-#: templates/courses/problem_set_detail.html:51
+#: templates/courses/problem_set_detail.html:59
 msgid "Download all problem files"
 msgstr "Prenesi vse datoteke z nalogami"
 
 #. Translators: Button for adding new tags
-#: templates/courses/problem_set_detail.html:83
+#: templates/courses/problem_set_detail.html:91
 msgid "Add tag"
 msgstr "Dodaj značko"
 
 #. Translators: Prenesi datoteko
-#: templates/courses/problem_set_detail.html:98
+#: templates/courses/problem_set_detail.html:106
 msgid "Download file"
 msgstr "Prenesi datoteko"
 
 #. Translators: Datoteka za reševanje
-#: templates/courses/problem_set_detail.html:104
+#: templates/courses/problem_set_detail.html:112
 msgid "File for solving"
 msgstr "Datoteka za reševanje"
 
 #. Translators: Datoteka za urejanje
-#: templates/courses/problem_set_detail.html:108
+#: templates/courses/problem_set_detail.html:116
 msgid "File for editing"
 msgstr "Datoteka za urejanje"
 
 #. Translators: Button for downloading a single problem file.
-#: templates/courses/problem_set_detail.html:116
+#: templates/courses/problem_set_detail.html:124
 msgid "Download this problem file"
 msgstr "Datoteka z nalogo"
 
 #. Translators: Link to page with solutions.
-#. Translators: Title of solutions page.
-#: templates/courses/problem_set_detail.html:123
-#: templates/problems/solutions.html:4
+#: templates/courses/problem_set_detail.html:131
+#: templates/problems/solutions.html:12
 msgid "Solutions"
 msgstr "Rešitve"
 
-#. Translators: Update problem text button.
-#: templates/courses/problem_set_detail.html:137
+#: templates/courses/problem_set_detail.html:145
 msgid "Update"
 msgstr "Posodobi"
 
 #. Translators: problem set detail
 #. Translators: in solution comparison table
-#: templates/courses/problem_set_detail.html:170
-#: templates/problems/solutions.html:28
+#: templates/courses/problem_set_detail.html:177
+#: templates/problems/solutions.html:41
 msgid "part"
 msgstr "podnaloga"
 
@@ -286,16 +311,12 @@ msgstr "Uredi sklop"
 msgid "Add"
 msgstr "Dodaj"
 
-#: templates/homepage.html:23
-msgid "Unenroll"
-msgstr "Izpiši se"
-
 #. Translators: Link to a page with all problem lists within a course.
-#: templates/homepage.html:37
+#: templates/homepage.html:43
 msgid "All problem lists"
 msgstr "Vsi sklopi"
 
-#: templates/homepage.html:44
+#: templates/homepage.html:50
 msgid ""
 "Bellow is a list of courses you are not enrolled in yet. Enroll by clicking "
 "on 'Enroll' button."
@@ -303,7 +324,7 @@ msgstr ""
 "Spodaj je seznam predmetov, v katere še nisi vpisan. Vpiši se s klikom na "
 "gumb 'Vpiši se'."
 
-#: templates/homepage.html:58
+#: templates/homepage.html:64
 msgid "Enroll"
 msgstr "Vpiši se"
 
@@ -375,29 +396,34 @@ msgstr "Ste prepričani, da želite pobrisati nalogo"
 msgid "Edit problem"
 msgstr "Uredi nalogo"
 
+#. Translators: Title of solutions page.
+#: templates/problems/solutions.html:4
+msgid "solutions"
+msgstr "rešitve"
+
 #. Translators: Title of user solutions column.
-#: templates/problems/solutions.html:14
+#: templates/problems/solutions.html:27
 msgid "Your solution"
 msgstr "Vaša rešitev"
 
 #. Translators: Title of official solutions column.
-#: templates/problems/solutions.html:18
+#: templates/problems/solutions.html:31
 msgid "Official solution"
 msgstr "Uradna rešitev"
 
 #. Translators: in solution comparison table
-#: templates/problems/solutions.html:39 templates/problems/solutions.html:56
-#: templates/problems/solutions.html:73
+#: templates/problems/solutions.html:52 templates/problems/solutions.html:69
+#: templates/problems/solutions.html:86
 msgid "You have not attempted to solve this part yet."
 msgstr "Tega dela naloge še niste reševal."
 
 #. Translators: in solution comparison table
-#: templates/problems/solutions.html:48
+#: templates/problems/solutions.html:61
 msgid "Solution visibility is set to 'hidden'."
 msgstr "Vidnost rešitev je nastavljena na 'Skrito'"
 
 #. Translators: in solution comparison table
-#: templates/problems/solutions.html:68
+#: templates/problems/solutions.html:81
 msgid "Your solution for this part is not yet accepted."
 msgstr "Tega dela naloge še niste pravilno rešili."
 
