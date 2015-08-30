@@ -33,7 +33,7 @@ class BasicViewsTestCase(TestCase):
                     ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
                     ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
                     ('course_detail', {'course_pk': self.course.pk}),
-                    ('problem_solution', {'problem_pk': self.problem.pk}),
+                    ('problem_solution', {'problem_pk': self.problem.pk, 'user_pk': self.user.pk}),
                     ('problem_attempt_file', {'problem_pk': self.problem.pk}),
                 ],
             'teacher':
