@@ -185,6 +185,7 @@ def problem_solution(request, problem_pk, user_pk):
     return render(request, 'problems/solutions.html',
                   {
                       'problem': problem,
+                      'problem_set': problem_set,
                       'parts': parts,
                       'student': student,
                       'is_teacher': request.user.can_edit_problem_set(problem_set),
