@@ -131,7 +131,11 @@ class Part(OrderWithRespectToMixin, models.Model):
         return u'@{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def get_absolute_url(self):
-        return self.problem.get_absolute_url()
+        return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
+
+    def anchor(self):
+        return 'part-{}'.format(self.pk)
+
 
     def check_secret(self, secret):
         '''

@@ -6,193 +6,106 @@
 
  
 {% block navigation-left %} 
-    <li><a href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a></li>
-    <li class="active"><a href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a></li>
+    <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
 {% endblock %}
 
 
 {% block content %}
 {# display of all problems in a problem set #}
-<div class="panel-body">
-	<h3>
-	  {{ problem_set.title}}
-	</h3>
-	
-	{% if problem_set.description and problem_set.description.strip %}
-	          {{ problem_set.description|latex_markdown }}
-	{% endif %}
-	<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-	        {% if show_teacher_forms %}
-            <div class="btn-group btn-group-sm" role="group" aria-label="Download">
-              <button type="button" class="btn btn-default btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                {# Translators: Prenesi datoteke #}
-                {% trans "Download all files" %}
-                <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="{% url 'problem_set_attempts' problem_set.pk %}">
-                	{# Translators: Datoteke za reševanje #}
-					{% trans "Files for solving" %}
-                </a></li>
-                <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
-                	{# Translators: Datoteke za urejanje #}
-					{% trans "Files for editing" %}
-                </a></li>
-              </ul>
+    <div class="content-section-a tomo-top-section">
+
+        <div class="container">
+
+          <div class="row">
+            <div class="tomo-chapter-heading">
+              <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
+                {# Translators: Button for downloading all problem files within a problem set. #}
+                <a class="btn btn-default" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
+              </div>
+              <h2 class="section-heading">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <span>{{ problem_set.title}}</span>
+              </h2>
+    {% if problem_set.description and problem_set.description.strip %}
+              {{ problem_set.description|latex_markdown }}
+    {% endif %}
             </div>
-	        <button class="btn btn-default btn-sm btn-for-modal" aria-label="Create" data-url="{% url 'problem_create' problem_set.id %}">
-	            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-	                 {# Translators: Button for creating new problem. #}
-					 {% trans "Add new problem" %}
-	        </button>
-		    <div class="btn-group btn-group-sm" role="group" aria-label="Progress">
-	        <a class="btn btn-default" href="{% url 'problem_set_progress' problem_set.pk %}" role="button">
-	            <span class="glyphicon glyphicon-tasks" aria-hidden="true"></span>
-        	{# Translators: Button for showing the overall progress of students for the problem set. #}
-            {% trans "Show progress" %}
- 	        </a>
-		    </div>
-	        {% else %}
-		    <div class="btn-group btn-group-sm" role="group" aria-label="Download">
-	        <a class="btn btn-primary" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button">
-        	{# Translators: Button for downloading all problem files within a problem set. #}
-            {% trans "Download all problem files" %}
- 	        </a>
-		    </div>
-	        {% endif %}
-	</div>
-</div>
-{% for problem in problem_set.problems.all %}      
-	{% if problem.id in valid_problems_ids %}
-		<div id="{{ problem.anchor }}" class="panel panel-success">
-	{% elif problem.id in invalid_problems_ids %}
-		<div id="{{ problem.anchor }}" class="panel panel-danger">
-	{% elif problem.id in half_valid_problems_ids %}
-		<div id="{{ problem.anchor }}" class="panel panel-warning">
-	{% else %}
-		<div id="{{ problem.anchor }}" class="panel panel-default">
-	{% endif %}
-		<div id="{{ problem.anchor }}" class="panel-heading">
-			<div class="row">
-			  <div class="col-md-4">
-					<h4>
-						{{ problem.title }}
-					</h4>
-					<br>
-					{% if show_teacher_forms %}
-						{% for tag in problem.tags.all %}
-							<button type="button" class="btn btn-default btn-sm tag-button" id="tag_button_"> 
-								{{ tag }} 
-								<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-							</button>
-						{% endfor %}
-						<button type="button" class="btn btn-default btn-sm">
-							{# Translators: Button for adding new tags #}
-							{% trans "Add tag" %}
-						</button>
-					{% else %}
-						{% for tag in problem.tags.all %}
-							<button type="button" class="btn btn-default btn-sm disabled"> {{ tag }} </button>
-						{% endfor %}
-					{% endif %}
-			  </div>
-			  <div class="col-md-8">
-			  <span class="pull-right">
-					<div class="btn-toolbar" role="toolbar" aria-label="Buttons">
-	                    {% if show_teacher_forms %}
-	                    <div class="btn-group btn-group-sm" role="group" aria-label="Download">
-	                      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-	                        {# Translators: Prenesi datoteko #}
-							{% trans "Download file" %}
-	                        <span class="caret"></span>
-	                      </button>
-	                      <ul class="dropdown-menu" role="menu">
-	                        <li><a href="{% url 'problem_attempt_file' problem.id %}">
-		                        {# Translators: Datoteka za reševanje #}
-								{% trans "File for solving" %}
-	                        </a></li>
-	                        <li><a href="{% url 'problem_edit_file' problem.id %}">
-	                        	{# Translators: Datoteka za urejanje #}
-								{% trans "File for editing" %}
-                        	</a></li>
-	                      </ul>
-	                    </div>
-	                    {% else %}
-						<div class="btn-group btn-group-sm" role="group" aria-label="Download">
-							<a class="btn btn-default" href="{% url 'problem_attempt_file' problem.id %}" role="button">
-								{# Translators: Button for downloading a single problem file. #}
-								{% trans "Download this problem file" %}
-							</a>
-						</div>
-	                    {% endif %}
-	                    <div class="btn-group btn-group-sm" role="group" aria-label="Solutions">
-			    				<a class="btn btn-default" href="{% url 'problem_solution' problem.id user.id%}" role="button">
-			    				    {# Translators: Link to page with solutions. #}
-									{% trans "Solutions" %}
-			    				</a>
-		                </div>						
-	                    {% if show_teacher_forms %}
-	                    <div class="btn-group btn-group-sm" role="group" aria-label="Move">
-	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
-	                        	data-toggle="tooltip" title="{% trans 'Move up' %}" data-container:'body'>
-	                            <span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>
-	                        </a>
-	                        <a class="btn btn-default" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down"
-	                        	data-toggle="tooltip" title="{% trans 'Move down' %}" data-container:'body'>
-	                            <span class="glyphicon glyphicon-arrow-down" aria-hidden="true"></span>
-	                        </a>
-	                        <button class="btn btn-default btn-for-modal" aria-label="Update" data-url="{% url 'problem_update' problem.id %}"
-	                        	data-toggle="tooltip" title="{% trans 'Update' %}" data-container:'body'>
-	                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-	                        </button>
-	                        <button class="btn btn-default btn-for-modal" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
-	                        	data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
-	                        <span class="glyphicon glyphicon-duplicate" aria-hidden="true"></span>							
-	                        </button>
-	                        <span data-toggle="tooltip" title="{% trans 'Delete' %}" data-container:'body'>		                    
-	                        <button class="btn btn-default btn-for-modal" aria-label="Delete" data-url="{% url 'problem_delete' problem.id %}">
-	                        	
-	                            	<span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                            	
-	                        </button>
-	                        </span>
-	                    </div>
-	                    {% endif %}
-  				  </div> 
-  				  </span>    
-  				</div>
-			</div>
-			
-			
-		</div>
-  		{% if problem.description and problem.description.strip %}
-		<div class="panel-body">
-  	    	<p>	
-  	       		{{ problem.description|latex_markdown }}
-  	    	</p>
- 		</div>
-  	    {% endif %}
-	  	<ul class="list-group">
-			{% for part in problem.parts.all %}
-	    	<li class="list-group-item">
-	      		<p>
-	      		    {# Translators: problem set detail #}
-	      			{{ forloop.counter }}. {% trans "part" %}    				  
-    				{% if part.id in valid_parts_ids %}
-    				  <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" style="color: #468847"></span>
-    				{% elif  part.id in invalid_parts_ids %}
-    				  <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" style="color: #A31919"></span>
-    				{% endif %}
-	      		</p> 
-	      		{{ part.description|latex_markdown }}
-	    	</li>
-			{% endfor %}
-   	  	</ul>
-   	 </div>
-{% endfor %}
-{% endblock %} {# content #}
+          </div>
+
+          <div class="row">
+            <div class="col-md-9">
+          {% for problem in problem_set.problems.all %}
+            <div id="{{ problem.anchor }}" class="panel panel-default">
+
+                    <div id="{{ problem.anchor }}" class="panel-heading">
+                        <div class="row">
+                          <div class="col-md-8">
+                                <h4>{{ problem.title }}</h4>
+                    </div>
+                          <div class="col-md-4">
+                      <span class="pull-right">
+                        <div class="btn-toolbar tomo-task-heading" role="toolbar" aria-label="Buttons">
+                          <div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Download' %}">
+                            {# Translators: Button for downloading a single problem file. #}
+                            <a class="btn btn-default download-btn" href="{% url 'problem_attempt_file' problem.id %}" role="button" data-toggle="tooltip" title="
+                            {% trans "Download this problem file" %}"><i class="fa fa-download fa-lg"></i></a>
+                          </div>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
+                            <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
+                          </div>
+                        </div>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+{% if problem.description and problem.description.strip %}
+        <div class="panel-body">
+            <p> 
+                {{ problem.description|latex_markdown }}
+            </p>
+        </div>
+        {% endif %}
+
+                <ul class="list-group">
+            {% for part in problem.parts.all %}
+                  <li class="list-group-item" id="{{ part.anchor }}">
+                  {# Translators: problem set detail #}
+                    <p>{{ forloop.counter }}. {% trans "part" %}</p>
+                    {{ part.description|latex_markdown }}
+                    </li>
+                {% endfor %}
+                  </ul>
+                </div>
+        {% endfor %}
+
+          </div>
+
+          <div class="col-md-3" id="rightCol">
+            <ul class="nav nav-stacked" id="sidebar">
+              {% for problem in problem_set.problems.all %}
+              <li><a href="#{{problem.anchor}}">{{ problem.title }}</a>
+                <ul>
+                {% for part in problem.parts.all %}
+                  <li><a href="#{{part.anchor}}">{{ forloop.counter }}. {% trans "part" %}</a></li>
+                {% endfor %}
+                </ul>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+        </div>
+        </div>
+<!-- /.container -->
+  </div>
+<!-- /.content-section-a -->
+{% endblock content %}
 
 {% block extra_js %}
 <!-- for Tree view and modals-->
 <script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<script src="{% static 'js/sidebar.js' %}"></script>
 {% endblock %}

@@ -6,71 +6,83 @@
 
 {% block content %}
 
+
+    <div class="content-section-a tomo-top-section">
+
+      <div class="container">
+        <div class="row">
 {% for course in user_courses %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-        	<div class="row">
-			    <div class="col-md-6">
-		            <h4>
-		                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
-		            </h4>
-	            </div>
-	            <div class="col-md-6">
-	            	<span class="pull-right">
-		            	<form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
-			            	{% csrf_token %}
-				            <button class="btn btn-default btn-sm" type="submit" aria-label="Unenroll">
-								{% trans "Unenroll" %}
-							</button>
-							{% if course.show_teacher_forms %}
-							<a class="btn btn-primary btn-sm" href="{% url 'course_users' course.pk %}" role="button">
-		            			{# Translators: Link to list of course users. #}
-			            		{% trans "Browse list of users" %}	
-		            		</a>
-		            		{% endif %}
-						</form>
-					</span>
-				</div>
-        	</div>
-   		</div>
-        <ul class="list-group">
-          {% for problem_set in course.annotated_problem_sets %}
-          {% include 'courses/_problem_set.html' %}
-          {% endfor %}
-          <li class="list-group-item">
-          	<a href="{% url 'course_detail' course.pk %}">
-          		{# Translators: Link to a page with all problem lists within a course. #}
-          		<h5>{% trans "All problem lists" %}</h5>
-          	</a>
-          </li>
-        </ul>
-    </div>
-{% endfor %}
-
-<p>{% trans "Bellow is a list of courses you are not enrolled in yet. Enroll by clicking on 'Enroll' button." %}</p>
-
-{% for course in not_user_courses %}
-    <div class="panel panel-default">
-        <div class="panel-heading">
-        	<div class="row">
-			    <div class="col-md-4">
-		            <h4>{{ course.title }}</h4>
-		        </div>
-	            <div class="col-md-8">
-	            	<span class="pull-right">
-	            		<form action="{% url 'enroll_in_course' course.pk %}"  method="post" id='enroll_in_course_form'>
-	            			{% csrf_token %}
-				            <button class="btn btn-default btn-sm" type="submit" aria-label="Enroll">
-								{% trans "Enroll" %}
-							</button>
-						</form>
-					</span>
-				</div>
-			</div>
-			{{ course.description }}
+              <div class="col-md-6">
+            <div class="tomo-un-enroll">
+              <span class="pull-left">
+                <form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
+                  {% csrf_token %}
+                  <button class="btn btn-default btn-sm tomo-unenroll" type="submit" aria-label="{% trans "Unenroll" %}" data-toggle="tooltip" title="{% trans "Unenroll" %}"><i class="fa fa-star fa-lg"></i><i class="fa fa-star-o fa-lg"></i></button>
+                </form>
+              </span>
+              <h2 class="section-heading">
+                <hr class="section-heading-spacer">
+                <div class="clearfix"></div>
+                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+                {% if course.show_teacher_forms %}
+                <a class="btn btn-primary btn-sm" href="{% url 'course_users' course.pk %}" role="button">
+                    {# Translators: Link to list of course users. #}
+                    {% trans "Browse list of users" %}  
+                </a>
+                {% endif %}
+              </h2>
+            </div>
+            <ul class="list-group tomo-courses">
+              {% for problem_set in course.annotated_problem_sets %}
+              <li class="list-group-item">
+                <hr class="indicator background{{problem_set.grade}}" width="{{ problem_set.percentage }}%">
+                <div class="media">
+                  <div class="media-left"><p class="success text-danger color{{problem_set.grade}}">{{ problem_set.percentage }}<small>%</small></p></div>
+                  <div class="media-body media-middle">
+                    <div class="row">
+                        <div class="col-md-6">
+                        <h4 class="media-heading"><a style="" href="{% url 'problem_set_detail' problem_set.pk %}">{{problem_set.title}}</a></h4>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% cycle '' '</div><div class="row">' %}
+        {% endfor %}
         </div>
+      </div>
+<!-- /.container -->
     </div>
-{% endfor %}
+
+    <div class="content-section-y tomo-other">
+      <div class="container tomo-other">
+        <div class="row">
+        {% for course in not_user_courses %}
+          <div class="col-md-4">
+            <span class="pull-right">
+                <form action="{% url 'enroll_in_course' course.pk %}"  method="post" id='enroll_in_course_form'>
+                {% csrf_token %}
+                <button class="tomo-enroll" type="submit" aria-label="{% trans "Enroll" %}" data-toggle="tooltip" title="{% trans "Enroll" %}"><i class="fa fa-star fa-lg"></i><i class="fa fa-star-o fa-lg"></i></button>
+              </form>
+            </span>
+            <h3>{{ course.title }}</h3>
+            <p class="tomo-lecturer">
+            {% for lecturer in course.teachers.all %}
+            {{ lecturer.get_full_name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+            </p>
+            <p class="tomo-institution">@{% templatetag openbrace %}{{ course.organization_title }}{% templatetag closebrace %}</p>
+          </div>
+          {% cycle '' '' '</div><div class="row">' %}
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+
+
 	
     
     

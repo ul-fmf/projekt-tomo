@@ -69,6 +69,9 @@ def course_detail(request, course_pk):
     course.annotated_problem_sets = list(course.problem_sets.reverse())
     for problem_set in course.annotated_problem_sets:
         problem_set.percentage = problem_set.valid_percentage(request.user)
+        if problem_set.percentage is None:
+            problem_set.percentage = 0
+        problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'show_teacher_forms': request.user.can_edit_course(course),
@@ -139,6 +142,9 @@ def homepage(request):
             course.show_teacher_forms = request.user.can_edit_course(course)
             for problem_set in course.annotated_problem_sets:
                 problem_set.percentage = problem_set.valid_percentage(request.user)
+                if problem_set.percentage is None:
+                    problem_set.percentage = 0
+                problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
         else:
             not_user_courses.append(course)
     return render(request, 'homepage.html', {

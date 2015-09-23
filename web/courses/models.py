@@ -39,6 +39,9 @@ class Course(models.Model):
             sorted_attempts.append((problem_set, problem_set_attempts))
         return sorted_attempts
 
+    def organization_title(self):
+        return "Fakulteta za matematiko in fiziko"
+
 class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'

@@ -1,3 +1,95 @@
-body {
-    padding-top: 70px;
+.dropdown { position: relative; }
+.content-section-y { background-color: rgba(215, 160, 44, .8); }
+
+.color1 { color: #A92D2D; }
+.color2 { color: #C0672D; }
+.color3 { color: #D7A02C; }
+.color4 { color: #AF982A; }
+.color5 { color: #878F28; }
+.background1 { background-color: #A92D2D; }
+.background2 { background-color: #C0672D; }
+.background3 { background-color: #D7A02C; }
+.background4 { background-color: #AF982A; }
+.background5 { background-color: #878F28; }
+.background-alpha1 { background-color: rgba(169, 45, 45, .2); }
+.background-alpha2 { background-color: rgba(192, 103, 45, .2); }
+.background-alpha3 { background-color: rgba(215, 160, 44, .2); }
+.background-alpha4 { background-color: rgba(175, 152, 42, .2); }
+.background-alpha5 { background-color: rgba(135, 143, 40, .2); }
+
+.tomo-thin { font-weight: 300; }
+.tomo-institution { color: #666; font-weight: 300; }
+.tomo-lecturer { font-style: italic; color: #A92D2D; }
+
+.tomo-home { margin: 0 40px 0 0; padding: 0; }
+.tomo-home img { height: 100%; }
+
+.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
+.tomo-login-header { background: none; border: none; }
+.tomo-login-signin { margin: 15px 2px 0 0; background-color: rgba(255, 255, 255, 0.5); }
+.tomo-login-signin i { margin-right: 10px; }
+.tomo-login hr { border-color: #999; }
+.tomo-login form { margin: .5em 0; border-radius: 4px; padding: 1em; }
+.tomo-login button { margin: 0px 7px; background-color: rgba(135, 143, 40, .5) }
+.tomo-login button i { margin-right: 10px; }
+.tomo-login .fa-google { vertical-align: -25% } /* vertical position fix */
+
+
+.intro-message h3 { clear: both; }
+
+.dropdown-menu { rgba(255, 255, 255, 0.2); }
+.tomo-intro { float: none; margin: 0 auto; text-align: center; }
+.tomo-intro hr { border-top: 1px solid #f8f8f8; border-bottom: 1px solid rgba(0,0,0,0.2); }
+
+.tomo-page-header { background: url(../img/intro-bg.jpg) no-repeat center center; background-size: cover; }
+.tomo-page-header .navbar-brand { color: #f8f8f8; }
+.tomo-page-header .navbar-brand:hover { color: #ccc; }
+.tomo-page-header .navbar-nav>li>a { color: #f8f8f8; }
+.tomo-page-header .navbar-nav>li>a:hover { color: #ccc; }
+
+.tomo-un-enroll { margin-left: 20px; }
+.tomo-un-enroll h2 { padding-left: 60px; }
+.tomo-un-enroll span { margin-top: 20px; }
+.tomo-enroll { color: #A92D2D; }
+.tomo-unenroll { color: #D7A02C; }
+.tomo-unenroll .fa-star-o, .tomo-unenroll:hover .fa-star { display: none; }
+.tomo-unenroll:hover .fa-star-o { display: inline; color: #A92D2D; }
+.tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
+.tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
+
+.tomo-course-header .section-heading-spacer { margin-left: 200px; }
+.tomo-courses li { margin: 10px 0; padding: 0; }
+.tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; }
+.tomo-courses h4 { margin: 0; padding: 0; line-height: 1.2em; vertical-align: baseline; }
+.tomo-courses .media, .tomo-courses p { margin: 0; }
+.tomo-courses .media-left { height: 50px; line-height: 38px; font-size: 30px; text-align: right; padding-left: 10px; }
+.tomo-courses .media-left p { display: block; width: 80px; }
+.tomo-courses .media-middle { padding-left: 20px; }
+
+.tomo-chapter-heading { margin-left: 20px; }
+.tomo-chapter-heading .pull-left { margin-top: 20px; }
+.tomo-chapter-heading h2 { padding-left: 80px; }
+.tomo-chapter-heading h2 span { margin-top: -15px; display: block; }
+.tomo-chapter-heading .btn-default { padding-top: 10px; background-color: #878F28; color: #fff; }
+.tomo-task-heading .btn-default { width: 40px; color: #fff; }
+.tomo-task-heading .download-btn { background-color: #878F28; }
+.tomo-task-heading .solutions-btn { background-color: #D7A02C; }
+
+.tomo-other { margin: 0; padding: 0; }
+.tomo-other .col-md-4 { margin-right: 0px; height: 15em; padding: 2em 4em; }
+.tomo-other .col-md-4:hover { background-color: rgba(255, 255, 255, 0.5);}
+.tomo-other h3 { padding-right: 40px; font-size: 1.4em; }
+.tomo-other .tomo-institution { margin: 0; padding: 0; text-align: right; }
+.tomo-other button { border: none; background: none; }
+.tomo-other .tomo-enroll { margin-top: 20px; color: #fff; }
+.tomo-other .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
+.tomo-other .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
+
+footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
+
+.affix-top, .affix { position: static; }
+@media (min-width: 979px) {
+  #sidebar.affix-top { position: static; margin-top: 30px; width: 228px; }
+  #sidebar.affix { position: fixed; top: 70px; width: 228px; }
 }
+#sidebar li.active { border: 0 #eee solid; border-right-width: 5px; }

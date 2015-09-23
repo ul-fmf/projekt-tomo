@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 11:05+0200\n"
+"POT-Creation-Date: 2015-09-18 09:47+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18,118 +18,85 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: courses/models.py:57
+#: courses/models.py:47
 msgid "Hidden"
 msgstr "Skrite"
 
-#: courses/models.py:58
+#: courses/models.py:48
 msgid "Visible when solved"
 msgstr "Vidne po sprejeti rešitvi"
 
-#: courses/models.py:59 courses/models.py:64
+#: courses/models.py:49 courses/models.py:54
 msgid "Visible"
 msgstr "Vidne"
 
-#: courses/models.py:62
+#: courses/models.py:52
 msgid "Title"
 msgstr "Naslov"
 
-#: courses/models.py:63
+#: courses/models.py:53
 msgid "Description"
 msgstr "Opis"
 
-#: courses/models.py:66
+#: courses/models.py:56
 msgid "Solution visibility"
 msgstr "Rešitve"
 
 #. Translators: Default heading for pages (defined in base.html)
-#. Translators: description of project Tomo
-#: templates/base.html:11 templates/login.html:15
+#: templates/base.html:11 templates/login.html:84
 msgid "Project Tomo"
 msgstr "Projekt Tomo"
 
 #. Translators: Link for logout in navigation bar (top right)
-#: templates/base.html:47
+#: templates/base.html:45
 msgid "(logout)"
 msgstr "(odjava)"
 
-#. Translators: Univerza v Ljubljani
-#: templates/base.html:93 templates/base.html.py:94
-msgid "University of Ljubljana"
-msgstr "Univerza v Ljubljani"
-
-#. Translators: Evropski sklad za regionalni razvoj
-#: templates/base.html:98 templates/base.html.py:99
-msgid "European Regional Development Fund"
-msgstr "Evropski sklad za regionalni razvoj"
-
-#. Translators: Ministrstvo za izobraževanje, znanost in šport
-#: templates/base.html:103 templates/base.html.py:104
-msgid "Ministry of Education, Science and Sport"
-msgstr "Ministrstvo za izobraževanje, znanost in šport"
-
-#. Translators: Text in footer.
-#: templates/base.html:109
-msgid ""
-"This work was funded in part by the European Union, European Regional "
-"Development Fund and the Ministry of Education, \n"
-"        Science and Sport. The operation is implemented in the framework of "
-"the Operational Program for Strengthening Regional Development \n"
-"        Potentials for the Period 2007&mdash;2013, Development priority: "
-"Economic development infrastructure, Priority theme: Information society.\n"
-"        "
-msgstr ""
-"Operacijo delno financira Evropska unija iz Evropskega sklada za regionalni "
-"razvoj ter Ministrstvo za izobraževanje, znanost in šport. Operacija se "
-"izvaja v okviru Operativnega programa krepitve regionalnih razvojnih "
-"potencialov v obdobju 2007&mdash;2013, razvojne prioritete: gospodarska "
-"razvojna infrastruktura; prednostne usmeritve: informacijska družba"
-
 #. Translators: edit problem form button.
 #. Translators: edit problem form button.
-#: templates/courses/_problem_set.html:30
+#: templates/courses/_problem_set.html:34
 #: templates/courses/problemset_form.html:30
 #: templates/problems/problem_form.html:33
 msgid "Edit"
 msgstr "Uredi"
 
-#: templates/courses/_problem_set.html:36
-#: templates/courses/problem_set_detail.html:153
+#: templates/courses/_problem_set.html:40
+#: templates/courses/problem_set_detail.html:152
 msgid "Delete"
 msgstr "Izbriši"
 
-#: templates/courses/_problem_set.html:42
+#: templates/courses/_problem_set.html:46
 #: templates/courses/problem_set_detail.html:137
 msgid "Move up"
 msgstr "Gor"
 
-#: templates/courses/_problem_set.html:46
+#: templates/courses/_problem_set.html:50
 #: templates/courses/problem_set_detail.html:141
 msgid "Move down"
 msgstr "Dol"
 
 #. Translators: Sklop je viden
-#: templates/courses/_problem_set.html:55
+#: templates/courses/_problem_set.html:60
 msgid "Problem set is visible"
 msgstr "Sklop je viden"
 
 #. Translators: Sklop je skrit
-#: templates/courses/_problem_set.html:58
+#: templates/courses/_problem_set.html:63
 msgid "Problem set is hidden"
 msgstr "Sklop je skrit"
 
 #. Translators: Uradne rešitve so skrite
-#: templates/courses/_problem_set.html:70
+#: templates/courses/_problem_set.html:77
 msgid "Official solutions are hidden"
 msgstr "Uradne rešitve so skrite"
 
 #. Translators: Uradne rešitve so pogojno vidne
-#: templates/courses/_problem_set.html:73
+#: templates/courses/_problem_set.html:80
 msgid "Official solutions are visible when solved"
 msgstr "Uradne rešitve so pogojno vidne"
 
 #. Translators: Uradne rešitve so vidne
-#: templates/courses/_problem_set.html:76
+#: templates/courses/_problem_set.html:83
 msgid "Official solutions are visible"
 msgstr "Uradne rešitve so vidne"
 
@@ -180,7 +147,7 @@ msgid "Students"
 msgstr "Študenti"
 
 #. Translators: Promote student to teacher - button
-#: templates/courses/course_users.html:67
+#: templates/courses/course_users.html:73
 msgid "Promote to teacher"
 msgstr "Status učitelja"
 
@@ -275,7 +242,7 @@ msgstr "Posodobi"
 
 #. Translators: problem set detail
 #. Translators: in solution comparison table
-#: templates/courses/problem_set_detail.html:177
+#: templates/courses/problem_set_detail.html:180
 #: templates/problems/solutions.html:41
 msgid "part"
 msgstr "podnaloga"
@@ -329,36 +296,25 @@ msgid "Enroll"
 msgstr "Vpiši se"
 
 #. Translators: Title of login page.
-#: templates/login.html:6
+#: templates/login.html:7
 msgid "Welcome"
 msgstr "Dobrodošli"
 
-#: templates/login.html:16
-msgid ""
-" Project Tomo is your personal programming teacher. You learn by solving "
-"problems\n"
-"\t      on your computer and Tomo informs you how well you are doing. "
-msgstr ""
-"Projekt Tomo je vaš osebni učitelj programiranja. Učite se tako, da na "
-"svojem računalniku rešujete naloge, Tomo pa vas ves čas obvešča o poteku "
-"reševanja."
-
 #. Translators: must sign in
-#: templates/login.html:22
+#: templates/login.html:27
 msgid ""
 "You must sign-in before the first use. You must use the same username and "
-"password \n"
-"\t\t      that you use on student computers."
+"password that you use on student computers."
 msgstr ""
 "Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in "
 "geslom, ki ju uporabljate za prijavo na študentske računalnike."
 
 #. Translators: sign-in error
-#: templates/login.html:33
+#: templates/login.html:34
 msgid "Sign-in error!"
 msgstr "Napaka ob prijavi!"
 
-#: templates/login.html:34
+#: templates/login.html:35
 msgid ""
 "Use the same username and password that you use on student computers,\n"
 "             for example <code>NovakJ14</code> and <code>Triglav.1</code>. "
@@ -367,19 +323,52 @@ msgstr ""
 "primer <code>NovakJ14</code> in <code>Triglav.1</code>."
 
 #. Translators: Input for username on login page.
-#: templates/login.html:42
+#: templates/login.html:44
 msgid "Username"
 msgstr "Uporabniško ime"
 
 #. Translators: Input for password on login page.
-#: templates/login.html:49
+#: templates/login.html:51
 msgid "Password"
 msgstr "Geslo"
 
 #. Translators: Button for sign-in on login page.
-#: templates/login.html:57
+#: templates/login.html:58
 msgid "Sign in"
 msgstr "Prijavi se"
+
+#: templates/login.html:86
+msgid "Your personal programming teacher."
+msgstr "Vaš osebni učitelj programiranja."
+
+#. Translators: Univerza v Ljubljani, Evropski sklad za regionalni razvoj, Ministrstvo za izobraževanje, znanost in šport
+#: templates/login.html:111
+msgid "University of Ljubljana"
+msgstr "Univerza v Ljubljani"
+
+#: templates/login.html:111
+msgid "European Regional Development Fund"
+msgstr "Evropski sklad za regionalni razvoj"
+
+#: templates/login.html:111
+msgid "Ministry of Education, Science and Sport"
+msgstr "Ministrstvo za izobraževanje, znanost in šport"
+
+#. Translators: Text in footer.
+#: templates/login.html:116
+msgid ""
+"This work was funded in part by the European Union, European Regional "
+"Development Fund and the Ministry of Education, Science and Sport. The "
+"operation is implemented in the framework of the Operational Program for "
+"Strengthening Regional Development Potentials for the Period 2007 – 2013, "
+"Development priority: Economic development infrastructure, Priority theme: "
+"Information society."
+msgstr ""
+"Operacijo delno financira Evropska unija iz Evropskega sklada za regionalni "
+"razvoj ter Ministrstvo za izobraževanje, znanost in šport. Operacija se "
+"izvaja v okviru Operativnega programa krepitve regionalnih razvojnih "
+"potencialov v obdobju 2007&mdash;2013, razvojne prioritete: gospodarska "
+"razvojna infrastruktura; prednostne usmeritve: informacijska družba"
 
 #. Translators: Title of problem delete confirmation page. Brisanje naloge
 #: templates/problems/problem_confirm_delete.html:9
