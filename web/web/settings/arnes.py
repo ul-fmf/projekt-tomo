@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'simple_history',
     'courses',
     'taggit',
+    'utils',
 )
 
 STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
