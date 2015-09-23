@@ -7,4 +7,4 @@ django-taggit>=0.14.0
 django-nose>=1.4
 coverage>=3.7.1
 djangosaml2>=0.13.0
-
+python-social-auth>=0.2.12

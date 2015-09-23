@@ -16,6 +16,7 @@ router.register(r'courses', CourseViewSet, base_name='courses')
 
 urlpatterns = patterns('',
     url(r'^$', homepage, name='homepage'),
+    url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include(patterns('django.contrib.auth.views',
         url(r'^login/$', 'login', {'template_name': 'login.html'}, name='login'),
         url(r'^logout/$', 'logout', name='logout'),

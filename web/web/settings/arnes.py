@@ -22,25 +22,6 @@ DATABASES = {
     }
 }
 
-INSTALLED_APPS = (
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'users',
-    'problems',
-    'attempts',
-    'bootstrap3',
-    'simple_history',
-    'courses',
-    'taggit',
-    'utils',
-)
-
 STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
 STATIC_URL = '/static/'
 
@@ -59,6 +40,18 @@ AD_SEARCH_FIELDS = ['mail', 'givenName', 'sn', 'sAMAccountName']
 AD_LDAP_URL = 'ldap://%s:%s' % (AD_DNS_NAME, AD_LDAP_PORT)
 
 AUTHENTICATION_BACKENDS = (
-    # 'utils.auth.ActiveDirectoryBackend',
+    'utils.auth.ActiveDirectoryBackend',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY']
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ['SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET']
+SOCIAL_AUTH_FACEBOOK_KEY = os.environ['SOCIAL_AUTH_FACEBOOK_KEY']
+SOCIAL_AUTH_FACEBOOK_SECRET = os.environ['SOCIAL_AUTH_FACEBOOK_SECRET']
+SOCIAL_AUTH_FACEBOOK_SCOPE = os.environ['SOCIAL_AUTH_FACEBOOK_SCOPE']
+SOCIAL_AUTH_TWITTER_KEY = os.environ['SOCIAL_AUTH_TWITTER_KEY']
+SOCIAL_AUTH_TWITTER_SECRET = os.environ['SOCIAL_AUTH_TWITTER_SECRET']
+
+SOCIAL_AUTH_USER_MODEL = 'users.User'

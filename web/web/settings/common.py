@@ -18,6 +18,7 @@ INSTALLED_APPS = (
     'simple_history',
     'courses',
     'taggit',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
