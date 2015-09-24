@@ -39,8 +39,21 @@ class Course(models.Model):
             sorted_attempts.append((problem_set, problem_set_attempts))
         return sorted_attempts
 
+    def annotate_for_user(self, user):
+        self.is_taught = user.can_edit_course(self)
+        self.is_favourite = user.is_favourite_course(self)
+        self.annotated_problem_sets = []
+        for problem_set in self.problem_sets.all():
+            if user.can_view_problem_set(problem_set):
+                problem_set.percentage = problem_set.valid_percentage(user)
+                if problem_set.percentage is None:
+                    problem_set.percentage = 0
+                problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+                self.annotated_problem_sets.append(problem_set)
+
     def organization_title(self):
         return "Fakulteta za matematiko in fiziko"
+
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_HIDDEN = 'H'

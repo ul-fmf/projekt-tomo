@@ -9,8 +9,14 @@ class User(AbstractUser):
     class Meta:
         ordering = ['last_name', 'first_name']
 
-    def can_edit_course(self, course):
+    def is_teacher(self, course):
         return course.teachers.filter(pk=self.id).exists()
+
+    def is_student(self, course):
+        return course.students.filter(pk=self.id).exists()
+
+    def can_edit_course(self, course):
+        return self.is_teacher(course)
 
     def can_edit_problem_set(self, problem_set):
         return self.can_edit_course(problem_set.course)
@@ -19,37 +25,23 @@ class User(AbstractUser):
         return self.can_edit_problem_set(problem.problem_set)
 
     def can_view_course_attempts(self, course):
-        return course.teachers.filter(pk=self.id).exists()
+        return self.is_teacher(course)
 
     def can_view_problem_set_attempts(self, problem_set):
         return self.can_view_course_attempts(problem_set.course)
 
+    def is_favourite_course(self, course):
+        return self.is_teacher(course) or self.is_student(course)
+
     def can_view_course(self, course):
-        return (course.teachers.filter(pk=self.id).exists() or
-                course.students.filter(pk=self.id).exists())
+        return True
 
     def can_view_problem_set(self, problem_set):
-        return self.can_view_course(problem_set.course)
+        return self.can_view_course(problem_set.course) and \
+               (problem_set.visible or self.is_teacher(problem_set.course))
 
     def can_view_problem(self, problem):
         return self.can_view_problem_set(problem.problem_set)
-
-#     def can_view_solutions(self, part):
-#         problem_set = part.problem.problem_set
-#         problem_set_visibility = problem_set.solution_visibility
-#         if problem_set_visibility == problem_set.SOLUTION_VISIBLE:
-#             return True 
-#         elif problem_set_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED:
-#             #check if user's attempt for this part exists
-#             try:
-#                 attempt = part.attempts.get(user=self)
-#                 #check if user's attempt for this part is accepted
-#                 return attempt.is_valid
-#             except ObjectDoesNotExist:
-#                 return False
-#             return attempt.is_valid()
-#         else:
-#             return self.can_edit_problem(part.problem)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

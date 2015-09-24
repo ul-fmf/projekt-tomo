@@ -66,12 +66,7 @@ def course_detail(request, course_pk):
     """Show a list of all problems in a problem set."""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
-    course.annotated_problem_sets = list(course.problem_sets.reverse())
-    for problem_set in course.annotated_problem_sets:
-        problem_set.percentage = problem_set.valid_percentage(request.user)
-        if problem_set.percentage is None:
-            problem_set.percentage = 0
-        problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+    course.annotate_for_user(request.user)
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'show_teacher_forms': request.user.can_edit_course(course),
@@ -136,15 +131,10 @@ def homepage(request):
     user_courses = []
     not_user_courses = []
     for course in Course.objects.all():
-        if request.user.can_view_course(course):
+        if request.user.is_favourite_course(course):
             user_courses.append(course)
-            course.annotated_problem_sets = list(course.recent_problem_sets())
-            course.show_teacher_forms = request.user.can_edit_course(course)
-            for problem_set in course.annotated_problem_sets:
-                problem_set.percentage = problem_set.valid_percentage(request.user)
-                if problem_set.percentage is None:
-                    problem_set.percentage = 0
-                problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+            course.annotate_for_user(request.user)
+            course.annotated_problem_sets = course.annotated_problem_sets[-1:-4:-1]
         else:
             not_user_courses.append(course)
     return render(request, 'homepage.html', {

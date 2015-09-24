@@ -47,9 +47,9 @@
 .tomo-page-header .navbar-nav>li>a { color: #f8f8f8; }
 .tomo-page-header .navbar-nav>li>a:hover { color: #ccc; }
 
-.tomo-un-enroll { margin-left: 20px; }
-.tomo-un-enroll h2 { padding-left: 60px; }
-.tomo-un-enroll span { margin-top: 20px; }
+.tomo-course-header { margin-left: 20px; }
+.tomo-course-header h2 { padding-left: 60px; }
+.tomo-course-header span { margin-top: 20px; }
 .tomo-enroll { color: #A92D2D; }
 .tomo-unenroll { color: #D7A02C; }
 .tomo-unenroll .fa-star-o, .tomo-unenroll:hover .fa-star { display: none; }
@@ -57,7 +57,6 @@
 .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
 .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
 
-.tomo-course-header .section-heading-spacer { margin-left: 200px; }
 .tomo-courses li { margin: 10px 0; padding: 0; }
 .tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; }
 .tomo-courses h4 { margin: 0; padding: 0; line-height: 1.2em; vertical-align: baseline; }

@@ -13,25 +13,7 @@
         <div class="row">
 {% for course in user_courses %}
               <div class="col-md-6">
-            <div class="tomo-un-enroll">
-              <span class="pull-left">
-                <form action="{% url 'unenroll_from_course' course.pk %}"  method="post" id='unenroll_from_course_form'>
-                  {% csrf_token %}
-                  <button class="btn btn-default btn-sm tomo-unenroll" type="submit" aria-label="{% trans "Unenroll" %}" data-toggle="tooltip" title="{% trans "Unenroll" %}"><i class="fa fa-star fa-lg"></i><i class="fa fa-star-o fa-lg"></i></button>
-                </form>
-              </span>
-              <h2 class="section-heading">
-                <hr class="section-heading-spacer">
-                <div class="clearfix"></div>
-                <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
-                {% if course.show_teacher_forms %}
-                <a class="btn btn-primary btn-sm" href="{% url 'course_users' course.pk %}" role="button">
-                    {# Translators: Link to list of course users. #}
-                    {% trans "Browse list of users" %}  
-                </a>
-                {% endif %}
-              </h2>
-            </div>
+            {% include 'courses/_course_header.html' %}
             <ul class="list-group tomo-courses">
               {% for problem_set in course.annotated_problem_sets %}
               <li class="list-group-item">
