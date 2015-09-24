@@ -81,7 +81,18 @@
             <a href="mailto:info@projekt-tomo.si">ask us</a> for an account.
             {% endblocktrans %}
           </small></p>
+
         </form>
+
+        <hr>
+
+        <p><small>
+          {% url 'terms_of_service' as terms_of_service_url %}
+          {% blocktrans %}
+          By logging in you agree to our
+          <a href="{{ terms_of_service_url }}">Terms of service</a>.
+          {% endblocktrans %}
+        </small></p>
       </div>
     </div>
   </div>

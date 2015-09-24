@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}               
+{% load staticfiles %}
+
+{% block title %}Tomo – {% trans 'Terms of service' %}{% endblock %}
+
+ 
+{% block navigation-left %} 
+<a class="navbar-brand topnav" href="{% url 'terms_of_service' %}">{% trans 'Terms of service' %}</a>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-top-section"><div class="container">
+{% filter latex_markdown %}
+# {% trans 'Terms of service' %}
+{% endfilter %}
+</div></div>
+{% endblock content %}

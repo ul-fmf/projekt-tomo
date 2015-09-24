@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 12:02+0000\n"
+"POT-Creation-Date: 2015-09-24 12:29+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -43,7 +43,7 @@ msgid "Solution visibility"
 msgstr "Rešitve"
 
 #. Translators: Default heading for pages (defined in base.html)
-#: templates/base.html:11 templates/login.html:100
+#: templates/base.html:11 templates/login.html:110
 msgid "Project Tomo"
 msgstr "Projekt Tomo"
 
@@ -52,19 +52,22 @@ msgstr "Projekt Tomo"
 msgid "(logout)"
 msgstr "(odjava)"
 
-#: templates/base.html:77
-msgid "General terms"
-msgstr ""
+#: templates/base.html:77 templates/terms_of_service.html:5
+#: templates/terms_of_service.html.py:9
+msgid "Terms of service"
+msgstr "Pogoji poslovanja"
 
 #: templates/base.html:79
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: templates/base.html:82
 msgid ""
 "Copyright &copy; Faculty of Mathematics and Physics, University of "
 "Ljubljana, 2015. All Rights Reserved "
 msgstr ""
+"Copyright &copy; Fakulteta za matematiko in fiziko, Univerza v "
+"Ljubljani, 2015. Vse pravice pridržane "
 
 #: templates/courses/_course_header.html:7
 #: templates/courses/_course_header.html:9
@@ -249,16 +252,16 @@ msgid "Add"
 msgstr "Dodaj"
 
 #. Translators: Title of login page.
-#: templates/login.html:8
+#: templates/login.html:7
 msgid "Welcome"
 msgstr "Dobrodošli"
 
 #. Translators: Button for sign-in on login page.
-#: templates/login.html:19 templates/login.html.py:74
+#: templates/login.html:18 templates/login.html.py:73
 msgid "Sign in"
 msgstr "Prijavite se"
 
-#: templates/login.html:23
+#: templates/login.html:22
 msgid ""
 "\n"
 "          Login with an external provider\n"
@@ -268,34 +271,34 @@ msgstr ""
 "          Prijavite se z zunanjim ponudnikom\n"
 "          "
 
-#: templates/login.html:29
+#: templates/login.html:28
 msgid "ArnesAAI"
 msgstr "ArnesAAI"
 
-#: templates/login.html:33
+#: templates/login.html:32
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/login.html:37
+#: templates/login.html:36
 msgid "Google"
 msgstr "Google"
 
 #. Translators: sign-in error
-#: templates/login.html:48
+#: templates/login.html:47
 msgid "Sign-in error!"
 msgstr "Napaka ob prijavi!"
 
 #. Translators: Input for username on login page.
-#: templates/login.html:56 templates/login.html.py:59
+#: templates/login.html:55 templates/login.html.py:58
 msgid "Username"
 msgstr "Uporabniško ime"
 
 #. Translators: Input for password on login page.
-#: templates/login.html:65 templates/login.html.py:68
+#: templates/login.html:64 templates/login.html.py:67
 msgid "Password"
 msgstr "Geslo"
 
-#: templates/login.html:78
+#: templates/login.html:77
 msgid ""
 "\n"
 "            You can login with a username and password only if you were "
@@ -308,25 +311,37 @@ msgid ""
 "            "
 msgstr ""
 "\n"
-"            Z uporabniškim imenom in geslom se lahko prijavite le, "
-"če vam\n"
-"            je bil ročno dodeljen račun. V nasprotnem primeru prosimo, "
-"da uporabite\n"
+"            Z uporabniškim imenom in geslom se lahko prijavite le, če vam\n"
+"            je bil ročno dodeljen račun. V nasprotnem primeru prosimo, da "
+"uporabite\n"
 "            enega od zgoraj naštetih zunanjih ponudnikov. Če to ni\n"
 "            mogoče, <a href=\"mailto:info@projekt-tomo.si\">zaprosite</a> za "
 "račun.\n"
 "            "
 
+#: templates/login.html:91
+#, python-format
+msgid ""
+"\n"
+"          By logging in you agree to our\n"
+"          <a href=\"%(terms_of_service_url)s\">Terms of service</a>.\n"
+"          "
+msgstr ""
+"\n"
+"          S prijavo se strinjate z našimi\n"
+"          <a href=\"%(terms_of_service_url)s\">Pogoji poslovanja</a>.\n"
+"          "
+
 #. Translators: description of project Tomo
-#: templates/login.html:104
+#: templates/login.html:114
 msgid "Your personal programming teacher."
 msgstr "Vaš osebni učitelj programiranja."
 
-#: templates/login.html:123
+#: templates/login.html:133
 msgid "Sponsors"
 msgstr "Sponzorji"
 
-#: templates/login.html:125
+#: templates/login.html:135
 msgid ""
 "\n"
 "    This work was funded in part by the European Union, European Regional\n"

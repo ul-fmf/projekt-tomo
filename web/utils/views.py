@@ -1,6 +1,11 @@
 import StringIO
 import zipfile
 from django.http import HttpResponse
+from django.shortcuts import render
+
+
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')
 
 
 def plain_text(name, contents, content_type='text/plain'):
