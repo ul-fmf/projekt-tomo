@@ -1,118 +1,134 @@
 {% extends 'base.html' %}
 {% load i18n %}  
-{% load bootstrap3 %} 
 {% load staticfiles %}
 
+{% block title %}
 {# Translators: Title of login page. #}
-{% block title %}{% trans "Welcome" %}{% endblock %}
+{% trans 'Welcome' %}
+{% endblock title %}
 
 {% block navigation %}
-  <nav class="navbar navbar-default navbar-fixed-top topnav tomo-login-header" role="navigation">
-    <div class="container topnav">
-      <div class="navbar-header"> <!-- Brand and toggle get grouped for better mobile display -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="login-collapse" style="text-align: right">
-        <div class="dropdown">
-          <a class="btn btn-default tomo-login-signin dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {% trans "Sign in" %}</a>
-            <div class="dropdown-menu tomo-login">
-            <form role="form" action="{% url "django.contrib.auth.views.login" %}" method="post">
-             {# Translators: must sign in #}
-              <p>{% blocktrans %}You must sign-in before the first use. You must use the same username and password that you use on student computers.{% endblocktrans %}</p>
-                {% csrf_token %}
+<nav class="navbar navbar-default navbar-fixed-top topnav tomo-login-header"
+     role="navigation" style="text-align: right">
+  <div class="container" style="text-align: right">
+    <div class="dropdown">
+      <a class="btn btn-default tomo-login-signin dropdown-toggle"
+         data-toggle="dropdown">
+         <i class="fa fa-user"></i>
+         {% trans 'Sign in' %}
+      </a>
+      <div class="dropdown-menu tomo-login">
+        <p>
+          {% blocktrans %}
+          Login with an external provider
+          {% endblocktrans %}
+        </p>
+        <div class="form-group">
+        <a class="btn btn-default" role="button" href="#">
+           {% trans 'ArnesAAI' %}
+        </a>
+        <a class="btn btn-default" role="button"
+           href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+           <i class="fa fa-facebook fa-lg"></i> {% trans 'Facebook' %}
+        </a>
+        <a class="btn btn-default" role="button"
+           href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
+           <i class="fa fa-google fa-lg"></i> {% trans 'Google' %}
+        </a>
+        </div>
 
-             {% if form.errors %}
-        <div class="alert alert-danger alert-dismissable alert-link">
-            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
+        <hr>
+
+        <form role="form" method="post"
+              action="{% url 'django.contrib.auth.views.login' %}">
+          {% if form.errors %}
+          <div class="alert alert-danger" role="alert">
             {# Translators: sign-in error #}
-            <strong>{% trans "Sign-in error!" %}</strong>
-            {% blocktrans %}Use the same username and password that you use on student computers,
-             for example <code>NovakJ14</code> and <code>Triglav.1</code>. {% endblocktrans %}
-        </div>
-        {% endif %}
-
-                <input type="hidden" name="next" value="{{ next }}" />
-              <div class="form-group">
-                <label class="sr-only" for="id_username">
-                {# Translators: Input for username on login page. #}
-                {% trans "Username" %}
-                </label>
-                <input class="form-control" id="id_username" maxlength="254" name="username" placeholder="NovakJ14" required="required" title="" type="text" autocomplete="off">
-              </div>
-              <div class="form-group">
-                <label class="sr-only" for="id_password">
-                {# Translators: Input for password on login page. #}
-                {% trans "Password" %}
-                </label>
-                <input class="form-control" id="id_password" maxlength="254" name="password" placeholder="Triglav.1" required="required" title="" type="password" autocomplete="off">
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-default">
-                    {# Translators: Button for sign-in on login page. #}
-                    {% trans "Sign in" %}
-                </button>
-                
-                    <hr>
-                    <a class="btn btn-default" href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}" role="button"><i class="fa fa-facebook fa-lg"></i> Facebook</a>
-                    <a class="btn btn-default" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}" role="button"><i class="fa fa-google fa-lg"></i> Google</a>
-              </div>
-            </form>
+            <strong>{% trans 'Sign-in error!' %}</strong>
           </div>
-        </div>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container -->
-  </nav>{% endblock %}
+          {% endif %}
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next }}" />
+          <div class="form-group">
+            <label class="sr-only" for="id_username">
+              {# Translators: Input for username on login page. #}
+              {% trans 'Username' %}
+            </label>
+            <input class="form-control" id="id_username" maxlength="254"
+                   name="username" placeholder="{% trans 'Username' %}"
+                   required="required" title="" type="text" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="id_password">
+            {# Translators: Input for password on login page. #}
+            {% trans 'Password' %}
+            </label>
+            <input class="form-control" id="id_password" maxlength="254"
+                   name="password" placeholder="{% trans 'Password' %}"
+                   required="required" title="" type="password" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-default">
+              {# Translators: Button for sign-in on login page. #}
+              {% trans 'Sign in' %}
+            </button> 
+          </div>
+          <p><small>
+            {% blocktrans %}
+            You can login with a username and password only if you were given a
+            manually created account. If not, please use any of the external
+            providers listed above. If that is not possible, you can
+            <a href="mailto:info@projekt-tomo.si">ask us</a> for an account.
+            {% endblocktrans %}
+          </small></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</nav>
+{% endblock %}
 
 {% block content %}
-    <!-- Header -->
-    <a name="about"></a>
-    <div class="intro-header">
-        <div class="container">
+<div class="intro-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="intro-message">
+          <div class="col-md-6 tomo-intro">
+            <img src="{% static 'img/logo.svg' %}" class="img-responsive"
+                 alt="{% trans 'Project Tomo' %}" width="100%">
+          </div>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="intro-message">
-                          {# Translators: description of project Tomo #}
-                        <div class="col-md-6 tomo-intro">
-                          <img src="{% static 'img/logo.svg' %}" class="img-responsive" alt="{% trans 'Project Tomo' %}" width="100%">
-                        </div>
-                        <h3>{% trans "Your personal programming teacher." %}</h3>
-                        <!--
-                        <div class="col-md-6 tomo-intro">
-                          <hr>
-                          <div class="embed-responsive embed-responsive-16by9" >
-                            <iframe class="embed-responsive-item"  src="https://player.vimeo.com/video/30368682"></iframe>
-                          </div>
-                      </div>
-                      -->
-                    </div>
-                </div>
+          {# Translators: description of project Tomo #}
+          <h3>{% trans 'Your personal programming teacher.' %}</h3>
+
+          <!-- <div class="col-md-6 tomo-intro">
+            <hr>
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item"
+                      src="https://player.vimeo.com/video/30368682"></iframe>
             </div>
-
+          </div> -->
         </div>
-        <!-- /.container -->
-
+      </div>
     </div>
-    <!-- /.intro-header -->
+  </div>
+</div>
 {% endblock %}
 
 {% block footer %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-12">
-      {# Translators: Univerza v Ljubljani, Evropski sklad za regionalni razvoj, Ministrstvo za izobraževanje, znanost in šport #}
-      <img src="{% static 'img/sponzorji.png' %}" class="center-block" alt="{% trans 'University of Ljubljana' %}, {% trans 'European Regional Development Fund' %}, {% trans 'Ministry of Education, Science and Sport' %}" title="{% trans 'University of Ljubljana' %}, {% trans 'European Regional Development Fund' %}, {% trans 'Ministry of Education, Science and Sport' %}">
-    </div>
-  </div>
+  <img src="{% static 'img/sponzorji.png' %}" class="center-block"
+       alt="{% trans 'Sponsors' %}" title="{% trans 'Sponsors' %}">
   <p>
-    {# Translators: Text in footer. #}
-    {% trans "This work was funded in part by the European Union, European Regional Development Fund and the Ministry of Education, Science and Sport. The operation is implemented in the framework of the Operational Program for Strengthening Regional Development Potentials for the Period 2007 – 2013, Development priority: Economic development infrastructure, Priority theme: Information society." %}
+    {% blocktrans %}
+    This work was funded in part by the European Union, European Regional
+    Development Fund and the Ministry of Education, Science and Sport.
+    The operation is implemented in the framework of the Operational Program
+    for Strengthening Regional Development Potentials for the Period 2007 – 2013,
+    Development priority: Economic development infrastructure,
+    Priority theme: Information society.
+    {% endblocktrans %}
   </p>
 </div>
 {% endblock footer %}
