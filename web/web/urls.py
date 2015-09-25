@@ -29,4 +29,8 @@ urlpatterns = patterns('',
     url(r'^problems/', include('problems.urls')),
 )
 
+urlpatterns += patterns('',
+  url(r'^shib/', include('shibboleth.urls', namespace='shibboleth')),
+)
+
 urlpatterns += courses.urls.urlpatterns

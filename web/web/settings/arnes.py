@@ -9,6 +9,10 @@ TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['www.projekt-tomo.si']
 
+INSTALLED_APPS += (
+  'shibboleth',
+)
+
 WSGI_APPLICATION = 'web.wsgi.dev.application'
 
 DATABASES = {
