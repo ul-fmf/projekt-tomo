@@ -84,7 +84,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def student_success(self):
         student_count = self.course.students.count()
-        attempts = Attempt.objects.filter(user__taught_courses=self.course,
+        attempts = Attempt.objects.filter(user__courses=self.course,
                                           part__problem__problem_set=self)
         submitted_count = attempts.count()
         valid_count = attempts.filter(valid=True).count()

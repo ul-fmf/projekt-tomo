@@ -15,17 +15,17 @@
       settings = $.extend({
         segmentShowStroke : false,
         segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 1,
+        segmentStrokeWidth : 0.5,
         baseColor: "#fff",
         baseOffset: 0,
-        edgeOffset: 2, //offset from edge of $this
+        edgeOffset: 0, //offset from edge of $this
         pieSegmentGroupClass: "pieSegmentGroup",
         pieSegmentClass: "pieSegment",
-        lightPiesOffset: 2, //lighten pie's width
+        lightPiesOffset: 0, //lighten pie's width
         lightPiesOpacity: .3, //lighten pie's default opacity
         lightPieClass: "lightPie",
         animation : true,
-        animationSteps : 90,
+        animationSteps : 10,
         animationEasing : "easeInOutExpo",
         beforeDraw: function(){  },
         afterDrawed : function(){  },

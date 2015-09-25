@@ -53,7 +53,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def student_success(self):
         student_count = self.problem_set.course.students.count()
-        attempts = Attempt.objects.filter(user__taught_courses=self.problem_set.course,
+        attempts = Attempt.objects.filter(user__courses=self.problem_set.course,
                                           part__problem=self)
         submitted_count = attempts.count()
         valid_count = attempts.filter(valid=True).count()
@@ -190,3 +190,25 @@ class Part(OrderWithRespectToMixin, models.Model):
         Check whether user has submitted attempt for this part.
         '''
         return user.attempts.filter(part=self).count() >= 1
+
+    def student_success(self):
+        student_count = self.problem.problem_set.course.students.count()
+        attempts = self.attempts.filter(user__courses=self.problem.problem_set.course)
+        submitted_count = attempts.count()
+        valid_count = attempts.filter(valid=True).count()
+        invalid_count = submitted_count - valid_count
+        total_count = student_count
+
+        if total_count:
+            valid_percentage = int(100.0 * valid_count / total_count)
+            invalid_percentage = int(100.0 * invalid_count / total_count)
+        else:
+            valid_percentage = 0
+            invalid_percentage = 0
+
+        empty_percentage = 100 - valid_percentage - invalid_percentage
+        return {
+            'valid': valid_percentage,
+            'invalid': invalid_percentage,
+            'empty': empty_percentage
+        }
