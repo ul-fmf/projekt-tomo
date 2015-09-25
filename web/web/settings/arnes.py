@@ -25,13 +25,29 @@ DATABASES = {
 STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
 STATIC_URL = '/static/'
 
-LOGIN_URL = '/accounts/login/'
+LOGIN_URL = 'https://www.projekt-tomo.si/Shibboleth.sso/Login'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 LOGOUT_URL = '/accounts/logout/'
 LOGIN_REDIRECT_URL = '/'
 SUBMISSION_URL = 'https://www.projekt-tomo.si'
 
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware'
+)
+SHIBBOLETH_ATTRIBUTE_MAP = {
+   'uid': (True, 'username'),
+   'givenName': (True, 'first_name'),
+   'sn': (True, 'last_name'),
+   'mail': (False, 'email'),
+}
 AD_DNS_NAME = 'warpout.fmf.uni-lj.si'
 AD_LDAP_PORT = 389
 AD_SEARCH_DN = 'ou=uporabniki,dc=std,dc=fmf,dc=uni-lj,dc=si'
@@ -44,6 +60,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'shibboleth.backends.ShibbolethRemoteUserBackend',
 )
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY']
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ['SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET']
