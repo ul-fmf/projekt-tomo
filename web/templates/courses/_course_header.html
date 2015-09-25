@@ -3,7 +3,7 @@
 
   <span class="pull-left">
   {% if course.is_taught %}
-    <button class="btn btn-default btn-sm tomo-taught"
+    <button class="tomo-taught"
             aria-label="{% trans "Taught course" %}"
             data-toggle="tooltip"
             title="{% trans "Taught course" %}">
@@ -14,11 +14,11 @@
           method="post"
           id='unenroll_from_course_form'>
       {% csrf_token %}
-      <button class="btn btn-default btn-sm tomo-unenroll"
+      <button class="tomo-unenroll"
               type="submit"
-              aria-label="{% trans "Unenroll" %}"
+              aria-label="{% trans "Remove from favorites" %}"
               data-toggle="tooltip"
-              title="{% trans "Unenroll" %}">
+              title="{% trans "Remove from favorites" %}">
         <i class="fa fa-star fa-lg"></i>
         <i class="fa fa-star-o fa-lg"></i>
       </button>
@@ -28,11 +28,11 @@
           method="post"
           id='enroll_in_course_form'>
       {% csrf_token %}
-      <button class="btn btn-default btn-sm tomo-enroll"
+      <button class="tomo-enroll"
               type="submit"
-              aria-label="{% trans "Enroll" %}"
+              aria-label="{% trans "Add to favorites" %}"
               data-toggle="tooltip"
-              title="{% trans "Enroll" %}">
+              title="{% trans "Add to favorites" %}">
         <i class="fa fa-star fa-lg"></i>
         <i class="fa fa-star-o fa-lg"></i>
       </button>
