@@ -28,5 +28,8 @@ urlpatterns = patterns(
         name='problem_delete'),
     url(r'^(?P<problem_pk>\d+)/copy/',
         views.copy_form,
-        name='problem_copy')
+        name='problem_copy'),
+    url(r'^(?P<problem_pk>\d+)/progress/$',
+        views.problem_progress,
+        name='problem_progress'),
 )

@@ -19,6 +19,13 @@ def problem_attempt_file(request, problem_pk):
     filename, contents = problem.attempt_file(user=request.user)
     return plain_text(filename, contents, content_type='text/x-python')
 
+@login_required
+def problem_progress(request, problem_pk):
+    problem = get_object_or_404(Problem, id=problem_pk)
+    verify(request.user.can_view_problem_set_attempts(problem.problem_set))
+    return render(request, "courses/problem_progress.html", {
+        'problem': problem,
+    })
 
 @login_required
 def problem_edit_file(request, problem_pk):
