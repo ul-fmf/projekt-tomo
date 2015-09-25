@@ -10,17 +10,36 @@
   <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
 {% endblock %}
 
-
 {% block content %}
 {# display of all problems in a problem set #}
 <div class="content-section-a tomo-top-section">
   <div class="container">
     <div class="row">
       <div class="tomo-chapter-heading">
+        {% if show_teacher_forms %}
+        <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
+          <a type="button" class="btn btn-default btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+            {# Translators: Prenesi datoteke #}
+            <i class="fa fa-download fa-2x"></i>
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href="{% url 'problem_set_attempts' problem_set.pk %}">
+                {# Translators: Datoteke za reševanje #}
+                {% trans "Files for solving" %}
+            </a></li>
+            <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
+                {# Translators: Datoteke za urejanje #}
+                {% trans "Files for editing" %}
+            </a></li>
+          </ul>
+        </div>
+        {% else %}
         <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
           {# Translators: Button for downloading all problem files within a problem set. #}
           <a class="btn btn-default" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
         </div>
+        {% endif %}
         <h2 class="section-heading">
           <hr class="section-heading-spacer">
           <div class="clearfix"></div>
@@ -35,16 +54,63 @@
           {{ problem_set.description|latex_markdown }}
           <hr>
         {% endif %}
+
         {% for problem in problem_set.problems.all %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-6">
                 <h4>{{ problem.title }}</h4>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <span class="pull-right">
                   <div class="btn-toolbar tomo-task-heading" role="toolbar" aria-label="Buttons">
+                    {% if show_teacher_forms %}
+
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Download">
+                      <button type="button" class="btn btn-default dropdown-toggle download-btn" data-toggle="dropdown" aria-expanded="false">
+                        {# Translators: Prenesi datoteko #}
+                        <i class="fa fa-download fa-lg"></i>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu">
+                        <li><a href="{% url 'problem_attempt_file' problem.id %}">
+                            {# Translators: Datoteka za reševanje #}
+                            {% trans "File for solving" %}
+                        </a></li>
+                        <li><a href="{% url 'problem_edit_file' problem.id %}">
+                            {# Translators: Datoteka za urejanje #}
+                            {% trans "File for editing" %}
+                        </a></li>
+                      </ul>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
+                      <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
+                        <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
+                            data-toggle="tooltip" title="{% trans 'Move up' %}" data-container:'body'>
+                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down"
+                            data-toggle="tooltip" title="{% trans 'Move down' %}" data-container:'body'>
+                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-default btn-for-modal edit-btn" aria-label="Update" data-url="{% url 'problem_update' problem.id %}"
+                            data-toggle="tooltip" title="{% trans 'Update' %}" data-container:'body'>
+                            <i class="fa fa-cog" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
+                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
+                        <i class="fa fa-copy" aria-hidden="true"></i>                          
+                        </a>
+                        <a class="btn btn-default btn-for-modal edit-btn trash-btn" aria-label="Delete" data-url="{% url 'problem_delete' problem.id %}">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    {% else %}
+
                     <div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Download' %}">
                       {# Translators: Button for downloading a single problem file. #}
                       <a class="btn btn-default download-btn" href="{% url 'problem_attempt_file' problem.id %}" role="button" data-toggle="tooltip" title="
@@ -53,6 +119,8 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
                       <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
                     </div>
+
+                    {% endif %}
                   </div>
                 </span>
               </div>
@@ -78,6 +146,13 @@
           </ul>
         </div>
         {% endfor %}
+        <hr>
+                    <button class="btn btn-default btn-lg btn-for-modal" aria-label="Create" data-url="{% url 'problem_create' problem_set.id %}">
+                <i class="fa fa-download fa-plus"></i>
+                     {# Translators: Button for creating new problem. #}
+                     {% trans "Add new problem" %}
+            </button>
+
       </div>
 
       <div class="col-md-3" id="rightCol">

@@ -83,6 +83,8 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-task-heading .btn-default { width: 40px; color: #fff; }
 .tomo-task-heading .download-btn { background-color: #878F28; }
 .tomo-task-heading .solutions-btn { background-color: #D7A02C; }
+.tomo-task-heading .edit-btn { border: none; background-color: rgba(215, 160, 44, .2); color: #D7A02C; }
+.tomo-task-heading .trash-btn:hover { background-color: #A92D2D; }
 
 .tomo-other { margin: 0; padding: 0; }
 .tomo-other .col-md-4 { margin-right: 0px; height: 15em; padding: 2em 4em; }
