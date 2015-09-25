@@ -110,9 +110,9 @@
 $(function() {
   {% for problem, success in problem_success %}
   $("#pieChart-{{ problem.pk }}").drawPieChart([
-    {value: {{ success.0 }}, color: "#878F28"},
-    {value: {{ success.1 }}, color: "#D7A02C"},
-    {value: {{ success.2 }}, color: "#A92D2D"}
+    {value: {{ success.valid }}, color: "#878F28"},
+    {value: {{ success.invalid }}, color: "#D7A02C"},
+    {value: {{ success.empty }}, color: "#A92D2D"}
   ]);
   {% for part in problem.parts.all %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([

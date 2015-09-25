@@ -41,17 +41,23 @@ def problem_set_detail(request, problem_set_pk):
     invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
 
     problem_success = []
-
     for problem in problem_set.problems.all():
-        valid, invalid, nothing = 0, 0, 0
-        for part in problem.parts.all():
-            if part.pk in valid_parts_ids:
-                valid += 1
-            elif part.pk in invalid_parts_ids:
-                invalid += 1
-            else:
-                nothing += 1
-        problem_success.append((problem, (valid, invalid, nothing)))
+        if request.user.can_edit_course(course):
+            success = problem.student_success()
+        else:
+            success = {
+                'valid': 0,
+                'invalid': 0,
+                'nothing': 0
+            }
+            for part in problem.parts.all():
+                if part.pk in valid_parts_ids:
+                    success['valid'] += 1
+                elif part.pk in invalid_parts_ids:
+                    success['invalid'] += 1
+                else:
+                    success['nothing'] += 1
+        problem_success.append((problem, success))
 
     return render(request, 'courses/problem_set_detail.html', {
         'problem_set': problem_set,

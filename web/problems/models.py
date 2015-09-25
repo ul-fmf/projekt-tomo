@@ -9,6 +9,7 @@ from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
+from attempts.models import Attempt
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
@@ -49,6 +50,30 @@ class Problem(OrderWithRespectToMixin, models.Model):
             "authentication_token": authentication_token
         })
         return filename, contents
+
+    def student_success(self):
+        student_count = self.problem_set.course.students.count()
+        attempts = Attempt.objects.filter(user__taught_courses=self.problem_set.course,
+                                          part__problem=self)
+        submitted_count = attempts.count()
+        valid_count = attempts.filter(valid=True).count()
+        part_count = Part.objects.filter(problem=self).count()
+        invalid_count = submitted_count - valid_count
+        total_count = student_count * part_count
+
+        if total_count:
+            valid_percentage = int(100.0 * valid_count / total_count)
+            invalid_percentage = int(100.0 * invalid_count / total_count)
+        else:
+            valid_percentage = 0
+            invalid_percentage = 0
+
+        empty_percentage = 100 - valid_percentage - invalid_percentage
+        return {
+            'valid': valid_percentage,
+            'invalid': invalid_percentage,
+            'empty': empty_percentage
+        }
 
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
