@@ -65,7 +65,7 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
 
 .tomo-courses li { margin: 10px 0; padding: 0; }
-.tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; }
+.tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; display: inline-block; border: 0;}
 .tomo-courses h4 { margin: 0; padding: 0; line-height: 1.2em; vertical-align: baseline; }
 .tomo-courses .media, .tomo-courses p { margin: 0; }
 .tomo-courses .media-left { height: 50px; line-height: 38px; font-size: 30px; text-align: right; padding-left: 10px; }

@@ -4,6 +4,8 @@ from django.template.defaultfilters import slugify
 from users.models import User
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
+from attempts.models import Attempt
+from problems.models import Part
 
 
 class Course(models.Model):
@@ -79,6 +81,30 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def student_success(self):
+        student_count = self.course.students.count()
+        attempts = Attempt.objects.filter(user__taught_courses=self.course,
+                                          part__problem__problem_set=self)
+        submitted_count = attempts.count()
+        valid_count = attempts.filter(valid=True).count()
+        part_count = Part.objects.filter(problem__problem_set=self).count()
+        invalid_count = submitted_count - valid_count
+        total_count = student_count * part_count
+
+        if total_count:
+            valid_percentage = int(100.0 * valid_count / total_count)
+            invalid_percentage = int(100.0 * invalid_count / total_count)
+        else:
+            valid_percentage = 0
+            invalid_percentage = 0
+
+        empty_percentage = 100 - valid_percentage - invalid_percentage
+        return {
+            'valid': valid_percentage,
+            'invalid': invalid_percentage,
+            'empty': empty_percentage
+        }
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
