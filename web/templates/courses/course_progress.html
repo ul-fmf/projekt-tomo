@@ -5,19 +5,13 @@
 
  
 {% block navigation-left %}
-    <li><a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a></li>
-    <li><a href="">{{ observed_user.get_full_name }}</a></li>
-    <li class="active"><a href="{% url 'course_progress' course.pk observed_user.pk %}">
-    	{# Translators: Progress of a student in a course - heading in navigation#}
-    	{% trans "Progress" %}
-    	<span class="sr-only">
-    		{# Translators: current page in navigation #}
-    		{% trans "(current)" %}
-   		</span></a></li>
+  <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+  <a class="navbar-brand topnav" href="#">{{ observed_user.get_full_name }} <span class="sr-only">(current)</span></a>
 {% endblock %}
 
 
 {% block content %}
+<div class="content-section-a tomo-top-section"><div class="container">
   {% for problem_set, problem_set_attempts in course_attempts %}
   <h3>
     <a href="{{ problem_set.get_absolute_url }}">{{ problem_set.title }}</a>
@@ -26,35 +20,24 @@
   <table class="table table-condensed">
     <tbody>
       {% for problem, problem_attempts in problem_set_attempts %}
-      {% with progress_bar_width=problem.progress_bar_width %}
       <tr>
         <td>
         	<a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
        	</td><td width='75%'>
-        <div class="progress">
           {% for attempt in problem_attempts %}
           	{# FIX IT! IT SHOWS SOLUTION FROM USER THAT IS BROWSING THE PAGE. NEW SOLUTIONS VIEW NEEDED #}
           	<a href="{% url 'problem_solution' problem.pk observed_user.pk%}">
-	            <div style="width: {{ progress_bar_width }}; {% if not attempt %} background-color: #f5f5f5{% endif %}" class="progress-bar
-	              {% cycle '' 'progress-bar-striped' %}
-	              {% if attempt %}
-	                {% if attempt.valid %}
-	                  progress-bar-success
-	                {% else %}
-	                  progress-bar-danger
-	                {% endif %}
-	              {% else %}
-	              {% endif %}
-	            ">
-            	</div>
-           	</a>
+              {% if attempt.valid %}<i class="color5 fa fa-circle"></i>
+              {% elif attempt %}<i class="color3 fa fa-circle"></i>
+              {% else %}<i class="color1 fa fa-circle"></i>
+              {% endif %}
+            </a>
           {% endfor %}
-        </div>
         </td>
       </tr>
-      {% endwith %}
       {% endfor %}
     </tbody>
   </table>
   {% endfor %}
+</div></div>
 {% endblock %} {# content #}

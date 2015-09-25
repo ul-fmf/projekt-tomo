@@ -59,7 +59,7 @@
           <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
             {% csrf_token %}
             <li>
-              {{ student.get_full_name }}
+              <a href="{% url 'course_progress' course.pk student.pk %}">{{ student.get_full_name }}</a>
               <span id="student{{student.pk}}" class="chart"></span>
               <span class="tomo-teacher-switch">
                 {# Translators: Demote teacher to student - button #}

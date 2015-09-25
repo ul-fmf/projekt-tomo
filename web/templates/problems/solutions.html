@@ -58,7 +58,10 @@
                     {% trans 'Official solution' %}
                   </div>
                   <div class="tomo-solution-code-official">
-                    {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+                    {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
+                    <pre><code>{{ part.solution }}</code></pre>
+
+                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
                     {# Translators: in solution comparison table #}
                     <p>{% trans 'Official solutions are hidden.' %}</p>
 
@@ -69,10 +72,8 @@
                     {# Translators: in solution comparison table #}
                     <p>{% trans 'Official solution will be visible once you submit a valid solution.' %}</p>
                     {% endif %}
-
-                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
-                    <pre><code>{{ part.solution }}</code></pre>
                     {% endif %}
+
                   </div>
                 </div>
               </div>
