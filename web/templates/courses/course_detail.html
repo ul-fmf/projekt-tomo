@@ -30,6 +30,49 @@
       </div>
 
       <div class="col-md-4 tomo-course-info">
+        {% if show_teacher_forms %}
+        <hr>
+        <p class="tomo-institution">{{ course.organization_title }}</p>
+        <div class="tomo-course-description">
+          {{ course.description }}
+        </div>
+        <ul class="tomo-lecturers">
+          {% for teacher in course.teachers.all %}
+          <form action="{% url 'demote_to_student' course.pk  teacher.pk %}"  method="post" id='demote_to_student_form'>
+            {% csrf_token %}
+            <li>
+              {{ teacher.get_full_name }}
+              <span class="tomo-teacher-switch">
+                {# Translators: Demote teacher to student - button #}
+                <button type="submit" aria-label="Demote" data-toggle="tooltip"
+                        title="{% trans 'Demote to student' %}">
+                  <i class="fa fa-user"></i>
+                </button>
+            </span>
+          </li>
+          </form>
+          {% endfor %}
+        </ul>
+        <hr>
+        <ul class="tomo-students">
+          {% for student in students %}
+          <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
+            {% csrf_token %}
+            <li>
+              {{ student.get_full_name }}
+              <span id="student{{student.pk}}" class="chart"></span>
+              <span class="tomo-teacher-switch">
+                {# Translators: Demote teacher to student - button #}
+                <button type="submit" aria-label="Demote" data-toggle="tooltip"
+                        title="{% trans 'Promote to teacher' %}">
+                  <i class="fa fa-graduation-cap"></i>
+                </button>
+              </form>
+            </span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
         <hr>
         {% for lecturer in course.teachers.all %}
         <p class="tomo-lecturer">{{ lecturer.get_full_name }}</p>
@@ -38,6 +81,7 @@
         <div class="tomo-course-description">
           {{ course.description }}
         </div>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -47,4 +91,18 @@
 {% block extra_js %}
 <!-- for Tree view and modals-->
 <script src="{% static "js/bootstrap-treeview.js" %}"></script>
+{% if show_teacher_forms %}
+    <script src="{% static 'js/piechart.js' %}"></script>
+    <script>
+      $(function() {
+        {% for student in students %}
+        $("#student{{student.pk}}").drawPieChart([
+          { value : {{ student.empty }},  color: "#A92D2D" },
+          { value:  {{ student.invalid }},   color: "#D7A02C" },
+          { value : {{ student.valid }},   color: "#878F28" }
+        ]);
+        {% endfor %}
+      });
+    </script>
+{% endif %}
 {% endblock %}

@@ -75,9 +75,30 @@ def course_detail(request, course_pk):
     """Show a list of all problems in a problem set."""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
+    if request.user.can_edit_course(course):
+        students = list(course.students.exclude(taught_courses=course))
+        part_count = Part.objects.filter(problem__problem_set__course=course).count()
+        attempts = Attempt.objects.filter(part__problem__problem_set__course=course)
+        from django.db.models import Count
+        valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
+        all_attempts = attempts.values('user').annotate(Count('user'))
+        def to_dict(attempts):
+            attempts_dict = {}
+            for val in attempts:
+                attempts_dict[val['user']] = val['user__count']
+            return attempts_dict
+        valid_attempts_dict = to_dict(valid_attempts)
+        all_attempts_dict = to_dict(all_attempts)
+        for student in students:
+            student.valid = valid_attempts_dict.get(student.pk, 0)
+            student.invalid = all_attempts_dict.get(student.pk, 0) - student.valid
+            student.empty = part_count - student.valid - student.invalid
+    else:
+        students = []
     course.annotate_for_user(request.user)
     return render(request, 'courses/course_detail.html', {
         'course': course,
+        'students': students,
         'show_teacher_forms': request.user.can_edit_course(course),
     })
 
@@ -117,7 +138,7 @@ def promote_to_teacher(request, course_pk, student_pk):
     student = get_object_or_404(User, pk=student_pk)
     course.teachers.add(student)
     course.students.remove(student)
-    return redirect('course_users', course.pk)
+    return redirect(course)
 
 
 @login_required
@@ -128,10 +149,7 @@ def demote_to_student(request, course_pk, teacher_pk):
     teacher = get_object_or_404(User, pk=teacher_pk)
     course.students.add(teacher)
     course.teachers.remove(teacher)
-    if teacher == request.user:
-        return redirect(course)
-    else:
-        return redirect('course_users', course.pk)
+    return redirect(course)
 
 
 @login_required

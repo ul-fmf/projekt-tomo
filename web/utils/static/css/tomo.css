@@ -26,8 +26,8 @@ a { color: #23527c; }
 .tomo-students li { margin: 7px 0; }
 li .tomo-teacher-switch { display: none; }
 li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { display: inline; }
-.tomo-teacher-switch .btn { margin: 0 0 0 10px; border: none; padding: 0; background: none; color: #000; }
-.tomo-teacher-switch .btn:hover { color: #D7A02C }
+.tomo-teacher-switch button { margin: 0 0 0 10px; border: none; padding: 0; background: none; color: #000; }
+.tomo-teacher-switch button:hover { color: #D7A02C }
 
 .tomo-home { margin: 0 40px 0 0; padding: 0; }
 .tomo-home img { height: 100%; }
