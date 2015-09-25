@@ -103,7 +103,8 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         return {
             'valid': valid_percentage,
             'invalid': invalid_percentage,
-            'empty': empty_percentage
+            'empty': empty_percentage,
+            'grade': min(5, int(valid_percentage / 20) + 1)
         }
 
     def get_absolute_url(self):

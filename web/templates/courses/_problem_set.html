@@ -93,11 +93,13 @@
     </div>
     {% endif %}
 
-    {% if show_teacher_forms %}
+    {% if course.is_taught %}
     <div class="media-left">
-      <p class="success text-danger color{{ problem_set.grade }}">
-        {{ problem_set.percentage }}<small>%</small>
+      {% with problem_set.student_success as success %}
+      <p class="success text-danger color{{ success.grade }}">
+        {{ success.valid }}<small>%</small>
       </p>
+      {% endwith %}
     </div>
     {% else %}
     <div class="media-left">
