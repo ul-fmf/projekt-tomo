@@ -80,8 +80,8 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-chapter-heading h2 span { margin-top: -15px; display: block; }
 .tomo-chapter-heading .btn-default { padding-top: 10px; background-color: #878F28; color: #fff; }
 .tomo-task-heading .btn-default { width: 40px; color: #fff; }
-.tomo-task-heading [aria-label="Download"] .btn-default { background-color: #878F28; }
-.tomo-task-heading [aria-label="Solutions"] .btn-default { background-color: #D7A02C; }
+.tomo-task-heading .download-btn { background-color: #878F28; }
+.tomo-task-heading .solutions-btn { background-color: #D7A02C; }
 
 .tomo-other { margin: 0; padding: 0; }
 .tomo-other .col-md-4 { margin-right: 0px; height: 15em; padding: 2em 4em; }
@@ -135,8 +135,8 @@ footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
   #sidebar.affix-top { position: static; margin-top: 30px; width: 228px; }
   #sidebar.affix { position: fixed; top: 70px; width: 228px; }
 }
-#sidebar a { font-size: 1.5em;  }
+#sidebar a { font-size: 1.2em;  }
 #sidebar li.active { background-color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
 #sidebar .subtasks { overflow: auto; }
-#sidebar .subtasks a { font-size: 1em; display: block; width: 3em; text-align: right; margin: 5px; float: left; }
+#sidebar .subtasks a { font-size: 0.8em; display: block; width: 2em; text-align: right; margin: 5px; float: left; }
 #sidebar .subtasks .chart { float: right; margin: .05em 0 0 5px; }

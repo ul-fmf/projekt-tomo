@@ -6,106 +6,126 @@
 
  
 {% block navigation-left %} 
-    <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
-    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
+  <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
 {% endblock %}
 
 
 {% block content %}
 {# display of all problems in a problem set #}
-    <div class="content-section-a tomo-top-section">
+<div class="content-section-a tomo-top-section">
+  <div class="container">
+    <div class="row">
+      <div class="tomo-chapter-heading">
+        <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
+          {# Translators: Button for downloading all problem files within a problem set. #}
+          <a class="btn btn-default" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
+        </div>
+        <h2 class="section-heading">
+          <hr class="section-heading-spacer">
+          <div class="clearfix"></div>
+          <span>{{ problem_set.title}}</span>
+        </h2>
+        {% if problem_set.description and problem_set.description.strip %}
+          {{ problem_set.description|latex_markdown }}
+        {% endif %}
+      </div>
+    </div>
 
-        <div class="container">
-
-          <div class="row">
-            <div class="tomo-chapter-heading">
-              <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
-                {# Translators: Button for downloading all problem files within a problem set. #}
-                <a class="btn btn-default" href="{% url 'problem_set_attempts' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
+    <div class="row">
+      <div class="col-md-9">
+        {% for problem in problem_set.problems.all %}
+        <div id="{{ problem.anchor }}" class="panel panel-default">
+          <div id="{{ problem.anchor }}" class="panel-heading">
+            <div class="row">
+              <div class="col-md-8">
+                <h4>{{ problem.title }}</h4>
               </div>
-              <h2 class="section-heading">
-                <hr class="section-heading-spacer">
-                <div class="clearfix"></div>
-                <span>{{ problem_set.title}}</span>
-              </h2>
-    {% if problem_set.description and problem_set.description.strip %}
-              {{ problem_set.description|latex_markdown }}
-    {% endif %}
+              <div class="col-md-4">
+                <span class="pull-right">
+                  <div class="btn-toolbar tomo-task-heading" role="toolbar" aria-label="Buttons">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Download' %}">
+                      {# Translators: Button for downloading a single problem file. #}
+                      <a class="btn btn-default download-btn" href="{% url 'problem_attempt_file' problem.id %}" role="button" data-toggle="tooltip" title="
+                      {% trans "Download this problem file" %}"><i class="fa fa-download fa-lg"></i></a>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
+                      <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
+                    </div>
+                  </div>
+                </span>
+              </div>
             </div>
           </div>
 
-          <div class="row">
-            <div class="col-md-9">
-          {% for problem in problem_set.problems.all %}
-            <div id="{{ problem.anchor }}" class="panel panel-default">
-
-                    <div id="{{ problem.anchor }}" class="panel-heading">
-                        <div class="row">
-                          <div class="col-md-8">
-                                <h4>{{ problem.title }}</h4>
-                    </div>
-                          <div class="col-md-4">
-                      <span class="pull-right">
-                        <div class="btn-toolbar tomo-task-heading" role="toolbar" aria-label="Buttons">
-                          <div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Download' %}">
-                            {# Translators: Button for downloading a single problem file. #}
-                            <a class="btn btn-default download-btn" href="{% url 'problem_attempt_file' problem.id %}" role="button" data-toggle="tooltip" title="
-                            {% trans "Download this problem file" %}"><i class="fa fa-download fa-lg"></i></a>
-                          </div>
-                            <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
-                            <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
-                          </div>
-                        </div>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-{% if problem.description and problem.description.strip %}
-        <div class="panel-body">
+          {% if problem.description and problem.description.strip %}
+          <div class="panel-body">
             <p> 
-                {{ problem.description|latex_markdown }}
+              {{ problem.description|latex_markdown }}
             </p>
-        </div>
-        {% endif %}
+          </div>
+          {% endif %}
 
-                <ul class="list-group">
+          <ul class="list-group">
             {% for part in problem.parts.all %}
-                  <li class="list-group-item" id="{{ part.anchor }}">
-                  {# Translators: problem set detail #}
-                    <p>{{ forloop.counter }}. {% trans "part" %}</p>
-                    {{ part.description|latex_markdown }}
-                    </li>
-                {% endfor %}
-                  </ul>
-                </div>
+            <li class="list-group-item" id="{{ part.anchor }}">
+              {# Translators: problem set detail #}
+              <p>{{ forloop.counter }}. {% trans "part" %}</p>
+              {{ part.description|latex_markdown }}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
         {% endfor %}
+      </div>
 
-          </div>
-
-          <div class="col-md-3" id="rightCol">
-            <ul class="nav nav-stacked" id="sidebar">
-              {% for problem in problem_set.problems.all %}
-              <li><a href="#{{problem.anchor}}">{{ problem.title }}</a>
-                <ul>
-                {% for part in problem.parts.all %}
-                  <li><a href="#{{part.anchor}}">{{ forloop.counter }}. {% trans "part" %}</a></li>
-                {% endfor %}
-                </ul>
-              </li>
+      <div class="col-md-3" id="rightCol">
+        <ul class="nav nav-stacked" id="sidebar">
+          {% for problem in problem_set.problems.all %}
+          <li>
+            <a href="#{{ problem.anchor }}">
+              {{ problem.title }}
+              <span id="pieChart-{{ problem.pk }}" class="chart" style="float: right"></span>
+            </a>
+            <div class="subtasks">
+              {% for part in problem.parts.all %}
+              <a href="#{{part.anchor}}"><span id="pieChart-{{ problem.pk }}-{{ part.pk }}" class="chart"></span></a>
               {% endfor %}
-            </ul>
-          </div>
-
-        </div>
-        </div>
-<!-- /.container -->
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
   </div>
-<!-- /.content-section-a -->
+</div>
 {% endblock content %}
 
 {% block extra_js %}
 <!-- for Tree view and modals-->
-<script src="{% static "js/bootstrap-treeview.js" %}"></script>
+<script src="{% static 'js/bootstrap-treeview.js' %}"></script>
 <script src="{% static 'js/sidebar.js' %}"></script>
+<script src="{% static 'js/piechart.js' %}"></script>
+<script>
+$(function() {
+  {% for problem, success in problem_success %}
+  $("#pieChart-{{ problem.pk }}").drawPieChart([
+    {value: {{ success.0 }}, color: "#878F28"},
+    {value: {{ success.1 }}, color: "#D7A02C"},
+    {value: {{ success.2 }}, color: "#A92D2D"}
+  ]);
+  {% for part in problem.parts.all %}
+  $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
+    {% if part.pk in valid_parts_ids %}
+    {value: 1, color: "#878F28"}
+    {% elif part.pk in invalid_parts_ids %}
+    {value: 1, color: "#D7A02C"}
+    {% else %}
+    {value: 1, color: "#A92D2D"},
+    {% endif %}
+  ]);
+  {% endfor %}
+  {% endfor %}
+});
+</script>
 {% endblock %}

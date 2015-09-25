@@ -40,22 +40,25 @@ def problem_set_detail(request, problem_set_pk):
     valid_parts_ids = user_attempts.filter(valid=True).values_list('part_id', flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
 
-    attempted_problems = problem_set.attempted_problems(request.user)
-    valid_problems_ids = [problem.id for problem in problem_set.valid_problems(request.user)]
-    invalid_problems_ids = [problem.id for problem in problem_set.invalid_problems(request.user)]
+    problem_success = []
 
-    half_valid_problems_ids = [problem.id for problem in attempted_problems
-                               if problem.id not in valid_problems_ids
-                               and problem.id not in invalid_problems_ids]
+    for problem in problem_set.problems.all():
+        valid, invalid, nothing = 0, 0, 0
+        for part in problem.parts.all():
+            if part.pk in valid_parts_ids:
+                valid += 1
+            elif part.pk in invalid_parts_ids:
+                invalid += 1
+            else:
+                nothing += 1
+        problem_success.append((problem, (valid, invalid, nothing)))
 
     return render(request, 'courses/problem_set_detail.html', {
         'problem_set': problem_set,
         'problems': problem_set.problems.all(),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
-        'valid_problems_ids': valid_problems_ids,
-        'invalid_problems_ids': invalid_problems_ids,
-        'half_valid_problems_ids': half_valid_problems_ids,
+        'problem_success': problem_success,
         'show_teacher_forms': request.user.can_edit_course(course),
         'user': user,
     })
