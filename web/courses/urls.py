@@ -14,7 +14,7 @@ urlpatterns = patterns(
     url(r'^problem_set/(?P<problem_set_pk>\d+)/edit/$',
         views.problem_set_edit,
         name='problem_set_edit'),
-    url(r'^problem_set/(?P<problem_set_pk>\d+)/move/(?P<shift>-?\d+)/$',
+    url(r'^problem_set/(?P<problem_set_pk>\d+)/move/$',
         views.problem_set_move,
         name='problem_set_move'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/toggle_visible/$',

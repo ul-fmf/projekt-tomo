@@ -4,55 +4,45 @@
 {% block title %}Tomo – {{ course.title }}{% endblock %}
 
 {% block navigation-left %}
-    <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
-    <span class="sr-only">{# Translators: current page in navigation #}
-    		{% trans "(current)" %}</span></a></li>
+<a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+<span class="sr-only">
+  {# Translators: current page in navigation #}
+  {% trans "(current)" %}
+</span>
 {% endblock %}
 
 {% block content %}
-  <div class="content-section-a tomo-top-section">
+<div class="content-section-a tomo-top-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        {% include 'courses/_course_header.html' %}
+      </div>
+    </div>
 
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8">
-            {% include 'courses/_course_header.html' %}
-          </div></div>
-
-          <div class="row"><div class="col-md-8">
-
-      <ul class="list-group tomo-courses">
+    <div class="row">
+      <div class="col-md-8">
+        <ul class="list-group tomo-courses">
           {% for problem_set in course.annotated_problem_sets %}
-              <li class="list-group-item">
-                <hr class="indicator background{{problem_set.grade}}" width="{{ problem_set.percentage }}%">
-                <div class="media">
-                  <div class="media-left"><p class="success text-danger color{{problem_set.grade}}">{{ problem_set.percentage }}<small>%</small></p></div>
-                  <div class="media-body media-middle">
-                    <div class="row">
-                        <h4 class="media-heading"><a style="" href="{% url 'problem_set_detail' problem_set.pk %}">{{problem_set.title}}</a></h4>
-                    </div>
-                  </div>
-                </div>
-              </li>
-        {% endfor %}
-      </ul>
-  </div>
+          {% include 'courses/_problem_set.html' %}
+          {% endfor %}
+        </ul>
+      </div>
 
-  <div class="col-md-4 tomo-course-info">
-    <hr>
-    {% for lecturer in course.teachers.all %}
+      <div class="col-md-4 tomo-course-info">
+        <hr>
+        {% for lecturer in course.teachers.all %}
         <p class="tomo-lecturer">{{ lecturer.get_full_name }}</p>
-    {% endfor %}
-    <p class="tomo-institution">{{ course.organization_title }}</p>
-    <div class="tomo-course-description">
-        {{ course.description }}
+        {% endfor %}
+        <p class="tomo-institution">{{ course.organization_title }}</p>
+        <div class="tomo-course-description">
+          {{ course.description }}
+        </div>
+      </div>
     </div>
   </div>
-</div></div>
-<!-- /.container -->
 </div>
-<!-- /.content-section-a -->
 {% endblock content %}
-
 
 {% block extra_js %}
 <!-- for Tree view and modals-->

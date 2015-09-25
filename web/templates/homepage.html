@@ -2,71 +2,57 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block title %}Tomo{% endblock %}
-
 {% block content %}
-
-
-    <div class="content-section-a tomo-top-section">
-
-      <div class="container">
-        <div class="row">
-{% for course in user_courses %}
-              <div class="col-md-6">
-            {% include 'courses/_course_header.html' %}
-            <ul class="list-group tomo-courses">
-              {% for problem_set in course.annotated_problem_sets %}
-              <li class="list-group-item">
-                <hr class="indicator background{{problem_set.grade}}" width="{{ problem_set.percentage }}%">
-                <div class="media">
-                  <div class="media-left"><p class="success text-danger color{{problem_set.grade}}">{{ problem_set.percentage }}<small>%</small></p></div>
-                  <div class="media-body media-middle">
-                    <div class="row">
-                        <div class="col-md-6">
-                        <h4 class="media-heading"><a style="" href="{% url 'problem_set_detail' problem_set.pk %}">{{problem_set.title}}</a></h4>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-              {% endfor %}
-            </ul>
-          </div>
-          {% cycle '' '</div><div class="row">' %}
-        {% endfor %}
+<div class="content-section-a tomo-top-section">
+  <div class="container">
+    <div class="row">
+      {% for course in user_courses %}
+        <div class="col-md-6">
+          {% include 'courses/_course_header.html' %}
+          <ul class="list-group tomo-courses">
+          {% for problem_set in course.annotated_problem_sets %}
+          {% include 'courses/_problem_set.html' %}
+          {% endfor %}
+          </ul>
         </div>
-      </div>
-<!-- /.container -->
+        {% cycle '' '</div><div class="row">' %}
+      {% endfor %}
     </div>
+  </div>
+</div>
 
-    <div class="content-section-y tomo-other">
-      <div class="container tomo-other">
-        <div class="row">
-        {% for course in not_user_courses %}
-          <div class="col-md-4">
-            <span class="pull-right">
-                <form action="{% url 'enroll_in_course' course.pk %}"  method="post" id='enroll_in_course_form'>
-                {% csrf_token %}
-                <button class="tomo-enroll" type="submit" aria-label="{% trans "Enroll" %}" data-toggle="tooltip" title="{% trans "Enroll" %}"><i class="fa fa-star fa-lg"></i><i class="fa fa-star-o fa-lg"></i></button>
-              </form>
-            </span>
-            <h3>{{ course.title }}</h3>
-            <p class="tomo-lecturer">
-            {% for lecturer in course.teachers.all %}
-            {{ lecturer.get_full_name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-            </p>
-            <p class="tomo-institution">@{% templatetag openbrace %}{{ course.organization_title }}{% templatetag closebrace %}</p>
-          </div>
-          {% cycle '' '' '</div><div class="row">' %}
-        {% endfor %}
-        </div>
+<div class="content-section-y tomo-other">
+  <div class="container tomo-other">
+    <div class="row">
+      {% for course in not_user_courses %}
+      <div class="col-md-4">
+        <span class="pull-right">
+          <form action="{% url 'enroll_in_course' course.pk %}"
+                method="post" id='enroll_in_course_form'>
+            {% csrf_token %}
+            <button class="tomo-enroll" type="submit"
+                    aria-label="{% trans "Enroll" %}" data-toggle="tooltip"
+                    title="{% trans "Enroll" %}">
+              <i class="fa fa-star fa-lg"></i>
+              <i class="fa fa-star-o fa-lg"></i>
+            </button>
+          </form>
+        </span>
+        <h3>
+          {{ course.title }}
+        </h3>
+        <p class="tomo-lecturer">
+          {% for lecturer in course.teachers.all %}
+          {{ lecturer.get_full_name }}{% if not forloop.last %}, {% endif %}
+          {% endfor %}
+        </p>
+        <p class="tomo-institution">
+          @{% templatetag openbrace %}{{ course.organization_title }}{% templatetag closebrace %}
+        </p>
       </div>
+      {% cycle '' '' '</div><div class="row">' %}
+      {% endfor %}
     </div>
-
-
-	
-    
-    
-    
+  </div>
+</div>
 {% endblock content %}

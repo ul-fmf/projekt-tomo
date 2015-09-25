@@ -160,11 +160,16 @@ def unenroll_from_course(request, course_pk):
     return redirect(homepage)
 
 
+@require_POST
 @login_required
-def problem_set_move(request, problem_set_pk, shift):
+def problem_set_move(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    verify(request.user.can_edit_problem_set(problem_set))
-    problem_set.move(shift)
+    verify(request.user.can_edit_course(problem_set.course))
+    print request.POST
+    if 'move_up' in request.POST:
+        problem_set.move(-1)
+    elif 'move_down' in request.POST:
+        problem_set.move(1)
     return redirect(problem_set.course)
 
 
