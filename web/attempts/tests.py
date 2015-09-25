@@ -2,9 +2,9 @@ import json
 from django.test import TestCase
 from rest_framework.test import APIClient
 from users.models import User
-from models import Attempt, Part
+from models import Attempt
 from courses.models import Course, ProblemSet
-from problems.models import Problem
+from problems.models import Problem, Part
 
 
 # Create your tests here.
