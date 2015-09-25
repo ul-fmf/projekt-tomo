@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 12:29+0000\n"
+"POT-Creation-Date: 2015-09-25 10:28+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -43,7 +43,7 @@ msgid "Solution visibility"
 msgstr "Rešitve"
 
 #. Translators: Default heading for pages (defined in base.html)
-#: templates/base.html:11 templates/login.html:110
+#: templates/base.html:11 templates/login.html:106
 msgid "Project Tomo"
 msgstr "Projekt Tomo"
 
@@ -53,7 +53,7 @@ msgid "(logout)"
 msgstr "(odjava)"
 
 #: templates/base.html:77 templates/terms_of_service.html:5
-#: templates/terms_of_service.html.py:9
+#: templates/terms_of_service.html.py:9 templates/terms_of_service.html:16
 msgid "Terms of service"
 msgstr "Pogoji poslovanja"
 
@@ -66,8 +66,8 @@ msgid ""
 "Copyright &copy; Faculty of Mathematics and Physics, University of "
 "Ljubljana, 2015. All Rights Reserved "
 msgstr ""
-"Copyright &copy; Fakulteta za matematiko in fiziko, Univerza v "
-"Ljubljani, 2015. Vse pravice pridržane "
+"Copyright &copy; Fakulteta za matematiko in fiziko, Univerza v Ljubljani, "
+"2015. Vse pravice pridržane "
 
 #: templates/courses/_course_header.html:7
 #: templates/courses/_course_header.html:9
@@ -80,57 +80,56 @@ msgid "Unenroll"
 msgstr "Izpiši se"
 
 #: templates/courses/_course_header.html:33
-#: templates/courses/_course_header.html:35 templates/homepage.html:50
+#: templates/courses/_course_header.html:35 templates/homepage.html:34
+#: templates/homepage.html.py:35
 msgid "Enroll"
 msgstr "Vpiši se"
 
+#. Translators: Sklop je viden
+#: templates/courses/_problem_set.html:20
+msgid "Problem set is visible"
+msgstr "Sklop je viden"
+
+#. Translators: Sklop je skrit
+#: templates/courses/_problem_set.html:23
+msgid "Problem set is hidden"
+msgstr "Sklop je skrit"
+
+#. Translators: Uradne rešitve so skrite
+#: templates/courses/_problem_set.html:37
+msgid "Official solutions are hidden"
+msgstr "Uradne rešitve so skrite"
+
+#. Translators: Uradne rešitve so pogojno vidne
+#: templates/courses/_problem_set.html:40
+msgid "Official solutions are visible when solved"
+msgstr "Uradne rešitve so pogojno vidne"
+
+#. Translators: Uradne rešitve so vidne
+#: templates/courses/_problem_set.html:43
+msgid "Official solutions are visible"
+msgstr "Uradne rešitve so vidne"
+
 #. Translators: edit problem form button.
 #. Translators: edit problem form button.
-#: templates/courses/_problem_set.html:34
+#: templates/courses/_problem_set.html:58
 #: templates/courses/problemset_form.html:30
 #: templates/problems/problem_form.html:33
 msgid "Edit"
 msgstr "Uredi"
 
-#: templates/courses/_problem_set.html:40
+#: templates/courses/_problem_set.html:64
 msgid "Delete"
 msgstr "Izbriši"
 
-#: templates/courses/_problem_set.html:46
-msgid "Move up"
+#: templates/courses/_problem_set.html:69
+#, fuzzy
+#| msgid "Move up"
+msgid "Move"
 msgstr "Gor"
 
-#: templates/courses/_problem_set.html:50
-msgid "Move down"
-msgstr "Dol"
-
-#. Translators: Sklop je viden
-#: templates/courses/_problem_set.html:60
-msgid "Problem set is visible"
-msgstr "Sklop je viden"
-
-#. Translators: Sklop je skrit
-#: templates/courses/_problem_set.html:63
-msgid "Problem set is hidden"
-msgstr "Sklop je skrit"
-
-#. Translators: Uradne rešitve so skrite
-#: templates/courses/_problem_set.html:77
-msgid "Official solutions are hidden"
-msgstr "Uradne rešitve so skrite"
-
-#. Translators: Uradne rešitve so pogojno vidne
-#: templates/courses/_problem_set.html:80
-msgid "Official solutions are visible when solved"
-msgstr "Uradne rešitve so pogojno vidne"
-
-#. Translators: Uradne rešitve so vidne
-#: templates/courses/_problem_set.html:83
-msgid "Official solutions are visible"
-msgstr "Uradne rešitve so vidne"
-
 #. Translators: current page in navigation
-#: templates/courses/course_detail.html:9
+#: templates/courses/course_detail.html:10
 #: templates/courses/course_progress.html:15
 #: templates/courses/problem_set_progress.html:15
 #: templates/problems/solutions.html:15
@@ -211,7 +210,7 @@ msgstr "Rešitve"
 #. Translators: in solution comparison table
 #: templates/courses/problem_set_detail.html:76
 #: templates/courses/problem_set_detail.html:92
-#: templates/problems/solutions.html:41
+#: templates/problems/solutions.html:34
 msgid "part"
 msgstr "podnaloga"
 
@@ -251,17 +250,12 @@ msgstr "Dodaj sklop"
 msgid "Add"
 msgstr "Dodaj"
 
-#. Translators: Title of login page.
-#: templates/login.html:7
-msgid "Welcome"
-msgstr "Dobrodošli"
-
 #. Translators: Button for sign-in on login page.
-#: templates/login.html:18 templates/login.html.py:73
+#: templates/login.html:14 templates/login.html.py:69
 msgid "Sign in"
 msgstr "Prijavite se"
 
-#: templates/login.html:22
+#: templates/login.html:18
 msgid ""
 "\n"
 "          Login with an external provider\n"
@@ -271,34 +265,34 @@ msgstr ""
 "          Prijavite se z zunanjim ponudnikom\n"
 "          "
 
-#: templates/login.html:28
+#: templates/login.html:24
 msgid "ArnesAAI"
 msgstr "ArnesAAI"
 
-#: templates/login.html:32
+#: templates/login.html:28
 msgid "Facebook"
 msgstr "Facebook"
 
-#: templates/login.html:36
+#: templates/login.html:32
 msgid "Google"
 msgstr "Google"
 
 #. Translators: sign-in error
-#: templates/login.html:47
+#: templates/login.html:43
 msgid "Sign-in error!"
 msgstr "Napaka ob prijavi!"
 
 #. Translators: Input for username on login page.
-#: templates/login.html:55 templates/login.html.py:58
+#: templates/login.html:51 templates/login.html.py:54
 msgid "Username"
 msgstr "Uporabniško ime"
 
 #. Translators: Input for password on login page.
-#: templates/login.html:64 templates/login.html.py:67
+#: templates/login.html:60 templates/login.html.py:63
 msgid "Password"
 msgstr "Geslo"
 
-#: templates/login.html:77
+#: templates/login.html:73
 msgid ""
 "\n"
 "            You can login with a username and password only if you were "
@@ -319,7 +313,7 @@ msgstr ""
 "račun.\n"
 "            "
 
-#: templates/login.html:91
+#: templates/login.html:87
 #, python-format
 msgid ""
 "\n"
@@ -333,15 +327,15 @@ msgstr ""
 "          "
 
 #. Translators: description of project Tomo
-#: templates/login.html:114
+#: templates/login.html:110
 msgid "Your personal programming teacher."
 msgstr "Vaš osebni učitelj programiranja."
 
-#: templates/login.html:133
+#: templates/login.html:129
 msgid "Sponsors"
 msgstr "Sponzorji"
 
-#: templates/login.html:135
+#: templates/login.html:131
 msgid ""
 "\n"
 "    This work was funded in part by the European Union, European Regional\n"
@@ -387,30 +381,41 @@ msgid "solutions"
 msgstr "rešitve"
 
 #. Translators: Title of user solutions column.
-#: templates/problems/solutions.html:27
+#: templates/problems/solutions.html:42
 msgid "Your solution"
 msgstr "Vaša rešitev"
 
+#. Translators: in solution comparison table
+#: templates/problems/solutions.html:49
+msgid "You did not attempt to solve this part."
+msgstr "Tega dela naloge niste poskušali reševati."
+
 #. Translators: Title of official solutions column.
-#: templates/problems/solutions.html:31
+#: templates/problems/solutions.html:57
 msgid "Official solution"
 msgstr "Uradna rešitev"
 
 #. Translators: in solution comparison table
-#: templates/problems/solutions.html:52 templates/problems/solutions.html:69
-#: templates/problems/solutions.html:86
-msgid "You have not attempted to solve this part yet."
-msgstr "Tega dela naloge še niste reševal."
+#: templates/problems/solutions.html:62
+msgid "Official solutions are hidden."
+msgstr "Uradne rešitve so skrite."
 
 #. Translators: in solution comparison table
-#: templates/problems/solutions.html:61
-msgid "Solution visibility is set to 'hidden'."
-msgstr "Vidnost rešitev je nastavljena na 'Skrito'"
+#: templates/problems/solutions.html:69
+msgid "Official solution will be visible once you submit a valid solution."
+msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 
-#. Translators: in solution comparison table
-#: templates/problems/solutions.html:81
-msgid "Your solution for this part is not yet accepted."
-msgstr "Tega dela naloge še niste pravilno rešili."
+#~ msgid "Move down"
+#~ msgstr "Dol"
+
+#~ msgid "Welcome"
+#~ msgstr "Dobrodošli"
+
+#~ msgid "Solution visibility is set to 'hidden'."
+#~ msgstr "Vidnost rešitev je nastavljena na 'Skrito'"
+
+#~ msgid "Your solution for this part is not yet accepted."
+#~ msgstr "Tega dela naloge še niste pravilno rešili."
 
 #~ msgid "Browse list of users"
 #~ msgstr "Seznam vpisanih"

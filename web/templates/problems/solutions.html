@@ -1,96 +1,90 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {# Translators: Title of solutions page. #}
-{% block title %}Tomo - {{ problem.title }}: {% trans "solutions" %}{% endblock %}
+{% block title %}Tomo - {{ problem.title }}: {% trans 'solutions' %}{% endblock %}
 
 {% block navigation-left %}
-    <li><a href="{% url 'course_detail' problem.problem_set.course.pk %}">{{ problem.problem_set.course.title }}</a></li>
-    <li><a href="{% url 'problem_set_detail' problem.problem_set.pk %}">{{ problem.problem_set.title }}</a></li>
-    <li><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></li>
-    <li><a href="">{{ student.get_full_name }}</a></li>
-    <li class="active"><a href="#">
-    	{% trans "Solutions" %}	
-    	<span class="sr-only">
-    		{# Translators: current page in navigation #}
-    		{% trans "(current)" %}
-   		</span></a></li>
+    <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+    <a class="navbar-brand topnav" href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
+    <a class="navbar-brand topnav" href="#">
+      {% if user == student %}
+        {% trans 'Solutions' %}
+      {% else %}
+        {% trans 'Solutions' %} ({{ student.get_full_name }})
+      {% endif %}
+      <span class="sr-only">
+        {# Translators: current page in navigation #}
+        {% trans '(current)' %}
+      </span>
+    </a>
 {% endblock %}
 
 {% block content %}
+<div class="content-section-a tomo-top-section">
+  <div class="container tomo-task-solutions">
+    <div class="tomo-task">
+      <h3>{{ problem.title }}</h3>
+      {% if problem_set.description and problem_set.description.strip %}
+      {{ problem_set.description|latex_markdown }}
+      {% endif %}
 
-<div class="panel panel-default">
- 	<!-- Default panel contents -->
- 	<div class="panel-heading">
- 		<div class="row">
-			<div class="col-xs-6 text-center">
-				{# Translators: Title of user solutions column. #}
-				<p>{% trans "Your solution" %}</p>
-			</div>
-			<div class="col-xs-6 text-center">
-				{# Translators: Title of official solutions column. #}
-				<p>{% trans "Official solution" %}</p>
-			</div>
-  		</div>
-  	</div>
-  	<ul class="list-group">
-		{% for part in parts %}
-		<li class="list-group-item">
-			<div class="row">
-				<div class="col-xs-12">
-					{# Translators: in solution comparison table #}
-					<p>{{ forloop.counter }}. {% trans "part" %}</p>
-				</div>
-			</div>
-		    <div class="row">
-		    {% if is_teacher %}
-		    	{% if part.attempt %}
-		    		<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-		    		<div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
-		    	{% else %}
-		    		<div class="col-xs-6">
-		    		{# Translators: in solution comparison table #}
-		        	{% trans "You have not attempted to solve this part yet." %}
-		        	</div>
-		        	<div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
-	        	{% endif %}
-	        {% else %}
-			    {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
-			    	<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-	                <div class="col-xs-6 text-center">
-	                    {# Translators: in solution comparison table #}
-	                    {% trans "Solution visibility is set to 'hidden'." %}
-	                </div>
-			    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
-			    	{% if part.attempt %}
-			    		<div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-			    	{% else %}
-			    		<div class="col-xs-6">
-			    			{# Translators: in solution comparison table #}
-			        		{% trans "You have not attempted to solve this part yet." %}
-			        	</div>
-		        	{% endif %}
-	                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
-			    {% else %}
-	                {% if part.attempt and part.attempt.valid %}
-	                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-	                <div class="col-xs-6"><pre><code>{{ part.solution }}</code></pre></div>
-	                {% elif part.attempt %}
-	                <div class="col-xs-6"><pre><code>{{ part.attempt.solution }}</code></pre></div>
-	                <div class="col-xs-6 text-center">
-	                    {# Translators: in solution comparison table #}
-	                    {% trans "Your solution for this part is not yet accepted." %}
-	                </div>
-	                {% else %}
-	                <div class="col-xs-12 text-center">
-			        	{# Translators: in solution comparison table #}
-			        	{% trans "You have not attempted to solve this part yet." %}
-	                {% endif %}
-			     </div> {% comment %}end row div{% endcomment%}
-			     {% endif %}
-		    {% endif %}
-		</li>
-    	{% endfor %}
-  	</ul>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            {% for part in parts %}
+            <li class="list-group-item">
+              {# Translators: in solution comparison table #}
+              <p>{{ forloop.counter }}. {% trans 'part' %}</p>
+              <div class="tomo-task">
+                {{ part.description|latex_markdown }}
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="tomo-solution-user">
+                    {# Translators: Title of user solutions column. #}
+                    {% trans 'Your solution' %}
+                  </div>
+                  <div class="tomo-solution-code-user">
+                    {% if part.attempt %}
+                    <pre><code>{{ part.attempt.solution }}</code></pre>
+                    {% else %}
+                    {# Translators: in solution comparison table #}
+                    <p>{% trans 'You did not attempt to solve this part.' %}</p>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="tomo-solution-official">
+                    {# Translators: Title of official solutions column. #}
+                    {% trans 'Official solution' %}
+                  </div>
+                  <div class="tomo-solution-code-official">
+                    {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+                    {# Translators: in solution comparison table #}
+                    <p>{% trans 'Official solutions are hidden.' %}</p>
+
+                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
+                    {% if part.attempt.valid %}
+                    <pre><code>{{ part.solution }}</code></pre>
+                    {% else %}
+                    {# Translators: in solution comparison table #}
+                    <p>{% trans 'Official solution will be visible once you submit a valid solution.' %}</p>
+                    {% endif %}
+
+                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
+                    <pre><code>{{ part.solution }}</code></pre>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-
 {% endblock content %}
