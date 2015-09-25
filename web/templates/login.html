@@ -20,17 +20,14 @@
           {% endblocktrans %}
         </p>
         <div class="form-group">
-        <a class="btn btn-default" role="button" href="#">
-           <i class="fa fa-university fa-lg"></i> {% trans 'ArnesAAI' %}
-        </a>
-        <a class="btn btn-default" role="button"
-           href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
-           <i class="fa fa-facebook fa-lg"></i> {% trans 'Facebook' %}
-        </a>
-        <a class="btn btn-default" role="button"
-           href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
-           <i class="fa fa-google fa-lg"></i> {% trans 'Google' %}
-        </a>
+          <a class="btn btn-default" role="button"
+             href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+             <i class="fa fa-facebook fa-lg"></i> {% trans 'Facebook' %}
+          </a>
+          <a class="btn btn-default" role="button"
+             href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
+             <i class="fa fa-google fa-lg"></i> {% trans 'Google' %}
+          </a>
         </div>
 
         <hr>

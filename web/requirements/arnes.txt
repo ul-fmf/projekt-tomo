@@ -1,4 +1,2 @@
--r local.txt
-python-ldap>=2.4.19
+-r common.txt
 psycopg2>=2.6
--e git://github.com/Brown-University-Library/django-shibboleth-remoteuser.git#egg=django-shibboleth-remoteuser
