@@ -151,7 +151,7 @@ def enroll_in_course(request, course_pk):
     """Enrolls user in a course as a student."""
     course = get_object_or_404(Course, pk=course_pk)
     course.students.add(request.user)
-    return redirect(course)
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -160,7 +160,7 @@ def unenroll_from_course(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     course.students.remove(request.user)
     course.teachers.remove(request.user)
-    return redirect(homepage)
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 @require_POST
