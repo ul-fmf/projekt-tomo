@@ -26,14 +26,15 @@
           <div class="clearfix"></div>
           <span>{{ problem_set.title }}</span>
         </h2>
-        {% if problem_set.description and problem_set.description.strip %}
-          {{ problem_set.description|latex_markdown }}
-        {% endif %}
       </div>
     </div>
 
     <div class="row">
       <div class="col-md-9">
+        {% if problem_set.description and problem_set.description.strip %}
+          {{ problem_set.description|latex_markdown }}
+          <hr>
+        {% endif %}
         {% for problem in problem_set.problems.all %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
