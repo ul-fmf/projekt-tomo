@@ -48,7 +48,7 @@ def problem_set_detail(request, problem_set_pk):
             success = {
                 'valid': 0,
                 'invalid': 0,
-                'nothing': 0
+                'empty': 0
             }
             for part in problem.parts.all():
                 if part.pk in valid_parts_ids:
@@ -56,7 +56,7 @@ def problem_set_detail(request, problem_set_pk):
                 elif part.pk in invalid_parts_ids:
                     success['invalid'] += 1
                 else:
-                    success['nothing'] += 1
+                    success['empty'] += 1
         problem_success.append((problem, success))
 
     return render(request, 'courses/problem_set_detail.html', {
