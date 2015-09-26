@@ -22,7 +22,7 @@ a { color: #23527c; }
 .tomo-institution { color: #666; font-weight: 300; }
 .tomo-lecturer { font-style: italic; color: #A92D2D; }
 .tomo-lecturers { list-style-type: none; color: #A92D2D; font-weight: 500; padding: 0; margin: 10px 0; }
-.tomo-students { list-style-type: none; font-weight: 500; padding: 0; margin: 10px 0; }
+.tomo-students { list-style-type: none; font-weight: 400; padding: 0; margin: 10px 0; }
 .tomo-students li { margin: 7px 0; }
 li .tomo-teacher-switch { display: none; }
 li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { display: inline; }
@@ -32,12 +32,13 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-home { margin: 0 40px 0 0; padding: 0; }
 .tomo-home img { height: 100%; }
 
-.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
+.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
 .tomo-login-header { background: none; border: none; }
 .tomo-login-signin { margin: 15px 2px 0 0; background-color: rgba(255, 255, 255, 0.5); }
 .tomo-login-signin i { margin-right: 10px; }
 .tomo-login hr { border-color: #999; }
-.tomo-login form { margin: .5em 0; border-radius: 4px; padding: 1em; }
+.tomo-login form { margin: 0; border-radius: 4px; padding: 0 1em; }
+.tomo-login small { font-weight: 300; }
 .tomo-login .btn { margin: 0px 7px; background-color: rgba(135, 143, 40, .5) }
 .tomo-login .btn i { margin-right: 10px; }
 .tomo-login .fa-google { vertical-align: -25% } /* vertical position fix */
@@ -55,9 +56,13 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-page-header .navbar-nav>li>a { color: #f8f8f8; }
 .tomo-page-header .navbar-nav>li>a:hover { color: #ccc; }
 
-.tomo-course-header { margin-left: 20px; }
-.tomo-course-header h2 { padding-left: 60px; }
-.tomo-course-header span { margin-top: 20px; }
+.tomo-course-header { margin-left: 0px; }
+.tomo-course-header h2 { padding-left: 0px; }
+.tomo-course-header span { margin: 20px 0 0 -6px; }
+.tomo-course-header hr { margin-left: 5px; }
+.tomo-course-header .tomo-taught { color: #ddd; }
+.tomo-course-header .tomo-taught:focus, .tomo-course-header .tomo-taught:hover { cursor: default; }
+.tomo-course-header .pull-left { margin-top: 5px; }
 .tomo-enroll { color: #A92D2D; }
 .tomo-unenroll { color: #D7A02C; }
 .tomo-unenroll .fa-star-o, .tomo-unenroll:hover .fa-star { display: none; }

@@ -4,6 +4,7 @@
 
 ;(function($, undefined) {
   $.fn.drawPieChart = function(data, options) {
+    var dataLength = $.grep(data, function(o, i) { return ( o.value > 0 ); }).length;
     var $this = this,
       W = $this.width(),
       H = $this.height(),
@@ -15,7 +16,7 @@
       settings = $.extend({
         segmentShowStroke : false,
         segmentStrokeColor : "#fff",
-        segmentStrokeWidth : 0.5,
+        segmentStrokeWidth : ((dataLength > 1) ? 0.5 : 0),
         baseColor: "#fff",
         baseOffset: 0,
         edgeOffset: 0, //offset from edge of $this

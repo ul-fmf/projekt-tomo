@@ -81,14 +81,16 @@
       <div class="btn-group" role="group" aria-label="{% trans 'Move' %}">
        <form action="{% url 'problem_set_move' problem_set.pk %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-sm btn-default" aria-label="Move Up" name="move_up">
-          <i class="fa fa-arrow-up"></i>
-        </button>
-        <button type="submit" class="btn btn-sm btn-default" aria-label="Move Down" name="move_down">
-          <i class="fa fa-arrow-down"></i>
-        </button>
-        </form>
-        </div>
+         <div class="btn-group" role="group" aria-label="Move">
+          <button type="submit" class="btn btn-sm btn-default" aria-label="Move Up" name="move_up">
+            <i class="fa fa-arrow-up"></i>
+          </button>
+          <button type="submit" class="btn btn-sm btn-default" aria-label="Move Down" name="move_down">
+            <i class="fa fa-arrow-down"></i>
+          </button>
+         </div>
+       </form>
+      </div>
 
     </div>
     {% endif %}
