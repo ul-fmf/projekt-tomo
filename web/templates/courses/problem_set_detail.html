@@ -146,12 +146,14 @@
           </ul>
         </div>
         {% endfor %}
+        {% if show_teacher_forms %}
         <hr>
                     <button class="btn btn-default btn-lg btn-for-modal" aria-label="Create" data-url="{% url 'problem_create' problem_set.id %}">
                 <i class="fa fa-download fa-plus"></i>
                      {# Translators: Button for creating new problem. #}
                      {% trans "Add new problem" %}
             </button>
+        {% endif %}
 
       </div>
 
@@ -159,7 +161,7 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in problem_set.problems.all %}
           <li>
-            <a href="{% url 'problem_progress' problem.pk %}">
+            <a href="{% if show_teacher_forms %}{% url 'problem_progress' problem.pk %}{% else %}#{% endif %}">
               {{ problem.title }}
               <span id="pieChart-{{ problem.pk }}" class="chart" style="float: right"></span>
             </a>
