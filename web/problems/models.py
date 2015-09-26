@@ -130,7 +130,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
-        for user in sorted(attempts.keys()):
+        for user in self.problem_set.course.students.all():
             user_attempts = [attempts[user].get(part) for part in self.parts.all()]
             sorted_attempts.append((user, user_attempts))
         return sorted_attempts
