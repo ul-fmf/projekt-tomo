@@ -161,7 +161,7 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in problem_set.problems.all %}
           <li>
-            <a href="{% if show_teacher_forms %}{% url 'problem_progress' problem.pk %}{% else %}#{% endif %}">
+            <a href="{% if show_teacher_forms %}{% url 'problem_progress' problem.pk %}{% else %}#{{ problem.anchor }}{% endif %}">
               {{ problem.title }}
               <span id="pieChart-{{ problem.pk }}" class="chart" style="float: right"></span>
             </a>
