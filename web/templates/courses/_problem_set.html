@@ -4,14 +4,14 @@
   {% if course.is_taught %}
   {% with problem_set.student_success as success %}
   {% spaceless %}
-  {% if success.empty %}
-  <hr class="indicator background1" width="{{ success.empty }}%">
+  {% if success.valid %}
+  <hr class="indicator background5" width="{{ success.valid }}%">
   {% endif %}
   {% if success.invalid %}
   <hr class="indicator background3" width="{{ success.invalid }}%">
   {% endif %}
-  {% if success.valid %}
-  <hr class="indicator background5" width="{{ success.valid }}%">
+  {% if success.empty %}
+  <hr class="indicator background1" width="{{ success.empty }}%">
   {% endif %}
   {% endspaceless %}
   {% endwith %}

@@ -127,7 +127,7 @@
       settings.onPieClick.apply($(this),[e,data]);
     }
     function drawPieSegments (animationDecimal){
-      var startRadius = 0,//-90 degree
+      var startRadius = -PI / 2,//-90 degree
           rotateAnimation = 1;
       if (settings.animation) { rotateAnimation = animationDecimal; } //count up between0~1
       $pathGroup[0].setAttribute("opacity",animationDecimal);

@@ -163,7 +163,6 @@
           <li>
             <a href="{% if show_teacher_forms %}{% url 'problem_progress' problem.pk %}{% else %}#{{ problem.anchor }}{% endif %}">
               {{ problem.title }}
-              <span id="pieChart-{{ problem.pk }}" class="chart" style="float: right"></span>
             </a>
             <div class="subtasks">
               {% for part in problem.parts.all %}
@@ -187,11 +186,6 @@
 <script>
 $(function() {
   {% for problem, success in problem_success %}
-  $("#pieChart-{{ problem.pk }}").drawPieChart([
-    {value: {{ success.valid }}, color: "#878F28"},
-    {value: {{ success.invalid }}, color: "#D7A02C"},
-    {value: {{ success.empty }}, color: "#A92D2D"},
-  ]);
   {% for part in problem.parts.all %}
   {% if show_teacher_forms %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
