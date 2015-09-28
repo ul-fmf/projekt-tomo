@@ -1,0 +1,76 @@
+/* plain text */
+.pln {
+  color: #22221b;
+}
+ 
+@media screen {
+  /* string content */
+  .str {
+    color: #878F28;
+  }
+ 
+  /* a keyword */
+  .kwd {
+    color: #A92D2D;
+  }
+ 
+  /* a comment */
+  .com {
+    color: #878573;
+  }
+ 
+  /* a type name */
+  .typ {
+    color: #AF982A;
+  }
+ 
+  /* a literal value */
+  .lit {
+    color: #C0672D;
+  }
+ 
+  /* punctuation */
+  .pun {
+    color: #22221b;
+  }
+ 
+  /* lisp open bracket */
+  .opn {
+    color: #22221b;
+  }
+ 
+  /* lisp close bracket */
+  .clo {
+    color: #22221b;
+  }
+ 
+  /* a markup tag name */
+  .tag {
+    color: #ba6236;
+  }
+ 
+  /* a markup attribute name */
+  .atn {
+    color: #C0672D;
+  }
+ 
+  /* a markup attribute value */
+  .atv {
+    color: #5b9d48;
+  }
+ 
+  /* a declaration */
+  .dec {
+    color: #C0672D;
+  }
+ 
+  /* a variable name */
+  .var {
+    color: #ba6236;
+  }
+ 
+  /* a function name */
+  .fun {
+    color: #AF982A;
+  }
+}

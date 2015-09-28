@@ -27,6 +27,14 @@
           {% include 'courses/_problem_set.html' %}
           {% endfor %}
         </ul>
+        {% if show_teacher_forms %}
+        <hr>
+                    <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'problem_set_create' course.id %}">
+                <i class="fa fa-download fa-plus"></i>
+                     {# Translators: Button for creating new problem. #}
+                     {% trans "Add new problem set" %}
+            </button>
+        {% endif %}
       </div>
 
       <div class="col-md-4 tomo-course-info">

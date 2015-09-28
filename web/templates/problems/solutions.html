@@ -37,45 +37,55 @@
               {# Translators: in solution comparison table #}
               <p>{{ forloop.counter }}. {% trans 'part' %}</p>
               <div class="row">
-                <div class="col-md-6">
-                  <div class="tomo-solution-user">
-                    {# Translators: Title of user solutions column. #}
-                    {% trans 'Your solution' %}
+                <div class="row-height">
+                  <div class="col-xs-12 col-sm-6 col-sm-height">
+                    <div class="tomo-solution-user">
+                      {# Translators: Title of user solutions column. #}
+                      {% trans 'Your solution' %}
+                    </div>
+                    <div class="inside inside-full-height">
+                      <div class="content">
+                        <div class="tomo-solution-code-user">
+                          {% if part.attempt %}
+                          <div class="tomo-pre"><code>{{ part.attempt.solution }}</code></div>
+                          {% else %}
+                          {# Translators: in solution comparison table #}
+                          <div class="tomo-message">{% trans 'You did not attempt to solve this part.' %}</div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="tomo-solution-code-user">
-                    {% if part.attempt %}
-                    <pre><code>{{ part.attempt.solution }}</code></pre>
-                    {% else %}
-                    {# Translators: in solution comparison table #}
-                    <p>{% trans 'You did not attempt to solve this part.' %}</p>
-                    {% endif %}
-                  </div>
-                </div>
 
-                <div class="col-md-6">
+                <div class="col-xs-12 col-sm-6 col-sm-height">
                   <div class="tomo-solution-official">
                     {# Translators: Title of official solutions column. #}
                     {% trans 'Official solution' %}
                   </div>
-                  <div class="tomo-solution-code-official">
-                    {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
-                    <pre><code>{{ part.solution }}</code></pre>
+                  <div class="inside inside-full-height">
+                    <div class="content">
+                      <div class="tomo-solution-code-official">
+                        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
+                        <div class="tomo-pre"><code>{{ part.solution }}</code></div>
 
-                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
-                    {# Translators: in solution comparison table #}
-                    <p>{% trans 'Official solutions are hidden.' %}</p>
+                        {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+                        {# Translators: in solution comparison table #}
+                        <div class="tomo-message">{% trans 'Official solutions are hidden.' %}</div>
 
-                    {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
-                    {% if part.attempt.valid %}
-                    <pre><code>{{ part.solution }}</code></pre>
-                    {% else %}
-                    {# Translators: in solution comparison table #}
-                    <p>{% trans 'Official solution will be visible once you submit a valid solution.' %}</p>
-                    {% endif %}
-                    {% endif %}
+                        {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
+                        {% if part.attempt.valid %}
+                        <div class="tomo-pre"><code>{{ part.solution }}</code></div>
+                        {% else %}
+                        {# Translators: in solution comparison table #}
+                        <div class="tomo-message">{% trans 'Official solution will be visible once you submit a valid solution.' %}</div>
+                        {% endif %}
+                        {% endif %}
 
+                      </div>
+                    </div>
                   </div>
                 </div>
+              </div>
               </div>
             </li>
             {% endfor %}
