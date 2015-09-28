@@ -5,7 +5,7 @@ from attempts.rest import AttemptViewSet
 from problems.rest import ProblemViewSet
 from courses.rest import CourseViewSet
 from courses.views import homepage
-from utils.views import terms_of_service
+from utils.views import help, terms_of_service
 import courses.urls
 
 
@@ -18,6 +18,7 @@ router.register(r'courses', CourseViewSet, base_name='courses')
 urlpatterns = patterns('',
     url(r'^$', homepage, name='homepage'),
     url(r'^terms_of_service$', terms_of_service, name='terms_of_service'),
+    url(r'^help$', help, name='help'),
     url('', include('social.apps.django_app.urls', namespace='social')),
     url(r'^accounts/', include(patterns('django.contrib.auth.views',
         url(r'^login/$', 'login', {'template_name': 'login.html'}, name='login'),
