@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-25 20:16+0000\n"
+"POT-Creation-Date: 2015-09-28 09:06+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -41,6 +41,89 @@ msgstr "Opis"
 #: web/courses/models.py:74
 msgid "Solution visibility"
 msgstr "Rešitve"
+
+#: web/problems/templates/python/edit.py:21
+msgid ""
+"This is a template for a new problem part. To create a new part, uncomment\n"
+"# # the template and fill in your content.\n"
+"# #\n"
+"# # Define a function `multiply(x, y)` that returns the product of `x` and "
+"`y`.\n"
+"# # For example:\n"
+"# #\n"
+"# #     >>> multiply(3, 7)\n"
+"# #     21\n"
+"# #     >>> multiply(6, 7)\n"
+"# #     42"
+msgstr ""
+"To je predloga za novo podnalogo. Če želite ustvariti novo podnalogo,\n"
+"# # pobrišite komentarje ter vsebino zamenjajte s svojo.\n"
+"# #\n"
+"# # Sestavite funkcijo `zmnozi(x, y)`, ki vrne produkt števil `x` in "
+"`y`.\n"
+"# # Na primer:\n"
+"# #\n"
+"# #     >>> zmnozi(3, 7)\n"
+"# #     21\n"
+"# #     >>> zmnozi(6, 7)\n"
+"# #     42"
+
+#: web/problems/templates/python/edit.py:33
+#: web/problems/templates/python/edit.py:38
+#: web/problems/templates/python/edit.py:39
+#: web/problems/templates/python/edit.py:40
+#: web/problems/templates/python/edit.py:41
+#: web/problems/templates/python/edit.py:42
+msgid "multiply"
+msgstr "zmnozi"
+
+#: web/problems/templates/python/edit.py:46
+msgid "Do not change this line or anything below it."
+msgstr "Ne spreminjajte te vrstice ali česarkoli pod njo."
+
+#: web/problems/templates/python/edit.py:126
+msgid "The problem is correctly formulated."
+msgstr "Naloga je pravilno sestavljena."
+
+#: web/problems/templates/python/edit.py:127
+msgid "Should I save it on the server [yes/NO]"
+msgstr "Ali naj jo shranim na strežnik [da/NE]"
+
+#: web/problems/templates/python/edit.py:127
+msgid "yes"
+msgstr "da"
+
+#: web/problems/templates/python/edit.py:128
+msgid "Saving problem to the server"
+msgstr "Shranjujem nalogo na strežnik"
+
+#: web/problems/templates/python/edit.py:134
+msgid "Updating file"
+msgstr "Posodabljam datoteko"
+
+#: web/problems/templates/python/edit.py:138
+msgid "Previous file has been renamed to"
+msgstr "Stara datoteka je bila preimenovana v"
+
+#: web/problems/templates/python/edit.py:139
+msgid "If the file did not refresh in your editor, close and reopen it."
+msgstr "Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite."
+
+#: web/problems/templates/python/edit.py:141
+msgid "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM! Please, try again."
+msgstr "PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Prosimo, poskusite znova."
+
+#: web/problems/templates/python/edit.py:143
+msgid "Problem saved."
+msgstr "Naloga je shranjena."
+
+#: web/problems/templates/python/edit.py:145
+msgid "Problem was not saved."
+msgstr "Naloga ni bila shranjena."
+
+#: web/problems/templates/python/edit.py:147
+msgid "The problem is not correctly formulated."
+msgstr "Naloga ni pravilno sestavljena."
 
 #. Translators: Default heading for pages (defined in base.html)
 #: web/templates/base.html:11 web/templates/login.html:103
@@ -131,38 +214,32 @@ msgstr "Gor"
 
 #. Translators: current page in navigation
 #: web/templates/courses/course_detail.html:10
-#: web/templates/courses/course_progress.html:15
-#: web/templates/courses/problem_set_progress.html:15
+#: web/templates/courses/problem_progress.html:13
 #: web/templates/problems/solutions.html:18
 msgid "(current)"
 msgstr "(trenutna)"
 
-#. Translators: Progress of a student in a course - heading in navigation
-#. Translators: Progress of students in a problem set - heading in navigation
-#: web/templates/courses/course_progress.html:12
-#: web/templates/courses/problem_set_progress.html:12
-msgid "Progress"
-msgstr "Napredek"
+#. Translators: Demote teacher to student - button
+#: web/templates/courses/course_detail.html:48
+#: web/templates/courses/course_users.html:33
+msgid "Demote to student"
+msgstr "Status študenta"
+
+#. Translators: Promote student to teacher - button
+#: web/templates/courses/course_detail.html:67
+#: web/templates/courses/course_users.html:73
+msgid "Promote to teacher"
+msgstr "Status učitelja"
 
 #. Translators: List of all teachers in a course - heading
 #: web/templates/courses/course_users.html:16
 msgid "Teachers"
 msgstr "Učitelji"
 
-#. Translators: Demote teacher to student - button
-#: web/templates/courses/course_users.html:33
-msgid "Demote to student"
-msgstr "Status študenta"
-
 #. Translators: List of all students in a course - heading
 #: web/templates/courses/course_users.html:48
 msgid "Students"
 msgstr "Študenti"
-
-#. Translators: Promote student to teacher - button
-#: web/templates/courses/course_users.html:73
-msgid "Promote to teacher"
-msgstr "Status učitelja"
 
 #. Translators: Title of copy problem modal.
 #: web/templates/courses/problem_copy_form.html:6
@@ -176,6 +253,7 @@ msgstr "Prosimo, izberite sklop, v katerega bo prekopirana ta naloga."
 
 #. Translators: Confirm copying of a problem.
 #: web/templates/courses/problem_copy_form.html:21
+#: web/templates/courses/problem_set_detail.html:104
 msgid "Copy"
 msgstr "Kopiraj"
 
@@ -185,35 +263,84 @@ msgstr "Kopiraj"
 msgid "Cancel"
 msgstr "Prekliči"
 
+#. Translators: Progress of students in a problem set - heading in navigation
+#: web/templates/courses/problem_progress.html:10
+msgid "Progress"
+msgstr "Napredek"
+
 #: web/templates/courses/problem_set_detail.html:20
-#: web/templates/courses/problem_set_detail.html:47
+#: web/templates/courses/problem_set_detail.html:38
+#: web/templates/courses/problem_set_detail.html:114
 #, fuzzy
 #| msgid "Download file"
 msgid "Download"
 msgstr "Prenesi datoteko"
 
+#. Translators: Datoteke za reševanje
+#: web/templates/courses/problem_set_detail.html:29
+msgid "Files for solving"
+msgstr "Datoteke za reševanje"
+
+#. Translators: Datoteke za urejanje
+#: web/templates/courses/problem_set_detail.html:33
+msgid "Files for editing"
+msgstr "Datoteke za urejanje"
+
 #. Translators: Button for downloading all problem files within a problem set.
-#: web/templates/courses/problem_set_detail.html:22
+#: web/templates/courses/problem_set_detail.html:40
 msgid "Download all problem files"
 msgstr "Prenesi vse datoteke z nalogami"
 
-#: web/templates/courses/problem_set_detail.html:50
-msgid "Download this problem file"
-msgstr "Datoteka z nalogo"
+#. Translators: Datoteka za reševanje
+#: web/templates/courses/problem_set_detail.html:79
+msgid "File for solving"
+msgstr "Datoteka za reševanje"
 
-#: web/templates/courses/problem_set_detail.html:52
-#: web/templates/courses/problem_set_detail.html:53
+#. Translators: Datoteka za urejanje
+#: web/templates/courses/problem_set_detail.html:83
+msgid "File for editing"
+msgstr "Datoteka za urejanje"
+
+#: web/templates/courses/problem_set_detail.html:87
+#: web/templates/courses/problem_set_detail.html:88
+#: web/templates/courses/problem_set_detail.html:119
+#: web/templates/courses/problem_set_detail.html:120
 #: web/templates/problems/solutions.html:12
 #: web/templates/problems/solutions.html:14
 msgid "Solutions"
 msgstr "Rešitve"
 
+#: web/templates/courses/problem_set_detail.html:92
+#, fuzzy
+#| msgid "Move up"
+msgid "Move up"
+msgstr "Gor"
+
+#: web/templates/courses/problem_set_detail.html:96
+msgid "Move down"
+msgstr "Dol"
+
+#: web/templates/courses/problem_set_detail.html:100
+msgid "Update"
+msgstr "Posodobi"
+
+#: web/templates/courses/problem_set_detail.html:117
+msgid "Download this problem file"
+msgstr "Datoteka z nalogo"
+
 #. Translators: problem set detail
 #. Translators: in solution comparison table
-#: web/templates/courses/problem_set_detail.html:73
+#: web/templates/courses/problem_set_detail.html:142
 #: web/templates/problems/solutions.html:38
 msgid "part"
 msgstr "podnaloga"
+
+#. Translators: Button for creating new problem.
+#. Translators: Title of 'add new problem' form.
+#: web/templates/courses/problem_set_detail.html:154
+#: web/templates/problems/problem_form.html:22
+msgid "Add new problem"
+msgstr "Dodaj nalogo"
 
 #. Translators: Title of problem delete confirmation page. Brisanje sklopa
 #: web/templates/courses/problemset_confirm_delete.html:9
@@ -367,28 +494,23 @@ msgstr "Ste prepričani, da želite pobrisati nalogo"
 msgid "Edit problem"
 msgstr "Uredi nalogo"
 
-#. Translators: Title of 'add new problem' form.
-#: web/templates/problems/problem_form.html:22
-msgid "Add new problem"
-msgstr "Dodaj nalogo"
-
 #. Translators: Title of solutions page.
 #: web/templates/problems/solutions.html:4
 msgid "solutions"
 msgstr "rešitve"
 
 #. Translators: Title of user solutions column.
-#: web/templates/problems/solutions.html:46
+#: web/templates/problems/solutions.html:43
 msgid "Your solution"
 msgstr "Vaša rešitev"
 
 #. Translators: in solution comparison table
-#: web/templates/problems/solutions.html:53
+#: web/templates/problems/solutions.html:50
 msgid "You did not attempt to solve this part."
 msgstr "Tega dela naloge niste poskušali reševati."
 
 #. Translators: Title of official solutions column.
-#: web/templates/problems/solutions.html:61
+#: web/templates/problems/solutions.html:58
 msgid "Official solution"
 msgstr "Uradna rešitev"
 
@@ -411,9 +533,6 @@ msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 #~ msgid "ArnesAAI"
 #~ msgstr "ArnesAAI"
 
-#~ msgid "Move down"
-#~ msgstr "Dol"
-
 #~ msgid "Welcome"
 #~ msgstr "Dobrodošli"
 
@@ -429,26 +548,11 @@ msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 #~ msgid "Download all files"
 #~ msgstr "Prenesi vse datoteke"
 
-#~ msgid "Files for solving"
-#~ msgstr "Datoteke za reševanje"
-
-#~ msgid "Files for editing"
-#~ msgstr "Datoteke za urejanje"
-
 #~ msgid "Show progress"
 #~ msgstr "Prikaži napredek"
 
 #~ msgid "Add tag"
 #~ msgstr "Dodaj značko"
-
-#~ msgid "File for solving"
-#~ msgstr "Datoteka za reševanje"
-
-#~ msgid "File for editing"
-#~ msgstr "Datoteka za urejanje"
-
-#~ msgid "Update"
-#~ msgstr "Posodobi"
 
 #~ msgid "All problem lists"
 #~ msgstr "Vsi sklopi"

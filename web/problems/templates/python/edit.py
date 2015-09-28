@@ -1,4 +1,4 @@
-with open(__file__, encoding='utf-8') as f:
+{% load i18n %}with open(__file__, encoding='utf-8') as f:
     source = f.read()
 exec(source[source.find("# =L=I=B=""R=A=R=Y=@="):])
 problem = extract_problem(__file__)
@@ -17,8 +17,35 @@ Check.part()
 {{ part.validation|safe }}
 
 {% endfor %}
+# # =====================================================================@000000=
+# # {% blocktrans %}This is a template for a new problem part. To create a new part, uncomment
+# # the template and fill in your content.
+# #
+# # Define a function `multiply(x, y)` that returns the product of `x` and `y`.
+# # For example:
+# #
+# #     >>> multiply(3, 7)
+# #     21
+# #     >>> multiply(6, 7)
+# #     42{% endblocktrans %}
+# # =============================================================================
+#
+# def {% trans "multiply" %}(x, y):
+#     return x * y
+#
+# Check.part()
+#
+# Check.equal('{% trans "multiply" %}(3, 7)', 21)
+# Check.equal('{% trans "multiply" %}(6, 7)', 42)
+# Check.equal('{% trans "multiply" %}(10, 10)', 100)
+# Check.secret({% trans "multiply" %}(100, 100))
+# Check.secret({% trans "multiply" %}(500, 123))
+
 
 # ===========================================================================@=
+# {% trans "Do not change this line or anything below it." %}
+# =============================================================================
+
 
 _validate_current_file()
 
@@ -43,7 +70,7 @@ def extract_problem(filename):
         r'(?P<solution>.*?)'                  # solution
         r'^Check\.part\(\)\n'                 # beginning of validation
         r'(?P<validation>.*?)'                # validation
-        r'(?=\n# =+@)',                       # beginning of next part
+        r'(?=\n(# )?# =+@)',                  # beginning of next part
         flags=re.DOTALL | re.MULTILINE
     )
     parts = [{
@@ -53,14 +80,11 @@ def extract_problem(filename):
         'validation': match.group('validation').strip(),
         'problem': {{ problem.id }}
     } for match in part_regex.finditer(source)]
-    # The last solution extends all the way to the validation code,
-    # so we strip any trailing whitespace from it.
-    parts[-1]['solution'] = parts[-1]['solution'].rstrip()
     problem_match = re.search(
         r'^# =+\n'                             # beginning of header
         r'^# (?P<title>[^\n]*)\n'              # title
         r'(?P<description>(^#( [^\n]*)?\n)*)'  # description
-        r'# =+@',                              # beginning of first part
+        r'(?=(# )?# =+@)',                     # beginning of first part
         source, flags=re.DOTALL | re.MULTILINE)
     return {
         'title': problem_match.group('title').strip(),
@@ -99,26 +123,25 @@ def _validate_current_file():
 
     Check.summarize()
     if all(part['valid'] for part in problem['parts']):
-        print('Naloge so pravilno sestavljene.')
-        if input('Ali jih shranim na strežnik? [da/NE]') == 'da':
-            print('Shranjujem naloge na strežnik...', end="")
+        print('{% trans "The problem is correctly formulated." %}')
+        if input('{% trans "Should I save it on the server [yes/NO]" %}') == '{% trans "yes" %}':
+            print('{% trans "Saving problem to the server" %}...', end="")
             try:
                 url = '{{ submission_url }}'
                 token = 'Token {{ authentication_token }}'
                 response = submit_problem(problem, url, token)
                 if 'update' in response:
-                    print("Posodabljam datoteko... ", end="")
-                    backup_filename = backup(filename)
-                    r = urlopen(response['update'])
-                    with open(filename, 'w', encoding='utf-8') as f:
-                        f.write(r.read().decode('utf-8'))
-                    print("Stara datoteka je preimenovana v {0}.".format(backup_filename))
-                    print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
+                    print('{% trans "Updating file" %}... ', end="")
+                    backup_filename = backup(__file__)
+                    with open(__file__, 'w', encoding='utf-8') as f:
+                        f.write(response['update'])
+                    print('{% trans "Previous file has been renamed to" %} {0}.'.format(backup_filename))
+                    print('{% trans "If the file did not refresh in your editor, close and reopen it." %}')
             except urllib.error.URLError:
-                print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
+                print('\n{% trans "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM! Please, try again." %}')
             else:
-                print('Naloge so shranjene.')
+                print('{% trans "Problem saved." %}')
         else:
-            print('Naloge niso bile shranjene.')
+            print('{% trans "Problem was not saved." %}')
     else:
-        print('Naloge so napačno sestavljene.')
+        print('{% trans "The problem is not correctly formulated." %}')

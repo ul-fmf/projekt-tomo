@@ -105,4 +105,6 @@ class ProblemViewSet(ModelViewSet):
             serializer = PartSerializer(data=parts_data, instance=part)
             serializer.is_valid(raise_exception=False)
             serializer.save()
-        return Response(ProblemSerializer(instance=problem).data, status=status.HTTP_200_OK)
+        serialized_data = ProblemSerializer(instance=problem).data
+        serialized_data['update'] = problem.edit_file(request.user)[1]
+        return Response(serialized_data, status=status.HTTP_200_OK)
