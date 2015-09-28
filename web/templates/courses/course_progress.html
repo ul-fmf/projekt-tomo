@@ -11,33 +11,39 @@
 
 
 {% block content %}
-<div class="content-section-a tomo-top-section"><div class="container">
-  {% for problem_set, problem_set_attempts in course_attempts %}
-  <h3>
-    <a href="{{ problem_set.get_absolute_url }}">{{ problem_set.title }}</a>
-  </h3>
-
-  <table class="table table-condensed">
-    <tbody>
-      {% for problem, problem_attempts in problem_set_attempts %}
-      <tr>
-        <td>
-        	<a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
-       	</td><td width='75%'>
-          {% for attempt in problem_attempts %}
-          	{# FIX IT! IT SHOWS SOLUTION FROM USER THAT IS BROWSING THE PAGE. NEW SOLUTIONS VIEW NEEDED #}
-          	<a href="{% url 'problem_solution' problem.pk observed_user.pk%}">
-              {% if attempt.valid %}<i class="color5 fa fa-circle"></i>
-              {% elif attempt %}<i class="color3 fa fa-circle"></i>
-              {% else %}<i class="color1 fa fa-circle"></i>
-              {% endif %}
-            </a>
-          {% endfor %}
-        </td>
-      </tr>
+<div class="content-section-a tomo-overview-student">
+  <div class="container">
+    <h2>{{ observed_user.title }}</h2>
+    <div class="row">
+      {% for problem_set, problem_set_attempts in course_attempts %}
+      <div class="col-md-4">
+        <h3><a href="{{ problem_set.get_absolute_url }}">{{ problem_set.title }}</a></h3>
+      </div>
+      <div class="col-md-8">
+        <table class="table table-condensed">
+          <tbody>
+            {% for problem, problem_attempts in problem_set_attempts %}
+            <tr>
+              <td>
+                <a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
+              </td>
+              <td width='60%'>
+                {% for attempt in problem_attempts %}
+                <a href="{% url 'problem_solution' problem.pk observed_user.pk %}">
+                  {% if attempt.valid %}<i class="color5 fa fa-circle"></i>
+                  {% elif attempt %}<i class="color3 fa fa-circle"></i>
+                  {% else %}<i class="color1 fa fa-circle"></i>
+                  {% endif %}
+                </a>
+                {% endfor %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
       {% endfor %}
-    </tbody>
-  </table>
-  {% endfor %}
-</div></div>
-{% endblock %} {# content #}
+    </div>
+  </div>
+</div>
+{% endblock content %}

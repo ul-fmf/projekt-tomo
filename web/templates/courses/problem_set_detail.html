@@ -161,7 +161,7 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in problem_set.problems.all %}
           <li>
-            <a href="{% if show_teacher_forms %}{% url 'problem_progress' problem.pk %}{% else %}#{{ problem.anchor }}{% endif %}">
+            <a href="{% if show_teacher_forms %}{% url 'problem_set_progress' problem_set.pk %}{% else %}{% endif %}#{{ problem.anchor }}">
               {{ problem.title }}
             </a>
             <div class="subtasks">
