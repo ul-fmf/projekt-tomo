@@ -71,6 +71,7 @@ class ProblemUpdate(UpdateView):
     Update problem title and description.
     '''
     model = Problem
+    fields = '__all__'
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
