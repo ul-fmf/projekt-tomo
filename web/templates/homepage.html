@@ -39,7 +39,7 @@
           </form>
         </span>
         <h3>
-          {{ course.title }}
+          <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
         </h3>
         <p class="tomo-lecturer">
           {% for lecturer in course.teachers.all %}
