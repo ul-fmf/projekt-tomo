@@ -13,6 +13,7 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
+    institution = models.CharField(max_length=140)
     tags = TaggableManager(blank=True)
 
     class Meta:
@@ -52,9 +53,6 @@ class Course(models.Model):
                     problem_set.percentage = 0
                 problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
                 self.annotated_problem_sets.append(problem_set)
-
-    def organization_title(self):
-        return "Fakulteta za matematiko in fiziko"
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):

@@ -40,7 +40,7 @@
       <div class="col-md-4 tomo-course-info">
         {% if show_teacher_forms %}
         <hr>
-        <p class="tomo-institution">{{ course.organization_title }}</p>
+        <p class="tomo-institution">{{ course.institution }}</p>
         <div class="tomo-course-description">
           {{ course.description }}
         </div>
@@ -85,7 +85,7 @@
         {% for lecturer in course.teachers.all %}
         <p class="tomo-lecturer">{{ lecturer.get_full_name }}</p>
         {% endfor %}
-        <p class="tomo-institution">{{ course.organization_title }}</p>
+        <p class="tomo-institution">{{ course.institution }}</p>
         <div class="tomo-course-description">
           {{ course.description }}
         </div>
