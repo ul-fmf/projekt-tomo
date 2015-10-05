@@ -6,152 +6,26 @@
 
  
 {% block navigation-left %} 
-<a class="navbar-brand topnav" href="{% url 'terms_of_service' %}">{% trans 'Help' %}</a>
+<a class="navbar-brand topnav" href="{% url 'help' %}">{% trans 'Help' %}</a>
 {% endblock %}
 
 
 {% block content %}
 <div class="content-section-a tomo-top-section"><div class="container">
-{% filter latex_markdown %}
-## {% trans 'Help' %}
+<h2>{% trans 'Help' %}</h2>
 
-OPOZORILO: Ob registraciji se uporabnik zaveže, da se strinja z vsemi določbami v spodaj navedenih splošnih pogojih uporabe vsebin storitve Projekt Tomo.
+<p>Tomo je spletna storitev, namenjena hitrejšemu učenju programskih jezikov. Tomo ponuja bazo nalog, ki jih samostojno rešujemo (pišemo programe) in avtomatsko dobimo povratno informacijo, ali napisani program pravilno deluje na testnih podatkih.
+</p>
 
-Z registracijo, prijavo oz. z uporabo strani se uporabnik strinja s splošnimi pogoji uporabe. V kolikor se s splošnimi pogoji uporabe ne strinja, registracija oz. prijava ni možna.
+<h2>Tehnične zahteve</h2>
+    <ol>
+        <li>spletni brskalnik</li>
+        <li>možnost nalaganja datotek</li>
+        <li>urejevalnik za pisanje kode (priporočamo IDLE)</li>
+        <li>Python 3.0 ali več (dostopen <a href="https://www.python.org/downloads/">tukaj</a>)</li>
+    </ol>
 
-### 1. Splošne določbe
-
-Vsebina splošnih pogojev uporabe (v nadaljnjem besedilu: pogoji uporabe) storitve Projekt Tomo se nanaša na pogoje uporabe vsebin storitve Projekt Tomo ter predstavlja pravno veljaven in zavezujoč sporazum med ponudnikom ter uporabniki oz. člani storitve Projekt Tomo.
-
-Ponudnik storitve si pridružuje pravico do spremembe katerega koli dela spletnih strani in izbrisa katerega koli dela vsebine brez vnaprejšnjega obvestila.
-
-Z namenom, da se uporabnikom zagotovi čim boljšo možno izkušnja, ponudnik storitve skrbi za stalno posodabljanje storitve Projekt Tomo. Uporabnik je seznanjen in se strinja, da se oblika in narava storitve, ki jo zagotavlja ponudnik storitve, občasno spreminjata brez predhodnega obvestila uporabniku.
-
-### 2. Pomen izrazov
-
-Vlogo ponudnika storitve (v nadaljnjem besedilu: ponudnik) opravlja Fakulteta za matematiko in fiziko, Univerza v Ljubljani.
-
-Ponudniki poti so ponudniki spletne povezave, ki jo pri njih najemajo uporabniki ali ponudnik.
-
-Uporabnik je vsaka oseba, ki obišče storitev Projekt Tomo in jih na kakršen koli način uporablja (v nadaljnjem besedilu: uporabnik).
-
-Član storitve Projekt Tomo je vsak uporabnik, ki se uspešno prijavi/registrira v storitev Projekt Tomo.
-
-Uporaba se omogoča nedoločenemu številu uporabnikov, ki sprejmejo storitev ponudnika na način, pod pogoji in v skladu s temi pogoji uporabe ter drugimi navodili ponudnika.
-
-### 3. Opis storitve Projekt Tomo
-
-Storitev Projekt Tomo je namenjena samostojnemu učenju programiranja ter pomoči pri takem učnem procesu. Pred prvo prijavo mora uporabnik ustvariti račun.
-
-### 4. Dostopnost storitve Projekt Tomo
-
-Spletne strani so praviloma dostopne 24 ur na dan in vse dni v letu. Ponudnik si pridržuje pravico do krajših prekinitev dostopa do storitve Projekt Tomo zaradi tehničnih razlogov. Zaradi razlogov, povezanih z vzdrževanjem ali zamenjavo opreme, si ponudnik pridržuje pravico tudi do daljših prekinitev dostopa do storitve Projekt Tomo. Ponudnik ne jamči dostopnosti do strani ob morebitnih izpadih v omrežjih ponudnikov poti ali kakršnih koli izpadih, napakah, drugih tehničnih motnjah ali prekinitvah delovanja tretjih strank (električno napajanje…) ter višji sili.
-
-### 5. Način dostopa
-
-Uporaba in dostop do storitve Projekt Tomo sta zagotovljena 24 ur na dan, razen v primerih, določenih v 4. točki pogojev uporabe. Ponudnik si pridržuje pravico, da ob sumu zlorab, navedenih v 11. točki pogojev uporabe, omeji ali prekine dostop do vsebin storitve Projekt Tomo za posamezno uporabniško ime.
-
-Morebitne spremembe v načinu dostopa in uporabi vsebin bo ponudnik sproti objavljal v storitvi Projekt Tomo. Uporabnik lahko kadar koli in zaradi kakršnega koli razloga z obvestilom na <info@projekt-tomo.si> prekine članstvo v storitvi Projekt Tomo.
-
-### 6. Pogoji uporabe: starost in odgovornost
-
-Za uporabo vsebin objavljenih v storitvi Projekt Tomo ni starostnih omejitev. Uporaba storitve Projekt Tomo je namenjena uporabnikovi lastni uporabi. Registracija drugih oseb ni dovoljena, za kar uporabnik jamči s polno odškodninsko odgovornostjo in nase prevzema pasivno legitimacijo v primeru spora. Ni dovoljeno pooblastiti ali prijaviti drugih oseb oz. kakor koli drugače preusmeriti uporabniškega računa.
-
-Ponudnik lahko po lastni presoji zavrne dodelitev uporabniškega imena, ki nakazuje na drugo osebo, je zaščiteno s pravicami prava blagovnih znamk ali drugimi pravicami, je obsceno ali drugače nesprejemljivo.
-
-### 7. Druga pravila uporabe
-
-Za zagotavljanje kakovostne uporabe storitev se uporabnik zavezuje, da bo pri dostopu in uporabi upošteval vsa navodila in druga pravila uporabe, objavljena v storitvi Projekt Tomo.
-
-### 8. Splošna priporočila uporabnikom
-
-Uporabnik naj skrbno hrani svoje geslo in uporabniško ime ter uporablja storitev v skladu z navodili in priporočili ponudnika ter navodili ponudnika poti. Uporabniki naj se zavedajo, da so kljub skrbi in nadzoru storitev možne zlorabe. Ponudnik storitve bo o vseh spremembah in novostih svoje uporabnike obveščal na vseh mestih, kjer so objavljena navodila in pogoji uporabe.
-
-### 9. Spletni piškotki in pridobivanje javno dostopnih podatkov
-
-Ob prvem obisku storitve Projekt Tomo se obiskovalca obvesti, da spletna stran za delovanje uporablja spletne piškotke. Stran uporablja en piškotek, v katerem so shranjeni podatki o seji. Trajanje sejnega piškotka je omejeno na 14 dni. Piškotki so datoteke, namenjene boljši komunikaciji s spletno stranjo in izboljšanju delovanja spletnih strani ter za pripravo učinkovitih storitev. Preko teh datotek storitev Projekt Tomo pridobi javno dostopne podatke (tip brskalnika, operacijskega sistema, itd.), nikakor pa ne pride do identifikacije ali zbiranja osebnih podatkov o osebah, ki se skrivajo za temi podatki, ali osebah, ki uporabljajo terminalsko opremo. Teh podatkov tudi ni mogoče povezati z drugimi osebnimi podatki, ki so jih posamezni uporabniki dali na razpolago.
-
-### 10. Zavrnitev odgovornosti
-
-Uporabnik se mora zavedati, da:
-
-- Spletne tehnologije za prenos in dostop do vsebin niso 100% zanesljive. Ob morebitnih izpadih delovanja zaradi ponudnikov poti, ponudnik ne prevzema odgovornosti.
-- Ponudnik in ponudnik poti nista odgovorna za nepravilno delovanje storitev, ki so posledica napačne uporabe ali neznanja uporabnika.
-- Uporabnik za uporabo vsebin potrebuje ustrezno programsko in strojno opremo (računalnik).
-- Ponudnik ne more zagotavljati delovanja storitev v primeru izpada omrežja pogodbenih partnerjev, izpada električne energije ali drugih tehničnih motenj, ki bi lahko začasno motile delovanje storitev.
-- Vse informacije in gradiva v storitvi Projekt Tomo so informativne narave. Ponudnik se trudi za čim boljšo predstavitev in delovanje spletnih strani, ažurnost in popolnost podatkov, vsebovanih na teh straneh, vendar ne prevzema nikakršne odgovornosti o njihovi pravilnosti, ažurnosti in popolnosti.
-- Slike v storitvi Projekt Tomo so simbolične ter so samo informativne narave. Kopiranje, tiskanje ali shranjevanje slik ter njihova reprodukcija je brez predhodnega pisnega dovoljenja ponudnika prepovedana.
-- Uporaba grafičnih elementov in znamk, ki se pojavljajo v storitvi Projekt Tomo, je izrecno prepovedana brez ustreznega predhodnega pisnega soglasja ponudnika. 
-- Znaki, ki niso registrirani kot znamke, so zaščiteni po pravilih avtorskega prava.
-
-### 11. Uporabnik se zaveže, da:
-
-* storitve ne bo izrabljal v komercialne, nelegalne ali katere koli druge namene kot tiste, ki so določeni v teh pogojih uporabe;
-* ne bo distribuiral avtorsko zaščitenih vsebin ali vsebin, ki se nahajajo v storitvi Projekt Tomo;
-* ne bo poskušal pridobiti, zbirati in/ali shranjevati osebnih podatkov drugih uporabnikov;
-* ne bo na noben način kopiral, shranjeval ali posredoval celotne ali delov vsebine storitve Projekt Tomo;
-* ne bo uporabljal računalniških kod, škodljivih programov ali česar koli, kar bi lahko motilo, onesposobilo ali škodovalo tej storitvi, ponudniku storitev in njegovi programski ter strojni opremi, ponudniku poti ter telekomunikacijskim napravam.
-
-### 12. Namen obdelave in varstvo osebnih podatkov
-
-Ponudnik se obvezuje, da bo skrbno varoval podatke uporabnikov ter jih bo uporabljal izključno za potrebe izvajanja storitve.
-
-Ponudnik bo podatke, pridobljene od uporabnikov storitve Projekt Tomo, pridobival, hranil in drugače obdeloval za naslednje namene:
-
-vodenje zbirke registriranih uporabnikov;
-pripravo anonimnih statističnih analiz (skupno število uporabnikov, število novih uporabnikov v določenem časovnem obdobju, uporaba spletne strani ipd.).
-Podatki bodo varovani skladno z zahtevami zakona, ki ureja varstvo osebnih podatkov, in v nobenem primeru ne bodo posredovani tretjim osebam.
-
-Ponudnik se zavezuje, da bo zbrane podatke hranil le toliko časa, kolikor bo nujno potrebno za dosego namena, zaradi katerega so bili zbrani.
-
-Uporabnik v postopku registracije posreduje zahtevane osebne podatke. Uporabnik zagotovi, da bo s svojim uporabniškim imenom in z geslom upravljal izključno sam. Vsak uporabnik samostojno odgovarja za vsebine, ki jih vpiše ob prijavi v storitev Projekt Tomo. Storitev Projekt Tomo omogoča registracijo tudi s pomočjo uporabniškega imena in gesla pri Google ali Facebook.
-
-Uporabnik potrjuje, da je bil pred registracijo ustrezno seznanjen z obsegom in namenom obdelave osebnih podatkov, ki jih je dal na voljo upravljavcu ob registraciji.
-
-Uporabnik ob registraciji podaja osebno privolitev, da lahko ponudnik obdeluje osebne podatke, ki jih posreduje v storitev Projekt Tomo.
-
-Osebni podatki, ki se hranijo, so:
-
-* ime in priimek,
-* naslov e-pošte.
-
-Osebni podatki obsegajo tudi tiste, ki jih ponudnik obdeluje v času, ko je uporabnik registriran v storitvi Projekt Tomo in ki se primeroma nanašajo predvsem na naslednje okoliščine, tako uporabnika kot populacije, v katero uporabnik spada:
-
-* jezik uporabnika,
-* lokacija uporabnika,
-* sredstvo dostopa,
-* tip in verzija brskalnika, s katerim uporabnik dostopa do spletne strani,
-* operacijski sistem, ki ga uporabnik uporablja,
-* ločljivost zaslona uporabnika,
-* ponudnik internetnih storitev uporabnika,
-* ali uporabnik uporablja pametni telefon, osebni računalnik ali tablični računalnik,
-* IP številka računalnika, s katerim se prijavlja na spletno stran.
-* spletna stran, s katere je uporabnik prispel v storitev Projekt Tomo,
-* osebne preference uporabnika v zvezi s storitvijo.
-
-Ponudnik se obvezuje, da podatkov ne bo posredoval tretjim osebam, razen kolikor je to v skladu z veljavno zakonodajo. V času upravljanja z osebnimi podatki ima posameznik možnost vpogleda, prepisa, kopiranja, dopolnitve, popravkov, blokiranja in izbrisa osebnih podatkov v zbirki podatkov, skladno z veljavno zakonodajo.
-
-Ponudnik bo pridobljene podatke varoval ter preprečeval njihovo zlorabo. Osebni podatki bodo uporabljeni le za namene, za katere je uporabnik dal svoje soglasje.
-
-### 13. Reklamacije
-
-V primeru težav ali vprašanj lahko pošljete sporočilo na <info@projekt-tomo.si>
-
-### 14. Kršenje pogojev uporabe
-
-Ponudnik si pridržuje pravico, da uporabnikom, ki kršijo pogoje uporabe ali delujejo v nasprotju z njimi, onemogoči dostop do strani, dosegljivih z registracijo v storitvi Projekt Tomo.
-
-Ponudnik si pridržuje pravico onemogočiti dostop uporabnikom, ki namerno ali iz malomarnosti posredujejo tretjim osebam svoje geslo in/ali uporabniško ime.
-
-Če uporabnik s svojim ravnanjem povzroči ponudniku ali ponudniku poti kakršno koli škodo, zanjo v celoti moralno, materialno ter kazensko odgovarja.
-
-Morebitne kršitve pri uporabi storitve Projekt Tomo s strani drugih uporabnikov sporočite ponudniku storitev z e-pošto na naslov <info@projekt-tomo.si>.
-
-### 15. Spremembe in dopolnitve splošnih pogojev uporabe
-
-Ponudnik lahko obstoječe pogoje uporabe spremeni in dopolni brez predhodnega obvestila. Uporabnik se obvezuje, da bo občasno v storitvi Projekt Tomo preverjal, ali so se pogoji uporabe spremenili. V primeru, da uporabnik s spremenjenimi pogoji uporabe ne bo več soglašal, mora takoj prenehati z uporabo storitve Projekt Tomo, sicer pa z vstopom v storitev Projekt Tomo potrjuje, da se z morebitnimi spremembami in dopolnitvami strinja.
-
-#### Ljubljana, dne 30. 9. 2015
-{% endfilter %}
+<a href="{% url 'help_students' %}"><h4>Navodila za uporabo - učenci</h4></a>
+<a href="{% url 'help_teachers' %}"><h4>Navodila za uporabo - učitelji</h4></a>
 </div></div>
 {% endblock content %}

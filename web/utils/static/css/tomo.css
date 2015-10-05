@@ -1,3 +1,23 @@
+/* for centering images according to HTML5 standard */
+.center_image {
+  margin: 20px auto;
+  display:block;
+    max-width: 80%;
+}
+
+.center_text {
+  text-align:center;
+}
+
+.help-table {
+    border-collapse: collapse;
+}
+
+.help-table, th, td {
+  border: 1px solid black;
+}
+
+
 a { color: #23527c; }
 .dropdown { position: relative; }
 .content-section-y { background-color: rgba(215, 160, 44, .8); }
