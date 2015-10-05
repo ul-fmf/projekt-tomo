@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-28 09:06+0000\n"
+"POT-Creation-Date: 2015-10-05 08:23+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: web/courses/models.py:65
+#: web/courses/models.py:63
 msgid "Hidden"
 msgstr "Skrite"
 
-#: web/courses/models.py:66
+#: web/courses/models.py:64
 msgid "Visible when solved"
 msgstr "Vidne po sprejeti rešitvi"
 
-#: web/courses/models.py:67 web/courses/models.py:72
+#: web/courses/models.py:65 web/courses/models.py:70
 msgid "Visible"
 msgstr "Vidne"
 
-#: web/courses/models.py:70
+#: web/courses/models.py:68
 msgid "Title"
 msgstr "Naslov"
 
-#: web/courses/models.py:71
+#: web/courses/models.py:69
 msgid "Description"
 msgstr "Opis"
 
-#: web/courses/models.py:74
+#: web/courses/models.py:72
 msgid "Solution visibility"
 msgstr "Rešitve"
 
@@ -126,26 +126,34 @@ msgid "The problem is not correctly formulated."
 msgstr "Naloga ni pravilno sestavljena."
 
 #. Translators: Default heading for pages (defined in base.html)
-#: web/templates/base.html:11 web/templates/login.html:103
+#: web/templates/base.html:11 web/templates/login.html:104
 msgid "Project Tomo"
 msgstr "Projekt Tomo"
 
 #. Translators: Link for logout in navigation bar (top right)
-#: web/templates/base.html:43
+#: web/templates/base.html:40
 msgid "(logout)"
 msgstr "(odjava)"
 
-#: web/templates/base.html:77 web/templates/terms_of_service.html:5
+#: web/templates/base.html:41 web/templates/base.html.py:75
+#: web/templates/help.html:5 web/templates/help.html.py:9
+#: web/templates/help.html:15 web/templates/help_students.html:9
+#: web/templates/help_teachers.html:9
+msgid "Help"
+msgstr "Pomoč"
+
+#: web/templates/base.html:79 web/templates/help_students.html:5
+#: web/templates/help_teachers.html:5 web/templates/terms_of_service.html:5
 #: web/templates/terms_of_service.html:9
 #: web/templates/terms_of_service.html:16
 msgid "Terms of service"
 msgstr "Pogoji poslovanja"
 
-#: web/templates/base.html:79
+#: web/templates/base.html:81
 msgid "Contact"
 msgstr "Kontakt"
 
-#: web/templates/base.html:82
+#: web/templates/base.html:84
 msgid ""
 "Copyright &copy; Faculty of Mathematics and Physics, University of "
 "Ljubljana, 2015. All Rights Reserved "
@@ -214,19 +222,26 @@ msgstr "Gor"
 
 #. Translators: current page in navigation
 #: web/templates/courses/course_detail.html:10
-#: web/templates/courses/problem_progress.html:13
+#: web/templates/courses/problem_set_progress.html:12
 #: web/templates/problems/solutions.html:18
 msgid "(current)"
 msgstr "(trenutna)"
 
+#. Translators: Button for creating new problem.
+#. Translators: Title of 'add new problem set' form.
+#: web/templates/courses/course_detail.html:35
+#: web/templates/courses/problemset_form.html:19
+msgid "Add new problem set"
+msgstr "Dodaj sklop"
+
 #. Translators: Demote teacher to student - button
-#: web/templates/courses/course_detail.html:48
+#: web/templates/courses/course_detail.html:56
 #: web/templates/courses/course_users.html:33
 msgid "Demote to student"
 msgstr "Status študenta"
 
 #. Translators: Promote student to teacher - button
-#: web/templates/courses/course_detail.html:67
+#: web/templates/courses/course_detail.html:75
 #: web/templates/courses/course_users.html:73
 msgid "Promote to teacher"
 msgstr "Status učitelja"
@@ -262,11 +277,6 @@ msgstr "Kopiraj"
 #: web/templates/problems/problem_form.html:39
 msgid "Cancel"
 msgstr "Prekliči"
-
-#. Translators: Progress of students in a problem set - heading in navigation
-#: web/templates/courses/problem_progress.html:10
-msgid "Progress"
-msgstr "Napredek"
 
 #: web/templates/courses/problem_set_detail.html:20
 #: web/templates/courses/problem_set_detail.html:38
@@ -342,6 +352,11 @@ msgstr "podnaloga"
 msgid "Add new problem"
 msgstr "Dodaj nalogo"
 
+#. Translators: Progress of students in a problem set - heading in navigation
+#: web/templates/courses/problem_set_progress.html:9
+msgid "Progress"
+msgstr "Napredek"
+
 #. Translators: Title of problem delete confirmation page. Brisanje sklopa
 #: web/templates/courses/problemset_confirm_delete.html:9
 msgid "Delete problem set"
@@ -366,11 +381,6 @@ msgstr "Ne"
 #: web/templates/courses/problemset_form.html:16
 msgid "Edit problem set"
 msgstr "Uredi sklop"
-
-#. Translators: Title of 'add new problem set' form.
-#: web/templates/courses/problemset_form.html:19
-msgid "Add new problem set"
-msgstr "Dodaj sklop"
 
 #. Translators: add new problem form button.
 #: web/templates/courses/problemset_form.html:33
@@ -443,23 +453,24 @@ msgid ""
 "\n"
 "          By logging in you agree to our\n"
 "          <a href=\"%(terms_of_service_url)s\">Terms of service</a>.\n"
+"          Our website uses cookies.\n"
 "          "
 msgstr ""
 "\n"
 "          S prijavo se strinjate z našimi\n"
 "          <a href=\"%(terms_of_service_url)s\">Pogoji poslovanja</a>.\n"
-"          "
+"          Spletna stran za delovanje uporablja piškotke.          "
 
 #. Translators: description of project Tomo
-#: web/templates/login.html:107
+#: web/templates/login.html:108
 msgid "Your personal programming teacher."
 msgstr "Vaš osebni učitelj programiranja."
 
-#: web/templates/login.html:126
+#: web/templates/login.html:127
 msgid "Sponsors"
 msgstr "Sponzorji"
 
-#: web/templates/login.html:128
+#: web/templates/login.html:129
 msgid ""
 "\n"
 "    This work was funded in part by the European Union, European Regional\n"
@@ -500,27 +511,27 @@ msgid "solutions"
 msgstr "rešitve"
 
 #. Translators: Title of user solutions column.
-#: web/templates/problems/solutions.html:43
+#: web/templates/problems/solutions.html:44
 msgid "Your solution"
 msgstr "Vaša rešitev"
 
 #. Translators: in solution comparison table
-#: web/templates/problems/solutions.html:50
+#: web/templates/problems/solutions.html:53
 msgid "You did not attempt to solve this part."
 msgstr "Tega dela naloge niste poskušali reševati."
 
 #. Translators: Title of official solutions column.
-#: web/templates/problems/solutions.html:58
+#: web/templates/problems/solutions.html:63
 msgid "Official solution"
 msgstr "Uradna rešitev"
 
 #. Translators: in solution comparison table
-#: web/templates/problems/solutions.html:66
+#: web/templates/problems/solutions.html:73
 msgid "Official solutions are hidden."
 msgstr "Uradne rešitve so skrite."
 
 #. Translators: in solution comparison table
-#: web/templates/problems/solutions.html:73
+#: web/templates/problems/solutions.html:80
 msgid "Official solution will be visible once you submit a valid solution."
 msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 
