@@ -2,7 +2,7 @@ from common import *
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['www.projekt-tomo.si']
