@@ -9,10 +9,6 @@ ALLOWED_HOSTS = ['www.projekt-tomo.si']
 
 WSGI_APPLICATION = 'web.wsgi.dev.application'
 
-INSTALLED_APPS += (
-  'shibboleth',
-)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
