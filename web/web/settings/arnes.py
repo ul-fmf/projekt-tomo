@@ -9,6 +9,10 @@ ALLOWED_HOSTS = ['www.projekt-tomo.si']
 
 WSGI_APPLICATION = 'web.wsgi.dev.application'
 
+INSTALLED_APPS += (
+  'shibboleth',
+)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -25,6 +29,25 @@ STATIC_URL = '/static/'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'shibboleth.middleware.ShibbolethRemoteUserMiddleware',
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'simple_history.middleware.HistoryRequestMiddleware'
+)
+
+SHIBBOLETH_ATTRIBUTE_MAP = {
+   "shib-user": (True, "username"),
+   "shib-given-name": (True, "first_name"),
+   "shib-sn": (True, "last_name"),
+   "shib-mail": (False, "email"),
+}
+
 LOGIN_REDIRECT_URL = '/'
 SUBMISSION_URL = 'https://www.projekt-tomo.si'
 
@@ -32,6 +55,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'social.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
+    'shibboleth.backends.ShibbolethRemoteUserBackend',
 )
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ['SOCIAL_AUTH_GOOGLE_OAUTH2_KEY']
