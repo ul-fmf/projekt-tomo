@@ -42,7 +42,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SHIBBOLETH_ATTRIBUTE_MAP = {
-   "uid": (True, "username"),
+   "mail": (True, "username"),
    "givenName": (True, "first_name"),
    "sn": (True, "last_name"),
    "mail": (False, "email"),
