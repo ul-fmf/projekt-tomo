@@ -12,6 +12,9 @@ class User(AbstractUser):
     def is_teacher(self, course):
         return course.teachers.filter(pk=self.id).exists()
 
+    def is_teacher_anywhere(self):
+        return self.taught_courses.exists()
+
     def is_student(self, course):
         return course.students.filter(pk=self.id).exists()
 

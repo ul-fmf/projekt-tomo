@@ -115,7 +115,7 @@ def copy_form(request, problem_pk):
         b) user can edit the problem set.
         Returns the copy of the given problem.
         """
-        verify(user.can_edit_problem_set(original_problem.problem_set))
+        verify(user.can_view_problem(original_problem))
         verify(request.user.can_edit_problem_set(new_problem_set))
         new_problem = Problem()
         new_problem.title = original_problem.title

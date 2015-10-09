@@ -120,6 +120,15 @@
                       <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
                     </div>
 
+                    {% if user.is_teacher_anywhere %}
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
+                        <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
+                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
+                        <i class="fa fa-copy" aria-hidden="true"></i>                          
+                        </a>
+                    </div>
+                    {% endif %}
+
                     {% endif %}
                   </div>
                 </span>
