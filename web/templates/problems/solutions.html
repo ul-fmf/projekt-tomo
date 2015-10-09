@@ -47,7 +47,7 @@
                       <div class="content">
                         <div class="tomo-solution-code-user">
                           {% if part.attempt %}
-                          <div class="tomo-pre"><code>{{ part.attempt.solution }}</code></div>
+                          <div class="tomo-pre">{{ part.attempt.solution }}</div>
                           {% else %}
                           {# Translators: in solution comparison table #}
                           <div class="tomo-message">{% trans 'You did not attempt to solve this part.' %}</div>
@@ -66,7 +66,7 @@
                     <div class="content">
                       <div class="tomo-solution-code-official">
                         {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
-                        <div class="tomo-pre"><code>{{ part.solution }}</code></div>
+                        <div class="tomo-pre">{{ part.solution }}</div>
 
                         {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
                         {# Translators: in solution comparison table #}
@@ -74,7 +74,7 @@
 
                         {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
                         {% if part.attempt.valid %}
-                        <div class="tomo-pre"><code>{{ part.solution }}</code></div>
+                        <div class="tomo-pre">{{ part.solution }}</div>
                         {% else %}
                         {# Translators: in solution comparison table #}
                         <div class="tomo-message">{% trans 'Official solution will be visible once you submit a valid solution.' %}</div>
