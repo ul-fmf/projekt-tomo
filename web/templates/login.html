@@ -20,62 +20,29 @@
           {% endblocktrans %}
         </p>
         <div class="form-group">
-          <a class="btn btn-default" role="button"
+          <a class="btn btn-default" style="font-size: 1.3em" role="button"
+             href="/Shibboleth.sso/Login">
+             <i class="fa fa-university fa-lg"></i> {% trans 'ArnesAAI' %}
+          </a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-default" style="font-size: 0.8em" role="button"
              href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
              <i class="fa fa-facebook fa-lg"></i> {% trans 'Facebook' %}
           </a>
-          <a class="btn btn-default" role="button"
+          <a class="btn btn-default" style="font-size: 0.8em" role="button"
              href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
              <i class="fa fa-google fa-lg"></i> {% trans 'Google' %}
           </a>
         </div>
 
-        <hr>
-
-        <form role="form" method="post"
-              action="{% url 'django.contrib.auth.views.login' %}">
-          {% if form.errors %}
-          <div class="alert alert-danger" role="alert">
-            {# Translators: sign-in error #}
-            <strong>{% trans 'Sign-in error!' %}</strong>
-          </div>
-          {% endif %}
-          {% csrf_token %}
-          <input type="hidden" name="next" value="{{ next }}" />
-          <div class="form-group">
-            <label class="sr-only" for="id_username">
-              {# Translators: Input for username on login page. #}
-              {% trans 'Username' %}
-            </label>
-            <input class="form-control" id="id_username" maxlength="254"
-                   name="username" placeholder="{% trans 'Username' %}"
-                   required="required" title="" type="text" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label class="sr-only" for="id_password">
-            {# Translators: Input for password on login page. #}
-            {% trans 'Password' %}
-            </label>
-            <input class="form-control" id="id_password" maxlength="254"
-                   name="password" placeholder="{% trans 'Password' %}"
-                   required="required" title="" type="password" autocomplete="off">
-          </div>
-          <div class="form-group">
-            <button type="submit" class="btn btn-default">
-              {# Translators: Button for sign-in on login page. #}
-              {% trans 'Sign in' %}
-            </button> 
-          </div>
           <p><small>
             {% blocktrans %}
-            You can login with a username and password only if you were given a
-            manually created account. If not, please use any of the external
-            providers listed above. If that is not possible, you can
-            <a href="mailto:info@projekt-tomo.si">ask us</a> for an account.
+            You can login using one of the external providers listed above.
+            We recommend that Slovene students and teachers use
+            <a href="https://aai.arnes.si">ArnesAAI</a> single sign-on service.
             {% endblocktrans %}
           </small></p>
-
-        </form>
 
         <hr>
 

@@ -404,6 +404,10 @@ msgstr ""
 "          "
 
 #: web/templates/login.html:25
+msgid "ArnesAAI"
+msgstr "ArnesAAI"
+
+#: web/templates/login.html:31
 msgid "Facebook"
 msgstr "Facebook"
 
@@ -411,43 +415,22 @@ msgstr "Facebook"
 msgid "Google"
 msgstr "Google"
 
-#. Translators: sign-in error
-#: web/templates/login.html:40
-msgid "Sign-in error!"
-msgstr "Napaka ob prijavi!"
-
-#. Translators: Input for username on login page.
-#: web/templates/login.html:48 web/templates/login.html.py:51
-msgid "Username"
-msgstr "Uporabniško ime"
-
-#. Translators: Input for password on login page.
-#: web/templates/login.html:57 web/templates/login.html.py:60
-msgid "Password"
-msgstr "Geslo"
-
-#: web/templates/login.html:70
+#: web/templates/login.html:42
 msgid ""
 "\n"
-"            You can login with a username and password only if you were "
-"given a\n"
-"            manually created account. If not, please use any of the "
-"external\n"
-"            providers listed above. If that is not possible, you can\n"
-"            <a href=\"mailto:info@projekt-tomo.si\">ask us</a> for an "
-"account.\n"
+"            You can login using one of the external providers listed above.\n"
+"            We recommend that Slovene students and teachers use\n"
+"            <a href=\"https://aai.arnes.si\">ArnesAAI</a> single sign-on "
+"service.\n"
 "            "
 msgstr ""
 "\n"
-"            Z uporabniškim imenom in geslom se lahko prijavite le, če vam\n"
-"            je bil ročno dodeljen račun. V nasprotnem primeru prosimo, da "
-"uporabite\n"
-"            enega od zgoraj naštetih zunanjih ponudnikov. Če to ni\n"
-"            mogoče, <a href=\"mailto:info@projekt-tomo.si\">zaprosite</a> za "
-"račun.\n"
+"            Prijavite se lahko z enim od zgoraj naštetih zunanjih ponudnikov.\n"
+"            Slovenskim učencem in učiteljem priporočamo, da uporabijo\n"
+"            enotno prijavo <a href=\"https://aai.arnes.si\">ArnesAAI</a>.\n"
 "            "
 
-#: web/templates/login.html:84
+#: web/templates/login.html:53
 #, python-format
 msgid ""
 "\n"
@@ -462,15 +445,15 @@ msgstr ""
 "          Spletna stran za delovanje uporablja piškotke.          "
 
 #. Translators: description of project Tomo
-#: web/templates/login.html:108
+#: web/templates/login.html:77
 msgid "Your personal programming teacher."
 msgstr "Vaš osebni učitelj programiranja."
 
-#: web/templates/login.html:127
+#: web/templates/login.html:96
 msgid "Sponsors"
 msgstr "Sponzorji"
 
-#: web/templates/login.html:129
+#: web/templates/login.html:98
 msgid ""
 "\n"
 "    This work was funded in part by the European Union, European Regional\n"
@@ -541,9 +524,6 @@ msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 #~ msgid "Enroll"
 #~ msgstr "Vpiši se"
 
-#~ msgid "ArnesAAI"
-#~ msgstr "ArnesAAI"
-
 #~ msgid "Welcome"
 #~ msgstr "Dobrodošli"
 
@@ -567,37 +547,3 @@ msgstr "Uradne rešitve bodo vidne, ko boste oddali veljavno rešitev."
 
 #~ msgid "All problem lists"
 #~ msgstr "Vsi sklopi"
-
-#~ msgid ""
-#~ "Bellow is a list of courses you are not enrolled in yet. Enroll by "
-#~ "clicking on 'Enroll' button."
-#~ msgstr ""
-#~ "Spodaj je seznam predmetov, v katere še nisi vpisan. Vpiši se s klikom na "
-#~ "gumb 'Vpiši se'."
-
-#~ msgid ""
-#~ "You must sign-in before the first use. You must use the same username and "
-#~ "password that you use on student computers."
-#~ msgstr ""
-#~ "Pred prvo uporabo se morate prijaviti in sicer z uporabniškim imenom in "
-#~ "geslom, ki ju uporabljate za prijavo na študentske računalnike."
-
-#~ msgid ""
-#~ "Use the same username and password that you use on student computers,\n"
-#~ "             for example <code>NovakJ14</code> and <code>Triglav.1</"
-#~ "code>. "
-#~ msgstr ""
-#~ "Uporabite enako uporabniško ime in geslo kot na študentskih računalnikih, "
-#~ "na primer <code>NovakJ14</code> in <code>Triglav.1</code>."
-
-#~ msgid "University of Ljubljana"
-#~ msgstr "Univerza v Ljubljani"
-
-#~ msgid "European Regional Development Fund"
-#~ msgstr "Evropski sklad za regionalni razvoj"
-
-#~ msgid "Ministry of Education, Science and Sport"
-#~ msgstr "Ministrstvo za izobraževanje, znanost in šport"
-
-#~ msgid "Oh dear, you are not enrolled in any course yet."
-#~ msgstr "Ojej, v noben predmet še niste vpisani."
