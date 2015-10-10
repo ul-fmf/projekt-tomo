@@ -9,6 +9,12 @@ class User(AbstractUser):
     class Meta:
         ordering = ['last_name', 'first_name']
 
+    def uses_shibboleth(self):
+        try:
+            return self.backend == 'shibboleth.backends.ShibbolethRemoteUserBackend'
+        except:
+            return False
+
     def is_teacher(self, course):
         return course.teachers.filter(pk=self.id).exists()
 
