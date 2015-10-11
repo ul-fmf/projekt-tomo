@@ -1,3 +1,7 @@
+.intro-header {
+  background: url(../img/intro-bg.jpg) center center no-repeat;
+}
+
 /* for centering images according to HTML5 standard */
 .center_image {
   margin: 20px auto;
