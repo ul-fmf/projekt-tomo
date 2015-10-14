@@ -108,7 +108,7 @@ class Check:
     def input(content, encoding=None):
         old_stdin = sys.stdin
         old_feedback = Check.current_part['feedback'][:]
-        sys.stdin = io.StringIO('\n'.join(vhod))
+        sys.stdin = io.StringIO('\n'.join(content))
         try:
             yield
         finally:
