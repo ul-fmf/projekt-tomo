@@ -84,8 +84,9 @@ def course_detail(request, course_pk):
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
         students = list(course.students.exclude(taught_courses=course))
-        part_count = Part.objects.filter(problem__problem_set__course=course).count()
-        attempts = Attempt.objects.filter(part__problem__problem_set__course=course)
+        problem_sets = course.problem_sets.filter(visible=True)
+        part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
+        attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
         from django.db.models import Count
         valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
         all_attempts = attempts.values('user').annotate(Count('user'))
