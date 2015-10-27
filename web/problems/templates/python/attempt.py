@@ -233,8 +233,8 @@ def _validate_current_file():
                 wrong_index = response['wrong_indices'].get(str(part['part']))
                 if wrong_index is not None:
                     hint = part['secret'][wrong_index][1]
-                if hint:
-                    part['feedback'].append('Namig: {}'.format(hint))
+                    if hint:
+                        part['feedback'].append('Namig: {}'.format(hint))
 
 
     filename = os.path.abspath(sys.argv[0])
