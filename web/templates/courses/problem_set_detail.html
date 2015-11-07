@@ -170,12 +170,12 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in problem_set.problems.all %}
           <li>
-            <a href="{% if show_teacher_forms %}{% url 'problem_set_progress' problem_set.pk %}{% else %}{% endif %}#{{ problem.anchor }}">
+            <a href="#{{ problem.anchor }}">
               {{ problem.title }}
             </a>
             <div class="subtasks">
               {% for part in problem.parts.all %}
-              <a href="#{{part.anchor}}"><span id="pieChart-{{ problem.pk }}-{{ part.pk }}" class="chart"></span></a>
+              <a href="{% if show_teacher_forms %}{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}{% else %}#{{part.anchor}}{% endif %}"><span id="pieChart-{{ problem.pk }}-{{ part.pk }}" class="chart"></span></a>
               {% endfor %}
             </div>
           </li>
