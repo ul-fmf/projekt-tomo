@@ -2,16 +2,16 @@
 
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "si.tomo.fmf.uni-lj.onlineviewer"
+        id        = "si.www.projekt-tomo.si.onlineviewer"
         version   = "1.0">
 
-    <name>Tomo</name>
+    <name>Projekt Tomo</name>
 
     <description>
-        Tomo Online Viewer
+        Your personal programming teacher / Vaš osebni učitelj programiranja
     </description>
 
-    <author href="http://fmf.uni-lj.si" email="tomo@fmf.uni-lj.si">
+    <author href="https://www.fmf.uni-lj.si" email="info@projekt-tomo.si">
         Faculty of Mathematics and Physics
     </author>
 
