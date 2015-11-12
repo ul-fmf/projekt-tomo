@@ -55,4 +55,7 @@
     <gap:splash gap:platform="android" gap:qualifier="xxhdpi" src="res/screen/android/xxhdpi-portrait.png" />
     <gap:splash gap:platform="android" gap:qualifier="xxxhdpi" src="res/screen/android/xxxhdpi-portrait.png" />
 
+    <gap:plugin name="org.apache.cordova.inappbrowser" version="0.2.4" />
+    <access origin="https://www.projekt-tomo.si“ />
+    
 </widget>
