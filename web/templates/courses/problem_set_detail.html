@@ -175,7 +175,16 @@
             </a>
             <div class="subtasks">
               {% for part in problem.parts.all %}
-              <a href="{% if show_teacher_forms %}{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}{% else %}#{{part.anchor}}{% endif %}"><span id="pieChart-{{ problem.pk }}-{{ part.pk }}" class="chart"></span></a>
+              {% if show_teacher_forms %}
+                {% with part.student_success as success %}
+                <a href="{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}"
+                   data-toggle="tooltip"
+                   title="{{ success.valid }} {% trans "valid" %} / {{ success.invalid }} {% trans "invalid" %} / {{ success.empty }} {% trans "empty" %} ">
+                  {% endwith %}
+              {% else %}
+                <a href="#{{part.anchor}}">
+              {% endif %}
+              <span id="pieChart-{{ problem.pk }}-{{ part.pk }}" class="chart"></span></a>
               {% endfor %}
             </div>
           </li>

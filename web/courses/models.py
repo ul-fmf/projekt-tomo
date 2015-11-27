@@ -36,10 +36,22 @@ class Course(models.Model):
         sorted_attempts = []
         for problem_set in self.problem_sets.all().prefetch_related('problems__parts'):
             problem_set_attempts = []
+            prob_set_valid = prob_set_invalid = prob_set_empty = 0
             for problem in problem_set.problems.all():
+                valid = invalid = empty = 0
                 problem_attempts = [attempts.get(part.pk) for part in problem.parts.all()]
-                problem_set_attempts.append((problem, problem_attempts))
-            sorted_attempts.append((problem_set, problem_set_attempts))
+                for attempt in problem_attempts:
+                    if attempt is None:
+                        empty += 1
+                    elif attempt.valid:
+                        valid += 1
+                    else:
+                        invalid += 1
+                problem_set_attempts.append((problem, problem_attempts, valid, invalid, empty))
+                prob_set_valid += valid
+                prob_set_invalid += invalid
+                prob_set_empty += empty
+            sorted_attempts.append((problem_set, problem_set_attempts, prob_set_valid, prob_set_invalid, prob_set_empty))
         return sorted_attempts
 
     def annotate_for_user(self, user):

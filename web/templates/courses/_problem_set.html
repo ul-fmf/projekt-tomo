@@ -4,6 +4,8 @@
   {% if course.is_taught %}
   {% with problem_set.student_success as success %}
   {% spaceless %}
+  <div data-toggle="tooltip"
+       title="{{ success.valid }}% {% trans "valid" %} / {{ success.invalid }}% {% trans "invalid" %} / {{ success.empty }}% {% trans "empty" %} ">
   {% if success.valid %}
   <hr class="indicator background5" width="{{ success.valid }}%">
   {% endif %}
@@ -13,6 +15,7 @@
   {% if success.empty %}
   <hr class="indicator background1" width="{{ success.empty }}%">
   {% endif %}
+  </div>
   {% endspaceless %}
   {% endwith %}
   {% else %}

@@ -131,8 +131,16 @@ class Problem(OrderWithRespectToMixin, models.Model):
             if student not in attempts:
                 attempts[student] = {}
         for user in self.problem_set.course.students.all():
+            valid = invalid = empty = 0
             user_attempts = [attempts[user].get(part) for part in self.parts.all()]
-            sorted_attempts.append((user, user_attempts))
+            for attempt in user_attempts:
+                if attempt is None:
+                    empty += 1
+                elif attempt.valid:
+                    valid += 1
+                else:
+                    invalid += 1
+            sorted_attempts.append((user, user_attempts, valid, invalid, empty))
         return sorted_attempts
 
     def progress_bar_width(self):

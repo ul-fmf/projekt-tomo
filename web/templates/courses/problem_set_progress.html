@@ -27,10 +27,13 @@
       <div class="col-md-8">
         <table class="table table-condensed">
           <tbody>
-            {% for observed_user, attempts in problem.attempts_by_user %}
+            {% for observed_user, attempts, valid, invalid, empty in problem.attempts_by_user %}
             <tr>
               <td>
-                <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}">{{ observed_user.get_full_name }}</a>
+                <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}"
+                   data-toggle="tooltip"
+                   title="{{ valid }} {% trans "valid" %} / {{ invalid }} {% trans "invalid" %} / {{ empty }} {% trans "empty" %} ">
+                   {{ observed_user.get_full_name }}</a>
               </td>
               <td width='60%'>
                 {% for attempt in attempts %}

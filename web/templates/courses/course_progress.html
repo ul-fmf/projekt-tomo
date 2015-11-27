@@ -15,17 +15,23 @@
   <div class="container">
     <h2>{{ observed_user.title }}</h2>
     <div class="row">
-      {% for problem_set, problem_set_attempts in course_attempts %}
+      {% for problem_set, problem_set_attempts, ps_valid, ps_invalid, ps_empty in course_attempts %}
       <div class="col-md-4">
-        <h3><a href="{{ problem_set.get_absolute_url }}">{{ problem_set.title }}</a></h3>
+        <h3><a href="{{ problem_set.get_absolute_url }}"
+                   data-toggle="tooltip"
+                   title="{{ ps_valid }} {% trans "valid" %} / {{ ps_invalid }} {% trans "invalid" %} / {{ ps_empty }} {% trans "empty" %} ">
+{{ problem_set.title }}</a></h3>
       </div>
       <div class="col-md-8">
         <table class="table table-condensed">
           <tbody>
-            {% for problem, problem_attempts in problem_set_attempts %}
+            {% for problem, problem_attempts, valid, invalid, empty in problem_set_attempts %}
             <tr>
               <td>
-                <a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
+                <a href="{{ problem.get_absolute_url }}"
+                   data-toggle="tooltip"
+                   title="{{ valid }} {% trans "valid" %} / {{ invalid }} {% trans "invalid" %} / {{ empty }} {% trans "empty" %} ">
+              {{ problem.title }}</a>
               </td>
               <td width='60%'>
                 {% for attempt in problem_attempts %}
