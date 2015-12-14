@@ -18,18 +18,6 @@ msgstr ""
 "%100==4 ? 2 : 3);\n"
 "X-Generator: Poedit 1.7.5\n"
 
-#: web/courses/models.py:63
-msgid "Hidden"
-msgstr "Skrite"
-
-#: web/courses/models.py:64
-msgid "Visible when solved"
-msgstr "Vidne po sprejeti rešitvi"
-
-#: web/courses/models.py:65 web/courses/models.py:70
-msgid "Visible"
-msgstr "Vidne"
-
 #: web/courses/models.py:68
 msgid "Title"
 msgstr "Naslov"
@@ -40,7 +28,7 @@ msgstr "Opis"
 
 #: web/courses/models.py:72
 msgid "Solution visibility"
-msgstr "Rešitve"
+msgstr "Vidnost rešitev"
 
 #: web/problems/templates/python/edit.py:21
 msgid ""
@@ -195,7 +183,7 @@ msgstr "Uradne rešitve so skrite"
 #. Translators: Uradne rešitve so pogojno vidne
 #: web/templates/courses/_problem_set.html:52
 msgid "Official solutions are visible when solved"
-msgstr "Uradne rešitve so pogojno vidne"
+msgstr "Uradne rešitve so vidne po sprejeti rešitvi"
 
 #. Translators: Uradne rešitve so vidne
 #: web/templates/courses/_problem_set.html:55

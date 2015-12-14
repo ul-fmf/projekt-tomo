@@ -72,9 +72,9 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
     SOLUTION_VISIBLE = 'V'
     SOLUTION_VISIBILITY_CHOICES = (
-        (SOLUTION_HIDDEN, _('Hidden')),
-        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Visible when solved')),
-        (SOLUTION_VISIBLE, _('Visible')),
+        (SOLUTION_HIDDEN, _('Official solutions are hidden')),
+        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Official solutions are visible when solved')),
+        (SOLUTION_VISIBLE, _('Official solutions are visible')),
     )
     course = models.ForeignKey(Course, related_name='problem_sets')
     title = models.CharField(max_length=70, verbose_name=_('Title'))
