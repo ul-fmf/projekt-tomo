@@ -226,7 +226,7 @@ class ProblemSetCreate(CreateView):
 
 class ProblemSetUpdate(UpdateView):
     model = ProblemSet
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'visible', 'solution_visibility']
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
