@@ -156,14 +156,14 @@ msgstr "Predmet učite"
 
 #: web/templates/courses/_course_header.html:19
 #: web/templates/courses/_course_header.html:21
-msgid "Remove from favorites"
-msgstr "Odstrani iz priljubljenih"
+msgid "Remove from my courses"
+msgstr "Odstrani iz mojih predmetov"
 
 #: web/templates/courses/_course_header.html:33
 #: web/templates/courses/_course_header.html:35 web/templates/homepage.html:34
 #: web/templates/homepage.html.py:35
-msgid "Add to favorites"
-msgstr "Dodaj med priljubljene"
+msgid "Add to my courses"
+msgstr "Dodaj med moje predmete"
 
 #. Translators: Sklop je viden
 #: web/templates/courses/_problem_set.html:32
