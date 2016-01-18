@@ -27,5 +27,5 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 # Tell nose to measure coverage on the 'problems', 'attemtps', 'courses' and 'users' apps
 NOSE_ARGS = [
     '--with-coverage',
-    '--cover-package=problems,attempts,courses,users',
+    '--cover-package=problems,attempts,courses,users,utils',
 ]

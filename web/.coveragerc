@@ -1,0 +1,6 @@
+[report]
+omit =
+	*/admin.py
+	*/migrations/*
+
+
