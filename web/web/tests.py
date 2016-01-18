@@ -18,7 +18,9 @@ class BasicViewsTestCase(TestCase):
 
         self.course = Course.objects.create()
         prob_set = ProblemSet.objects.create(course=self.course)
-        self.problem = Problem.objects.create(problem_set=prob_set)
+        visible_prob_set = ProblemSet.objects.create(course=self.course, visible=True)
+        problem = Problem.objects.create(problem_set=prob_set)
+        visible_problem = Problem.objects.create(problem_set=visible_prob_set)
         self.views = {
             'public':
                 [
@@ -26,27 +28,24 @@ class BasicViewsTestCase(TestCase):
                 ],
             'authenticated':
                 [
-                    ('homepage', dict())
+                    ('homepage', dict()),
+                    ('problem_set_detail', {'problem_set_pk': visible_prob_set.pk}),
+                    ('course_detail', {'course_pk': self.course.pk}),
+                    ('problem_attempt_file', {'problem_pk': visible_problem.pk}),
+                    ('problem_set_attempts', {'problem_set_pk': visible_prob_set.pk}),
+                    ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.user.pk}),
                 ],
             'student':
                 [
-                    ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
-                    ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
-                    ('course_detail', {'course_pk': self.course.pk}),
-                    ('problem_solution', {'problem_pk': self.problem.pk, 'user_pk': self.user.pk}),
-                    ('problem_attempt_file', {'problem_pk': self.problem.pk}),
                 ],
             'teacher':
                 [
-                    ('problem_edit_file', {'problem_pk': self.problem.pk}),
-                ],
-            'teacher_redirect':
-                [
-                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
-                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
-                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
-                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
-                ],
+                    ('problem_edit_file', {'problem_pk': problem.pk}),
+                    ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
+                    ('problem_attempt_file', {'problem_pk': problem.pk}),
+                    ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
+                    ('problem_solution', {'problem_pk': problem.pk, 'user_pk': self.user.pk}),
+                ]
         }
         self.default_redirect_view_name = 'login'
         self.client = Client()
@@ -122,7 +121,7 @@ class BasicViewsTestCase(TestCase):
         """
         try:
             self.login()
-            denied = self.views['teacher'] + self.views['teacher_redirect']
+            denied = self.views['teacher']
             for view, args in denied + self.views['student']:
                 self.assertDenied(view, args)
             self.course.students.add(self.user)
@@ -141,13 +140,8 @@ class BasicViewsTestCase(TestCase):
         try:
             self.login()
             self.course.teachers.add(self.user)
-            redirect_views = [view for view, args in self.views['teacher_redirect']]
             for view, args in chain.from_iterable(self.views.values()):
-                if view not in redirect_views:
-                    print("OK: " + view)
-                    self.assertOK(view, args)
-                else:
-                    print("Redirect: " + view)
-                    self.assertRedirect(view, args)
+                print("OK: " + view)
+                self.assertOK(view, args)
         finally:
             self.logout()
