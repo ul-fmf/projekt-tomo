@@ -30,6 +30,10 @@ class BasicViewsTestCase(TestCase):
             'public':
                 [
                     ('login', dict()),
+                    ('terms_of_service', dict()),
+                    ('help', dict()),
+                    ('help_students', dict()),
+                    ('help_teachers', dict()),
                 ],
             'authenticated':
                 [
@@ -43,14 +47,24 @@ class BasicViewsTestCase(TestCase):
             'student':
                 [
                 ],
+            'teacher_redirect':
+                [
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': -1}),
+                ],
             'teacher':
                 [
+                    ('course_users', {'course_pk': self.course.pk}),
                     ('problem_edit_file', {'problem_pk': problem.pk}),
+                    ('problem_set_edit', {'problem_set_pk': visible_problem.pk}),
                     ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
                     ('problem_attempt_file', {'problem_pk': problem.pk}),
                     ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
                     ('problem_solution', {'problem_pk': problem.pk, 'user_pk': self.user.pk}),
                     ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.other_user.pk}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': -1}),
+                    ('problem_set_progress', {'problem_set_pk': prob_set.pk}),
                 ]
         }
         self.default_redirect_view_name = 'login'
@@ -127,7 +141,7 @@ class BasicViewsTestCase(TestCase):
         """
         try:
             self.login()
-            denied = self.views['teacher']
+            denied = self.views['teacher'] + self.views['teacher_redirect']
             for view, args in denied + self.views['student']:
                 self.assertDenied(view, args)
             self.course.students.add(self.user)
@@ -146,8 +160,13 @@ class BasicViewsTestCase(TestCase):
         try:
             self.login()
             self.course.teachers.add(self.user)
+            redirect_views = [view for view, args in self.views['teacher_redirect']]
             for view, args in chain.from_iterable(self.views.values()):
-                print("OK: " + view)
-                self.assertOK(view, args)
+                if view not in redirect_views:
+                    print("OK: " + view)
+                    self.assertOK(view, args)
+                else:
+                    print("Redirect: " + view)
+                    self.assertRedirect(view, args)
         finally:
             self.logout()
