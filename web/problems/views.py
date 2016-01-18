@@ -172,7 +172,7 @@ def problem_solution(request, problem_pk, user_pk):
     """Show problem solution."""
     problem = Problem.objects.get(pk=problem_pk)
     student = get_object_or_404(User, pk=user_pk)
-    verify(student.can_view_problem(problem))
+    verify(request.user.can_view_problem_solution(problem, student))
     problem_set = problem.problem_set
     attempts = student.attempts.filter(part__problem__id=problem_pk)
     parts = problem.parts.all()

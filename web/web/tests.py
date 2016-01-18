@@ -16,6 +16,11 @@ class BasicViewsTestCase(TestCase):
             email='gregor@jerse.info',
             password='gregor')
 
+        self.other_user = User.objects.create_user(
+            username='sonja',
+            email='sonja@jerse.info',
+            password='sonja')
+
         self.course = Course.objects.create()
         prob_set = ProblemSet.objects.create(course=self.course)
         visible_prob_set = ProblemSet.objects.create(course=self.course, visible=True)
@@ -45,6 +50,7 @@ class BasicViewsTestCase(TestCase):
                     ('problem_attempt_file', {'problem_pk': problem.pk}),
                     ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
                     ('problem_solution', {'problem_pk': problem.pk, 'user_pk': self.user.pk}),
+                    ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.other_user.pk}),
                 ]
         }
         self.default_redirect_view_name = 'login'
