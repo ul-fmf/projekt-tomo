@@ -14,7 +14,7 @@ def update_fields(obj, new_values):
     for field, value in new_values.items():
         if value != getattr(obj, field):
             setattr(obj, field, value)
-        changed_fields.append(field)
+            changed_fields.append(field)
     return changed_fields
 
 

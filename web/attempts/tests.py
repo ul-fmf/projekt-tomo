@@ -133,3 +133,15 @@ class AttemptSubmitTestCase(TestCase):
         attempt = Attempt.objects.get()
         self.assertTrue(self.attempts_data[1]["valid"], "Attempt data should be true")
         self.assertFalse(attempt.valid, 'Attempt must be marked as invalid')
+
+    def testHistory(self):
+        self.client.post('/api/attempts/submit/', [self.attempts_data[2]],
+                         format='json')
+        self.client.post('/api/attempts/submit/', [self.attempts_data[3]],
+                         format='json')
+        self.assertEqual(Attempt.objects.count(), 1)
+        attempt = Attempt.objects.get()
+        self.assertEqual(attempt.history.count(), 2)
+        self.client.post('/api/attempts/submit/', [self.attempts_data[3]],
+                         format='json')
+        self.assertEqual(attempt.history.count(), 2)
