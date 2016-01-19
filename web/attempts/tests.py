@@ -8,7 +8,6 @@ from problems.models import Problem, Part
 
 
 class AttemptSubmitTestCase(TestCase):
-    fixtures = ['users.json']
 
     def setUp(self):
         course = Course.objects.create()
@@ -21,9 +20,9 @@ class AttemptSubmitTestCase(TestCase):
         self.part3 = Part(problem=problem, secret='["1", "2", "3"]')
         self.part3.save()
 
-        self.user = User.objects.get(username='matija')
+        user = User.objects.create_user(username='matija')
         self.client = APIClient()
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.user.auth_token.key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + user.auth_token.key)
 
         self.attempts_data = [
             {
@@ -133,4 +132,4 @@ class AttemptSubmitTestCase(TestCase):
                                                      " in the database")
         attempt = Attempt.objects.get()
         self.assertTrue(self.attempts_data[1]["valid"], "Attempt data should be true")
-        self.assertFalse(attempt.valid, 'Attempt must be marked as valid')
+        self.assertFalse(attempt.valid, 'Attempt must be marked as invalid')
