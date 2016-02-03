@@ -18,7 +18,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
     problem_set = models.ForeignKey('courses.ProblemSet', related_name='problems')
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
-
+    language = models.CharField(max_length=8, choices=(
+        ('python','Python 3'),
+        ('octave','Octave')), default = 'python')
+    EXTENSIONS = {'python':'py', 'octave': 'm'}
     class Meta:
         order_with_respect_to = 'problem_set'
 
@@ -42,9 +45,12 @@ class Problem(OrderWithRespectToMixin, models.Model):
         solutions = self.user_solutions(user)
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
         url = settings.SUBMISSION_URL + reverse('attempts-submit')
-        filename = "{0}.py".format(slugify(self.title))
-        contents = render_to_string("python/attempt.py", {
+        problem_slug = slugify(self.title).replace("-","_")
+        extension = self.EXTENSIONS[self.language]
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string("{0}/attempt.{1}".format(self.language, extension), {
             "problem": self,
+            "problem_title": problem_slug,
             "parts": parts,
             "submission_url": url,
             "authentication_token": authentication_token
