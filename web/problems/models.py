@@ -50,7 +50,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
         filename = "{0}.{1}".format(problem_slug, extension)
         contents = render_to_string("{0}/attempt.{1}".format(self.language, extension), {
             "problem": self,
-            "problem_title": problem_slug,
             "parts": parts,
             "submission_url": url,
             "authentication_token": authentication_token
@@ -84,8 +83,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse('problems-submit')
-        filename = "{0}-edit.py".format(slugify(self.title))
-        contents = render_to_string("python/edit.py", {
+        problem_slug = slugify(self.title).replace("-","_")
+        filename = "{0}_edit.{1}".format(problem_slug, self.EXTENSIONS[self.language])
+        contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
             "problem": self,
             "submission_url": url,
             "authentication_token": authentication_token

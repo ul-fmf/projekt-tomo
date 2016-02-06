@@ -168,72 +168,9 @@ check = struct();
 # varargin2struct.m
 {% include 'octave/jsonlab.m' %}
 
-function parts = extract_parts(filename)
-    f = fopen(filename, 'r');
-    source = '';
-    while (s = fgets(f)) > -1
-      source = [source s];
-    end
-    fclose(f)
-    part_regex = '# =+@(?<part>\d+)=\n';  # beginning of header
-    part_regex = [part_regex '(#( [^\n]*)?\n)+']; # description
-    part_regex = [part_regex '# =+\n'];           # end of header
-    part_regex = [part_regex '(?<solution>.*?)'];# solution
-    part_regex = [part_regex '(?=\n# =+@)'];     # beginning of next part
+{% include 'octave/utils.m' %}
 
-    [s, e, te, m, t, nm, sp] = regexp(source,part_regex,'dotall');
-    if iscell(nm.part)
-      parts = [];
-      for i=1:length(nm.part)
-        parts = [parts struct("part",nm.part(i),"solution", strtrim(nm.solution(i)))];
-      end
-    else
-      parts = [struct("part",nm.part,"solution",strtrim(nm.solution))];
-    end
-    # The last solution extends all the way to the validation code,
-    # so we strip any trailing whitespace from it.
-endfunction
 
-function [response,output] = submit_parts(parts, url, token)
-       submited_parts = cell();
-       for part = parts
-           if check_has_solution(part)
-               #data = [data '{ "secret":'
-               part.feedback = savejson('',part.feedback);
-               submited_parts(end+1) = part;
-               #submited_parts(end).feedback = savejson(submited_parts(end).feedback);
-            end
-        end
-       #data = [data "]" ];
-       data = savejson('',submited_parts); #.encode('utf-8')
-       pycall = [...
-       'python3 - 2>&1 << EOF',"\n",...
-       'import json, urllib.request',"\n",...
-       'data = r"""' data '"""',"\n",...
-       'blk_data = data.encode("utf-8")',"\n",...
-       'headers = { "Authorization": "' token '","content-type": "application/json" }',"\n",...
-       'request = urllib.request.Request("' url '", data=blk_data, headers=headers)',"\n",...
-       'response = urllib.request.urlopen(request)',"\n",...
-       'response = json.loads(response.read().decode("utf-8"))',"\n",...
-       'for part in response["attempts"]:',"\n",...
-       '  print("%s: %d" %(part["part"],part["valid"]))',"\n",...
-       'EOF'];
-       # TODO print feedback as well
-       # disp(pycall)
-
-       #'response = post(''' url ''')'
-       #'print(response.text)"']
-       [response,output] = system(pycall);
-       if response
-         disp('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
-         disp(output)
-       else
-         disp('rešitve so shranjene.')
-       end
-       #request = urllib.request.Request(url, data=data, headers=headers)
-       #response = urllib.request.urlopen(request)
-       #return json.loads(response.read().decode('utf-8'))
-endfunction
 function update_attempts(response)
   global check
   valid_regex = "([0-9]+): *([01])";
@@ -249,6 +186,7 @@ function update_attempts(response)
   end
 endfunction
 
+
 function validation = validate_current_file()
   global check;
 
@@ -262,9 +200,9 @@ function validation = validate_current_file()
 %        return backup_filename
 %
 %
-%  filename = argv()(end) # current filename
-  filename = which("{{ problem_title }}");
-  file_parts = extract_parts(filename);
+  src = char(fileread(mfilename("fullpathext")));
+  fclose(fp);
+  file_parts = extract_parts(src);
   check_initialize(file_parts);
 
   {% for part, _ in parts %}
@@ -277,10 +215,22 @@ function validation = validate_current_file()
       end
   {% endfor %}
 
-printf('Shranjujem rešitve na strežnik... ');
-url = "{{ submission_url }}"; #'https://www.projekt-tomo.si/api/attempts/submit/';
-token = "Token {{ authentication_token }}"; #'Token 0779d82c83d98c1e4a5480e4e6f57b906598f5ee';
-response = submit_parts(check.parts, url, token);
+
+
+submited_parts = cell();
+for part = check.parts
+    if check_has_solution(part)
+        #data = [data '{ "secret":'
+        part.feedback = savejson('',part.feedback);
+        submited_parts(end+1) = part;
+        #submited_parts(end).feedback = savejson(submited_parts(end).feedback);
+     end
+end
+
+url = "{{ submission_url }}";
+token = "Token {{ authentication_token }}";
+
+response = submit_parts(submited_parts, url, token);
 update_attempts(response);
 check_summarize()
 endfunction
