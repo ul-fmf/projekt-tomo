@@ -187,7 +187,7 @@ function update_attempts(response)
 endfunction
 
 
-function validation = validate_current_file()
+function validation = validate_current_file(src)
   global check;
 
 #    def backup(filename):
@@ -200,8 +200,6 @@ function validation = validate_current_file()
 %        return backup_filename
 %
 %
-  src = char(fileread(mfilename("fullpathext")));
-  fclose(fp);
   file_parts = extract_parts(src);
   check_initialize(file_parts);
 
@@ -219,11 +217,10 @@ function validation = validate_current_file()
 
 submited_parts = cell();
 for part = check.parts
+    part = part{1};
     if check_has_solution(part)
-        #data = [data '{ "secret":'
         part.feedback = savejson('',part.feedback);
-        submited_parts(end+1) = part;
-        #submited_parts(end).feedback = savejson(submited_parts(end).feedback);
+        submited_parts{end+1} = part;
      end
 end
 
@@ -235,5 +232,6 @@ update_attempts(response);
 check_summarize()
 endfunction
 
-validate_current_file();
+src = char(fileread(mfilename("fullpathext")));
+validate_current_file(src);
 # attempt.m
