@@ -6,6 +6,7 @@ from problems.rest import ProblemViewSet
 from courses.rest import CourseViewSet
 from courses.views import homepage
 from utils.views import help, terms_of_service
+from users.views import mobile_app_token
 import courses.urls
 
 
@@ -28,6 +29,7 @@ urlpatterns = patterns('',
     ))),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/mobile-app-token/', mobile_app_token, name='mobile_app_token'),
     url(r'^api/', include(router.urls)),
     url(r'^problems/', include('problems.urls')),
 )
