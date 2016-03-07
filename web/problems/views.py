@@ -41,7 +41,7 @@ class ProblemCreate(CreateView):
     Create new problem by specifying title and description.
     '''
     model = Problem
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'language']
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)
