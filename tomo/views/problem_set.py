@@ -9,9 +9,9 @@ from django.template.loader import render_to_string
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from courses.models import Course, ProblemSet
 from tomo.utils import verify, zip_archive
-from problems.models import Language
+from problems.models import Language, Problem
 from submissions.models import Attempt
-from .problem import student_contents, teacher_contents
+from .problem import student_contents, teacher_contents, dump_contents
 
 def view_problem_set(request, pk):
     problem_set = get_object_or_404(ProblemSet, id=pk)
@@ -126,6 +126,22 @@ def student_zip(request, pk):
         filename = "{0}/{1:02d}-{2}".format(archivename, i + 1, problem.filename())
         contents = student_contents(request, problem, request.user,
                                     request.user.is_authenticated())
+        files.append((filename, contents))
+    return zip_archive(archivename, files)
+
+def problems_archive(request):
+    filenames = {}
+    archivename = "ALL.zip"
+    files = []
+    for problem in Problem.objects.all():
+        filename = problem.filename()
+        if filename in filenames:
+            filenames[filename] += 1
+            filename = filename + "-" + str(filenames[filename])
+        else:
+            filenames[filename] = 0
+        filename = "{0}/{1}".format(archivename, filename)
+        contents = dump_contents(request, problem)
         files.append((filename, contents))
     return zip_archive(archivename, files)
 

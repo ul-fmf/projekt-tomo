@@ -213,6 +213,13 @@ def teacher_contents(request, problem, user):
     return render_to_string(problem.language.teacher_file,
                             context_instance=RequestContext(request, context))
 
+def dump_contents(request, problem):
+    context = RequestContext(request, {
+        'problem': problem,
+        'parts': problem.parts.all(),
+    })
+    return render_to_string(problem.language.dump_file, context)
+
 def teacher_download(request, pk=None):
     problem = get_object_or_404(Problem, id=pk)
     verify(problem.problem_set.course.has_teacher(request.user))

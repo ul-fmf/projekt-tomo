@@ -24,6 +24,10 @@ class Language(models.Model):
     def moss_file(self):
         return self.student_file.replace("student", "moss")
 
+    @property
+    def dump_file(self):
+        return self.student_file.replace("student", "dump")
+
 
 class Problem(models.Model):
     author = models.ForeignKey(User, related_name='problems')

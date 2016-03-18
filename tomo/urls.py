@@ -6,6 +6,7 @@ from .views.problem_set import ProblemSetCreate, ProblemSetUpdate, ProblemSetDel
 urlpatterns = patterns('',
     url(r'^$', 'tomo.views.homepage', name='homepage'),
     url(r'^settings/$', 'tomo.views.settings', name='settings'),
+    (r'^dump_all/$', 'tomo.views.problem_set.problems_archive'),
     (r'^problem_set/', include(patterns('tomo.views.problem_set',
         (r'^(?P<pk>\d+)/', include(patterns('tomo.views.problem_set',
             url(r'^$', 'view_problem_set', name='problem_set'),
