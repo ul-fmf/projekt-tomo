@@ -1,0 +1,7 @@
+django-bootstrap3==6.2.2
+Django==1.8.5
+djangorestframework==3.2.4
+Markdown==2.6.3
+django-simple-history==1.6.3
+django-taggit==0.17.3
+python-social-auth==0.2.13

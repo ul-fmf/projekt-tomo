@@ -4,6 +4,8 @@ from django.template.defaultfilters import slugify
 from users.models import User
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
+from attempts.models import Attempt
+from problems.models import Part
 
 
 class Course(models.Model):
@@ -11,30 +13,58 @@ class Course(models.Model):
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
-    tags = TaggableManager()
+    institution = models.CharField(max_length=140)
+    tags = TaggableManager(blank=True)
 
     class Meta:
         ordering = ['title']
 
     def __unicode__(self):
-        return self.title
-
-    def recent_problem_sets(self, n=3):
-        return self.problem_sets.reverse().filter(visible=True)[:n]
-
-    # show users courses
-    def user_courses(self, user):
-        return user.courses
-
-    def is_teacher(self, user):
-        return (user in self.teachers.all())
-
-    def is_student(self, user):
-        return (user in self.students.all())
+        return u'{} @{{{}}}'.format(self.title, self.institution)
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('course_detail', args=[str(self.pk)])
+
+    def recent_problem_sets(self, n=3):
+        return self.problem_sets.reverse().filter(visible=True)[:n]
+
+    def user_attempts(self, user):
+        attempts = {}
+        for attempt in user.attempts.filter(part__problem__problem_set__course=self):
+            attempts[attempt.part_id] = attempt
+        sorted_attempts = []
+        for problem_set in self.problem_sets.all().prefetch_related('problems__parts'):
+            problem_set_attempts = []
+            prob_set_valid = prob_set_invalid = prob_set_empty = 0
+            for problem in problem_set.problems.all():
+                valid = invalid = empty = 0
+                problem_attempts = [attempts.get(part.pk) for part in problem.parts.all()]
+                for attempt in problem_attempts:
+                    if attempt is None:
+                        empty += 1
+                    elif attempt.valid:
+                        valid += 1
+                    else:
+                        invalid += 1
+                problem_set_attempts.append((problem, problem_attempts, valid, invalid, empty))
+                prob_set_valid += valid
+                prob_set_invalid += invalid
+                prob_set_empty += empty
+            sorted_attempts.append((problem_set, problem_set_attempts, prob_set_valid, prob_set_invalid, prob_set_empty))
+        return sorted_attempts
+
+    def annotate_for_user(self, user):
+        self.is_taught = user.can_edit_course(self)
+        self.is_favourite = user.is_favourite_course(self)
+        self.annotated_problem_sets = []
+        for problem_set in self.problem_sets.all():
+            if user.can_view_problem_set(problem_set):
+                problem_set.percentage = problem_set.valid_percentage(user)
+                if problem_set.percentage is None:
+                    problem_set.percentage = 0
+                problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+                self.annotated_problem_sets.append(problem_set)
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
@@ -42,9 +72,9 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
     SOLUTION_VISIBLE = 'V'
     SOLUTION_VISIBILITY_CHOICES = (
-        (SOLUTION_HIDDEN, _('Hidden')),
-        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Visible when solved')),
-        (SOLUTION_VISIBLE, _('Visible')),
+        (SOLUTION_HIDDEN, _('Official solutions are hidden')),
+        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Official solutions are visible when solved')),
+        (SOLUTION_VISIBLE, _('Official solutions are visible')),
     )
     course = models.ForeignKey(Course, related_name='problem_sets')
     title = models.CharField(max_length=70, verbose_name=_('Title'))
@@ -61,6 +91,31 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def student_success(self):
+        student_count = self.course.students.count()
+        attempts = Attempt.objects.filter(user__courses=self.course,
+                                          part__problem__problem_set=self)
+        submitted_count = attempts.count()
+        valid_count = attempts.filter(valid=True).count()
+        part_count = Part.objects.filter(problem__problem_set=self).count()
+        invalid_count = submitted_count - valid_count
+        total_count = student_count * part_count
+
+        if total_count:
+            valid_percentage = int(100.0 * valid_count / total_count)
+            invalid_percentage = int(100.0 * invalid_count / total_count)
+        else:
+            valid_percentage = 0
+            invalid_percentage = 0
+
+        empty_percentage = 100 - valid_percentage - invalid_percentage
+        return {
+            'valid': valid_percentage,
+            'invalid': invalid_percentage,
+            'empty': empty_percentage,
+            'grade': min(5, int(valid_percentage / 20) + 1)
+        }
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse

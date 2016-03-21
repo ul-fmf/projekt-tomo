@@ -1,62 +1,104 @@
 {% extends 'base.html' %}
 {% load i18n %}  
-{% load bootstrap3 %} 
+{% load staticfiles %}
 
-{# Translators: Title of login page. #}
-{% block title %}{% trans "Welcome" %}{% endblock %}
 
 {% block navigation %}
-<!-- Override navigation defined in base.html -->
+<nav class="navbar navbar-default navbar-fixed-top topnav tomo-login-header"
+     role="navigation" style="text-align: right">
+  <div class="container" style="text-align: right">
+    <div class="dropdown">
+      <a class="btn btn-default tomo-login-signin dropdown-toggle"
+         data-toggle="dropdown">
+         <i class="fa fa-user"></i>
+         {% trans 'Sign in' %}
+      </a>
+      <div class="dropdown-menu tomo-login">
+        <p>
+          {% blocktrans %}
+          Login with an external provider
+          {% endblocktrans %}
+        </p>
+        <div class="form-group">
+          <a class="btn btn-default" style="font-size: 1.3em" role="button"
+             href="/Shibboleth.sso/Login">
+             <i class="fa fa-university fa-lg"></i> {% trans 'ArnesAAI' %}
+          </a>
+        </div>
+        <div class="form-group">
+          <a class="btn btn-default" style="font-size: 0.8em" role="button"
+             href="{% url 'social:begin' 'facebook' %}?next={{ request.path }}">
+             <i class="fa fa-facebook fa-lg"></i> {% trans 'Facebook' %}
+          </a>
+          <a class="btn btn-default" style="font-size: 0.8em" role="button"
+             href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">
+             <i class="fa fa-google fa-lg"></i> {% trans 'Google' %}
+          </a>
+        </div>
+
+          <p><small>
+            {% blocktrans %}
+            You can login using one of the external providers listed above.
+            We recommend that Slovene students and teachers use
+            <a href="https://aai.arnes.si">ArnesAAI</a> single sign-on service.
+            {% endblocktrans %}
+          </small></p>
+
+        <hr>
+
+        <p><small>
+          {% url 'terms_of_service' as terms_of_service_url %}
+          {% blocktrans %}
+          By logging in you agree to our
+          <a href="{{ terms_of_service_url }}">Terms of service</a>.
+          Our website uses cookies.
+          {% endblocktrans %}
+        </small></p>
+      </div>
+    </div>
+  </div>
+</nav>
 {% endblock %}
 
 {% block content %}
-      <div class="jumbotron">
-      {# Translators: description of project Tomo #}
-	  <h1>{% trans "Project Tomo" %}</h1>
-	  <p>{% blocktrans %} Project Tomo is your personal programming teacher. You learn by solving problems
-	      on your computer and Tomo informs you how well you are doing. {% endblocktrans %}
-	  </p>
-      </div> <!-- End jumbotron -->
-    
-     {# Translators: must sign in #}
-	  <p>{% blocktrans %}You must sign-in before the first use. You must use the same username and password 
-		      that you use on student computers.{% endblocktrans %}
-	  </p>
-    <!-- vnos uporabniškega imena in gesla -->
-    <form role="form" action="{% url "django.contrib.auth.views.login" %}" method="post">
-    	{% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}" />
-        {% if form.errors %}
-        <div class="alert alert-danger alert-dismissable alert-link">
-            <button class="close" type="button" data-dismiss="alert" aria-hidden="true">×</button>
-            {# Translators: sign-in error #}
-            <strong>{% trans "Sign-in error!" %}</strong>
-            {% blocktrans %}Use the same username and password that you use on student computers,
-             for example <code>NovakJ14</code> and <code>Triglav.1</code>. {% endblocktrans %}
-        </div>
-        {% endif %}
+<div class="intro-header">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="intro-message">
+          <div class="col-md-6 tomo-intro">
+            <img src="{% static 'img/logo.svg' %}" class="img-responsive"
+                 alt="{% trans 'Project Tomo' %}" width="100%">
+          </div>
 
-        <div class="form-group">
-        	<label class="sr-only" for="id_username">
-        	{# Translators: Input for username on login page. #}
-        	{% trans "Username" %}
-        	</label>
-        	<input class="form-control" id="id_username" maxlength="254" name="username" placeholder="NovakJ14" required="required" title="" type="text" autocomplete="off">
-        </div>
-        <div class="form-group">
-        	<label class="sr-only" for="id_password">
-        	{# Translators: Input for password on login page. #}
-        	{% trans "Password" %}
-        	</label>
-        	<input class="form-control" id="id_password" maxlength="254" name="password" placeholder="Triglav.1" required="required" title="" type="password" autocomplete="off">
-        </div>
+          {# Translators: description of project Tomo #}
+          <h3>{% trans 'Your personal programming teacher.' %}</h3>
 
-    	{% buttons %}
-	        <button type="submit" class="btn btn-default">
-	        	{# Translators: Button for sign-in on login page. #}
-	            {% trans "Sign in" %}
-	        </button>
-	    {% endbuttons %}
-      </form>
+          <div class="col-md-6 tomo-intro">
+            <hr>
+            <script async class="speakerdeck-embed" data-id="6ec1b05b5f9b4dad964da31b47471a98" data-ratio="1.33333333333333" src="//speakerdeck.com/assets/embed.js"></script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
-  
+
+{% block footer %}
+<div class="container">
+  <img src="{% static 'img/sponzorji.png' %}" class="center-block"
+       alt="{% trans 'Sponsors' %}" title="{% trans 'Sponsors' %}">
+  <p>
+    {% blocktrans %}
+    This work was funded in part by the European Union, European Regional
+    Development Fund and the Ministry of Education, Science and Sport.
+    The operation is implemented in the framework of the Operational Program
+    for Strengthening Regional Development Potentials for the Period 2007 – 2013,
+    Development priority: Economic development infrastructure,
+    Priority theme: Information society.
+    {% endblocktrans %}
+  </p>
+</div>
+{{ block.super }}
+{% endblock %}

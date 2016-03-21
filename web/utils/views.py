@@ -1,6 +1,16 @@
 import StringIO
 import zipfile
 from django.http import HttpResponse
+from django.shortcuts import render
+
+
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')
+
+
+def help(request, special=None):
+    template = 'help_{}.html'.format(special) if special else 'help.html'
+    return render(request, template)
 
 
 def plain_text(name, contents, content_type='text/plain'):

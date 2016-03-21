@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from rest_framework.reverse import reverse
 from problems.models import Problem, Part
 from courses.models import ProblemSet
+from users.models import User
 from utils.views import plain_text
 from utils import verify
 
@@ -16,8 +17,7 @@ def problem_attempt_file(request, problem_pk):
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_view_problem(problem))
     filename, contents = problem.attempt_file(user=request.user)
-    return plain_text(filename, contents)
-
+    return plain_text(filename, contents, content_type='text/x-python')
 
 @login_required
 def problem_edit_file(request, problem_pk):
@@ -25,7 +25,7 @@ def problem_edit_file(request, problem_pk):
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem(problem))
     filename, contents = problem.edit_file(user=request.user)
-    return plain_text(filename, contents)
+    return plain_text(filename, contents, content_type='text/x-python')
 
 
 @login_required
@@ -41,7 +41,7 @@ class ProblemCreate(CreateView):
     Create new problem by specifying title and description.
     '''
     model = Problem
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'language']
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)
@@ -63,6 +63,7 @@ class ProblemUpdate(UpdateView):
     Update problem title and description.
     '''
     model = Problem
+    fields = '__all__'
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
@@ -114,7 +115,7 @@ def copy_form(request, problem_pk):
         b) user can edit the problem set.
         Returns the copy of the given problem.
         """
-        verify(user.can_edit_problem_set(original_problem.problem_set))
+        verify(user.can_view_problem(original_problem))
         verify(request.user.can_edit_problem_set(new_problem_set))
         new_problem = Problem()
         new_problem.title = original_problem.title
@@ -167,12 +168,13 @@ def get_courses_and_problem_sets(request):
         problem_sets = problem_sets + course.problem_sets.values_list('problem_set_id', flat=True)
 
 @login_required
-def problem_solution(request, problem_pk):
+def problem_solution(request, problem_pk, user_pk):
     """Show problem solution."""
     problem = Problem.objects.get(pk=problem_pk)
-    verify(request.user.can_view_problem(problem))
+    student = get_object_or_404(User, pk=user_pk)
+    verify(request.user.can_view_problem_solution(problem, student))
     problem_set = problem.problem_set
-    attempts = request.user.attempts.filter(part__problem__id=problem_pk)
+    attempts = student.attempts.filter(part__problem__id=problem_pk)
     parts = problem.parts.all()
 
     for part in parts:
@@ -182,8 +184,10 @@ def problem_solution(request, problem_pk):
             part.attempt = None
     return render(request, 'problems/solutions.html',
                   {
-                      'parts': parts,
+                      'problem': problem,
                       'problem_set': problem_set,
+                      'parts': parts,
+                      'student': student,
                       'is_teacher': request.user.can_edit_problem_set(problem_set),
                   }
                   )

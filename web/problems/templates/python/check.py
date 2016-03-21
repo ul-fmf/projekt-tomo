@@ -104,26 +104,68 @@ class Check:
             Check.error('Pri vhodni datoteki {0} z vsebino\n  {1}\nso se pojavile naslednje napake:\n- {2}', filename, '\n  '.join(content), '\n- '.join(new_feedback))
 
     @staticmethod
+    @contextmanager
+    def input(content, encoding=None):
+        old_stdin = sys.stdin
+        old_feedback = Check.current_part['feedback'][:]
+        sys.stdin = io.StringIO('\n'.join(content))
+        try:
+            yield
+        finally:
+            sys.stdin = old_stdin
+        new_feedback = Check.current_part['feedback'][len(old_feedback):]
+        Check.current_part['feedback'] = old_feedback
+        if new_feedback:
+            new_feedback = ['\n  '.join(error.split('\n')) for error in new_feedback]
+            Check.error('Pri vhodu\n  {0}\nso se pojavile naslednje napake:\n- {1}', '\n  '.join(content), '\n- '.join(new_feedback))
+
+    @staticmethod
     def out_file(filename, content, encoding=None):
         with open(filename, encoding=encoding) as f:
             out_lines = f.readlines()
-        len_out, len_given = len(out_lines), len(content)
-        if len_out < len_given:
-            out_lines += (len_given - len_out) * ['\n']
+        equal, diff, line_width = Check.difflines(out_lines, content)
+        if equal:
+            return True
         else:
-            content += (len_out - len_given) * ['\n']
+            Check.error('Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}', filename, (line_width - 7) * ' ', '\n  '.join(diff))
+            return False
+
+    @staticmethod
+    def output(expression, content):
+        old_stdout = sys.stdout
+        sys.stdout = io.StringIO()
+        try:
+            def visible_input(prompt):
+                inp = input(prompt)
+                print(inp)
+                return inp
+            exec(Check.current_part['solution'], {'input': visible_input})
+        finally:
+            output = sys.stdout.getvalue().strip().splitlines()
+            sys.stdout = old_stdout
+        equal, diff, line_width = Check.difflines(output, content)
+        if equal:
+            return True
+        else:
+            Check.error('Program izpiše{0}  namesto:\n  {1}', (line_width - 13) * ' ', '\n  '.join(diff))
+            return False
+
+    @staticmethod
+    def difflines(actual_lines, expected_lines):
+        actual_len, expected_len = len(actual_lines), len(expected_lines)
+        if actual_len < expected_len:
+            actual_lines += (expected_len - actual_len) * ['\n']
+        else:
+            expected_lines += (actual_len - expected_len) * ['\n']
         equal = True
-        line_width = max(len(out_line.rstrip()) for out_line in out_lines + ['je enaka'])
+        line_width = max(len(actual_line.rstrip()) for actual_line in actual_lines + ['je enaka'])
         diff = []
-        for out, given in zip(out_lines, content):
+        for out, given in zip(actual_lines, expected_lines):
             out, given = out.rstrip(), given.rstrip()
             if out != given:
                 equal = False
             diff.append('{0} {1} {2}'.format(out.ljust(line_width), '|' if out == given else '*', given))
-        if not equal:
-            Check.error('Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}', filename, (line_width - 7) * ' ', '\n  '.join(diff))
-            return False
-        return True
+        return equal, diff, line_width
 
     @staticmethod
     def generator(expression, expected_values, should_stop=False, further_iter=0, env={}, clean=None):

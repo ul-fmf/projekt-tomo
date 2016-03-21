@@ -5,7 +5,7 @@ from views import ProblemUpdate, ProblemCreate, ProblemDelete
 
 urlpatterns = patterns(
     '',
-    url(r'^(?P<problem_pk>\d+)/solutions/$',
+    url(r'^(?P<problem_pk>\d+)/solutions/(?P<user_pk>\d+)$',
         views.problem_solution,
         name='problem_solution'),
     url(r'^(?P<problem_pk>\d+)/download/$',
@@ -28,5 +28,5 @@ urlpatterns = patterns(
         name='problem_delete'),
     url(r'^(?P<problem_pk>\d+)/copy/',
         views.copy_form,
-        name='problem_copy')
+        name='problem_copy'),
 )

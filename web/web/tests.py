@@ -16,37 +16,56 @@ class BasicViewsTestCase(TestCase):
             email='gregor@jerse.info',
             password='gregor')
 
+        self.other_user = User.objects.create_user(
+            username='sonja',
+            email='sonja@jerse.info',
+            password='sonja')
+
         self.course = Course.objects.create()
         prob_set = ProblemSet.objects.create(course=self.course)
-        self.problem = Problem.objects.create(problem_set=prob_set)
+        visible_prob_set = ProblemSet.objects.create(course=self.course, visible=True)
+        problem = Problem.objects.create(problem_set=prob_set)
+        visible_problem = Problem.objects.create(problem_set=visible_prob_set)
         self.views = {
             'public':
                 [
                     ('login', dict()),
+                    ('terms_of_service', dict()),
+                    ('help', dict()),
+                    ('help_students', dict()),
+                    ('help_teachers', dict()),
                 ],
             'authenticated':
                 [
-                    ('homepage', dict())
+                    ('homepage', dict()),
+                    ('problem_set_detail', {'problem_set_pk': visible_prob_set.pk}),
+                    ('course_detail', {'course_pk': self.course.pk}),
+                    ('problem_attempt_file', {'problem_pk': visible_problem.pk}),
+                    ('problem_set_attempts', {'problem_set_pk': visible_prob_set.pk}),
+                    ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.user.pk}),
                 ],
             'student':
                 [
-                    ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
-                    ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
-                    ('course_detail', {'course_pk': self.course.pk}),
-                    ('problem_solution', {'problem_pk': self.problem.pk}),
-                    ('problem_attempt_file', {'problem_pk': self.problem.pk}),
-                ],
-            'teacher':
-                [
-                    ('problem_edit_file', {'problem_pk': self.problem.pk}),
                 ],
             'teacher_redirect':
                 [
-                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
-                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
-                    ('problem_set_move', {'problem_set_pk': prob_set.pk, 'shift': 1}),
-                    ('problem_move', {'problem_pk': self.problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': -1}),
                 ],
+            'teacher':
+                [
+                    ('course_users', {'course_pk': self.course.pk}),
+                    ('problem_edit_file', {'problem_pk': problem.pk}),
+                    ('problem_set_edit', {'problem_set_pk': visible_problem.pk}),
+                    ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
+                    ('problem_attempt_file', {'problem_pk': problem.pk}),
+                    ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
+                    ('problem_solution', {'problem_pk': problem.pk, 'user_pk': self.user.pk}),
+                    ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.other_user.pk}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': -1}),
+                    ('problem_set_progress', {'problem_set_pk': prob_set.pk}),
+                ]
         }
         self.default_redirect_view_name = 'login'
         self.client = Client()

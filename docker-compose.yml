@@ -1,0 +1,43 @@
+ 
+# Data only container.
+# Use debian:jessie image as it is the base for all other images we use.
+dbdata:
+  image: debian:jessie
+  volumes:
+    - /var/lib/postgresql/data
+  command: echo "Tomo database data only container"
+
+# Database container based on official postgres image.
+# Database username, name and password are only used if no database exists.
+db:
+  image: postgres
+  volumes_from:
+    - dbdata
+  restart: always
+  environment:
+    - POSTGRES_USER=tomo
+    - POSTGRES_DB=tomo
+    - POSTGRES_PASSWORD=tomo_geslo
+
+# Tomo web service based on matijapretnar/projekt-tomo image.
+tomo:
+  image: matijapretnar/projekt-tomo
+  ports:
+    - "8080:8080"
+  links:
+    - db
+  environment:
+    - DJANGO_SETTINGS_MODULE=web.settings.arnes
+    - SECRET_KEY=type_your_secret_key
+    - UWSGI_CHDIR=/home/tomo/projekt-tomo/web
+    - UWSGI_MODULE=web.wsgi.arnes:application
+    - UWSGI_MASTER=True
+    - UWSGI_PIDFILE=/tmp/project-master.pid
+    - UWSGI_VACUUM=True
+    - UWSGI_MAX_REQUESTS=5000
+    - UWSGI_UID=tomo
+    - UWSGI_GID=tomo
+    - UWSGI_SOCKET=:8080
+    - UWSGI_PLUGINS=python
+    - UWSGI_STATIC_MAP=/static=/home/tomo/projekt-tomo/web/static
+  restart: always

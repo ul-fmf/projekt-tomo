@@ -4,7 +4,7 @@
 {% if form.instance.pk %}
 	<form action="{% url 'problem_set_update' problemset.id %}"  method="post" id='edit_problem_set_form'>
 {% else %}
-	<form action="{% url 'problem_set_create' course.id %}"  method="post" id='add_problem_set_form'>
+	<form action="{% url 'problem_set_create' course_pk %}"  method="post" id='add_problem_set_form'>
 {% endif %}
 	{% csrf_token %}
     	<input type="hidden" name="problem_set" id="id_problem_set" value="{{ form.instance.problem_set.id }}" />

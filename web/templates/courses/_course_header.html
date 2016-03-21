@@ -1,0 +1,52 @@
+{% load i18n %}
+<div class="tomo-course-header">
+
+  <span class="pull-left">
+  {% if course.is_taught %}
+    <button class="tomo-taught"
+            aria-label="{% trans "Taught course" %}"
+            data-toggle="tooltip"
+            title="{% trans "Taught course" %}">
+      <i class="fa fa-graduation-cap fa-lg"></i>
+    </button>
+  {% elif course.is_favourite %}
+    <form action="{% url 'unenroll_from_course' course.pk %}"
+          method="post"
+          id='unenroll_from_course_form'>
+      {% csrf_token %}
+      <button class="tomo-unenroll"
+              type="submit"
+              aria-label="{% trans "Remove from my courses" %}"
+              data-toggle="tooltip"
+              title="{% trans "Remove from my courses" %}">
+        <i class="fa fa-star fa-lg"></i>
+        <i class="fa fa-star-o fa-lg"></i>
+      </button>
+    </form>
+  {% else %}
+    <form action="{% url 'enroll_in_course' course.pk %}"
+          method="post"
+          id='enroll_in_course_form'>
+      {% csrf_token %}
+      <button class="tomo-enroll"
+              type="submit"
+              aria-label="{% trans "Add to my courses" %}"
+              data-toggle="tooltip"
+              title="{% trans "Add to my courses" %}">
+        <i class="fa fa-star fa-lg"></i>
+        <i class="fa fa-star-o fa-lg"></i>
+      </button>
+    </form>
+  {% endif %}
+  </span>
+
+  <h2 class="section-heading">
+    <hr class="section-heading-spacer">
+    <div class="clearfix"></div>
+    <a href="{% url 'course_detail' course.pk %}">
+      {{ course.title }}
+    </a>
+  </h2>
+
+</div>
+

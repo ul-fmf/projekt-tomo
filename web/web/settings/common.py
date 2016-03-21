@@ -18,10 +18,12 @@ INSTALLED_APPS = (
     'simple_history',
     'courses',
     'taggit',
+    'social.apps.django_app.default',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -50,6 +52,5 @@ TEMPLATE_DIRS = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locales'),
+    os.path.join(BASE_DIR, 'locale'),
 )
-

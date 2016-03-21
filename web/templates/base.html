@@ -10,110 +10,82 @@
     {# Translators: Default heading for pages (defined in base.html) #}
     <title>{% block title %}{% trans "Project Tomo" %}{% endblock %}</title>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">    	
-    <style type="text/css"> body { padding-top: 70px; }</style>  <!-- so fixed navigation bar will not overlay other content-->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/startbootstrap-landing-page/1.0.4/css/landing-page.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="//fonts.googleapis.com/css?family=Open Sans:300,400,700,300italic,400italic,700italic" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">      
+    <link href="{% static 'css/tomo.css' %}" rel="stylesheet">
   </head>
   <body>
-  
-  	{% if user.is_authenticated %}
- 	{% endif %}
-
-    <div class="container">
-  
     {% block navigation %}
-        <nav class="navbar navbar-inverse navbar-fixed-top">
-      		<div class="container-fluid">
-        		<div class="navbar-header">
-        			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-            			<span class="sr-only">Toggle navigation</span>
-            			<span class="icon-bar"></span>
-            			<span class="icon-bar"></span>
-            			<span class="icon-bar"></span>
-          			</button>
-          			 <a class="navbar-brand" href="{% url 'homepage' %}">Tomo</a>
-        		</div>
-        		<div class="collapse navbar-collapse" id="myNavbar">
-        			<ul class="nav navbar-nav navbar-left">
-	        			{% block navigation-left %} 
-    	    		 	{% endblock %} 
-        			</ul>
-        			<ul class="nav navbar-nav navbar-right">
-	        			{% block navigation-right %} 
-    	    		 	{% endblock %} 
-        				<li>
-        					<a href="{% url 'logout' %}?next={% url 'login' %}">
-        						{# Translators: Link for logout in navigation bar (top right) #}
-        						{{ user.get_full_name }} {% trans "(logout)" %}
-        					</a>
-     	     			</li>
-        			</ul>
-       			</div>        		
-      		</div>
-    	</nav>
+    <nav class="navbar navbar-default navbar-fixed-top topnav tomo-page-header" role="navigation">
+        <div class="container topnav">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand topnav tomo-home" href="{% url 'homepage' %}"><img src="{% static 'img/logo.svg' %}" alt="Projekt Tomo"></a>
+                {% block navigation-left %} 
+                {% endblock %} 
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    {# Translators: Link for logout in navigation bar (top right) #}
+                    <li><a href="{% if user.uses_shibboleth %}/Shibboleth.sso/Logout?return={% else %}{% url 'logout' %}?next={% endif %}{% url 'login' %}">{{ user.get_full_name }} {% trans "(logout)" %}</a></li>
+                    <li><a href="{% url 'help' %}"><i class="fa fa-question-circle fa-lg"></i><span class="sr-only">{% trans 'Help' %}</span></a></li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
     {% endblock %}
 
     {% block modal %}
-	<div class="modal fade" id="modal" role="dialog" aria-labelledby="modal dialog">  
-	<!--  TODO: change aria-labelledby in javascript that opens modal -->
-	    <div class="modal-dialog" role="document">
-	    	<div class="modal-content" id="modal_content"></div>
-	  	</div>
-	</div>
-	{% endblock %}
+  	<div class="modal fade" id="modal" role="dialog" aria-labelledby="modal dialog">  
+  	<!--  TODO: change aria-labelledby in javascript that opens modal -->
+  	    <div class="modal-dialog" role="document">
+  	    	<div class="modal-content" id="modal_content"></div>
+  	  	</div>
+  	</div>
+  	{% endblock %}
 
     {% block body %}  {% block content %}{% endblock %}  {% endblock %}
-    </div><!-- /.container -->
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>    
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        tex2jax: {
-          inlineMath: [["$", "$"], ["\\(", "\\)"]]
-        }
-      });
-    </script>
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>    
     <script src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-    <script>
-      $(document).ready(function() {
-        $("code").each(function() {
-            $(this).addClass("prettyprint")
-        });
-        prettyPrint();
-      });
-    </script>
+    <script src="{% static 'js/tomo.js' %}"></script>
     {% block extra_js %}{% endblock %}
+    <!-- Footer -->
     <footer>
-	    <div class="container">
-        <div class="row">
-          <div class="col-md-4">
-          {# Translators: Univerza v Ljubljani #}
-            <img src="http://tyrion.fmf.uni-lj.si/ul.png" class="center-block" alt="{% trans 'University of Ljubljana' %}" 
-            	 title="{% trans 'University of Ljubljana' %}" style="max-width: 100%; max-height: 6em">
-          </div>
-          <div class="col-md-4">
-          {# Translators: Evropski sklad za regionalni razvoj #}
-            <img src="http://tyrion.fmf.uni-lj.si/ess.png" class="center-block" alt="{% trans 'European Regional Development Fund' %}" 
-            	 title="{% trans 'European Regional Development Fund' %}" style="max-width: 100%; max-height: 6em">
-          </div>
-          <div class="col-md-4">
-          {# Translators: Ministrstvo za izobraževanje, znanost in šport #}
-            <img src="http://tyrion.fmf.uni-lj.si/mizs.png" class="center-block" alt="{% trans 'Ministry of Education, Science and Sport' %}" 
-            	 title="{% trans 'Ministry of Education, Science and Sport' %}" style="max-width: 100%; max-height: 6em">
-          </div>
+    {% block footer %}
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <ul class="list-inline">
+                        <li><a href="{% url 'help' %}">{% trans 'Help' %}</a></li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="https://github.com/matijapretnar/projekt-tomo">GitHub</a></li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="{% url 'terms_of_service' %}">{% trans 'Terms of service' %}</a></li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li><a href="mailto:info@projekt-tomo.si">{% trans 'Contact' %}</a></li>
+                    </ul>
+                    
+                    <p class="copyright text-muted small">{% trans "Copyright &copy; Faculty of Mathematics and Physics, University of Ljubljana, 2015. All Rights Reserved "%}</p>
+                </div>
+            </div>
         </div>
-        <p>
-        {# Translators: Text in footer. #}
-        {% blocktrans %}
-        This work was funded in part by the European Union, European Regional Development Fund and the Ministry of Education, 
-        Science and Sport. The operation is implemented in the framework of the Operational Program for Strengthening Regional Development 
-        Potentials for the Period 2007 – 2013, Development priority: Economic development infrastructure, Priority theme: Information society.
-        {% endblocktrans %}
-           
-        </p>
-      </div>
+    {% endblock footer %}
     </footer>
   </body>
 </html>

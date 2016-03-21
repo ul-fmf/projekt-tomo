@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load i18n %}               
+{% load staticfiles %}
+
+{% block title %}Tomo – {% trans 'Help' %}{% endblock %}
+
+ 
+{% block navigation-left %} 
+<a class="navbar-brand topnav" href="{% url 'help' %}">{% trans 'Help' %}</a>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-top-section"><div class="container">
+<h2>{% trans 'Help' %}</h2>
+
+<p>Tomo je spletna storitev, namenjena hitrejšemu učenju programskih jezikov. Tomo ponuja bazo nalog, ki jih samostojno rešujemo (pišemo programe) in avtomatsko dobimo povratno informacijo, ali napisani program pravilno deluje na testnih podatkih.
+</p>
+
+<h2>Tehnične zahteve</h2>
+    <ol>
+        <li>spletni brskalnik</li>
+        <li>možnost nalaganja datotek</li>
+        <li>urejevalnik za pisanje kode (priporočamo IDLE)</li>
+        <li>Python 3.0 ali več (dostopen <a href="https://www.python.org/downloads/">tukaj</a>)</li>
+    </ol>
+
+<a href="{% url 'help_students' %}"><h4>Navodila za uporabo - učenci</h4></a>
+<a href="{% url 'help_teachers' %}"><h4>Navodila za uporabo - učitelji</h4></a>
+</div></div>
+{% endblock content %}

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Tomo{% endblock %}
+
+{% block navigation-left %} 
+    <li class="active"><a href="{% url 'course_detail' course.pk %}">{{ course.title }} <span class="sr-only">(current)</span></a></li>
+{% endblock %}
+
+{% block content %}
+
+<div class="panel panel-default">
+ 	<div class="panel-heading">
+    	<h3 class="panel-title">
+	    	{# Translators: List of all teachers in a course - heading#}
+	    	{% trans "Teachers" %}
+   		</h3>
+ 	 </div>
+ 	 <ul class="list-group">
+		 {% for teacher in course.teachers.all %}
+	     <li class="list-group-item">
+	     	<div class="row">
+			    <div class="col-md-6">
+		            {{ teacher.get_full_name }}
+	            </div>
+	            <div class="col-md-6">
+	            	<span class="pull-right">
+			            <form action="{% url 'demote_to_student' course.pk  teacher.pk%}"  method="post" id='demote_to_student_form'>
+			            	{% csrf_token %}
+				            <button class="btn btn-default btn-sm" type="submit" aria-label="Demote">
+				            	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+				            	{# Translators: Demote teacher to student - button#}
+								{% trans "Demote to student" %}
+							</button>
+						</form>
+					</span>
+				</div>
+        	</div>
+  		 </li>
+  		 {% endfor %}
+  	</ul>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+    	<h3 class="panel-title">
+	    	{# Translators: List of all students in a course - heading#}
+	    	{% trans "Students" %}
+   		</h3>
+  	</div>
+  	<ul class="list-group">
+		{% for student in students %}
+	    <li class="list-group-item">
+	    	<div class="row">
+			    <div class="col-md-3">
+			    	<a href="{% url 'course_progress' course.pk  student.pk %}">
+		            	{{ student.get_full_name }}
+	            	</a>
+	            </div>
+                <div class="col-md-8">
+                    <div class="progress" style="width: 100%">
+                        <div style="width: {{ student.correct_percentage }}" class="progress-bar progress-bar-success"></div>
+                        <div style="width: {{ student.incorrect_percentage }}" class="progress-bar progress-bar-danger"></div>
+                    </div>
+                </div>
+	            <div class="col-md-1">
+	            	<span class="pull-right">
+			            <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
+			            	{% csrf_token %}
+				            <button class="btn btn-default btn-sm" type="submit" aria-label="Promote">
+				            	<span class="glyphicon glyphicon-education" aria-hidden="true"></span>
+<!-- 				            	{# Translators: Promote student to teacher - button#}
+								{% trans "Promote to teacher" %}
+ -->							</button>
+						</form>
+					</span>
+				</div>
+        	</div>
+  		</li>
+  		{% endfor %}
+  	</ul>
+</div>
+
+{% endblock content %}

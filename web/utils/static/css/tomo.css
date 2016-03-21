@@ -1,0 +1,327 @@
+.intro-header {
+  background: url(../img/intro-bg.jpg) center center no-repeat;
+  background-size: cover;
+}
+
+/* for centering images according to HTML5 standard */
+.center_image {
+  margin: 20px auto;
+  display:block;
+    max-width: 80%;
+}
+
+.center_text {
+  text-align:center;
+}
+
+.help-table {
+    border-collapse: collapse;
+}
+
+.help-table, th, td {
+  border: 1px solid black;
+}
+
+
+a { color: #23527c; }
+.dropdown { position: relative; }
+.content-section-y { background-color: rgba(215, 160, 44, .8); }
+
+.color1 { color: #A92D2D; }
+.color2 { color: #C0672D; }
+.color3 { color: #D7A02C; }
+.color4 { color: #AF982A; }
+.color5 { color: #878F28; }
+.background1 { background-color: #A92D2D; }
+.background2 { background-color: #C0672D; }
+.background3 { background-color: #D7A02C; }
+.background4 { background-color: #AF982A; }
+.background5 { background-color: #878F28; }
+.background-alpha1 { background-color: rgba(169, 45, 45, .2); }
+.background-alpha2 { background-color: rgba(192, 103, 45, .2); }
+.background-alpha3 { background-color: rgba(215, 160, 44, .2); }
+.background-alpha4 { background-color: rgba(175, 152, 42, .2); }
+.background-alpha5 { background-color: rgba(135, 143, 40, .2); }
+
+.tomo-thin { font-weight: 300; }
+.tomo-institution { color: #666; font-weight: 300; }
+.tomo-lecturer { font-style: italic; color: #A92D2D; }
+.tomo-lecturers { list-style-type: none; color: #A92D2D; font-weight: 500; padding: 0; margin: 10px 0; }
+.tomo-students { list-style-type: none; font-weight: 400; padding: 0; margin: 10px 0; }
+.tomo-students li { margin: 7px 0; }
+li .tomo-teacher-switch { display: none; }
+li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { display: inline; }
+.tomo-teacher-switch button { margin: 0 0 0 10px; border: none; padding: 0; background: none; color: #000; }
+.tomo-teacher-switch button:hover { color: #D7A02C }
+
+.tomo-home { margin: 0 40px 0 0; padding: 0; }
+.tomo-home img { height: 100%; }
+
+.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
+.tomo-login-header { background: none; border: none; }
+.tomo-login-signin { margin: 15px 2px 0 0; background-color: rgba(255, 255, 255, 0.5); }
+.tomo-login-signin i { margin-right: 10px; }
+.tomo-login hr { border-color: #999; }
+.tomo-login form { margin: 0; border-radius: 4px; padding: 0 1em; }
+.tomo-login small { font-weight: 300; }
+.tomo-login .btn { margin: 0px 7px; background-color: rgba(135, 143, 40, .5) }
+.tomo-login .btn i { margin-right: 10px; }
+.tomo-login .fa-google { vertical-align: -25% } /* vertical position fix */
+
+
+.intro-message h3 { clear: both; }
+
+.dropdown-menu { rgba(255, 255, 255, 0.2); }
+.tomo-intro { float: none; margin: 0 auto; text-align: center; }
+.tomo-intro hr { border-top: 1px solid #f8f8f8; border-bottom: 1px solid rgba(0,0,0,0.2); }
+
+.tomo-page-header { background: url(../img/intro-bg.jpg) no-repeat center center; background-size: cover; }
+.tomo-page-header .navbar-brand { color: #f8f8f8; }
+.tomo-page-header .navbar-brand:hover { color: #ccc; }
+.tomo-page-header .navbar-nav>li>a { color: #f8f8f8; }
+.tomo-page-header .navbar-nav>li>a:hover { color: #ccc; }
+
+.tomo-course-header { margin-left: 0px; }
+.tomo-course-header h2 { padding-left: 0px; }
+.tomo-course-header span { margin: 20px 0 0 -6px; }
+.tomo-course-header hr { margin-left: 5px; }
+.tomo-course-header .tomo-taught { color: #ddd; }
+.tomo-course-header .tomo-taught:focus, .tomo-course-header .tomo-taught:hover { cursor: default; }
+.tomo-course-header .pull-left { margin-top: 5px; }
+.tomo-enroll { color: #A92D2D; }
+.tomo-unenroll { color: #D7A02C; }
+.tomo-unenroll .fa-star-o, .tomo-unenroll:hover .fa-star { display: none; }
+.tomo-unenroll:hover .fa-star-o { display: inline; color: #A92D2D; }
+.tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
+.tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
+
+.tomo-courses li { margin: 10px 0; padding: 0; }
+.tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; display: inline-block; border: 0;}
+.tomo-courses h4 { margin: 0; padding: 0; line-height: 1.2em; vertical-align: baseline; }
+.tomo-courses .media, .tomo-courses p { margin: 0; }
+.tomo-courses .media-left { height: 50px; line-height: 38px; font-size: 30px; text-align: right; padding-left: 10px; }
+.tomo-courses .media-left p { display: block; width: 80px; }
+.tomo-courses .media-middle { padding-left: 20px; }
+.tomo-courses .media-right { float: right; margin-right: 20px; }
+.tomo-courses button { border: none; background-color: rgba(215, 160, 44, .2); color: #D7A02C; }
+
+.tomo-chapter-heading { margin-left: 0px; }
+.tomo-chapter-heading span { margin: 10px 0 0 0; }
+.tomo-chapter-heading a.btn { padding: 0; }
+.tomo-chapter-heading hr { margin-left: 10px; }
+.tomo-chapter-heading .caret {}
+.tomo-chapter-heading .btn { padding-top: 10px; background: none; border: none; color: #878F28; }
+.tomo-chapter-heading .btn:hover, .tomo-chapter-heading .btn:focus, .tomo-chapter-heading .open>.btn
+  { color: #AF982A; background: none; border: none; }
+.tomo-chapter-heading [type="button"]:active { box-shadow: none; }
+.tomo-chapter-heading .caret { padding-bottom: 13px; }
+.tomo-task-heading .btn-default { width: 40px; color: #fff; }
+.tomo-task-heading .dropdown-toggle { padding: 5px 8px; text-align: center; }
+.tomo-task-heading .caret { margin: 0 0 -5px -2px; }
+.tomo-task-heading .download-btn { background-color: #878F28; }
+.tomo-task-heading .solutions-btn { background-color: #D7A02C; }
+.tomo-task-heading .edit-btn { border: 1px solid #ccc; background-color: rgba(215, 160, 44, .2); color: #D7A02C; }
+.tomo-task-heading .edit-btn:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
+.tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
+.tomo-subtasks { font-weight: 300; }
+.tomo-col-noleftpadding { padding-left: 0; }
+.tomo-add-task { background-color: #878F28; color: #fff; }
+.tomo-add-task i { margin-right: 10px; }
+.tomo-add-task:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
+
+.tomo-other { margin: 0; padding: 0; }
+.tomo-other .col-md-4 { margin-right: 0px; height: 15em; padding: 2em 4em; }
+.tomo-other .col-md-4:hover { background-color: rgba(255, 255, 255, 0.5);}
+.tomo-other h3 { padding-right: 40px; font-size: 1.4em; }
+.tomo-other .tomo-institution { margin: 0; padding: 0; text-align: right; }
+.tomo-other button { border: none; background: none; }
+.tomo-course-header button { border: none; background: none; font-size: 1.2em;}
+.tomo-other .tomo-enroll { margin-top: 20px; color: #fff; }
+.tomo-other .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
+.tomo-other .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
+
+.tomo-overview-student { margin-top: 3em; }
+.tomo-overview-student h3 { font-size: 1.2em; }
+.tomo-overview-student table { font-weight: 300; margin-top: 1em; }
+.tomo-overview-student .table>tbody>tr>td { border: none; border-bottom: 1px solid #e7e7e7; }
+.tomo-overview-student .row { border-top: 3px solid #e7e7e7; margin-bottom: 2em; }
+/* .tomo-overview-student .container .row:nth-child(even) { background-color: #eee; }
+.tomo-overview-student .container .row:nth-child(odd) { background-color: #fff; } */
+
+.tomo-task-solutions { margin-top: 2em; }
+.tomo-task-solutions .tomo-pre { white-space: pre-wrap; font-family: monospace; background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    height: 100%;
+    font-weight: 300;
+    font-size: 0.8em;
+    border-radius: 4px; padding: 5px 7px; }
+.tomo-message {
+    /*color: #D7A02C;*/
+    /*position: absolute;*/
+    font-size: 1.2em;
+    text-align: center;
+
+}
+.tomo-task { margin: 1em 0; }
+.tomo-solution-user {
+  margin: 0;
+  padding: 0;
+  /*float: left;*/
+  width: 200px;
+  /*text-align: right;*/
+  color: #D7A02C;
+}
+.tomo-solution-official {
+ /*float: right;*/
+ width: 200px;
+ color:#878F28;
+}
+/*.tomo-solution-code-user { margin-left: 30px; }*/
+/*.tomo-solution-code-official { margin-right: 30px; }*/
+
+footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
+
+.chart { width: 1.2em; height: 1.2em; display: block; float: left; margin: .1em 10px 0 0; }
+.chart path { cursor: pointer; }
+
+.affix-top, .affix { position: static; }
+@media (min-width: 979px) {
+  #sidebar.affix-top { position: static; margin-top: 30px; width: 228px; }
+  #sidebar.affix { position: fixed; top: 70px; width: 228px; }
+}
+#sidebar a { font-size: 1em;  }
+#sidebar li { margin: 15px 0; }
+#sidebar li a { padding: 2px 0; }
+#sidebar li.active { background-color: #fff; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius: 5px; }
+#sidebar .subtasks { overflow: auto; }
+#sidebar .subtasks a { font-size: 1em; display: block; width: 2em; text-align: left; margin: 0px; float: left; }
+#sidebar .subtasks .chart { float: left; margin: .05em 0 0 5px; }
+
+
+/* Same height columns */
+.inside {}
+.inside-full-height {
+  /* if you want to give content full height give him height: 100%;
+  // with content full height you can't apply margins to the content
+  // content full height does not work in ie http://stackoverflow.com/questions/27384433/ie-display-table-cell-child-ignores-height-100 */
+  height: 100%; margin: 0;
+}
+.content { padding: 0; height: 100%; }
+.content .tomo-solution-code-official { padding: 0; height: 100%; }
+.content .tomo-solution-code-user { padding: 0; height: 100%; }
+.content .tomo-solution-code-official .tomo-pre { margin: 0; height: 100%; }
+
+/* columns of same height styles */
+.row-height { display: table; table-layout: fixed; height: 100%; width: 100%; }
+.col-height { display: table-cell; float: none; height: 100%; }
+.col-top { vertical-align: top; }
+.col-middle { vertical-align: middle; }
+.col-bottom { vertical-align: bottom; }
+
+@media (min-width: 480px) {
+  .row-xs-height { display: table; table-layout: fixed; height: 100%; width: 100%; }
+  .col-xs-height { display: table-cell; float: none; height: 100%; }
+  .col-xs-top { vertical-align: top; }
+  .col-xs-middle { vertical-align: middle; }
+  .col-xs-bottom { vertical-align: bottom; }
+}
+@media (min-width: 768px) {
+  .row-sm-height { display: table; table-layout: fixed; height: 100%; width: 100%; }
+  .col-sm-height { display: table-cell; float: none; height: 100%; }
+  .col-sm-top { vertical-align: top; }
+  .col-sm-middle { vertical-align: middle; }
+  .col-sm-bottom { vertical-align: bottom; }
+}
+@media (min-width: 992px) {
+  .row-md-height { display: table; table-layout: fixed; height: 100%; width: 100%; }
+  .col-md-height { display: table-cell; float: none; height: 100%; }
+  .col-md-top { vertical-align: top; }
+  .col-md-middle { vertical-align: middle; }
+  .col-md-bottom { vertical-align: bottom; }
+}
+@media (min-width: 1200px) {
+  .row-lg-height { display: table; table-layout: fixed; height: 100%; width: 100%; }
+  .col-lg-height { display: table-cell; float: none; height: 100%; }
+  .col-lg-top { vertical-align: top; }
+  .col-lg-middle { vertical-align: middle; }
+  .col-lg-bottom { vertical-align: bottom; }
+}
+
+
+/* plain text */
+.pln {
+  color: #22221b;
+}
+ 
+@media screen {
+  /* string content */
+  .str {
+    color: #878F28;
+  }
+ 
+  /* a keyword */
+  .kwd {
+    color: #A92D2D;
+    font-weight: 800;
+  }
+ 
+  /* a comment */
+  .com {
+    color: #878573;
+  }
+ 
+  /* a type name */
+  .typ {
+    color: #AF982A;
+  }
+ 
+  /* a literal value */
+  .lit {
+    color: #C0672D;
+  }
+ 
+  /* punctuation */
+  .pun {
+    color: #22221b;
+  }
+ 
+  /* lisp open bracket */
+  .opn {
+    color: #22221b;
+  }
+ 
+  /* lisp close bracket */
+  .clo {
+    color: #22221b;
+  }
+ 
+  /* a markup tag name */
+  .tag {
+    color: #ba6236;
+  }
+ 
+  /* a markup attribute name */
+  .atn {
+    color: #C0672D;
+  }
+ 
+  /* a markup attribute value */
+  .atv {
+    color: #5b9d48;
+  }
+ 
+  /* a declaration */
+  .dec {
+    color: #C0672D;
+  }
+ 
+  /* a variable name */
+  .var {
+    color: #ba6236;
+  }
+ 
+  /* a function name */
+  .fun {
+    color: #AF982A;
+  }
+}
