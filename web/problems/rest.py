@@ -75,7 +75,8 @@ class ProblemViewSet(ModelViewSet):
             existing_ids = set(parts_to_update.values_list('id', flat=True))
             to_update_ids = set([part['id'] for part in parts_to_update_data])
             missing_ids = to_update_ids.difference(existing_ids)
-            message = 'Parts with ids {0} are not in the database.'.format(missing_ids)
+            missing_ids = ['@{0:06d}'.format(missing_id) for missing_id in missing_ids]
+            message = 'Parts {0} do not belong to the given problem.'.format(', '.join(missing_ids))
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
         # Prepare custom sort order
         # Assign None to ids of not already created parts

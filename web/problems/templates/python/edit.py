@@ -142,7 +142,7 @@ def _validate_current_file():
                 print('\n{% trans "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM!" %}')
                 if message:
                     print('  ' + '\n  '.join(message.splitlines()))
-                print('{% trans " Please, try again." %}')
+                print('{% trans "Please, try again." %}')
             else:
                 print('{% trans "Problem saved." %}')
         else:
