@@ -228,25 +228,13 @@ msgstr "Dodaj sklop"
 
 #. Translators: Demote teacher to student - button
 #: web/templates/courses/course_detail.html:56
-#: web/templates/courses/course_users.html:33
 msgid "Demote to student"
 msgstr "Status študenta"
 
 #. Translators: Promote student to teacher - button
 #: web/templates/courses/course_detail.html:75
-#: web/templates/courses/course_users.html:73
 msgid "Promote to teacher"
 msgstr "Status učitelja"
-
-#. Translators: List of all teachers in a course - heading
-#: web/templates/courses/course_users.html:16
-msgid "Teachers"
-msgstr "Učitelji"
-
-#. Translators: List of all students in a course - heading
-#: web/templates/courses/course_users.html:48
-msgid "Students"
-msgstr "Študenti"
 
 #. Translators: Title of copy problem modal.
 #: web/templates/courses/problem_copy_form.html:6

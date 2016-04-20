@@ -54,7 +54,6 @@ class BasicViewsTestCase(TestCase):
                 ],
             'teacher':
                 [
-                    ('course_users', {'course_pk': self.course.pk}),
                     ('problem_edit_file', {'problem_pk': problem.pk}),
                     ('problem_set_edit', {'problem_set_pk': visible_problem.pk}),
                     ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
