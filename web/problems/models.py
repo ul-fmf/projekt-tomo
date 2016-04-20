@@ -56,31 +56,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def student_success(self):
-        students = self.problem_set.course.observed_students()
-        student_count = len(students)
-        attempts = Attempt.objects.filter(user__in=students,
-                                          part__problem=self)
-        submitted_count = attempts.count()
-        valid_count = attempts.filter(valid=True).count()
-        part_count = Part.objects.filter(problem=self).count()
-        invalid_count = submitted_count - valid_count
-        total_count = student_count * part_count
-
-        if total_count:
-            valid_percentage = int(100.0 * valid_count / total_count)
-            invalid_percentage = int(100.0 * invalid_count / total_count)
-        else:
-            valid_percentage = 0
-            invalid_percentage = 0
-
-        empty_percentage = 100 - valid_percentage - invalid_percentage
-        return {
-            'valid': valid_percentage,
-            'invalid': invalid_percentage,
-            'empty': empty_percentage
-        }
-
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse('problems-submit')

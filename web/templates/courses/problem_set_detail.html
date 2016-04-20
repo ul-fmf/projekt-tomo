@@ -203,7 +203,7 @@
 <script src="{% static 'js/piechart.js' %}"></script>
 <script>
 $(function() {
-  {% for problem, success in problem_success %}
+  {% for problem in problem_set.problems.all %}
   {% for part in problem.parts.all %}
   {% if show_teacher_forms %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
