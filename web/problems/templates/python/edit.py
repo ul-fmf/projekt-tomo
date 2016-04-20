@@ -137,8 +137,12 @@ def _validate_current_file():
                         f.write(response['update'])
                     print('{% trans "Previous file has been renamed to" %} {0}.'.format(backup_filename))
                     print('{% trans "If the file did not refresh in your editor, close and reopen it." %}')
-            except urllib.error.URLError:
-                print('\n{% trans "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM! Please, try again." %}')
+            except urllib.error.URLError as response:
+                message = json.loads(response.read().decode('utf-8'))
+                print('\n{% trans "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM!" %}')
+                if message:
+                    print('  ' + '\n  '.join(message.splitlines()))
+                print('{% trans " Please, try again." %}')
             else:
                 print('{% trans "Problem saved." %}')
         else:

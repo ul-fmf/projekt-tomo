@@ -97,9 +97,13 @@ msgstr "Stara datoteka je bila preimenovana v"
 msgid "If the file did not refresh in your editor, close and reopen it."
 msgstr "Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite."
 
-#: web/problems/templates/python/edit.py:141
-msgid "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM! Please, try again."
-msgstr "PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Prosimo, poskusite znova."
+#: web/problems/templates/python/edit.py:142
+msgid "AN ERROR OCCURED WHEN TRYING TO SAVE THE PROBLEM!"
+msgstr "PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE!"
+
+#: web/problems/templates/python/edit.py:145
+msgid "Please, try again."
+msgstr "Prosimo, poskusite znova."
 
 #: web/problems/templates/python/edit.py:143
 msgid "Problem saved."
