@@ -144,14 +144,14 @@ class BasicViewsTestCase(TestCase):
             denied = self.views['teacher'] + self.views['teacher_redirect']
             for view, args in denied + self.views['student']:
                 self.assertDenied(view, args)
-            self.course.students.add(self.user)
+            self.course.enroll_student(self.user)
             for view, args in self.views['student']:
                 self.assertOK(view, args)
             for view, args in denied:
                 self.assertDenied(view, args)
         finally:
             self.logout()
-            self.course.students.remove(self.user)
+            self.course.unenroll_student(self.user)
 
     def testTeacher(self):
         """

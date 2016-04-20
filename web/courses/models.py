@@ -11,7 +11,7 @@ from problems.models import Part
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    students = models.ManyToManyField(User, blank=True, related_name='courses')
+    students = models.ManyToManyField(User, blank=True, related_name='courses', through='StudentEnrollment')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
     institution = models.CharField(max_length=140)
     tags = TaggableManager(blank=True)
@@ -65,6 +65,43 @@ class Course(models.Model):
                     problem_set.percentage = 0
                 problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
                 self.annotated_problem_sets.append(problem_set)
+
+    def enroll_student(self, user):
+        enrollment = StudentEnrollment(course=self, user=user)
+        enrollment.save()
+
+    def unenroll_student(self, user):
+        enrollment = StudentEnrollment.objects.get(course=self, user=user)
+        enrollment.delete()
+
+    def promote_to_teacher(self, user):
+        self.unenroll_student(user)
+        self.teachers.add(user)
+
+    def demote_to_student(self, user):
+        self.enroll_student(user)
+        self.teachers.remove(user)
+
+    def toggle_observed(self, user):
+        enrollment = StudentEnrollment.objects.get(course=self, user=user)
+        enrollment.observed = not enrollment.observed
+        enrollment.save()
+
+    def observed_students(self):
+        observed = []
+        for enrollment in StudentEnrollment.objects.filter(course=self, observed=True):
+            observed.append(enrollment.user)
+        return observed
+
+
+class StudentEnrollment(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    observed = models.BooleanField(default=True)
+
+    class Meta:
+        unique_together = ('course', 'user')
+
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):

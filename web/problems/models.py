@@ -136,7 +136,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
-        for user in self.problem_set.course.students.all():
+        observed_students = self.problem_set.course.observed_students()
+        for user in observed_students:
             valid = invalid = empty = 0
             user_attempts = [attempts[user].get(part) for part in self.parts.all()]
             for attempt in user_attempts:

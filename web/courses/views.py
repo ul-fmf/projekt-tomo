@@ -83,7 +83,7 @@ def course_detail(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
-        students = list(course.students.exclude(taught_courses=course))
+        students = course.observed_students()
         problem_sets = course.problem_sets.filter(visible=True)
         part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
         attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
@@ -144,8 +144,17 @@ def promote_to_teacher(request, course_pk, student_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
     student = get_object_or_404(User, pk=student_pk)
-    course.teachers.add(student)
-    course.students.remove(student)
+    course.promote_to_teacher(student)
+    return redirect(course)
+
+
+@login_required
+def toggle_observed(request, course_pk, student_pk):
+    """Promote student to teacher in a given course"""
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_edit_course(course))
+    student = get_object_or_404(User, pk=student_pk)
+    course.toggle_observed(student)
     return redirect(course)
 
 
@@ -155,8 +164,7 @@ def demote_to_student(request, course_pk, teacher_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
     teacher = get_object_or_404(User, pk=teacher_pk)
-    course.students.add(teacher)
-    course.teachers.remove(teacher)
+    course.demote_to_student(teacher)
     return redirect(course)
 
 
@@ -182,7 +190,7 @@ def homepage(request):
 def enroll_in_course(request, course_pk):
     """Enrolls user in a course as a student."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.students.add(request.user)
+    course.enroll_student(request.user)
     return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -190,8 +198,7 @@ def enroll_in_course(request, course_pk):
 def unenroll_from_course(request, course_pk):
     """Unenrolls user (student or teacher) from a course."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.students.remove(request.user)
-    course.teachers.remove(request.user)
+    course.unenroll_student(request.user)
     return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -200,7 +207,6 @@ def unenroll_from_course(request, course_pk):
 def problem_set_move(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_course(problem_set.course))
-    print request.POST
     if 'move_up' in request.POST:
         problem_set.move(-1)
     elif 'move_down' in request.POST:

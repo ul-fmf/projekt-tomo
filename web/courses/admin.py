@@ -1,11 +1,18 @@
 from django.contrib import admin
-from .models import Course, ProblemSet
+from .models import Course, ProblemSet, StudentEnrollment
+
+
+class StudentEnrollmentInline(admin.StackedInline):
+    model = StudentEnrollment
 
 
 class CourseAdmin(admin.ModelAdmin):
     filter_horizontal = (
         'teachers',
         'students',
+    )
+    inlines = (
+        StudentEnrollmentInline,
     )
 
 
