@@ -3,7 +3,7 @@
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
 # {{ forloop.counter }}. podnaloga
 # {% if not attempt %}BREZ REŠITVE{% elif attempt.valid %}VELJAVNA REŠITEV{% else %}NEVELJAVNA REŠITEV{% endif %}{% if attempt and attempt.feedback_list %}{% for feedback in attempt.feedback_list %}
-# - {{ feedback }}{% endfor %}{% endif %}
+# - {{ feedback|indent:"#   "|safe }}{% endfor %}{% endif %}
 # =============================================================================
 {% if attempt %}{{ attempt.solution|safe }}{% endif %}{% endfor %}
 
