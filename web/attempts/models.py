@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from simple_history.models import HistoricalRecords
 from users.models import User
@@ -18,3 +19,6 @@ class Attempt(models.Model):
     def __unicode__(self):
         return u'{} vs. @{:06d}: {}'.format(self.user.username, self.part.pk,
                                             'valid' if self.valid else 'invalid')
+
+    def feedback_list(self):
+        return json.loads(json.loads(self.feedback))

@@ -233,3 +233,11 @@ def course_progress(request, course_pk, user_pk):
         'observed_user': user,
         'course_attempts': course.user_attempts(user)
     })
+
+
+@login_required
+def problem_set_results(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_view_problem_set_attempts(problem_set))
+    archive_name, files = problem_set.results_archive(request.user)
+    return zip_archive(archive_name, files)

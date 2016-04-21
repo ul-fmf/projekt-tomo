@@ -45,7 +45,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         solutions = self.user_solutions(user)
         parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
         url = settings.SUBMISSION_URL + reverse('attempts-submit')
-        problem_slug = slugify(self.title).replace("-","_")
+        problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}.{1}".format(problem_slug, extension)
         contents = render_to_string("{0}/attempt.{1}".format(self.language, extension), {
@@ -56,10 +56,24 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
+    def marking_file(self, user):
+        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
+        parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
+        username = user.get_full_name() or user.username
+        problem_slug = slugify(username).replace("-", "_")
+        extension = self.EXTENSIONS[self.language]
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string("{0}/marking.{1}".format(self.language, extension), {
+            "problem": self,
+            "parts": parts,
+            "user": user,
+        })
+        return filename, contents
+
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse('problems-submit')
-        problem_slug = slugify(self.title).replace("-","_")
+        problem_slug = slugify(self.title).replace("-", "_")
         filename = "{0}_edit.{1}".format(problem_slug, self.EXTENSIONS[self.language])
         contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
             "problem": self,

@@ -79,3 +79,9 @@ def latex_markdown(source):
 def verify(cond):
     if not cond:
         raise PermissionDenied
+
+
+@register.filter
+@stringfilter
+def remove_spaces(source):
+    return source.replace(" ", "").replace("\n", "")

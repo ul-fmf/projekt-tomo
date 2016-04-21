@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
+from django.template.loader import render_to_string
 from users.models import User
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
@@ -167,6 +168,46 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def edit_archive(self, user):
         files = [problem.edit_file(user) for problem in self.problems.all()]
         archive_name = "{0}-edit".format(slugify(self.title))
+        return archive_name, files
+
+    def results_archive(self, user):
+        students = self.course.observed_students()
+        user_ids = set()
+        attempt_dict = {}
+        attempts = Attempt.objects.filter(user__in=students,
+                                          part__problem__problem_set=self)
+        for attempt in attempts:
+            user_id = attempt.user_id
+            user_ids.add(user_id)
+            user_attempts = attempt_dict.get(user_id, {})
+            user_attempts[attempt.part_id] = attempt
+            attempt_dict[user_id] = user_attempts
+        users = User.objects.filter(id__in=user_ids)
+
+        archive_name = "{0}-results".format(slugify(self.title))
+        files = []
+
+        for problem in self.problems.all():
+            folder = slugify(problem.title)
+            for user in users.all():
+                filename, contents = problem.marking_file(user)
+                files.append(('{0}/{1}'.format(folder, filename), contents))
+
+        users = []
+        for user in User.objects.filter(id__in=user_ids).order_by('last_name'):
+            user_attempts = []
+            for problem in self.problems.all():
+                for part in problem.parts.all():
+                    user_attempts.append(attempt_dict[user.id].get(part.id))
+            users.append((user, user_attempts))
+        print(users)
+
+        spreadsheet_filename = '{0}.csv'.format(self.title)
+        spreadsheet_contents = render_to_string('results.csv', {
+            'problem_set': self,
+            'users': users
+        })
+        files.append((spreadsheet_filename, spreadsheet_contents))
         return archive_name, files
 
     def valid_percentage(self, user):
