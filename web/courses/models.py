@@ -200,7 +200,6 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                 for part in problem.parts.all():
                     user_attempts.append(attempt_dict[user.id].get(part.id))
             users.append((user, user_attempts))
-        print(users)
 
         spreadsheet_filename = '{0}.csv'.format(self.title)
         spreadsheet_contents = render_to_string('results.csv', {
