@@ -125,6 +125,7 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-task-heading .edit-btn:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
 .tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
 .tomo-subtasks { font-weight: 300; }
+.tomo-subtasks a { text-decoration: underline; }
 .tomo-col-noleftpadding { padding-left: 0; }
 .tomo-add-task { background-color: #878F28; color: #fff; }
 .tomo-add-task i { margin-right: 10px; }
