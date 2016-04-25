@@ -1,10 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from . import views
 from views import ProblemSetCreate, ProblemSetUpdate, ProblemSetDelete
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^problem_set/(?P<problem_set_pk>\d+)/$',
         views.problem_set_detail,
         name='problem_set_detail'),
@@ -59,4 +58,4 @@ urlpatterns = patterns(
     url(r'^course/(?P<course_pk>\d+)/progress/(?P<user_pk>\d+)/$',
         views.course_progress,
         name='course_progress'),
-)
+]

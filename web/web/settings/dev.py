@@ -4,7 +4,6 @@ with open(os.path.join(os.path.dirname(BASE_DIR), 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
 
 DEBUG = True
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['tomo.fmf.uni-lj.si']
 

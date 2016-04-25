@@ -1,10 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from . import views
 from views import ProblemUpdate, ProblemCreate, ProblemDelete
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^(?P<problem_pk>\d+)/solutions/(?P<user_pk>\d+)$',
         views.problem_solution,
         name='problem_solution'),
@@ -29,4 +28,4 @@ urlpatterns = patterns(
     url(r'^(?P<problem_pk>\d+)/copy/',
         views.copy_form,
         name='problem_copy'),
-)
+]
