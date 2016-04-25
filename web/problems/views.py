@@ -107,41 +107,16 @@ def copy_form(request, problem_pk):
     """
     Show and react to CopyForm.
     """
-    def problem_copy(user, original_problem, new_problem_set):
-        """
-        Copies the given problem to the given problem set.
-        Verifies if:
-        a) user can edit the problem.
-        b) user can edit the problem set.
-        Returns the copy of the given problem.
-        """
-        verify(user.can_view_problem(original_problem))
-        verify(request.user.can_edit_problem_set(new_problem_set))
-        new_problem = Problem()
-        new_problem.title = original_problem.title
-        new_problem.description = original_problem.description
-        new_problem.problem_set = new_problem_set
-        new_problem.tags = original_problem.tags
-        new_problem.save()
-        original_parts = original_problem.parts.all()
-        for original_part in original_parts:
-            new_part = Part()
-            new_part.problem = new_problem
-            new_part.description = original_part.description
-            new_part.solution = original_part.solution
-            new_part.validation = original_part.validation
-            new_part.secret = original_part.secret
-            new_part.save()
-        return new_problem
-
     problem = Problem.objects.get(pk=problem_pk)
+    verify(request.user.can_view_problem(problem))
     if request.method == 'POST':
         form = CopyProblemForm(request.POST)
         if form.is_valid():
             # perform the actual copy process
             problem_set_pk = form.cleaned_data['problem_set_id']
             problem_set = ProblemSet.objects.get(pk=problem_set_pk)
-            problem_copy(request.user, problem, problem_set)
+            verify(request.user.can_edit_problem_set(problem_set))
+            problem.copy_to(problem_set)
             return redirect(problem_set)
         else:
             #pass  # TODO: handle errors

@@ -147,6 +147,18 @@ class Problem(OrderWithRespectToMixin, models.Model):
         else:
             return "0%"
 
+    def copy_to(self, problem_set):
+        new_problem = Problem()
+        new_problem.title = self.title
+        new_problem.description = self.description
+        new_problem.problem_set = problem_set
+        new_problem.tags = self.tags
+        new_problem.save()
+        for part in self.parts.all():
+            part.copy_to(new_problem)
+        return new_problem
+
+
 
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
@@ -213,3 +225,13 @@ class Part(OrderWithRespectToMixin, models.Model):
             'invalid': invalid_count,
             'empty': empty_count
         }
+
+    def copy_to(self, problem):
+        new_part = Part()
+        new_part.problem = problem
+        new_part.description = self.description
+        new_part.solution = self.solution
+        new_part.validation = self.validation
+        new_part.secret = self.secret
+        new_part.save()
+        return new_part
