@@ -9,7 +9,6 @@ from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
-from attempts.models import Attempt
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
@@ -19,9 +18,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
     language = models.CharField(max_length=8, choices=(
-        ('python','Python 3'),
-        ('octave','Octave')), default = 'python')
-    EXTENSIONS = {'python':'py', 'octave': 'm'}
+        ('python', 'Python 3'),
+        ('octave', 'Octave')), default='python')
+    EXTENSIONS = {'python': 'py', 'octave': 'm'}
     class Meta:
         order_with_respect_to = 'problem_set'
 
@@ -82,38 +81,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def valid(self, user):
-        '''
-        Check whether user has valid attempts for all parts of
-        this problem.
-        '''
-        return self.valid_parts(user).count() == self.parts.count()
-
-    def invalid(self, user):
-        '''
-        Check whether user has some invalid attempts for this problem.
-        '''
-        return self.attempted(user) and self.valid_parts(user).count() == 0
-
-    def valid_parts(self, user):
-        '''
-        Return the QuerySet object of problem parts that have valid attempt by the given
-        user.
-        '''
-        return self.parts.filter(attempts__user=user, attempts__valid=True)
-
-    def attempted_parts(self, user):
-        '''
-        Return the queryset of all parts for which user has submitted attempts for.
-        '''
-        return user.attempts.filter(part__in=self.parts.all())
-
-    def attempted(self, user):
-        '''
-        Return the queryset of all parts for which user has submitted attempts for.
-        '''
-        return self.attempted_parts(user).count() > 0
-
     def attempts_by_user(self):
         attempts = {}
         for part in self.parts.all():
@@ -139,13 +106,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
                     invalid += 1
             sorted_attempts.append((user, user_attempts, valid, invalid, empty))
         return sorted_attempts
-
-    def progress_bar_width(self):
-        parts_count = self.parts.count()
-        if parts_count:
-            return "{0}%".format(100.0 / parts_count)
-        else:
-            return "0%"
 
     def copy_to(self, problem_set):
         new_problem = Problem()

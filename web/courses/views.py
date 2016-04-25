@@ -3,8 +3,6 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Course, ProblemSet
-from problems.models import Part
-from attempts.models import Attempt
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -18,13 +16,15 @@ def problem_set_attempts(request, problem_set_pk):
     archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
 
+
 @login_required
 def problem_set_progress(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_pk)
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(request, "courses/problem_set_progress.html", {
         'problem_set': problem_set,
     })
+
 
 @login_required
 def problem_set_edit(request, problem_set_pk):
@@ -39,8 +39,6 @@ def problem_set_edit(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    course = problem_set.course
-    user = request.user if request.user.is_authenticated() else None
     verify(request.user.can_view_problem_set(problem_set))
 
     user_attempts = request.user.attempts.filter(part__problem__problem_set__id=problem_set_pk)
@@ -49,11 +47,9 @@ def problem_set_detail(request, problem_set_pk):
 
     return render(request, 'courses/problem_set_detail.html', {
         'problem_set': problem_set,
-        'problems': problem_set.problems.all(),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
-        'show_teacher_forms': request.user.can_edit_course(course),
-        'user': user,
+        'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
     })
 
 

@@ -233,25 +233,15 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def valid_percentage(self, user):
         '''
-        Returns an integer value representing the percentage (rounded to the nearest integer)
-        of parts in this problemset for which  the given user has a valid attempt.
+        Returns the percentage of parts (rounded to the nearest integer)
+        of parts in this problem set for which the given user has a valid attempt.
         '''
-        number_of_all_parts = sum([problem.parts.count() for problem in self.problems.all()])
-        number_of_valid_parts = sum([problem.valid_parts(user).count()
-                                     for problem in self.problems.all()])
+        number_of_all_parts = Part.objects.filter(problem__problem_set=self).count()
+        number_of_valid_parts = user.attempts.filter(valid=True, part__problem__problem_set=self).count()
         if number_of_all_parts == 0:
             return None
         else:
             return int(round(100.0 * number_of_valid_parts / number_of_all_parts))
-
-    def attempted_problems(self, user):
-        return self.problems.filter(parts__attempts__user=user)
-
-    def invalid_problems(self, user):
-        return [problem for problem in self.attempted_problems(user) if problem.invalid(user)]
-
-    def valid_problems(self, user):
-        return [problem for problem in self.attempted_problems(user) if problem.valid(user)]
 
     def toggle_visible(self):
         self.visible = not self.visible
