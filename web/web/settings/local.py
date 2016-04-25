@@ -1,4 +1,4 @@
-from common import *
+from .common import *
 
 SECRET_KEY = '0vb+-_-52phz@ii^cxr+mlgvmn6fctd+v5qpnv&k+-00#u-==0'
 

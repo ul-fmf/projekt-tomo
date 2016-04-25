@@ -60,12 +60,12 @@ class ProblemViewSet(ModelViewSet):
         problem = None
         try:
             problem = Problem.objects.get(pk=problem_data['id'])
-        except Exception, e:
+        except Exception as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 
         existing_parts = problem.parts.all()
-        parts_to_update_data = filter(lambda part: 'id' in part, parts_data)
-        parts_to_create_data = filter(lambda part: 'id' not in part, parts_data)
+        parts_to_update_data = [part for part in parts_data if 'id' in part]
+        parts_to_create_data = [part for part in parts_data if 'id' not in part]
         parts_to_delete = existing_parts.exclude(id__in=[part['id']
                                                          for part in parts_to_update_data])
         parts_to_update = existing_parts.filter(id__in=[part['id']

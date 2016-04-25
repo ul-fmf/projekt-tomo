@@ -11,7 +11,7 @@ from .models import Attempt
 
 def update_fields(obj, new_values):
     changed_fields = []
-    for field, value in new_values.items():
+    for field, value in list(new_values.items()):
         if value != getattr(obj, field):
             setattr(obj, field, value)
             changed_fields.append(field)
@@ -66,7 +66,7 @@ class AttemptViewSet(ModelViewSet):
 
         def _f(validator):
             return not isinstance(validator, validators.UniqueTogetherValidator)
-        serializer.child.validators = filter(_f, serializer.child.validators)
+        serializer.child.validators = list(filter(_f, serializer.child.validators))
 
         if serializer.is_valid():
             attempts = []

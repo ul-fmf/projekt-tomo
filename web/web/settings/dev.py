@@ -1,4 +1,4 @@
-from common import *
+from .common import *
 
 with open(os.path.join(os.path.dirname(BASE_DIR), 'secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()

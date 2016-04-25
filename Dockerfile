@@ -16,14 +16,12 @@ RUN groupadd -r tomo && useradd -r -g tomo tomo
 RUN apt-get update \
   && apt-get install -y \
   uwsgi \
-  uwsgi-plugin-python \
-  python2.7 \
-  python-pip \
+  uwsgi-plugin-python3 \
+  python3 \
+  python3-pip \
   git \
   postgresql-server-dev-9.4 \
-  python-ldap \
-  libpython2.7-dev \
-  libldap2-dev \
+  libpython3-dev \
   libsasl2-dev \
    && rm -rf /var/lib/apt/lists/*
 

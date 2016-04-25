@@ -132,7 +132,7 @@ class Part(OrderWithRespectToMixin, models.Model):
         order_with_respect_to = 'problem'
 
     def __unicode__(self):
-        return u'@{0:06d} ({1})'.format(self.pk, truncate(self.description))
+        return '@{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def get_absolute_url(self):
         return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())

@@ -17,7 +17,7 @@ class Attempt(models.Model):
         unique_together = ('user', 'part')
 
     def __unicode__(self):
-        return u'{} vs. @{:06d}: {}'.format(self.user.username, self.part.pk,
+        return '{} vs. @{:06d}: {}'.format(self.user.username, self.part.pk,
                                             'valid' if self.valid else 'invalid')
 
     def feedback_list(self):

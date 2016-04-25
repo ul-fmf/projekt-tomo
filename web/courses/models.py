@@ -21,7 +21,7 @@ class Course(models.Model):
         ordering = ['title']
 
     def __unicode__(self):
-        return u'{} @{{{}}}'.format(self.title, self.institution)
+        return '{} @{{{}}}'.format(self.title, self.institution)
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse

@@ -103,7 +103,7 @@ class BasicViewsTestCase(TestCase):
         except for public pages.
         """
         public_views = [view for view, args in self.views['public']]
-        for view, args in chain.from_iterable(self.views.values()):
+        for view, args in chain.from_iterable(list(self.views.values())):
             if view not in public_views:
                 self.assertRedirect(view, args, 'login')
             else:
@@ -127,7 +127,7 @@ class BasicViewsTestCase(TestCase):
         try:
             self.login()
             public_views = [view for view, _ in self.views['public'] + self.views['authenticated']]
-            for view, args in chain.from_iterable(self.views.values()):
+            for view, args in chain.from_iterable(list(self.views.values())):
                 if view not in public_views:
                     self.assertDenied(view, args)
         finally:
@@ -160,12 +160,12 @@ class BasicViewsTestCase(TestCase):
             self.login()
             self.course.teachers.add(self.user)
             redirect_views = [view for view, args in self.views['teacher_redirect']]
-            for view, args in chain.from_iterable(self.views.values()):
+            for view, args in chain.from_iterable(list(self.views.values())):
                 if view not in redirect_views:
-                    print("OK: " + view)
+                    print(("OK: " + view))
                     self.assertOK(view, args)
                 else:
-                    print("Redirect: " + view)
+                    print(("Redirect: " + view))
                     self.assertRedirect(view, args)
         finally:
             self.logout()

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from . import views
-from views import ProblemUpdate, ProblemCreate, ProblemDelete
+from .views import ProblemUpdate, ProblemCreate, ProblemDelete
 
 
 urlpatterns = [
