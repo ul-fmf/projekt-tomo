@@ -31,7 +31,7 @@ WORKDIR /home/tomo
 RUN git clone -b ${TOMO_GIT_BRANCH} ${TOMO_GIT_LOCATION}
 
 # Install dependencies
-RUN pip install -r projekt-tomo/web/requirements/arnes.txt
+RUN pip3 install -r projekt-tomo/web/requirements/arnes.txt
 
 ENV SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=very_secret_key
 ENV SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=very_secret_key
