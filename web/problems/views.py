@@ -1,10 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from django.forms import Form, IntegerField, CharField, Textarea
+from django.forms import Form, IntegerField
 from django.http import HttpResponse
-from rest_framework.reverse import reverse
-from problems.models import Problem, Part
+from problems.models import Problem
 from courses.models import ProblemSet
 from users.models import User
 from utils.views import plain_text
@@ -18,6 +17,7 @@ def problem_attempt_file(request, problem_pk):
     verify(request.user.can_view_problem(problem))
     filename, contents = problem.attempt_file(user=request.user)
     return plain_text(filename, contents, content_type='text/x-python')
+
 
 @login_required
 def problem_edit_file(request, problem_pk):
@@ -101,8 +101,6 @@ class CopyProblemForm(Form):
     problem_set_id = IntegerField(label='Problem set id')
 
 
-#teacher status required
-#TODO: problem_copy - to copy a problem
 def copy_form(request, problem_pk):
     """
     Show and react to CopyForm.
@@ -112,14 +110,13 @@ def copy_form(request, problem_pk):
     if request.method == 'POST':
         form = CopyProblemForm(request.POST)
         if form.is_valid():
-            # perform the actual copy process
             problem_set_pk = form.cleaned_data['problem_set_id']
             problem_set = ProblemSet.objects.get(pk=problem_set_pk)
             verify(request.user.can_edit_problem_set(problem_set))
             problem.copy_to(problem_set)
             return redirect(problem_set)
         else:
-            #pass  # TODO: handle errors
+            # TODO: handle errors
             response = HttpResponse("Please select a problem set.")
             return response
     else:
@@ -134,13 +131,6 @@ def copy_form(request, problem_pk):
             }
         )
 
-
-def get_courses_and_problem_sets(request):
-    user = request.user
-    courses = user.taught_courses.values_list('course_id', flat=True)
-    problem_sets = ""
-    for course in courses:
-        problem_sets = problem_sets + course.problem_sets.values_list('problem_set_id', flat=True)
 
 @login_required
 def problem_solution(request, problem_pk, user_pk):

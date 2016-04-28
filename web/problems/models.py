@@ -157,19 +157,6 @@ class Part(OrderWithRespectToMixin, models.Model):
                 return False, i
         return True, None
 
-    def valid(self, user):
-        '''
-        Check whether user has submitted attempt for this part
-        that is marked as valid.
-        '''
-        return user.attempts.filter(part=self, valid=True).count() == 1
-
-    def attempted(self, user):
-        '''
-        Check whether user has submitted attempt for this part.
-        '''
-        return user.attempts.filter(part=self).count() >= 1
-
     def student_success(self):
         students = self.problem.problem_set.course.observed_students()
         student_count = len(students)

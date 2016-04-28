@@ -6,7 +6,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['www.projekt-tomo.si']
 
-WSGI_APPLICATION = 'web.wsgi.dev.application'
+WSGI_APPLICATION = 'web.wsgi.arnes.application'
 
 DATABASES = {
     'default': {
