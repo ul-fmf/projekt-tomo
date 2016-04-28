@@ -89,23 +89,22 @@ class Problem(OrderWithRespectToMixin, models.Model):
                     attempts[attempt.user][part] = attempt
                 else:
                     attempts[attempt.user] = {part: attempt}
-        sorted_attempts = []
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
-        observed_students = self.problem_set.course.observed_students()
+        observed_students = list(self.problem_set.course.observed_students())
+        print(observed_students)
         for user in observed_students:
-            valid = invalid = empty = 0
-            user_attempts = [attempts[user].get(part) for part in self.parts.all()]
-            for attempt in user_attempts:
+            user.valid = user.invalid = user.empty = 0
+            user.these_attempts = [attempts[user].get(part) for part in self.parts.all()]
+            for attempt in user.these_attempts:
                 if attempt is None:
-                    empty += 1
+                    user.empty += 1
                 elif attempt.valid:
-                    valid += 1
+                    user.valid += 1
                 else:
-                    invalid += 1
-            sorted_attempts.append((user, user_attempts, valid, invalid, empty))
-        return sorted_attempts
+                    user.invalid += 1
+        return observed_students
 
     def copy_to(self, problem_set):
         new_problem = Problem()
