@@ -24,7 +24,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     class Meta:
         order_with_respect_to = 'problem_set'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
@@ -130,7 +130,7 @@ class Part(OrderWithRespectToMixin, models.Model):
     class Meta:
         order_with_respect_to = 'problem'
 
-    def __unicode__(self):
+    def __str__(self):
         return '@{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def get_absolute_url(self):

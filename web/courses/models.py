@@ -20,7 +20,7 @@ class Course(models.Model):
     class Meta:
         ordering = ['title']
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} @{{{}}}'.format(self.title, self.institution)
 
     def get_absolute_url(self):
@@ -149,7 +149,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     class Meta:
         order_with_respect_to = 'course'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def student_success(self):

@@ -16,7 +16,7 @@ class Attempt(models.Model):
     class Meta:
         unique_together = ('user', 'part')
 
-    def __unicode__(self):
+    def __str__(self):
         return '{} vs. @{:06d}: {}'.format(self.user.username, self.part.pk,
                                             'valid' if self.valid else 'invalid')
 
