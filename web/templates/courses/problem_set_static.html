@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ problem_set.title }}</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">      
+  </head>
+
+  <body>
+    <h1>{{ problem_set.title }}</h1>
+
+    {% if problem_set.description and problem_set.description.strip %}
+      {{ problem_set.description|latex_markdown }}
+    {% endif %}
+
+    {% for problem in problem_set.problems.all %}
+      <hr>
+      <h2>{{ problem.title }}</h2>
+      {% if problem.description and problem.description.strip %}
+        {{ problem.description|latex_markdown }}
+      {% endif %}
+
+      {% for part in problem.parts.all %}
+        <h3>{{ forloop.counter }}. podnaloga</h3>
+        {{ part.description|latex_markdown }}
+        <h4>Uradna rešitev</h4>
+        <pre>{{ part.solution }}</pre>
+      {% endfor %}
+    {% endfor %}
+
+    <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $("pre").each(function() {
+            $(this).addClass("prettyprint")
+        });
+        prettyPrint();
+      });
+    </script>
+  </body>
+</html>

@@ -27,6 +27,15 @@ def problem_set_progress(request, problem_set_pk):
 
 
 @login_required
+def problem_set_static(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    return render(request, "courses/problem_set_static.html", {
+        'problem_set': problem_set,
+    })
+
+
+@login_required
 def problem_set_edit(request, problem_set_pk):
     """Download an archive of edit files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
