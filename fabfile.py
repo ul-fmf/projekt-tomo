@@ -6,8 +6,6 @@ LOCAL_VIRTUALENV = '~/.virtualenv/tomo'
 TOMO_HOST = 'www.projekt-tomo.si'
 
 env.hosts = [TOMO_HOST]
-env.timeout = 20
-env.connection_attempts = 3
 
 
 # MAIN TASKS
