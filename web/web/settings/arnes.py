@@ -22,8 +22,6 @@ DATABASES = {
 STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
 STATIC_URL = '/static/'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
