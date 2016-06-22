@@ -139,7 +139,7 @@ class Check:
                 inp = input(prompt)
                 print(inp)
                 return inp
-            exec(Check.current_part['solution'], {'input': visible_input})
+            exec(expression, {'input': visible_input})
         finally:
             output = sys.stdout.getvalue().strip().splitlines()
             sys.stdout = old_stdout
