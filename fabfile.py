@@ -21,7 +21,6 @@ def test():
 
 @task
 def deploy():
-    test()
     with cd('/home/gregor/docker/'):
         sudo('docker-compose pull')
         sudo('docker-compose up -d')
@@ -44,7 +43,7 @@ def activate_virtualenv():
 
 
 def manage(command):
-    tomo_docker('projekt-tomo/web/manage.py {}'.format(command))
+    tomo_docker('python3 projekt-tomo/web/manage.py {}'.format(command))
 
 
 def tomo_docker(command):

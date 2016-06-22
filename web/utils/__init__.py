@@ -19,7 +19,7 @@ def is_json_string_list(s):
     if type(val) is not list:
         raise ValidationError('Not a JSON list.')
     for x in val:
-        if type(x) is not str and type(x) is not unicode:
+        if type(x) is not str:
             raise ValidationError('Not a JSON list of strings.')
 
 
