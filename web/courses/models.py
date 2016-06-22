@@ -123,6 +123,7 @@ class StudentEnrollment(models.Model):
     observed = models.BooleanField(default=True)
 
     class Meta:
+        ordering = ['user', 'course']
         unique_together = ('course', 'user')
 
 
