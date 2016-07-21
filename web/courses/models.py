@@ -89,10 +89,7 @@ class Course(models.Model):
         enrollment.save()
 
     def observed_students(self):
-        observed = []
-        for enrollment in StudentEnrollment.objects.filter(course=self, observed=True):
-            observed.append(enrollment.user)
-        return observed
+        return User.objects.filter(studentenrollment__course=self, studentenrollment__observed=True)
 
     def student_success(self):
         students = self.observed_students()
