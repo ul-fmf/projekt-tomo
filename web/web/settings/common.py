@@ -73,3 +73,22 @@ TEMPLATES = [
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
 )
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'WARNING',  # 'DEBUG'
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR + '/debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
