@@ -93,7 +93,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
             if student not in attempts:
                 attempts[student] = {}
         observed_students = list(self.problem_set.course.observed_students())
-        print(observed_students)
         for user in observed_students:
             user.valid = user.invalid = user.empty = 0
             user.these_attempts = [attempts[user].get(part) for part in self.parts.all()]
