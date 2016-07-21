@@ -28,3 +28,7 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=problems,attempts,courses,users,utils',
 ]
+
+INSTALLED_APPS += (
+    'debug_toolbar',
+)
