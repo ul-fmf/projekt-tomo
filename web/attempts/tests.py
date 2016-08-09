@@ -4,7 +4,7 @@ from rest_framework.test import APIClient
 from users.models import User
 from .models import Attempt
 from courses.models import Course, ProblemSet
-from problems.models import Problem, Part
+from problems.models import ProblemContents, Part
 
 
 class AttemptSubmitTestCase(TestCase):
@@ -12,7 +12,7 @@ class AttemptSubmitTestCase(TestCase):
     def setUp(self):
         course = Course.objects.create()
         problem_set = ProblemSet.objects.create(course=course)
-        problem = Problem.objects.create(problem_set=problem_set)
+        problem = ProblemContents.objects.create(problem_set=problem_set)
         self.part1 = Part(problem=problem, secret='["1"]')
         self.part1.save()
         self.part2 = Part(problem=problem, secret='["1", "2"]')

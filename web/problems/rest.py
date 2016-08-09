@@ -5,7 +5,7 @@ from rest_framework import decorators, status
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from utils.rest import JSONStringField
-from .models import Problem, Part
+from .models import ProblemContents, Part
 
 
 class PartSerializer(ModelSerializer):
@@ -21,12 +21,12 @@ class PartSerializer(ModelSerializer):
 
 class ProblemSerializer(ModelSerializer):
     """
-    Serialize a Problem object.
+    Serialize a ProblemContents object.
     """
     parts = PartSerializer(many=True)
 
     class Meta:
-        model = Problem
+        model = ProblemContents
 
 
 class ProblemViewSet(ModelViewSet):
@@ -34,7 +34,7 @@ class ProblemViewSet(ModelViewSet):
     A viewset for viewing and editing Problem instances.
     """
     serializer_class = ProblemSerializer
-    queryset = Problem.objects.all()
+    queryset = ProblemContents.objects.all()
 
     @decorators.list_route(methods=['post'], authentication_classes=[TokenAuthentication])
     @transaction.atomic
@@ -59,7 +59,7 @@ class ProblemViewSet(ModelViewSet):
         # with exception details.
         problem = None
         try:
-            problem = Problem.objects.get(pk=problem_data['id'])
+            problem = ProblemContents.objects.get(pk=problem_data['id'])
         except Exception as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 

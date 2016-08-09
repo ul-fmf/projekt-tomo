@@ -11,7 +11,7 @@ from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
 
 
-class Problem(OrderWithRespectToMixin, models.Model):
+class ProblemContents(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     problem_set = models.ForeignKey('courses.ProblemSet', related_name='problems')
@@ -107,7 +107,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return observed_students
 
     def copy_to(self, problem_set):
-        new_problem = Problem()
+        new_problem = ProblemContents()
         new_problem.title = self.title
         new_problem.description = self.description
         new_problem.problem_set = problem_set
@@ -120,7 +120,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
 
 class Part(OrderWithRespectToMixin, models.Model):
-    problem = models.ForeignKey(Problem, related_name='parts')
+    problem = models.ForeignKey(ProblemContents, related_name='parts')
     description = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)

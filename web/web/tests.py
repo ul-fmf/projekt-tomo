@@ -2,7 +2,7 @@ from itertools import chain
 from django.test import Client, TestCase
 from django.core.urlresolvers import reverse
 from users.models import User
-from problems.models import Problem
+from problems.models import ProblemContents
 from courses.models import ProblemSet, Course
 
 
@@ -24,8 +24,8 @@ class BasicViewsTestCase(TestCase):
         self.course = Course.objects.create()
         prob_set = ProblemSet.objects.create(course=self.course)
         visible_prob_set = ProblemSet.objects.create(course=self.course, visible=True)
-        problem = Problem.objects.create(problem_set=prob_set)
-        visible_problem = Problem.objects.create(problem_set=visible_prob_set)
+        problem = ProblemContents.objects.create(problem_set=prob_set)
+        visible_problem = ProblemContents.objects.create(problem_set=visible_prob_set)
         self.views = {
             'public':
                 [

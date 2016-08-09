@@ -1,13 +1,13 @@
 from django.test import TestCase
 from courses.models import Course, ProblemSet
-from .models import Problem, Part
+from .models import ProblemContents, Part
 
 
 class PartTestCase(TestCase):
     def test_check_secret(self):
         cour = Course.objects.create()
         prob_set = ProblemSet.objects.create(course=cour)
-        prob = Problem.objects.create(problem_set=prob_set)
+        prob = ProblemContents.objects.create(problem_set=prob_set)
 
         part0 = Part.objects.create(problem=prob)
         self.assertEqual(part0.check_secret([]), (True, None))

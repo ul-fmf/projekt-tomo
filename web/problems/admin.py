@@ -1,6 +1,6 @@
 from django.contrib import admin
 from simple_history.admin import SimpleHistoryAdmin
-from .models import Problem, Part
+from .models import ProblemContents, Part
 
 
 class PartInline(admin.StackedInline):
@@ -35,4 +35,4 @@ class ProblemAdmin(SimpleHistoryAdmin):
         return obj.problem_set.course
     course.admin_order_field = 'problem_set__course'
 
-admin.site.register(Problem, ProblemAdmin)
+admin.site.register(ProblemContents, ProblemAdmin)
