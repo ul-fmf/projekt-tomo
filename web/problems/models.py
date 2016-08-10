@@ -11,6 +11,12 @@ from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
 
 
+class Problem(OrderWithRespectToMixin, models.Model):
+    problem_set = models.ForeignKey('courses.ProblemSet', related_name='problems')
+    problem_contents = models.ForeignKey('problems.ProblemContents', related_name='problems')
+    editable = models.BooleanField()
+
+
 class ProblemContents(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
