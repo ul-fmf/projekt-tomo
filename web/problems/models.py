@@ -12,9 +12,12 @@ from taggit.managers import TaggableManager
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
-    problem_set = models.ForeignKey('courses.ProblemSet', related_name='problems')
-    problem_contents = models.ForeignKey('problems.ProblemContents', related_name='problems')
+    problem_set = models.ForeignKey('courses.ProblemSet', related_name='virtualproblems', null=True, blank=True)
+    problem_contents = models.ForeignKey('problems.ProblemContents', related_name='problems', null=True, blank=True)
     editable = models.BooleanField()
+
+    class Meta:
+        order_with_respect_to = 'problem_set'
 
 
 class ProblemContents(OrderWithRespectToMixin, models.Model):
@@ -126,7 +129,7 @@ class ProblemContents(OrderWithRespectToMixin, models.Model):
 
 
 class Part(OrderWithRespectToMixin, models.Model):
-    problem = models.ForeignKey(ProblemContents, related_name='parts')
+    problem = models.ForeignKey('problems.ProblemContents', related_name='parts')
     description = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
