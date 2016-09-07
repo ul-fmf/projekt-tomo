@@ -35,7 +35,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'web.urls'
 
-LANGUAGE_CODE = 'sl'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'UTC'
 
