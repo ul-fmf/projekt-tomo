@@ -45,7 +45,7 @@ a { color: #23527c; }
 
 .tomo-thin { font-weight: 300; }
 .tomo-institution { color: #666; font-weight: 300; }
-.tomo-lecturer { font-style: italic; color: #A92D2D; }
+.tomo-lecturer { font-style: italic; color: #A92D2D; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .tomo-lecturers { list-style-type: none; color: #A92D2D; font-weight: 500; padding: 0; margin: 10px 0; }
 .tomo-students { list-style-type: none; font-weight: 400; padding: 0; margin: 10px 0; }
 .tomo-students li { margin: 7px 0; }
