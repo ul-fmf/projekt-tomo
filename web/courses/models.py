@@ -18,7 +18,7 @@ class Course(models.Model):
     tags = TaggableManager(blank=True)
 
     class Meta:
-        ordering = ['title']
+        ordering = ['institution', 'title']
 
     def __str__(self):
         return '{} @{{{}}}'.format(self.title, self.institution)
