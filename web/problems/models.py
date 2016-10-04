@@ -121,6 +121,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
     description = models.TextField(blank=True)
+    template = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     secret = models.TextField(default="[]", validators=[is_json_string_list])
