@@ -42,7 +42,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
-        parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
+        parts = [(part, solutions.get(part.id, part.template)) for part in self.parts.all()]
         url = settings.SUBMISSION_URL + reverse('attempts-submit')
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
