@@ -64,19 +64,22 @@ def extract_problem(filename):
     with open(filename, encoding='utf-8') as f:
         source = f.read()
     part_regex = re.compile(
-        r'# =+@(?P<part>\d+)=\n'              # beginning of header
+        r'# ===+@(?P<part>\d+)=\n'            # beginning of problem
         r'(?P<description>(#( [^\n]*)?\n)+)'  # description
-        r'# =+\n'                             # end of header
+        r'(# ===+\n)?'                        # optional beginning of template
+        r'(?P<template>(#( [^\n]*)?\n)*)'     # solution template
+        r'# ===+\n'                           # end of problem
         r'(?P<solution>.*?)'                  # solution
         r'^Check\.part\(\)\n'                 # beginning of validation
         r'(?P<validation>.*?)'                # validation
-        r'(?=\n(# )?# =+@)',                  # beginning of next part
+        r'(?===\n(# )?# =+@)',                # beginning of next part
         flags=re.DOTALL | re.MULTILINE
     )
     parts = [{
         'part': int(match.group('part')),
         'description': strip_hashes(match.group('description')),
         'solution': match.group('solution').strip(),
+        'template': strip_hashes(match.group('template')),
         'validation': match.group('validation').strip(),
         'problem': {{ problem.id }}
     } for match in part_regex.finditer(source)]
