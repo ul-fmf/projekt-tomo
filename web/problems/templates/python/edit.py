@@ -9,7 +9,9 @@ Check.initialize(problem['parts'])
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
-# {{ part.description|indent:"# "|safe }}
+# {{ part.description|indent:"# "|safe }}{% if part.template %}
+# -----------------------------------------------------------------------------
+# {{ part.template|indent:"# "|safe }}{% endif %}
 # =============================================================================
 {{ part.solution|safe }}
 
@@ -64,15 +66,15 @@ def extract_problem(filename):
     with open(filename, encoding='utf-8') as f:
         source = f.read()
     part_regex = re.compile(
-        r'# ===+@(?P<part>\d+)=\n'            # beginning of problem
-        r'(?P<description>(#( [^\n]*)?\n)+)'  # description
-        r'(# ===+\n)?'                        # optional beginning of template
-        r'(?P<template>(#( [^\n]*)?\n)*)'     # solution template
-        r'# ===+\n'                           # end of problem
-        r'(?P<solution>.*?)'                  # solution
-        r'^Check\.part\(\)\n'                 # beginning of validation
-        r'(?P<validation>.*?)'                # validation
-        r'(?===\n(# )?# =+@)',                # beginning of next part
+        r'# ===+@(?P<part>\d+)=\n'             # beginning of part header
+        r'(?P<description>(#( [^\n]*)?\n)+?)'  # description
+        r'(# ---+\n'                           # optional beginning of template
+        r'(?P<template>(#( [^\n]*)?\n)*))?'    # solution template
+        r'# ===+\n'                            # end of part header
+        r'(?P<solution>.*?)'                   # solution
+        r'^Check\.part\(\)\n'                  # beginning of validation
+        r'(?P<validation>.*?)'                 # validation
+        r'(?=\n(# )?# =+@)',                   # beginning of next part
         flags=re.DOTALL | re.MULTILINE
     )
     parts = [{
