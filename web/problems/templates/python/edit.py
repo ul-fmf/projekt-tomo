@@ -60,8 +60,11 @@ from contextlib import contextmanager
 
 def extract_problem(filename):
     def strip_hashes(description):
-        lines = description.strip().splitlines()
-        return "\n".join(line[2:] for line in lines)
+        if description is None:
+            return ''
+        else:
+            lines = description.strip().splitlines()
+            return "\n".join(line[2:] for line in lines)
 
     with open(filename, encoding='utf-8') as f:
         source = f.read()
