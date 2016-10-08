@@ -1,6 +1,5 @@
 .intro-header {
-  background: url(../img/intro-bg.jpg) center center no-repeat;
-  background-size: cover;
+  background-color: #444;
 }
 
 /* for centering images according to HTML5 standard */
