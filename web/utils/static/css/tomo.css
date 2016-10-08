@@ -61,7 +61,7 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-home { margin: 0 40px 0 0; padding: 0; }
 .tomo-home img { height: 100%; }
 
-.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
+.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 220px; min-width: 220px; text-align: center; background-color: #eee; }
 .tomo-login-header { background: none; border: none; }
 .tomo-login-signin { margin: 15px 2px 0 0; background-color: rgba(255, 255, 255, 0.5); }
 .tomo-login-signin i { margin-right: 10px; }
@@ -72,6 +72,7 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-login .btn i { margin-right: 10px; }
 .tomo-login .fa-google { vertical-align: -25% } /* vertical position fix */
 
+.intro-message {padding-top: 0; padding-bottom: 0;}
 .intro-message h3 { clear: both; }
 
 .dropdown-menu { rgba(255, 255, 255, 0.2); }
