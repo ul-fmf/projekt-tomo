@@ -26,6 +26,14 @@ def deploy():
 
 
 @task
+def quick_deploy():
+    tomo_docker('bash -c "cd projekt-tomo && git pull"')
+    migrate()
+    manage('collectstatic --noinput')
+    tomo_docker('uwsgi --reload /tmp/project-master.pid')
+
+
+@task
 def migrate():
     manage('migrate')
 
