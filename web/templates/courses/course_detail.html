@@ -50,13 +50,13 @@
             {% csrf_token %}
             <li>
               {{ teacher.get_full_name }}
-              <span class="tomo-teacher-switch">
-                {# Translators: Demote teacher to student - button #}
-                <button type="submit" aria-label="Demote" data-toggle="tooltip"
-                        title="{% trans 'Demote to student' %}">
-                  <i class="fa fa-user"></i>
-                </button>
-            </span>
+              <!-- <span class="tomo-teacher-switch"> -->
+                <!-- {# Translators: Demote teacher to student - button #} -->
+                <!-- <button type="submit" aria-label="Demote" data-toggle="tooltip" -->
+                        <!-- title="{% trans 'Demote to student' %}"> -->
+                  <!-- <i class="fa fa-user"></i> -->
+                <!-- </button> -->
+            <!-- </span> -->
           </li>
           </form>
           {% endfor %}
