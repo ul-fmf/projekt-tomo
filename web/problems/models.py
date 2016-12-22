@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -106,11 +107,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return observed_students
 
     def copy_to(self, problem_set):
-        new_problem = Problem()
-        new_problem.title = self.title
-        new_problem.description = self.description
+        new_problem = deepcopy(self)
+        new_problem.pk = None
         new_problem.problem_set = problem_set
-        new_problem.tags = self.tags
         new_problem.save()
         for part in self.parts.all():
             part.copy_to(new_problem)
@@ -173,11 +172,8 @@ class Part(OrderWithRespectToMixin, models.Model):
         }
 
     def copy_to(self, problem):
-        new_part = Part()
+        new_part = deepcopy(self)
+        new_part.pk = None
         new_part.problem = problem
-        new_part.description = self.description
-        new_part.solution = self.solution
-        new_part.validation = self.validation
-        new_part.secret = self.secret
         new_part.save()
         return new_part
