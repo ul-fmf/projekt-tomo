@@ -191,7 +191,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         return archive_name, files
 
     def results_archive(self, user):
-        students = self.course.observed_students()
+        students = self.course.students.all()
         user_ids = set()
         attempt_dict = {}
         attempts = Attempt.objects.filter(user__in=students,
