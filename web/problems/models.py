@@ -20,8 +20,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
     tags = TaggableManager(blank=True)
     language = models.CharField(max_length=8, choices=(
         ('python', 'Python 3'),
-        ('octave', 'Octave')), default='python')
-    EXTENSIONS = {'python': 'py', 'octave': 'm'}
+        ('octave', 'Octave'),
+        ('r', 'R')), default='python')
+    EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
     class Meta:
         order_with_respect_to = 'problem_set'
 
