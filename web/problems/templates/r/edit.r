@@ -1,8 +1,7 @@
-##########################################################################
+{% load i18n %}##########################################################################
 # To je datoteka, s katero pripravite nalogo.
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 ##########################################################################
-{% load my_tags %}
 {% include 'r/rjson.r' %}
 {% include 'r/library.r' %}
 {% include 'r/check.r' %}
@@ -36,7 +35,9 @@ matches <- regex_break(paste(
         part = as.numeric(match[2]),
         description = super_strip(match[4]),
         solution = strip(match[6]),
-        validation = strip(match[8])
+        template = '',
+        validation = strip(match[8]),
+        problem = {{ problem.id }}
       )
     )
   )
@@ -110,20 +111,19 @@ check$part()
 
 check$summarize()
 if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
-  cat('Naloge so napačno sestavljene.\n')
+  cat('{% trans "The problem is not correctly formulated." %}\n')
 } else {
-  cat('Naloge so pravilno sestavljene.\n')
-  if(readline('Ali jih shranim na strežnik? [da/NE]') == 'da') {
-    cat('Shranjujem naloge...\n')
+  cat('{% trans "The problem is correctly formulated." %}\n')
+  if(readline('{% trans "Should I save it on the server [yes/NO]" %}') == '{% trans "yes" %}') {
+    cat('{% trans "Saving problem to the server" %}...\n')
     post <- list(
-      data = '{{ data|safe }}',
-      signature = '{{ signature }}',
       title = title,
       description = description,
-      preamble = preamble,
-      parts = check$parts
+      parts = check$parts,
+      id = {{ problem.id }},
+      problem_set = {{ problem.problem_set.id }}
     )
-    r <- postJSON(path='{% url "teacher_upload" %}', json=enc2utf8(toJSON(post)))
+    r <- postJSON(path='/api/attempts/submit/', token='{{ authentication_token }}', json=enc2utf8(toJSON(post)))
     response <- fromJSON(r, method = "R")
     cat(response$message, "\n")
     if("update" %in% names(response)) {
@@ -134,6 +134,6 @@ if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
       close.connection(f)
     }
   } else {
-    cat('Naloge niso bile shranjene.\n')
+    cat('{% trans "Problem was not saved." %}\n')
   }
 }
