@@ -38,8 +38,6 @@ check$run <- function(example, state) {
 check$canonize <- function(x, digits = 6) {
   if(typeof(x) == "double" || typeof(x) == "complex") {
     return(round(x, digits))
-  } else if(typeof(x) == "complex") {
-    return(round(x, digits))
   } else if(typeof(x) == "list") {
     return(lapply(x, function(y) check$canonize(y, digits)))
   } else {
