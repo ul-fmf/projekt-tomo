@@ -2,7 +2,6 @@
 # To je datoteka, s katero pripravite nalogo.
 # Vsebina naloge je spodaj, za vsemi pomožnimi definicijami.
 ##########################################################################
-{% include 'r/rjson.r' %}
 {% include 'r/library.r' %}
 {% include 'r/check.r' %}
 

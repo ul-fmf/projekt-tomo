@@ -189,7 +189,6 @@ get_current_filename <- function () {
 .filename <- get_current_filename()
 
 .check <- function() {
-  {% include 'r/rjson.r' %}
   {% include 'r/library.r' %}
   {% include 'r/check.r' %}
 

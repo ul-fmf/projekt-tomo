@@ -1,3 +1,19 @@
+.error <- FALSE
+.errfun <- function(e) {
+    warning(e)
+    .error <<- TRUE
+}
+tryCatch({
+    library(rjson)
+}, error = .errfun)
+tryCatch({
+    library(httr)
+}, error = .errfun)
+
+if (.error) {
+    stop({% trans "Required libraries are unavailable. Please make sure that rjson and httr are available." %})
+}
+
 regex_break <- function(whole_regex, regexes, source) {
     whole_matches <- gregexpr(paste("(?sm)", whole_regex, sep=""), source, perl=TRUE)[[1]]
     whole_matches <- mapply(
