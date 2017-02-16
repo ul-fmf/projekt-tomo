@@ -27,6 +27,7 @@ class ProblemSerializer(ModelSerializer):
 
     class Meta:
         model = Problem
+        fields = '__all__'
 
 
 class ProblemViewSet(ModelViewSet):

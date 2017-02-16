@@ -33,6 +33,7 @@ class AttemptSerializer(ModelSerializer):
 
     class Meta:
         model = Attempt
+        fields = '__all__'
 
     @staticmethod
     def check_secret(validated_data):
