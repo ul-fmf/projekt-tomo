@@ -1,11 +1,14 @@
-# =============================================================================
-# {{ problem.title|safe }}{% if problem.description %}
+#######################################################################@@#
+# {{ problem.title }} {% if problem.description %}
 #
-# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
-# =====================================================================@{{ part.id|stringformat:'06d'}}=
+# {{ problem.description|indent:"# "|safe }}{% endif %}
+#######################################################################@@#
+
+{% for part, solution_attempt in parts %}
+##################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ forloop.counter }}. podnaloga
 # {{ part.description|indent:"# "|safe }}
-# =============================================================================
+##################################################################{{ part.id|stringformat:'06d'}}@#
 {{ solution_attempt|safe }}{% endfor %}
 
 
@@ -250,16 +253,15 @@ get_current_filename <- function () {
   {% endfor %}
 
   cat('Shranjujem rešitve na strežnik... ')
-  post <- list(
-    data = '{{ data|safe }}',
-    signature = '{{ signature }}',
-    preamble = .preamble,
-    attempts = check$parts,
-    source = "" # sending source somehow causes problems on the server side.
-  )
+  post <- check$parts
   tryCatch({
-    r <- postJSON(path='{{ submission_url }}', token='{{ authentication_token }}', json=enc2utf8(toJSON(post)))
-    response <- fromJSON(r, method = "R")
+    r <- POST(
+      '{{ submission_url }}',
+      body = check$parts,
+      encode = "json",
+      add_headers(Authorization = 'Token {{ authentication_token }}')
+    )
+    response <- content(r)
     cat('Rešitve so shranjene.\n')
     for(rejected in response$rejected)
       check$parts[[as.integer(rejected[[1]])]]$rejection <- rejected[[2]]

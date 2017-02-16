@@ -3,7 +3,7 @@ check <- list()
 check$initialize <- function(parts) {
   init.part <- function(part) {
     part$errors <- list()
-    part$challenge <- list()
+    part$secret <- list()
     return(part)
   }
   check$parts <<- lapply(parts, init.part)
@@ -25,10 +25,10 @@ check$error <- function(msg, ...) {
     c(check$parts[[check$part.counter]]$errors, sprintf(msg, ...))
 }
 
-check$challenge <- function(x, k = "") {
-  pair <- c(toString(k), toString(check$canonize(x)))
-  check$parts[[check$part.counter]]$challenge<<-
-    c(check$parts[[check$part.counter]]$challenge, list(pair))
+check$challenge <- function(x, hint = "") {
+  pair <- c(toString(check$canonize(x)), toString(hint))
+  check$parts[[check$part.counter]]$secret<<-
+    c(check$parts[[check$part.counter]]$secret, list(pair))
 }
 
 check$run <- function(example, state) {

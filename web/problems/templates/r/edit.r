@@ -79,7 +79,7 @@ preamble <- strip(problem_match[1, 7])
 
 {{ problem.preamble|safe }}
 
-{% for part in parts %}
+{% for part in problem.parts.all %}
 ##################################################################@{{ part.id|stringformat:'06d'}}#
 # {{ part.description|indent:"# "|safe }}
 ##################################################################{{ part.id|stringformat:'06d'}}@#
@@ -122,14 +122,18 @@ if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
       id = {{ problem.id }},
       problem_set = {{ problem.problem_set.id }}
     )
-    r <- postJSON(path='/api/attempts/submit/', token='{{ authentication_token }}', json=enc2utf8(toJSON(post)))
-    response <- fromJSON(r, method = "R")
+    r <- POST(
+      '{{ submission_url }}',
+      body = post,
+      encode = "json",
+      add_headers(Authorization = 'Token {{ authentication_token }}')
+    )
+    response <- content(r)
     cat(response$message, "\n")
     if("update" %in% names(response)) {
       file.copy(.filename, paste(.filename, ".orig", sep=""))
-      r <- readLines(response$update, encoding="UTF-8", warn=FALSE)
       f <- file(.filename, encoding="UTF-8")
-      writeLines(r, f)
+      writeLines(response$update, f)
       close.connection(f)
     }
   } else {

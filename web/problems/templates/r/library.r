@@ -1,4 +1,4 @@
-.error <- FALSE
+{% load i18n %}.error <- FALSE
 .errfun <- function(e) {
     warning(e)
     .error <<- TRUE
@@ -11,7 +11,7 @@ tryCatch({
 }, error = .errfun)
 
 if (.error) {
-    stop({% trans "Required libraries are unavailable. Please make sure that rjson and httr are available." %})
+    stop("{% trans 'Required libraries are unavailable. Please make sure that rjson and httr are available.' %}")
 }
 
 regex_break <- function(whole_regex, regexes, source) {
@@ -52,44 +52,6 @@ get_current_filename <- function () {
   } else {
     return(Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE))
   }
-}
-
-postJSON <- function(path, token, json) {
-  host_parts <- regex_break(".*", c(".*?", "(:\\d+)?"), "{{ request.get_host }}")
-  host <- host_parts[1, 1]
-  con <- socketConnection(host="127.0.0.1", port=8000, server=FALSE, blocking=TRUE)
-  post <- paste(
-    "POST ", path, " HTTP/1.1\r\n",
-    "Host: ", host, "\r\n",
-    "Connection: close\r\n",
-    "Content-Type: application/json; charset=utf-8\r\n",
-    "Authorization: ", token, "\r\n",
-    "Content-Length: ", nchar(json, type="bytes"), "\r\n\r\n",
-    json,
-    sep = ""
-  )
-  writeLines(post, con=con, sep="", useBytes=TRUE)
-  response <- paste(readLines(con, warn=FALSE), collapse="\r\n")
-  close.connection(con)
-  Encoding(response) <- "UTF-8"
-
-  header <- sub("\r\n\r\n.*?$", "", response)
-  if(grepl("Transfer-Encoding: chunked", header)) {
-    chunked <- sub("^.*?\r\n\r\n", "", response)
-    contents <- ""
-    repeat {
-      match <- regex_break(".*", c("[a-f0-9]+", "\\r\\n", ".*"), chunked)
-      len <- strtoi(match[1, 1], 16)
-      rest <- match[1, 3]
-      if(len == 0 || ncol(match) == 0)
-        break
-      contents <- paste(contents, substr(rest, 1, len), sep = "")
-      chunked <- substr(rest, len + 2, nchar(rest))
-    }
-  } else {
-    contents <- sub("^.*?\r\n\r\n", "", response)
-  }
-  return(contents)
 }
 
 pretty.print <- function(x) {
