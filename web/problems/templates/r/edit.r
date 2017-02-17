@@ -31,7 +31,7 @@ matches <- regex_break(paste(
 
   check$initialize(
     apply(matches, 1, function(match) list(
-        part = as.numeric(match[2]),
+        id = as.numeric(match[2]),
         description = super_strip(match[4]),
         solution = strip(match[6]),
         template = '',
