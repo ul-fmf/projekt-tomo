@@ -23,7 +23,7 @@ matches <- regex_break(paste(
   '^# ===+@',              # beginning of part header
   '(\\d+)',                # beginning of part header (?P<part>)
   '=\n',                   # beginning of part header
-  '(^#( [^\n]*)?\n)*',     # description
+  '(^#( [^\n]*)?\n)*?',    # description
   '(# ---+\n((#( [^\n]*)?\n)*))?',  # solution template
   '^# =+(\\d+)@=\n',       # end of part header
   '.*?',                   # solution
@@ -75,7 +75,9 @@ description <- super_strip(problem_match[1, 5])
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
 # ================================================================@{{ part.id|stringformat:'06d'}}=
-# {{ part.description|indent:"# "|safe }}
+# {{ part.description|indent:"# "|safe }}{% if part.template %}
+# ------------------------------------------------------------------------
+# {{ part.template|indent:"# "|safe }}{% endif %}
 # ================================================================{{ part.id|stringformat:'06d'}}@=
 {{ part.solution|safe }}
 
