@@ -179,14 +179,7 @@
 
 
 
-get_current_filename <- function () {
-  if (length(showConnections()) > 1) {
-    return(showConnections()[1, "description"])
-  } else {
-    return(Find(Negate(is.null), Map(function(f) { f$ofile }, sys.frames()), right=TRUE))
-  }
-}
-.filename <- get_current_filename()
+{% include 'r/filename.r' %}
 
 .check <- function() {
   {% include 'r/library.r' %}
