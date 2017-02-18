@@ -1,14 +1,11 @@
-#######################################################################@@#
+# ========================================================================
 # {{ problem.title }} {% if problem.description %}
 #
-# {{ problem.description|indent:"# "|safe }}{% endif %}
-#######################################################################@@#
-
-{% for part, solution_attempt in parts %}
-##################################################################@{{ part.id|stringformat:'06d'}}#
+# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
+# ================================================================@{{ part.id|stringformat:'06d'}}=
 # {{ forloop.counter }}. podnaloga
 # {{ part.description|indent:"# "|safe }}
-##################################################################{{ part.id|stringformat:'06d'}}@#
+# ========================================================================
 {{ solution_attempt|safe }}{% endfor %}
 
 
@@ -114,9 +111,9 @@
 
 
 
-#######################################################################@@#
+# =======================================================================@
 # Kode pod to črto nikakor ne spreminjajte.
-##########################################################################
+# ========================================================================
 
 "TA VRSTICA JE PRAVILNA."
 "ČE VAM R SPOROČI, DA JE V NJEJ NAPAKA, SE MOTI."
@@ -198,19 +195,19 @@ get_current_filename <- function () {
   .source <- paste(readLines(.filename), collapse="\n")
 
   matches <- regex_break(paste(
-      '#+@(\\d+)#\n', # beginning of header
-      '.*?',          # description
-      '#+\\1@#\n',    # end of header
-      '.*?',          # solution
-      '(?=#+@)',      # beginning of next part
+      '# =+@(\\d+)=\n',    # beginning of header
+      '(#( [^\n]*)?\n)+',  # description
+      '# =+\n',            # end of header
+      '.*?',               # solution
+      '(?=\n# =+@)',       # beginning of next part
       sep=""
   ),  c(
-      '#+@',          # beginning of header
-      '(\\d+)',       # beginning of header (?P<part>)
-      '#\n',          # beginning of header
-      '.*?',          # description
-      '#+(\\d+)@#\n', # end of header
-      '.*?'           # solution
+      '# =+@',             # beginning of header
+      '(\\d+)',            # beginning of header (?P<part>)
+      '=\n',               # beginning of header
+      '(#( [^\n]*)?\n)+',  # description
+      '# =+\n',            # end of header
+      '.*?'                # solution
   ), .source)
 
   check$initialize(
@@ -221,25 +218,6 @@ get_current_filename <- function () {
     )
   )
   check$parts[[length(check$parts)]]$solution = rstrip(check$parts[[length(check$parts)]]$solution)
-
-  problem_match <- regex_break(paste(
-    '#+@@#\n', # beginning of header
-    '.*?',     # description
-    '#+@@#\n', # end of header
-    '.*?',     # preamble
-    '(?=#+@)', # beginning of first part
-    sep = ""
-  ), c(
-    '#+@@#\n', # beginning of header
-    '.*?',     # description
-    '#+@@#\n', # end of header
-    '.*?'      # preamble
-    ), .source)
-
-  if(length(problem_match) == 0)
-    stop("NAPAKA: datoteka ni pravilno oblikovana")
-
-  .preamble <- problem_match[1, 4]
 
   {% for part, _ in parts %}
   if (check$part()) {
