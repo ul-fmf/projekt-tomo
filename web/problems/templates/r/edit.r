@@ -9,20 +9,23 @@
 .source <- paste(readLines(.filename, encoding = "UTF-8"), collapse="\n")
 
 matches <- regex_break(paste(
-  '^# ===+@(\\d+)=\n',     # beginning of header
+  '^# ===+@(\\d+)=\n',     # beginning of part header
   '(^#( [^\n]*)?\n)*',     # description
-  '^# =+\\1@=\n',          # end of header
+  '(# ---+\n',             # optional beginning of template
+  '((#( [^\n]*)?\n)*))?',  # solution template
+  '^# =+\\1@=\n',          # end of part header
   '.*?',                   # solution
   '^check\\$part\\(\\)\n', # beginning of validation
   '.*?',                   # validation
   '^(# )?(?=# =+@)',       # beginning of next part
   sep=""
 ), c(
-  '^# ===+@',              # beginning of header
-  '(\\d+)',                # beginning of header (?P<part>)
-  '=\n',                   # beginning of header
+  '^# ===+@',              # beginning of part header
+  '(\\d+)',                # beginning of part header (?P<part>)
+  '=\n',                   # beginning of part header
   '(^#( [^\n]*)?\n)*',     # description
-  '^# =+(\\d+)@=\n',       # end of header
+  '(# ---+\n((#( [^\n]*)?\n)*))?',  # solution template
+  '^# =+(\\d+)@=\n',       # end of part header
   '.*?',                   # solution
   'check\\$part\\(\\)\n',  # beginning of validation
   '.*?',                   # validation
@@ -33,9 +36,9 @@ matches <- regex_break(paste(
     apply(matches, 1, function(match) list(
         part = as.numeric(match[2]),
         description = super_strip(match[4]),
-        solution = strip(match[6]),
-        template = '',
-        validation = strip(match[8]),
+        solution = strip(match[7]),
+        template = super_strip(gsub("^[^\n]+\n", "", match[5])),
+        validation = strip(match[9]),
         problem = {{ problem.id }}
       )
     )
