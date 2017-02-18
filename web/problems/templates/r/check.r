@@ -4,6 +4,7 @@ check$initialize <- function(parts) {
   init.part <- function(part) {
     part$errors <- list()
     part$secret <- list()
+    if (part$part) part$id <- part$part
     return(part)
   }
   check$parts <<- lapply(parts, init.part)

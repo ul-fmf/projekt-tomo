@@ -26,7 +26,7 @@ regex_break <- function(whole_regex, regexes, source) {
     matches <- matrix("", nrow=m, ncol=n)
     for (i in 1:m) {
         whole <- whole_matches[i]
-        for (j in 1:length(regexes)) {
+        for (j in 1:n) {
             rest_regex <- paste(regexes[-(1 : j)], collapse="")
             part_regex <- paste("(?sm)\\A", regexes[j], "(?=", rest_regex, "\\Z)", sep="")
             match <- regexpr(part_regex, whole, perl=TRUE)
@@ -43,7 +43,7 @@ rstrip <- function(str) gsub("\\s+$", "", str)
 
 super_strip <- function(str) {
     str <- gsub("(^|\n)# ?", "\n", str)
-    str <- gsub("\\A\\s+|\\s+\\Z", "", str, perl=TRUE)
+    gsub("\\A\\s+|\\s+\\Z", "", str, perl=TRUE)
 }
 
 get_current_filename <- function () {

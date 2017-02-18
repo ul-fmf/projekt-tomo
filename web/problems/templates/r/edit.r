@@ -9,20 +9,20 @@
 .source <- paste(readLines(.filename, encoding = "UTF-8"), collapse="\n")
 
 matches <- regex_break(paste(
-  '^#+@(\\d+)#\n',         # beginning of header
+  '^# ===+@(\\d+)=\n',     # beginning of header
   '(^#( [^\n]*)?\n)*',     # description
-  '^#+\\1@#\n',            # end of header
+  '^# =+\\1@=\n',          # end of header
   '.*?',                   # solution
   '^check\\$part\\(\\)\n', # beginning of validation
   '.*?',                   # validation
-  '^(# )?(?=#+@)',         # beginning of next part
+  '^(# )?(?=# =+@)',       # beginning of next part
   sep=""
 ), c(
-  '^#+@',                  # beginning of header
+  '^# ===+@',              # beginning of header
   '(\\d+)',                # beginning of header (?P<part>)
-  '#\n',                   # beginning of header
+  '=\n',                   # beginning of header
   '(^#( [^\n]*)?\n)*',     # description
-  '^#+(\\d+)@#\n',         # end of header
+  '^# =+(\\d+)@=\n',       # end of header
   '.*?',                   # solution
   'check\\$part\\(\\)\n',  # beginning of validation
   '.*?',                   # validation
@@ -31,7 +31,7 @@ matches <- regex_break(paste(
 
   check$initialize(
     apply(matches, 1, function(match) list(
-        id = as.numeric(match[2]),
+        part = as.numeric(match[2]),
         description = super_strip(match[4]),
         solution = strip(match[6]),
         template = '',
@@ -43,22 +43,19 @@ matches <- regex_break(paste(
 
 
 problem_match <- regex_break(paste(
-  '^#+@@#\n',          # beginning of header
+  '^# =+\n',           # beginning of header
   '^# ([^\n]*)\n',     # title
   '^(#\\s*\n)*',       # empty rows
   '(^#( [^\n]*)?\n)*', # description
-  '^#+@@#\n',          # end of header
-  '.*?',               # preamble
-  '^(# )?(?=#+@)',     # beginning of first part
+  '^(# )?(?==+@)',     # beginning of first part
   sep = ""
 ), c(
-  '^#+@@#\n',          # beginning of header
+  '^# =+\n',           # beginning of header
   '^# ',               # title
   '([^\n]*)',          # title (?P<title>)
   '\n^(#\\s*\n)*',     # title & empty rows
   '(^#( [^\n]*)?\n)*', # description
-  '^#+@@#\n',          # end of header
-  '.*?'                # preamble
+  '^(# )?'             # beginning of first part
   ), .source)
 
 if(length(problem_match) == 0)
@@ -66,23 +63,17 @@ if(length(problem_match) == 0)
 
 title <- strip(problem_match[1, 3])
 description <- super_strip(problem_match[1, 5])
-preamble <- strip(problem_match[1, 7])
 
 ##########################################################################
 # Od tu naprej je navodilo naloge
 
-#######################################################################@@#
+# ========================================================================
 # {{ problem.title }} {% if problem.description %}
 #
-# {{ problem.description|indent:"# "|safe }}{% endif %}
-#######################################################################@@#
-
-{{ problem.preamble|safe }}
-
-{% for part in problem.parts.all %}
-##################################################################@{{ part.id|stringformat:'06d'}}#
+# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
+# ================================================================@{{ part.id|stringformat:'06d'}}=
 # {{ part.description|indent:"# "|safe }}
-##################################################################{{ part.id|stringformat:'06d'}}@#
+# ================================================================{{ part.id|stringformat:'06d'}}@=
 {{ part.solution|safe }}
 
 check$part()
@@ -90,23 +81,30 @@ check$part()
 
 {% endfor %}
 
-# ##################################################################@000000#
-# # To je predloga za novo podnalogo. Tu vpisite besedilo podnaloge.
-# ##################################################################000000@#
+# # ================================================================@000000=
+# # {% blocktrans %}This is a template for a new problem part. To create a new part, uncomment
+# # the template and fill in your content.
+# # Define a function `multiply(x, y)` that returns the product of `x` and `y`.
+# # For example:
+# #
+# #     > multiply(3, 7)
+# #     21
+# #     > multiply(6, 7)
+# #     42{% endblocktrans %}
+# # ================================================================000000@=
 #
-# sem napisite resitev
+# {% trans "multiply" %} <- function(x, y) x * y
 #
 # check$part()
 #
-# check$equal(testni_primer, resitev)
-#
-# check$challenge(testni_primer_1)
-# check$challenge(testni_primer_2)
-# check$challenge(testni_primer_3)
-# ...
+# check$equal({% trans "multiply" %}(3, 7), 21)
+# check$equal({% trans "multiply" %}(6, 7), 42)
+# check$equal({% trans "multiply" %}(10, 10), 100)
+# check$challenge({% trans "multiply" %}(100, 100))
+# check$challenge({% trans "multiply" %}(500, 123))
 
-#######################################################################@@#
-# Od tu naprej ničesar ne spreminjajte.
+# =====================================================================@@=
+# {% trans "Do not change this line or anything below it." %}
 
 check$summarize()
 if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
