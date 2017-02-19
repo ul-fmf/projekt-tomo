@@ -118,6 +118,10 @@ if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
   cat('{% trans "The problem is correctly formulated." %}\n')
   if(readline('{% trans "Should I save it on the server [yes/NO]" %}') == '{% trans "yes" %}') {
     cat('{% trans "Saving problem to the server" %}...\n')
+    check$parts <- lapply(check$parts, function(part) {
+      part$secret <- lapply(part$secret, function(secret) secret[1])
+      part
+    })
     post <- list(
       title = title,
       description = description,
