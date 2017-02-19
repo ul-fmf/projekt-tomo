@@ -109,6 +109,10 @@ check$part()
     if(length(problem_match) == 0)
       stop("NAPAKA: datoteka ni pravilno oblikovana")
 
+    check$parts <- lapply(check$parts, function(part) {
+      part$secret <- lapply(part$secret, function(secret) secret[1])
+      part
+    })
     return(list(
       title = strip(problem_match[1, 3]),
       description = super_strip(problem_match[1, 5]),
