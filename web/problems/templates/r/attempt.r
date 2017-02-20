@@ -227,7 +227,10 @@
   tryCatch({
     r <- POST(
       '{{ submission_url }}',
-      body = check$parts,
+      body = lapply(check$parts, function(part) {
+        part$secret <- lapply(part$secret, function(x) x[1])
+        part
+      }),
       encode = "json",
       add_headers(Authorization = 'Token {{ authentication_token }}')
     )
