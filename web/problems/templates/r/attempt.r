@@ -184,6 +184,7 @@
 .check <- function() {
   {% include 'r/library.r' %}
   {% include 'r/check.r' %}
+  check$challenge <- check$secret
 
   .source <- paste(readLines(.filename), collapse="\n")
 

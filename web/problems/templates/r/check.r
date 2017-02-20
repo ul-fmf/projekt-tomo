@@ -32,7 +32,7 @@ check$error <- function(msg, ...) {
   check$feedback(msg, ...)
 }
 
-check$challenge <- function(x, hint = "") {
+check$secret <- function(x, hint = "") {
   pair <- c(toString(check$canonize(x)), toString(hint))
   check$parts[[check$part.counter]]$secret<<-
     c(check$parts[[check$part.counter]]$secret, list(pair))

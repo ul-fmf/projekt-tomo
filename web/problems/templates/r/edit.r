@@ -37,8 +37,8 @@ check$part()
 # check$equal({% trans "multiply" %}(3, 7), 21)
 # check$equal({% trans "multiply" %}(6, 7), 42)
 # check$equal({% trans "multiply" %}(10, 10), 100)
-# check$challenge({% trans "multiply" %}(100, 100))
-# check$challenge({% trans "multiply" %}(500, 123))
+# check$secret({% trans "multiply" %}(100, 100))
+# check$secret({% trans "multiply" %}(500, 123))
 
 
 # ======================================================================@=
@@ -52,6 +52,11 @@ check$part()
 
 {% include 'r/library.r' %}
 {% include 'r/check.r' %}
+check$challenge.used <- FALSE
+check$challenge <- function(x, hint = "") {
+  check$challenge.used <<- TRUE
+  check$secret(x, hint)
+}
 
 .extract.problem <- function() {
     matches <- regex_break(paste(
@@ -119,6 +124,9 @@ check$part()
 
 .validate.current.file <- function() {
     check$summarize()
+    if(check$challenge.used) {
+      cat('{% trans "Function check$challenge is deprecated. Use check$secret instead." %}\n')
+    }
     if(all(sapply(check$parts, function(part) part$valid))) {
       cat('{% trans "The problem is correctly formulated." %}\n')
       if(readline('{% trans "Should I save it on the server [yes/NO]" %}') == '{% trans "yes" %}') {
