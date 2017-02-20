@@ -119,9 +119,7 @@ check$part()
 
 .validate.current.file <- function() {
     check$summarize()
-    if(any(sapply(check$parts, function(part) length(part$errors) > 0))) {
-      cat('{% trans "The problem is not correctly formulated." %}\n')
-    } else {
+    if(all(sapply(check$parts, function(part) part$valid))) {
       cat('{% trans "The problem is correctly formulated." %}\n')
       if(readline('{% trans "Should I save it on the server [yes/NO]" %}') == '{% trans "yes" %}') {
         cat('{% trans "Saving problem to the server" %}...\n')
@@ -147,5 +145,7 @@ check$part()
       } else {
         cat('{% trans "Problem was not saved." %}\n')
       }
+    } else {
+      cat('{% trans "The problem is not correctly formulated." %}\n')
     }
 }

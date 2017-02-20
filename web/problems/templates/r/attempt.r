@@ -210,7 +210,7 @@
       )
     )
   )
-  check$parts[[length(check$parts)]]$solution = rstrip(check$parts[[length(check$parts)]]$solution)
+  check$parts[[length(check$parts)]]$solution <- rstrip(check$parts[[length(check$parts)]]$solution)
 
   {% for part, _ in parts %}
   if (check$part()) {
@@ -224,7 +224,6 @@
   {% endfor %}
 
   cat('Shranjujem rešitve na strežnik... ')
-  post <- check$parts
   tryCatch({
     r <- POST(
       '{{ submission_url }}',
@@ -234,9 +233,28 @@
     )
     response <- content(r)
     cat('Rešitve so shranjene.\n')
-    for(rejected in response$rejected)
-      check$parts[[as.integer(rejected[[1]])]]$rejection <- rejected[[2]]
-    check$summarize()
+    updates <- list()
+    for (part in response$attempts) {
+      updates[[part$part]] <- part
+    }
+    for(i in 1:length(check$parts)) {
+      valid.before <- check$parts[[i]]$valid
+      if (!is.null(updates[[check$parts[[i]]$part]])) {
+        for (field in names(updates[[check$parts[[i]]$part]])) {
+          check$parts[[i]][[field]] <- updates[[check$parts[[i]]$part]][[field]]
+        }
+      }
+      valid.after <- check$parts[[i]]$valid
+      if (valid.before && ! valid.after) {
+        wrong.index <- response$wrong_indices[[as.character(check$parts[[i]]$part)]]
+        if (! is.null(wrong.index)) {
+          hint <- check$parts[[i]]$secret[[wrong.index+1]][2]
+          if (nchar(hint) > 0) {
+            check$parts[[i]]$feedback <- c(check$parts[[i]]$feedback, paste("Namig:", hint))
+          }
+        }
+      }
+    }
     if("update" %in% names(response)) {
       cat("Posodabljam datoteko... ")
       index <- 1
@@ -251,6 +269,7 @@
       cat("Stara datoteka je preimenovana v ", basename(backup.filename), ".\n", sep = "")
       cat("Če se datoteka v urejevalniku ni osvežila, jo shranite ter ponovno zaženite.\n")
     }
+    check$summarize()
   },
   error = function(r) {
     cat('Pri shranjevanju je prišlo do napake.\n')

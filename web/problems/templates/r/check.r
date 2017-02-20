@@ -2,7 +2,8 @@ check <- list()
 
 check$initialize <- function(parts) {
   init.part <- function(part) {
-    part$errors <- list()
+    part$valid <- TRUE
+    part$feedback <- list()
     part$secret <- list()
     if (part$part) part$id <- part$part
     return(part)
@@ -21,9 +22,14 @@ check$part <- function() {
   return(strip(check$parts[[check$part.counter]]$solution) != "")
 }
 
+check$feedback <- function(msg, ...) {
+  check$parts[[check$part.counter]]$feedback <<-
+    c(check$parts[[check$part.counter]]$feedback, sprintf(msg, ...))
+}
+
 check$error <- function(msg, ...) {
-  check$parts[[check$part.counter]]$errors <<-
-    c(check$parts[[check$part.counter]]$errors, sprintf(msg, ...))
+  check$parts[[check$part.counter]]$valid <<- FALSE
+  check$feedback(msg, ...)
 }
 
 check$challenge <- function(x, hint = "") {
@@ -116,16 +122,13 @@ check$summarize <- function() {
   for(i in 1:length(check$parts)) {
     if(strip(check$parts[[i]]$solution) == "") {
       cat("Podnaloga", i, "je brez rešitve.\n")
-    } else if (length(check$parts[[i]]$errors) > 0) {
-      cat("Podnaloga", i, "ni prestala vseh testov:\n")
-      cat(paste("- ", check$parts[[i]]$errors, "\n", sep = ""), sep = "")
-    } else if ("rejection" %in% names(check$parts[[i]])) {
-      if(check$parts[[i]]$rejection != "")
-        cat("Podnaloga ", i, " je zavrnjena. (", check$parts[[i]]$rejection, ")\n", sep = "")
-      else
-        cat("Podnaloga ", i, " je zavrnjena.\n", sep = "")
+    } else if (! check$parts[[i]]$valid) {
+      cat("Podnaloga", i, "nima veljavne rešitve.\n")
     } else {
-      cat("Podnaloga", i, "je pravilno rešena.\n")
+      cat("Podnaloga", i, "ima veljavno rešitev.\n")
+    }
+    for (message in check$parts[[i]]$feedback) {
+        cat("- ", message, "\n", sep = "")
     }
   }
 }
