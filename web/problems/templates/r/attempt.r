@@ -213,6 +213,8 @@
   )
   check$parts[[length(check$parts)]]$solution <- rstrip(check$parts[[length(check$parts)]]$solution)
 
+  body <- list()
+  indices <- c()
   {% for part, _ in parts %}
   if (check$part()) {
     tryCatch({
@@ -221,6 +223,8 @@
     error = function(e) {
       check$error("Testi v izrazu %s sprožijo izjemo %s", deparse(e$call), e$message)
     })
+    body[[length(body) + 1]] <- check$parts[[check$part.counter]]
+    indices <- c(indices, check$part.counter)
   }
   {% endfor %}
 
@@ -228,7 +232,7 @@
   tryCatch({
     r <- POST(
       '{{ submission_url }}',
-      body = lapply(check$parts, function(part) {
+      body = lapply(body, function(part) {
         part$secret <- lapply(part$secret, function(x) x[1])
         part
       }),
@@ -241,23 +245,24 @@
     for (part in response$attempts) {
       updates[[part$part]] <- part
     }
-    for(i in 1:length(check$parts)) {
-      valid.before <- check$parts[[i]]$valid
-      if (!is.null(updates[[check$parts[[i]]$part]])) {
-        for (field in names(updates[[check$parts[[i]]$part]])) {
-          check$parts[[i]][[field]] <- updates[[check$parts[[i]]$part]][[field]]
+    for(i in 1:length(body)) {
+      valid.before <- body[[i]]$valid
+      if (!is.null(updates[[body[[i]]$part]])) {
+        for (field in names(updates[[body[[i]]$part]])) {
+          body[[i]][[field]] <- updates[[body[[i]]$part]][[field]]
         }
       }
-      valid.after <- check$parts[[i]]$valid
+      valid.after <- body[[i]]$valid
       if (valid.before && ! valid.after) {
-        wrong.index <- response$wrong_indices[[as.character(check$parts[[i]]$part)]]
+        wrong.index <- response$wrong_indices[[as.character(body[[i]]$part)]]
         if (! is.null(wrong.index)) {
-          hint <- check$parts[[i]]$secret[[wrong.index+1]][2]
+          hint <- body[[i]]$secret[[wrong.index+1]][2]
           if (nchar(hint) > 0) {
-            check$parts[[i]]$feedback <- c(check$parts[[i]]$feedback, paste("Namig:", hint))
+            body[[i]]$feedback <- c(body[[i]]$feedback, paste("Namig:", hint))
           }
         }
       }
+      check$parts[[indices[i]]] <- body[[i]]
     }
     if("update" %in% names(response)) {
       cat("Posodabljam datoteko... ")
