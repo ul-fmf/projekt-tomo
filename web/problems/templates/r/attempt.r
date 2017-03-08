@@ -214,6 +214,7 @@
   check$parts[[length(check$parts)]]$solution <- rstrip(check$parts[[length(check$parts)]]$solution)
 
   body <- list()
+  indices <- c()
   {% for part, _ in parts %}
   if (check$part()) {
     tryCatch({
@@ -223,6 +224,7 @@
       check$error("Testi v izrazu %s sprožijo izjemo %s", deparse(e$call), e$message)
     })
     body[[length(body) + 1]] <- check$parts[[check$part.counter]]
+    indices <- c(indices, check$part.counter)
   }
   {% endfor %}
 
@@ -260,6 +262,7 @@
           }
         }
       }
+      check$parts[[indices[i]]] <- body[[i]]
     }
     if("update" %in% names(response)) {
       cat("Posodabljam datoteko... ")
