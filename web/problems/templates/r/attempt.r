@@ -245,24 +245,26 @@
     for (part in response$attempts) {
       updates[[part$part]] <- part
     }
-    for(i in 1:length(body)) {
-      valid.before <- body[[i]]$valid
-      if (!is.null(updates[[body[[i]]$part]])) {
-        for (field in names(updates[[body[[i]]$part]])) {
-          body[[i]][[field]] <- updates[[body[[i]]$part]][[field]]
-        }
-      }
-      valid.after <- body[[i]]$valid
-      if (valid.before && ! valid.after) {
-        wrong.index <- response$wrong_indices[[as.character(body[[i]]$part)]]
-        if (! is.null(wrong.index)) {
-          hint <- body[[i]]$secret[[wrong.index+1]][2]
-          if (nchar(hint) > 0) {
-            body[[i]]$feedback <- c(body[[i]]$feedback, paste("Namig:", hint))
+    if (length(body) > 0) {
+      for(i in 1:length(body)) {
+        valid.before <- body[[i]]$valid
+        if (!is.null(updates[[body[[i]]$part]])) {
+          for (field in names(updates[[body[[i]]$part]])) {
+            body[[i]][[field]] <- updates[[body[[i]]$part]][[field]]
           }
         }
+        valid.after <- body[[i]]$valid
+        if (valid.before && ! valid.after) {
+          wrong.index <- response$wrong_indices[[as.character(body[[i]]$part)]]
+          if (! is.null(wrong.index)) {
+            hint <- body[[i]]$secret[[wrong.index+1]][2]
+            if (nchar(hint) > 0) {
+              body[[i]]$feedback <- c(body[[i]]$feedback, paste("Namig:", hint))
+            }
+          }
+        }
+        check$parts[[indices[i]]] <- body[[i]]
       }
-      check$parts[[indices[i]]] <- body[[i]]
     }
     if("update" %in% names(response)) {
       cat("Posodabljam datoteko... ")
