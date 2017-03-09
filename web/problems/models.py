@@ -23,6 +23,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         ('octave', 'Octave'),
         ('r', 'R')), default='python')
     EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
+    MIMETYPES = {'python': 'text/x-python',
+                 'octave': 'text/x-octave',
+                 'r': 'text/x-R'}
     class Meta:
         order_with_respect_to = 'problem_set'
 
@@ -116,6 +119,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
             part.copy_to(new_problem)
         return new_problem
 
+    def content_type(self):
+        return self.MIMETYPES[self.language]
 
 
 class Part(OrderWithRespectToMixin, models.Model):
