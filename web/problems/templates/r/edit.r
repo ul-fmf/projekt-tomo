@@ -143,8 +143,9 @@ check$challenge <- function(x, hint = "") {
           add_headers(Authorization = 'Token {{ authentication_token }}')
         )
         response <- content(r)
-        cat(response$message, "\n")
-        if("update" %in% names(response)) {
+        if (is.atomic(response)) {
+          cat(response, "\n")
+        } else if("update" %in% names(response)) {
           file.copy(.filename, paste(.filename, ".orig", sep=""))
           f <- file(.filename, encoding="UTF-8")
           writeLines(response$update, f)
