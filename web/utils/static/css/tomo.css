@@ -176,9 +176,14 @@ margin-left: 30px; margin-bottom: 5px;}
   margin: 0;
   padding: 0;
   /*float: left;*/
-  width: 200px;
+  width: 100%;
   /*text-align: right;*/
   color: #D7A02C;
+}
+.tomo-solution-valid {
+  margin: 0;
+  padding: 0;
+  float: right;
 }
 .tomo-solution-official {
  /*float: right;*/
