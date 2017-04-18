@@ -86,7 +86,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def attempts_by_user(self):
+    def attempts_by_user(self, active_only=True):
         attempts = {}
         for part in self.parts.all():
             for attempt in part.attempts.all():
@@ -97,7 +97,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
-        observed_students = list(self.problem_set.course.observed_students())
+        observed_students = self.problem_set.course.observed_students()
+        if active_only:
+            observed_students = observed_students.filter(attempts__part__problem=self).distinct()
+        observed_students = list(observed_students)
         for user in observed_students:
             user.valid = user.invalid = user.empty = 0
             user.these_attempts = [attempts[user].get(part) for part in self.parts.all()]
