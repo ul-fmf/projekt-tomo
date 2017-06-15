@@ -7,6 +7,8 @@ from rest_framework.serializers import ModelSerializer, Field, CharField
 from rest_framework.viewsets import ModelViewSet
 from utils.rest import JSONStringField
 from .models import Attempt
+from django.core import signing
+from rest_framework.exceptions import PermissionDenied
 
 
 def update_fields(obj, new_values):
@@ -29,6 +31,7 @@ class AttemptSerializer(ModelSerializer):
     """
     solution = CharField(allow_blank=True, trim_whitespace=False)
     secret = WritableJSONField(write_only=True, required=False)
+    token = CharField(write_only=True, required=False)
     feedback = JSONStringField()
 
     class Meta:
@@ -43,6 +46,15 @@ class AttemptSerializer(ModelSerializer):
         if not secret_matches:
             validated_data['valid'] = False
             return wrong_index
+
+    @staticmethod
+    def check_token(validated_data, user):
+        if not validated_data['part'].problem.verify_attempt_tokens:
+            validated_data.pop('token', None)
+            return
+        data = signing.loads(validated_data.pop('token'))
+        if data['user'] != user.pk or data['part'] != validated_data['part'].pk:
+            raise PermissionDenied()
 
     def create(self, validated_data):
         self.check_secret(validated_data)
@@ -73,6 +85,7 @@ class AttemptViewSet(ModelViewSet):
             attempts = []
             wrong_indices = {}
             for attempt_data in serializer.validated_data:
+                AttemptSerializer.check_token(attempt_data, request.user)
                 wrong_index = AttemptSerializer.check_secret(attempt_data)
                 wrong_indices[attempt_data['part'].pk] = wrong_index
                 updated_fields = None

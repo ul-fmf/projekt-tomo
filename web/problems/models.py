@@ -10,6 +10,7 @@ from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
+from django.core import signing
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
@@ -22,6 +23,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         ('python', 'Python 3'),
         ('octave', 'Octave'),
         ('r', 'R')), default='python')
+    verify_attempt_tokens = models.BooleanField(default=True)
     EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
     MIMETYPES = {'python': 'text/x-python',
                  'octave': 'text/x-octave',
@@ -47,7 +49,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
-        parts = [(part, solutions.get(part.id, part.template)) for part in self.parts.all()]
+        parts = [(part, solutions.get(part.id, part.template), part.attempt_token(user)) for part in self.parts.all()]
         url = settings.SUBMISSION_URL + reverse('attempts-submit')
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
@@ -186,3 +188,9 @@ class Part(OrderWithRespectToMixin, models.Model):
         new_part.problem = problem
         new_part.save()
         return new_part
+
+    def attempt_token(self, user):
+        return signing.dumps({
+            'part': self.pk,
+            'user': user.pk,
+        })

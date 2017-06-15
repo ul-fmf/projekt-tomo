@@ -203,7 +203,7 @@ function validation = validate_current_file(src)
   file_parts = extract_parts(src);
   check_initialize(file_parts);
 
-  {% for part, _ in parts %}
+  {% for part, _, _ in parts %}
       if check_part()
           try
               {{ part.validation|default:"0;"|indent:"  "|safe }}

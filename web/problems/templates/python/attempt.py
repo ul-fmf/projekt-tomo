@@ -210,6 +210,8 @@ def _validate_current_file():
                     'secret': [x for (x, _) in part['secret']],
                     'feedback': json.dumps(part['feedback']),
                 }
+                if 'token' in part:
+                    submitted_part['token'] = part['token']
                 submitted_parts.append(submitted_part)
         data = json.dumps(submitted_parts).encode('utf-8')
         headers = {
@@ -240,8 +242,11 @@ def _validate_current_file():
     filename = os.path.abspath(sys.argv[0])
     file_parts = extract_parts(filename)
     Check.initialize(file_parts)
-{% for part, _ in parts %}
+{% for part, _, token in parts %}
     if Check.part():
+        {% if problem.verify_attempt_tokens %}
+        Check.current_part['token'] = '{{ token }}'
+        {% endif %}
         try:
             {{ part.validation|default:"pass"|indent:"            "|safe }}
         except:

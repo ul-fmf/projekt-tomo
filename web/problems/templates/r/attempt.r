@@ -215,7 +215,7 @@
 
   body <- list()
   indices <- c()
-  {% for part, _ in parts %}
+  {% for part, _, _ in parts %}
   if (check$part()) {
     tryCatch({
       {{ part.validation|indent:"      "|safe }}
