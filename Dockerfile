@@ -16,14 +16,12 @@ RUN groupadd -r tomo && useradd -r -g tomo tomo
 RUN apt-get update \
   && apt-get install -y \
   uwsgi \
-  uwsgi-plugin-python \
-  python2.7 \
-  python-pip \
+  uwsgi-plugin-python3 \
+  python3 \
+  python3-pip \
   git \
   postgresql-server-dev-9.4 \
-  python-ldap \
-  libpython2.7-dev \
-  libldap2-dev \
+  libpython3-dev \
   libsasl2-dev \
    && rm -rf /var/lib/apt/lists/*
 
@@ -33,14 +31,14 @@ WORKDIR /home/tomo
 RUN git clone -b ${TOMO_GIT_BRANCH} ${TOMO_GIT_LOCATION}
 
 # Install dependencies
-RUN pip install -r projekt-tomo/web/requirements/arnes.txt
+RUN pip3 install -r projekt-tomo/web/requirements/arnes.txt
 
 ENV SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=very_secret_key
 ENV SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=very_secret_key
 ENV SOCIAL_AUTH_FACEBOOK_KEY=very_secret_key
 ENV SOCIAL_AUTH_FACEBOOK_SECRET=very_secret_key
 
-RUN python projekt-tomo/web/manage.py collectstatic --noinput --settings=web.settings.arnes
+RUN python3 projekt-tomo/web/manage.py collectstatic --noinput --settings=web.settings.arnes
 RUN chown tomo.tomo -R /home/tomo
 
 # UWSGI options are read from environmental variables.

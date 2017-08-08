@@ -30,6 +30,10 @@ class BasicViewsTestCase(TestCase):
             'public':
                 [
                     ('login', dict()),
+                    ('terms_of_service', dict()),
+                    ('help', dict()),
+                    ('help_students', dict()),
+                    ('help_teachers', dict()),
                 ],
             'authenticated':
                 [
@@ -43,14 +47,23 @@ class BasicViewsTestCase(TestCase):
             'student':
                 [
                 ],
+            'teacher_redirect':
+                [
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': problem.pk, 'shift': -1}),
+                ],
             'teacher':
                 [
                     ('problem_edit_file', {'problem_pk': problem.pk}),
+                    ('problem_set_edit', {'problem_set_pk': visible_problem.pk}),
                     ('problem_set_detail', {'problem_set_pk': prob_set.pk}),
                     ('problem_attempt_file', {'problem_pk': problem.pk}),
                     ('problem_set_attempts', {'problem_set_pk': prob_set.pk}),
                     ('problem_solution', {'problem_pk': problem.pk, 'user_pk': self.user.pk}),
                     ('problem_solution', {'problem_pk': visible_problem.pk, 'user_pk': self.other_user.pk}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': 1}),
+                    ('problem_move', {'problem_pk': visible_problem.pk, 'shift': -1}),
+                    ('problem_set_progress', {'problem_set_pk': prob_set.pk}),
                 ]
         }
         self.default_redirect_view_name = 'login'
@@ -90,7 +103,7 @@ class BasicViewsTestCase(TestCase):
         except for public pages.
         """
         public_views = [view for view, args in self.views['public']]
-        for view, args in chain.from_iterable(self.views.values()):
+        for view, args in chain.from_iterable(list(self.views.values())):
             if view not in public_views:
                 self.assertRedirect(view, args, 'login')
             else:
@@ -114,7 +127,7 @@ class BasicViewsTestCase(TestCase):
         try:
             self.login()
             public_views = [view for view, _ in self.views['public'] + self.views['authenticated']]
-            for view, args in chain.from_iterable(self.views.values()):
+            for view, args in chain.from_iterable(list(self.views.values())):
                 if view not in public_views:
                     self.assertDenied(view, args)
         finally:
@@ -127,17 +140,17 @@ class BasicViewsTestCase(TestCase):
         """
         try:
             self.login()
-            denied = self.views['teacher']
+            denied = self.views['teacher'] + self.views['teacher_redirect']
             for view, args in denied + self.views['student']:
                 self.assertDenied(view, args)
-            self.course.students.add(self.user)
+            self.course.enroll_student(self.user)
             for view, args in self.views['student']:
                 self.assertOK(view, args)
             for view, args in denied:
                 self.assertDenied(view, args)
         finally:
             self.logout()
-            self.course.students.remove(self.user)
+            self.course.unenroll_student(self.user)
 
     def testTeacher(self):
         """
@@ -146,8 +159,13 @@ class BasicViewsTestCase(TestCase):
         try:
             self.login()
             self.course.teachers.add(self.user)
-            for view, args in chain.from_iterable(self.views.values()):
-                print("OK: " + view)
-                self.assertOK(view, args)
+            redirect_views = [view for view, args in self.views['teacher_redirect']]
+            for view, args in chain.from_iterable(list(self.views.values())):
+                if view not in redirect_views:
+                    print(("OK: " + view))
+                    self.assertOK(view, args)
+                else:
+                    print(("Redirect: " + view))
+                    self.assertRedirect(view, args)
         finally:
             self.logout()

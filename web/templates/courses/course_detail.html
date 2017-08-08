@@ -50,6 +50,7 @@
             {% csrf_token %}
             <li>
               {{ teacher.get_full_name }}
+              {% if teacher != user %}
               <span class="tomo-teacher-switch">
                 {# Translators: Demote teacher to student - button #}
                 <button type="submit" aria-label="Demote" data-toggle="tooltip"
@@ -57,6 +58,7 @@
                   <i class="fa fa-user"></i>
                 </button>
             </span>
+            {% endif %}
           </li>
           </form>
           {% endfor %}
@@ -64,20 +66,30 @@
         <hr>
         <ul class="tomo-students">
           {% for student in students %}
-          <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
-            {% csrf_token %}
             <li>
               <a href="{% url 'course_progress' course.pk student.pk %}">{{ student.get_full_name }}</a>
               <span id="student{{student.pk}}" class="chart"></span>
               <span class="tomo-teacher-switch">
+                <form action="{% url 'toggle_observed' course.pk  student.pk%}"  method="post" id='toggle_observed_form'>
+                  {% csrf_token %}
+                {# Translators: Stop observing the student #}
+                <button type="submit" aria-label="Demote" data-toggle="tooltip"
+                        title="{% trans 'Stop observing' %}">
+                  <i class="fa fa-eye-slash"></i>
+                </button>
+                </form>
+              </span>
+              <span class="tomo-teacher-switch">
+                <form action="{% url 'promote_to_teacher' course.pk  student.pk%}"  method="post" id='promote_to_teacher_form'>
+                  {% csrf_token %}
                 {# Translators: Demote teacher to student - button #}
                 <button type="submit" aria-label="Demote" data-toggle="tooltip"
                         title="{% trans 'Promote to teacher' %}">
                   <i class="fa fa-graduation-cap"></i>
                 </button>
-              </form>
-            </span>
-          </li>
+                </form>
+              </span>
+            </li>
           {% endfor %}
         </ul>
         {% else %}

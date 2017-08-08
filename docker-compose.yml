@@ -38,6 +38,6 @@ tomo:
     - UWSGI_UID=tomo
     - UWSGI_GID=tomo
     - UWSGI_SOCKET=:8080
-    - UWSGI_PLUGINS=python
+    - UWSGI_PLUGINS=python3
     - UWSGI_STATIC_MAP=/static=/home/tomo/projekt-tomo/web/static
   restart: always

@@ -1,6 +1,9 @@
+body, h1, h2, h3, h4, h5, h6 {
+    font-family: sans-serif;
+}
+
 .intro-header {
-  background: url(../img/intro-bg.jpg) center center no-repeat;
-  background-size: cover;
+  background-color: #444;
 }
 
 /* for centering images according to HTML5 standard */
@@ -45,7 +48,7 @@ a { color: #23527c; }
 
 .tomo-thin { font-weight: 300; }
 .tomo-institution { color: #666; font-weight: 300; }
-.tomo-lecturer { font-style: italic; color: #A92D2D; }
+.tomo-lecturer { font-style: italic; color: #A92D2D; text-overflow: ellipsis; white-space: nowrap; overflow: hidden; }
 .tomo-lecturers { list-style-type: none; color: #A92D2D; font-weight: 500; padding: 0; margin: 10px 0; }
 .tomo-students { list-style-type: none; font-weight: 400; padding: 0; margin: 10px 0; }
 .tomo-students li { margin: 7px 0; }
@@ -53,11 +56,16 @@ li .tomo-teacher-switch { display: none; }
 li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { display: inline; }
 .tomo-teacher-switch button { margin: 0 0 0 10px; border: none; padding: 0; background: none; color: #000; }
 .tomo-teacher-switch button:hover { color: #D7A02C }
-
+.tomo-teacher-switch form {display: inline;}
+.hide-courses { color: #666; text-decoration: underline; font-size: small; display: block; font-size: 1.4em;
+margin-left: 30px; margin-bottom: 5px;}
+.tomo-other h2 {
+  margin-left: 30px;
+}
 .tomo-home { margin: 0 40px 0 0; padding: 0; }
 .tomo-home img { height: 100%; }
 
-.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 300px; min-width: 220px; text-align: center; background-color: #eee; }
+.tomo-login { position: absolute; top: 0; right: 0; left: auto; margin-top: 10px; padding-top: 20px; width: 220px; min-width: 220px; text-align: center; background-color: #eee; }
 .tomo-login-header { background: none; border: none; }
 .tomo-login-signin { margin: 15px 2px 0 0; background-color: rgba(255, 255, 255, 0.5); }
 .tomo-login-signin i { margin-right: 10px; }
@@ -68,7 +76,7 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-login .btn i { margin-right: 10px; }
 .tomo-login .fa-google { vertical-align: -25% } /* vertical position fix */
 
-
+.intro-message {padding-top: 0; padding-bottom: 0;}
 .intro-message h3 { clear: both; }
 
 .dropdown-menu { rgba(255, 255, 255, 0.2); }
@@ -124,19 +132,20 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
 .tomo-task-heading .edit-btn:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
 .tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
 .tomo-subtasks { font-weight: 300; }
+.tomo-subtasks a { text-decoration: underline; }
 .tomo-col-noleftpadding { padding-left: 0; }
 .tomo-add-task { background-color: #878F28; color: #fff; }
 .tomo-add-task i { margin-right: 10px; }
 .tomo-add-task:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
 
 .tomo-other { margin: 0; padding: 0; }
-.tomo-other .col-md-4 { margin-right: 0px; height: 15em; padding: 2em 4em; }
+.tomo-other .col-md-4 { margin-right: 0px; height: 10em; padding: 2em 4em; }
 .tomo-other .col-md-4:hover { background-color: rgba(255, 255, 255, 0.5);}
-.tomo-other h3 { padding-right: 40px; font-size: 1.4em; }
+.tomo-other h3 { padding-right: 40px; font-size: 1.4em; margin-top: 10px; }
 .tomo-other .tomo-institution { margin: 0; padding: 0; text-align: right; }
 .tomo-other button { border: none; background: none; }
 .tomo-course-header button { border: none; background: none; font-size: 1.2em;}
-.tomo-other .tomo-enroll { margin-top: 20px; color: #fff; }
+.tomo-other .tomo-enroll { margin-top: 10px; color: #fff; }
 .tomo-other .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
 .tomo-other .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
 
@@ -167,9 +176,14 @@ li:hover .tomo-teacher-switch, .tomo-students li:focus .tomo-teacher-switch { di
   margin: 0;
   padding: 0;
   /*float: left;*/
-  width: 200px;
+  width: 100%;
   /*text-align: right;*/
   color: #D7A02C;
+}
+.tomo-solution-valid {
+  margin: 0;
+  padding: 0;
+  float: right;
 }
 .tomo-solution-official {
  /*float: right;*/
@@ -187,7 +201,7 @@ footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
 .affix-top, .affix { position: static; }
 @media (min-width: 979px) {
   #sidebar.affix-top { position: static; margin-top: 30px; width: 228px; }
-  #sidebar.affix { position: fixed; top: 70px; width: 228px; }
+  #sidebar.affix { position: fixed; top: 70px; width: 228px; bottom: 0px; overflow-y: scroll;}
 }
 #sidebar a { font-size: 1em;  }
 #sidebar li { margin: 15px 0; }

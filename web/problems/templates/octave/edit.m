@@ -84,12 +84,11 @@ function validation = validate_current_file(src,parts)
   n = length(parts);
   valid = [];
   for i=1:n
-    chunks = strsplit(parts{i}.solution,'check_part()');
     parts{i}.problem = {{ problem.id }};
-    parts{i}.solution = chunks{1};
-    parts{i}.validation = chunks{2};
-    if parts{i}.part
-      parts{i}.id = parts{i}.part;
+    parts{i}.solution = parts{i}.solution;
+    parts{i}.validation = parts{i}.validation;
+    if str2num(parts{i}.part) != 0
+      parts{i}.id = str2num(parts{i}.part);
     end
     valid  = [valid parts{i}.valid];
     parts{i} = rmfield(rmfield(rmfield(parts{i},'valid'),'feedback'),'part');

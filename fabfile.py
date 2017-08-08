@@ -2,9 +2,8 @@ import os
 from fabric.api import *
 
 LOCAL_ROOT = os.path.dirname(os.path.realpath(__file__))
-TOMO_HOST = 'tomo.fmf.uni-lj.si'
-TOMO_DIR = '/srv/tomodev/'
-TOMO_VIRTUALENV = '/srv/tomodev/virtualenv'
+LOCAL_VIRTUALENV = '~/.virtualenv/tomo'
+TOMO_HOST = 'www.projekt-tomo.si'
 
 env.hosts = [TOMO_HOST]
 
@@ -13,50 +12,45 @@ env.hosts = [TOMO_HOST]
 
 @task
 def test():
-    with prefix('source ~/.virtualenv/tomo/bin/activate'):
-        with lcd(LOCAL_ROOT):
-            with lcd('web'):
-                local('./manage.py test')
+    with lcd(LOCAL_ROOT), activate_virtualenv():
+        with lcd('web'):
+            local('./manage.py test')
 
 
 @task
 def deploy():
-    test()
-    transfer_code()
-    update_requirements()
-    manage('collectstatic --noinput')
-    manage('migrate')
-    restart()
+    with cd('/home/gregor/docker/'):
+        sudo('docker-compose pull')
+        sudo('docker-compose up -d')
+    migrate()
 
 
 @task
-def reset():
-    manage('flush')
-    manage('loaddata web/fixtures/*.json')
+def quick_deploy():
+    tomo_docker('bash -c "cd projekt-tomo && git pull"')
+    migrate()
+    manage('collectstatic --noinput')
+    tomo_docker('uwsgi --reload /tmp/project-master.pid')
 
+
+@task
+def migrate():
+    manage('migrate')
+
+
+@task
+def ls():
+    manage('help')
 
 # AUXILLIARY FUNCTIONS
 
 def activate_virtualenv():
-    return prefix('source {}/bin/activate'.format(TOMO_VIRTUALENV))
+    return prefix('source {}/bin/activate'.format(LOCAL_VIRTUALENV))
 
 
 def manage(command):
-    with cd(TOMO_DIR), activate_virtualenv():
-        return sudo('web/manage.py {} --settings=web.settings.dev'.format(command))
+    tomo_docker('python3 projekt-tomo/web/manage.py {}'.format(command))
 
 
-def transfer_code():
-    with lcd(LOCAL_ROOT):
-        local('rsync -chavzP --rsync-path="sudo rsync" --exclude-from=.gitignore '
-              '--delete web {}:{}'.format(TOMO_HOST, TOMO_DIR))
-
-
-def update_requirements():
-    with cd(TOMO_DIR), activate_virtualenv():
-        sudo('pip install -r web/requirements/dev.txt'.format(TOMO_VIRTUALENV))
-
-
-def restart():
-    with cd(TOMO_DIR):
-        sudo('touch web/web/wsgi/dev.py')
+def tomo_docker(command):
+    sudo('docker exec docker_tomo_1 {}'.format(command))

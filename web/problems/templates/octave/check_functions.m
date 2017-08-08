@@ -16,7 +16,8 @@ endfunction
 function r = check_part()
   global check;
   check.part_counter = check.part_counter + 1;
-  r = check_has_solution(check.parts{check.part_counter});
+  check.current_part = check.parts{check.part_counter};
+  r = check_has_solution(check.current_part);
 endfunction
 
 function check_error(message)
@@ -35,7 +36,7 @@ function res = check_equal(koda, rezultat)
   global check;
   res = 0;
   actual_result = eval(koda);
-  if abs(actual_result - rezultat) > 1e-15
+  if norm(actual_result - rezultat) > 1e-6
     check_error(["Izraz ", koda, " vrne ", mat2str(actual_result), " namesto ", mat2str(rezultat)]);
     res = 1;
   end

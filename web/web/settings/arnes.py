@@ -1,13 +1,12 @@
-from common import *
+from .common import *
 
 SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
-TEMPLATE_DEBUG = False
 
 ALLOWED_HOSTS = ['www.projekt-tomo.si']
 
-WSGI_APPLICATION = 'web.wsgi.dev.application'
+WSGI_APPLICATION = 'web.wsgi.arnes.application'
 
 DATABASES = {
     'default': {
@@ -23,10 +22,9 @@ DATABASES = {
 STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
 STATIC_URL = '/static/'
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

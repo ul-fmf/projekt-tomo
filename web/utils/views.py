@@ -1,4 +1,4 @@
-import StringIO
+from io import BytesIO
 import zipfile
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -6,6 +6,7 @@ from django.shortcuts import render
 
 def terms_of_service(request):
     return render(request, 'terms_of_service.html')
+
 
 def help(request, special=None):
     template = 'help_{}.html'.format(special) if special else 'help.html'
@@ -28,7 +29,7 @@ def zip_archive(archive_name, files):
     iterable of files, each represented by a pair, where the first component
     gives the filename and the second one gives the contents.
     """
-    string_buffer = StringIO.StringIO()
+    string_buffer = BytesIO()
     archive = zipfile.ZipFile(string_buffer, 'w', zipfile.ZIP_DEFLATED)
     for filename, contents in files:
         archive.writestr(filename, contents.encode('utf-8'))

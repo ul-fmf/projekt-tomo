@@ -1,19 +1,24 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from . import views
-from views import ProblemSetCreate, ProblemSetUpdate, ProblemSetDelete
+from .views import ProblemSetCreate, ProblemSetUpdate, ProblemSetDelete
 
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^problem_set/(?P<problem_set_pk>\d+)/$',
         views.problem_set_detail,
         name='problem_set_detail'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/download/$',
         views.problem_set_attempts,
         name='problem_set_attempts'),
+    url(r'^problem_set/(?P<problem_set_pk>\d+)/static/$',
+        views.problem_set_static,
+        name='problem_set_static'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/edit/$',
         views.problem_set_edit,
         name='problem_set_edit'),
+    url(r'^problem_set/(?P<problem_set_pk>\d+)/results/$',
+        views.problem_set_results,
+        name='problem_set_results'),
     url(r'^problem_set/(?P<problem_set_pk>\d+)/move/$',
         views.problem_set_move,
         name='problem_set_move'),
@@ -44,16 +49,16 @@ urlpatterns = patterns(
     url(r'^course/(?P<course_pk>\d+)/unenroll_from_course/$',
         views.unenroll_from_course,
         name='unenroll_from_course'),
-    url(r'^course/(?P<course_pk>\d+)/course_users/$',
-        views.course_users,
-        name='course_users'),
     url(r'^course/(?P<course_pk>\d+)/(?P<teacher_pk>\d+)/demote_to_student$',
         views.demote_to_student,
         name='demote_to_student'),
     url(r'^course/(?P<course_pk>\d+)/(?P<student_pk>\d+)/promote_to_teacher$',
         views.promote_to_teacher,
         name='promote_to_teacher'),
+    url(r'^course/(?P<course_pk>\d+)/(?P<student_pk>\d+)/toggle_observed$',
+        views.toggle_observed,
+        name='toggle_observed'),
     url(r'^course/(?P<course_pk>\d+)/progress/(?P<user_pk>\d+)/$',
         views.course_progress,
         name='course_progress'),
-)
+]

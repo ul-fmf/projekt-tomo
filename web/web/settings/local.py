@@ -1,9 +1,8 @@
-from common import *
+from .common import *
 
 SECRET_KEY = '0vb+-_-52phz@ii^cxr+mlgvmn6fctd+v5qpnv&k+-00#u-==0'
 
 DEBUG = True
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -27,5 +26,5 @@ TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
 # Tell nose to measure coverage on the 'problems', 'attemtps', 'courses' and 'users' apps
 NOSE_ARGS = [
     '--with-coverage',
-    '--cover-package=problems,attempts,courses,users',
+    '--cover-package=problems,attempts,courses,users,utils',
 ]

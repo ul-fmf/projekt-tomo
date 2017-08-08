@@ -19,7 +19,7 @@ def is_json_string_list(s):
     if type(val) is not list:
         raise ValidationError('Not a JSON list.')
     for x in val:
-        if type(x) is not unicode:
+        if type(x) is not str:
             raise ValidationError('Not a JSON list of strings.')
 
 
@@ -37,7 +37,7 @@ def truncate(s, max_length=50, indicator="..."):
     elif max_length < len(indicator):
         raise ValueError('Indicator longer than maximum length.')
     else:
-        return u'{0}{1}'.format(s[:max_length - len(indicator)], indicator)
+        return '{0}{1}'.format(s[:max_length - len(indicator)], indicator)
 
 
 @register.filter
@@ -79,3 +79,9 @@ def latex_markdown(source):
 def verify(cond):
     if not cond:
         raise PermissionDenied
+
+
+@register.filter
+@stringfilter
+def remove_spaces(source):
+    return source.replace(" ", "").replace("\n", "")

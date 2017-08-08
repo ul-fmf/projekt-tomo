@@ -3,8 +3,6 @@ from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Course, ProblemSet
-from problems.models import Part
-from attempts.models import Attempt
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -18,13 +16,24 @@ def problem_set_attempts(request, problem_set_pk):
     archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
 
+
 @login_required
 def problem_set_progress(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, id=problem_set_pk)
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(request, "courses/problem_set_progress.html", {
         'problem_set': problem_set,
     })
+
+
+@login_required
+def problem_set_static(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    return render(request, "courses/problem_set_static.html", {
+        'problem_set': problem_set,
+    })
+
 
 @login_required
 def problem_set_edit(request, problem_set_pk):
@@ -39,41 +48,17 @@ def problem_set_edit(request, problem_set_pk):
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    course = problem_set.course
-    user = request.user if request.user.is_authenticated() else None
     verify(request.user.can_view_problem_set(problem_set))
 
     user_attempts = request.user.attempts.filter(part__problem__problem_set__id=problem_set_pk)
     valid_parts_ids = user_attempts.filter(valid=True).values_list('part_id', flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list('part_id', flat=True)
 
-    problem_success = []
-    for problem in problem_set.problems.all():
-        if request.user.can_edit_course(course):
-            success = problem.student_success()
-        else:
-            success = {
-                'valid': 0,
-                'invalid': 0,
-                'empty': 0
-            }
-            for part in problem.parts.all():
-                if part.pk in valid_parts_ids:
-                    success['valid'] += 1
-                elif part.pk in invalid_parts_ids:
-                    success['invalid'] += 1
-                else:
-                    success['empty'] += 1
-        problem_success.append((problem, success))
-
     return render(request, 'courses/problem_set_detail.html', {
         'problem_set': problem_set,
-        'problems': problem_set.problems.all(),
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
-        'problem_success': problem_success,
-        'show_teacher_forms': request.user.can_edit_course(course),
-        'user': user,
+        'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
     })
 
 
@@ -83,24 +68,7 @@ def course_detail(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
-        students = list(course.students.exclude(taught_courses=course))
-        problem_sets = course.problem_sets.filter(visible=True)
-        part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
-        attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
-        from django.db.models import Count
-        valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
-        all_attempts = attempts.values('user').annotate(Count('user'))
-        def to_dict(attempts):
-            attempts_dict = {}
-            for val in attempts:
-                attempts_dict[val['user']] = val['user__count']
-            return attempts_dict
-        valid_attempts_dict = to_dict(valid_attempts)
-        all_attempts_dict = to_dict(all_attempts)
-        for student in students:
-            student.valid = valid_attempts_dict.get(student.pk, 0)
-            student.invalid = all_attempts_dict.get(student.pk, 0) - student.valid
-            student.empty = part_count - student.valid - student.invalid
+        students = course.student_success()
     else:
         students = []
     course.annotate_for_user(request.user)
@@ -112,40 +80,22 @@ def course_detail(request, course_pk):
 
 
 @login_required
-def course_users(request, course_pk):
-    """Show a list of all course students and teachers"""
-    course = get_object_or_404(Course, pk=course_pk)
-    verify(request.user.can_edit_course(course))
-    students = list(course.students.all())
-    part_count = Part.objects.filter(problem__problem_set__course=course).count()
-    attempts = Attempt.objects.filter(part__problem__problem_set__course=course)
-    from django.db.models import Count
-    valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
-    all_attempts = attempts.values('user').annotate(Count('user'))
-    def to_dict(attempts):
-        attempts_dict = {}
-        for val in attempts:
-            attempts_dict[val['user']] = val['user__count']
-        return attempts_dict
-    valid_attempts_dict = to_dict(valid_attempts)
-    all_attempts_dict = to_dict(all_attempts)
-    for student in students:
-        student.correct_percentage = "{}%".format(100.0 * valid_attempts_dict.get(student.pk, 0) / part_count)
-        student.incorrect_percentage = "{}%".format(100.0 * (all_attempts_dict.get(student.pk, 0) - valid_attempts_dict.get(student.pk, 0)) / part_count)
-    return render(request, 'courses/course_users.html', {
-        'course': course,
-        'students': students
-    })
-
-
-@login_required
 def promote_to_teacher(request, course_pk, student_pk):
     """Promote student to teacher in a given course"""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
     student = get_object_or_404(User, pk=student_pk)
-    course.teachers.add(student)
-    course.students.remove(student)
+    course.promote_to_teacher(student)
+    return redirect(course)
+
+
+@login_required
+def toggle_observed(request, course_pk, student_pk):
+    """Promote student to teacher in a given course"""
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_edit_course(course))
+    student = get_object_or_404(User, pk=student_pk)
+    course.toggle_observed(student)
     return redirect(course)
 
 
@@ -155,8 +105,7 @@ def demote_to_student(request, course_pk, teacher_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_edit_course(course))
     teacher = get_object_or_404(User, pk=teacher_pk)
-    course.students.add(teacher)
-    course.teachers.remove(teacher)
+    course.demote_to_student(teacher)
     return redirect(course)
 
 
@@ -182,7 +131,7 @@ def homepage(request):
 def enroll_in_course(request, course_pk):
     """Enrolls user in a course as a student."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.students.add(request.user)
+    course.enroll_student(request.user)
     return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -190,8 +139,7 @@ def enroll_in_course(request, course_pk):
 def unenroll_from_course(request, course_pk):
     """Unenrolls user (student or teacher) from a course."""
     course = get_object_or_404(Course, pk=course_pk)
-    course.students.remove(request.user)
-    course.teachers.remove(request.user)
+    course.unenroll_student(request.user)
     return redirect(request.META.get('HTTP_REFERER'))
 
 
@@ -200,7 +148,6 @@ def unenroll_from_course(request, course_pk):
 def problem_set_move(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_course(problem_set.course))
-    print request.POST
     if 'move_up' in request.POST:
         problem_set.move(-1)
     elif 'move_down' in request.POST:
@@ -274,3 +221,11 @@ def course_progress(request, course_pk, user_pk):
         'observed_user': user,
         'course_attempts': course.user_attempts(user)
     })
+
+
+@login_required
+def problem_set_results(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_view_problem_set_attempts(problem_set))
+    archive_name, files = problem_set.results_archive(request.user)
+    return zip_archive(archive_name, files)

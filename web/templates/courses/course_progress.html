@@ -14,8 +14,8 @@
 <div class="content-section-a tomo-overview-student">
   <div class="container">
     <h2>{{ observed_user.title }}</h2>
-    <div class="row">
       {% for problem_set, problem_set_attempts, ps_valid, ps_invalid, ps_empty in course_attempts %}
+      <div class="row">
       <div class="col-md-4">
         <h3><a href="{{ problem_set.get_absolute_url }}"
                    data-toggle="tooltip"
@@ -48,8 +48,8 @@
           </tbody>
         </table>
       </div>
+      </div>
       {% endfor %}
-    </div>
   </div>
 </div>
 {% endblock content %}

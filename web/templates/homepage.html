@@ -16,23 +16,32 @@
           </ul>
         </div>
         {% cycle '' '</div><div class="row">' %}
+      {% empty %}
+      <h3>Nimate predmetov</h3>
+      <p>Na spodnjem seznamu poiščite želene predmete in jih
+         dodajte med svoje s tem, da pritisnete na zvezdico ob imenu.</p>
       {% endfor %}
     </div>
   </div>
 </div>
 
+
 <div class="content-section-y tomo-other">
   <div class="container tomo-other">
-    <div class="row">
-      {% for course in not_user_courses %}
+    <h2>Ostali predmeti</h2>
+      {% regroup not_user_courses by institution as institution_list %}
+      {% for institution in institution_list %}
+      <a class="hide-courses" data-toggle="collapse" href="#inst-{{ forloop.counter}}" aria-expanded="false" aria-controls="inst-{{ forloop.counter}}">{{ institution.grouper }}</a>
+    <div class="row collapse" id="inst-{{ forloop.counter}}">
+      {% for course in institution.list %}
       <div class="col-md-4">
         <span class="pull-right">
           <form action="{% url 'enroll_in_course' course.pk %}"
                 method="post" id='enroll_in_course_form'>
             {% csrf_token %}
             <button class="tomo-enroll" type="submit"
-                    aria-label="{% trans "Add to favorites" %}" data-toggle="tooltip"
-                    title="{% trans "Add to favorites" %}">
+                    aria-label="{% trans "Add to my courses" %}" data-toggle="tooltip"
+                    title="{% trans "Add to my courses" %}">
               <i class="fa fa-star fa-lg"></i>
               <i class="fa fa-star-o fa-lg"></i>
             </button>
@@ -50,9 +59,9 @@
           @{% templatetag openbrace %}{{ course.institution }}{% templatetag closebrace %}
         </p>
       </div>
-      {% cycle '' '' '</div><div class="row">' %}
       {% endfor %}
     </div>
+      {% endfor %}
   </div>
 </div>
 {% endblock content %}

@@ -131,7 +131,7 @@ class Check:
             return False
 
     @staticmethod
-    def output(expression, content):
+    def output(expression, content, use_globals=False):
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         try:
@@ -139,7 +139,7 @@ class Check:
                 inp = input(prompt)
                 print(inp)
                 return inp
-            exec(Check.current_part['solution'], {'input': visible_input})
+            exec(expression, globals() if use_globals else {'input': visible_input})
         finally:
             output = sys.stdout.getvalue().strip().splitlines()
             sys.stdout = old_stdout

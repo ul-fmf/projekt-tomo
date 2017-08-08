@@ -27,6 +27,7 @@ class ProblemSerializer(ModelSerializer):
 
     class Meta:
         model = Problem
+        fields = '__all__'
 
 
 class ProblemViewSet(ModelViewSet):
@@ -60,12 +61,12 @@ class ProblemViewSet(ModelViewSet):
         problem = None
         try:
             problem = Problem.objects.get(pk=problem_data['id'])
-        except Exception, e:
+        except Exception as e:
             return Response(e.message, status=status.HTTP_400_BAD_REQUEST)
 
         existing_parts = problem.parts.all()
-        parts_to_update_data = filter(lambda part: 'id' in part, parts_data)
-        parts_to_create_data = filter(lambda part: 'id' not in part, parts_data)
+        parts_to_update_data = [part for part in parts_data if 'id' in part]
+        parts_to_create_data = [part for part in parts_data if 'id' not in part]
         parts_to_delete = existing_parts.exclude(id__in=[part['id']
                                                          for part in parts_to_update_data])
         parts_to_update = existing_parts.filter(id__in=[part['id']
@@ -75,7 +76,8 @@ class ProblemViewSet(ModelViewSet):
             existing_ids = set(parts_to_update.values_list('id', flat=True))
             to_update_ids = set([part['id'] for part in parts_to_update_data])
             missing_ids = to_update_ids.difference(existing_ids)
-            message = 'Parts with ids {0} are not in the database.'.format(missing_ids)
+            missing_ids = ['@{0:06d}'.format(missing_id) for missing_id in missing_ids]
+            message = 'Parts {0} do not belong to the given problem.'.format(', '.join(missing_ids))
             return Response(message, status=status.HTTP_400_BAD_REQUEST)
         # Prepare custom sort order
         # Assign None to ids of not already created parts

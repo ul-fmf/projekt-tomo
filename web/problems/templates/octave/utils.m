@@ -2,27 +2,30 @@ function parts = extract_parts(src)
     part_regex = '# =+@(?<part>\d+)=\n';  # beginning of header
     part_regex = [part_regex '(?<description>(#( [^\n]*)?\n)+)']; # description
     part_regex = [part_regex '# =+\n'];           # end of header
-    part_regex = [part_regex '(?<solution>.*?)'];# solution
-    part_regex = [part_regex '(?=\n(# )?# =+@)'];     # beginning of next part
-
+    part_regex = [part_regex '(?<solution>.*?)']; # solution
+    part_regex = [part_regex 'check_part\(\)\n']; # beginning of validation
+    part_regex = [part_regex '(?<validation>.*?)']; # validation
+    part_regex = [part_regex '(?=\n(# )?# =+@)']; # beginning of next part        
     [s, e, te, m, t, nm, sp] = regexp(src,part_regex,'dotall');
-    parts = cell();
     if iscell(nm.part)
       for i=1:length(nm.part)
         parts{end+1} =  struct("part",nm.part(i),
           "solution", strtrim(nm.solution(i)),
+          "validation", strtrim(nm.validation(i)),
           "description", regexprep(strtrim(nm.description(i)),"^#","",'lineanchors')
           );
       end
-    else
+    else      
       parts{1} = struct("part",nm.part,
       "solution",strtrim(nm.solution),
+      "validation",strtrim(nm.validation),
       "description", regexprep(strtrim(nm.description),"^# ","",'lineanchors')
       );
     end
     # The last solution extends all the way to the validation code,
     # so we strip any trailing whitespace from it.
 endfunction
+
 
 function [response,output] = submit_parts(submited_parts, url, token)
        #data = [data "]" ];

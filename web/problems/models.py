@@ -1,3 +1,4 @@
+from copy import deepcopy
 import json
 from django.conf import settings
 from django.core.urlresolvers import reverse
@@ -9,7 +10,6 @@ from simple_history.models import HistoricalRecords
 from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
-from attempts.models import Attempt
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
@@ -19,13 +19,17 @@ class Problem(OrderWithRespectToMixin, models.Model):
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
     language = models.CharField(max_length=8, choices=(
-        ('python','Python 3'),
-        ('octave','Octave')), default = 'python')
-    EXTENSIONS = {'python':'py', 'octave': 'm'}
+        ('python', 'Python 3'),
+        ('octave', 'Octave'),
+        ('r', 'R')), default='python')
+    EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
+    MIMETYPES = {'python': 'text/x-python',
+                 'octave': 'text/x-octave',
+                 'r': 'text/x-R'}
     class Meta:
         order_with_respect_to = 'problem_set'
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def get_absolute_url(self):
@@ -43,9 +47,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
-        parts = [(part, solutions.get(part.id, '')) for part in self.parts.all()]
+        parts = [(part, solutions.get(part.id, part.template)) for part in self.parts.all()]
         url = settings.SUBMISSION_URL + reverse('attempts-submit')
-        problem_slug = slugify(self.title).replace("-","_")
+        problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}.{1}".format(problem_slug, extension)
         contents = render_to_string("{0}/attempt.{1}".format(self.language, extension), {
@@ -56,34 +60,24 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def student_success(self):
-        student_count = self.problem_set.course.students.count()
-        attempts = Attempt.objects.filter(user__courses=self.problem_set.course,
-                                          part__problem=self)
-        submitted_count = attempts.count()
-        valid_count = attempts.filter(valid=True).count()
-        part_count = Part.objects.filter(problem=self).count()
-        invalid_count = submitted_count - valid_count
-        total_count = student_count * part_count
-
-        if total_count:
-            valid_percentage = int(100.0 * valid_count / total_count)
-            invalid_percentage = int(100.0 * invalid_count / total_count)
-        else:
-            valid_percentage = 0
-            invalid_percentage = 0
-
-        empty_percentage = 100 - valid_percentage - invalid_percentage
-        return {
-            'valid': valid_percentage,
-            'invalid': invalid_percentage,
-            'empty': empty_percentage
-        }
+    def marking_file(self, user):
+        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
+        parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
+        username = user.get_full_name() or user.username
+        problem_slug = slugify(username).replace("-", "_")
+        extension = self.EXTENSIONS[self.language]
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string("{0}/marking.{1}".format(self.language, extension), {
+            "problem": self,
+            "parts": parts,
+            "user": user,
+        })
+        return filename, contents
 
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse('problems-submit')
-        problem_slug = slugify(self.title).replace("-","_")
+        problem_slug = slugify(self.title).replace("-", "_")
         filename = "{0}_edit.{1}".format(problem_slug, self.EXTENSIONS[self.language])
         contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
             "problem": self,
@@ -92,39 +86,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
-    def valid(self, user):
-        '''
-        Check whether user has valid attempts for all parts of
-        this problem.
-        '''
-        return self.valid_parts(user).count() == self.parts.count()
-
-    def invalid(self, user):
-        '''
-        Check whether user has some invalid attempts for this problem.
-        '''
-        return self.attempted(user) and self.valid_parts(user).count() == 0
-
-    def valid_parts(self, user):
-        '''
-        Return the QuerySet object of problem parts that have valid attempt by the given
-        user.
-        '''
-        return self.parts.filter(attempts__user=user, attempts__valid=True)
-
-    def attempted_parts(self, user):
-        '''
-        Return the queryset of all parts for which user has submitted attempts for.
-        '''
-        return user.attempts.filter(part__in=self.parts.all())
-
-    def attempted(self, user):
-        '''
-        Return the queryset of all parts for which user has submitted attempts for.
-        '''
-        return self.attempted_parts(user).count() > 0
-
-    def attempts_by_user(self):
+    def attempts_by_user(self, active_only=True):
         attempts = {}
         for part in self.parts.all():
             for attempt in part.attempts.all():
@@ -132,34 +94,42 @@ class Problem(OrderWithRespectToMixin, models.Model):
                     attempts[attempt.user][part] = attempt
                 else:
                     attempts[attempt.user] = {part: attempt}
-        sorted_attempts = []
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
-        for user in self.problem_set.course.students.all():
-            valid = invalid = empty = 0
-            user_attempts = [attempts[user].get(part) for part in self.parts.all()]
-            for attempt in user_attempts:
+        observed_students = self.problem_set.course.observed_students()
+        if active_only:
+            observed_students = observed_students.filter(attempts__part__problem=self).distinct()
+        observed_students = list(observed_students)
+        for user in observed_students:
+            user.valid = user.invalid = user.empty = 0
+            user.these_attempts = [attempts[user].get(part) for part in self.parts.all()]
+            for attempt in user.these_attempts:
                 if attempt is None:
-                    empty += 1
+                    user.empty += 1
                 elif attempt.valid:
-                    valid += 1
+                    user.valid += 1
                 else:
-                    invalid += 1
-            sorted_attempts.append((user, user_attempts, valid, invalid, empty))
-        return sorted_attempts
+                    user.invalid += 1
+        return observed_students
 
-    def progress_bar_width(self):
-        parts_count = self.parts.count()
-        if parts_count:
-            return "{0}%".format(100.0 / parts_count)
-        else:
-            return "0%"
+    def copy_to(self, problem_set):
+        new_problem = deepcopy(self)
+        new_problem.pk = None
+        new_problem.problem_set = problem_set
+        new_problem.save()
+        for part in self.parts.all():
+            part.copy_to(new_problem)
+        return new_problem
+
+    def content_type(self):
+        return self.MIMETYPES[self.language]
 
 
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, related_name='parts')
     description = models.TextField(blank=True)
+    template = models.TextField(blank=True)
     solution = models.TextField(blank=True)
     validation = models.TextField(blank=True)
     secret = models.TextField(default="[]", validators=[is_json_string_list])
@@ -168,8 +138,8 @@ class Part(OrderWithRespectToMixin, models.Model):
     class Meta:
         order_with_respect_to = 'problem'
 
-    def __unicode__(self):
-        return u'@{0:06d} ({1})'.format(self.pk, truncate(self.description))
+    def __str__(self):
+        return '@{0:06d} ({1})'.format(self.pk, truncate(self.description))
 
     def get_absolute_url(self):
         return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
@@ -195,37 +165,24 @@ class Part(OrderWithRespectToMixin, models.Model):
                 return False, i
         return True, None
 
-    def valid(self, user):
-        '''
-        Check whether user has submitted attempt for this part
-        that is marked as valid.
-        '''
-        return user.attempts.filter(part=self, valid=True).count() == 1
-
-    def attempted(self, user):
-        '''
-        Check whether user has submitted attempt for this part.
-        '''
-        return user.attempts.filter(part=self).count() >= 1
-
     def student_success(self):
-        student_count = self.problem.problem_set.course.students.count()
-        attempts = self.attempts.filter(user__courses=self.problem.problem_set.course)
+        students = self.problem.problem_set.course.observed_students()
+        student_count = len(students)
+        attempts = self.attempts.filter(user__in=students)
         submitted_count = attempts.count()
         valid_count = attempts.filter(valid=True).count()
         invalid_count = submitted_count - valid_count
-        total_count = student_count
+        empty_count = student_count - valid_count - invalid_count
 
-        if total_count:
-            valid_percentage = int(100.0 * valid_count / total_count)
-            invalid_percentage = int(100.0 * invalid_count / total_count)
-        else:
-            valid_percentage = 0
-            invalid_percentage = 0
-
-        empty_percentage = 100 - valid_percentage - invalid_percentage
         return {
-            'valid': valid_percentage,
-            'invalid': invalid_percentage,
-            'empty': empty_percentage
+            'valid': valid_count,
+            'invalid': invalid_count,
+            'empty': empty_count
         }
+
+    def copy_to(self, problem):
+        new_part = deepcopy(self)
+        new_part.pk = None
+        new_part.problem = problem
+        new_part.save()
+        return new_part
