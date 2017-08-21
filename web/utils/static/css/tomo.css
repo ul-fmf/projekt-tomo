@@ -3,7 +3,7 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 .intro-header {
-  background-color: #444;
+  background-color: #222;
 }
 
 /* for centering images according to HTML5 standard */
@@ -83,7 +83,7 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-intro { float: none; margin: 0 auto; text-align: center; }
 .tomo-intro hr { border-top: 1px solid #f8f8f8; border-bottom: 1px solid rgba(0,0,0,0.2); }
 
-.tomo-page-header { background: url(../img/intro-bg.jpg) no-repeat center center; background-size: cover; }
+.tomo-page-header { background: #222; }
 .tomo-page-header .navbar-brand { color: #f8f8f8; }
 .tomo-page-header .navbar-brand:hover { color: #ccc; }
 .tomo-page-header .navbar-nav>li>a { color: #f8f8f8; }
