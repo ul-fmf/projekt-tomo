@@ -7,21 +7,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    def add_submission_date(apps, schema_editor):
-        Attempt = apps.get_model('attempts', 'Attempt')
-        HistoricalAttempt = apps.get_model('attempts', 'HistoricalAttempt')
-        submission_dates = {}
-        for historical_attempt in HistoricalAttempt.objects.all():
-            part_id, user_id = historical_attempt.part_id, historical_attempt.user_id
-            date = historical_attempt.history_date
-            historical_attempt.submission_date = date
-            historical_attempt.save()
-            if (part_id, user_id) not in submission_dates or date > submission_dates[(part_id, user_id)]:
-                submission_dates[(part_id, user_id)] = date
-        for attempt in Attempt.objects.all():
-            attempt.submission_date = submission_dates[(attempt.part_id, attempt.user_id)]
-            attempt.save()
-
     dependencies = [
         ('attempts', '0007_auto_20161004_0927'),
     ]
@@ -37,8 +22,20 @@ class Migration(migrations.Migration):
             name='submission_date',
             field=models.DateTimeField(null=True),
         ),
-        migrations.RunPython(
-            code=add_submission_date,
+        migrations.RunSQL(
+            'UPDATE attempts_historicalattempt SET submission_date = history_date'
+        ),
+        migrations.RunSQL(
+            '''UPDATE attempts_attempt
+                  SET submission_date = subquery.submission_date
+                 FROM (
+                    SELECT user_id, part_id, max(history_date) AS submission_date
+                      FROM attempts_historicalattempt
+                     GROUP BY user_id, part_id
+                 ) AS subquery
+                WHERE attempts_attempt.user_id = subquery.user_id
+                  AND attempts_attempt.part_id = subquery.part_id
+            '''
         ),
         migrations.AlterField(
             model_name='attempt',
