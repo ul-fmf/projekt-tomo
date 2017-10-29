@@ -163,7 +163,6 @@
 
 
 import io, json, os, re, sys, shutil, traceback, urllib.error, urllib.request
-from contextlib import contextmanager
 
 
 {% include 'python/check.py' %}

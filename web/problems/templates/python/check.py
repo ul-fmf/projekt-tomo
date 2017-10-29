@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 class Check:
     @staticmethod
     def has_solution(part):
