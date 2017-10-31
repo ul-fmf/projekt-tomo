@@ -27,14 +27,12 @@ class Migration(migrations.Migration):
         ),
         migrations.RunSQL(
             '''UPDATE attempts_attempt
-                  SET submission_date = subquery.submission_date
-                 FROM (
-                    SELECT user_id, part_id, max(history_date) AS submission_date
+                  SET submission_date = (
+                     SELECT max(history_date)
                       FROM attempts_historicalattempt
-                     GROUP BY user_id, part_id
-                 ) AS subquery
-                WHERE attempts_attempt.user_id = subquery.user_id
-                  AND attempts_attempt.part_id = subquery.part_id
+                     WHERE attempts_attempt.user_id = user_id
+                       AND attempts_attempt.part_id = part_id
+                 )
             '''
         ),
         migrations.AlterField(
