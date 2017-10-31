@@ -34,7 +34,7 @@ class Check:
         Check.feedback(message, *args, **kwargs)
 
     @staticmethod
-    def clean(x, digits=6):
+    def clean(x, digits=6, typed=False):
         t = type(x)
         if t is float:
             x = round(x, digits)
@@ -42,18 +42,18 @@ class Check:
             # we change it to 0.0 abusing the fact it behaves as False.
             v = x if x else 0.0
         elif t is complex:
-            v = complex(Check.clean(x.real, digits), Check.clean(x.imag, digits))
+            v = complex(Check.clean(x.real, digits, typed), Check.clean(x.imag, digits, typed))
         elif t is list:
-            v = list([Check.clean(y, digits) for y in x])
+            v = list([Check.clean(y, digits, typed) for y in x])
         elif t is tuple:
-            v = tuple([Check.clean(y, digits) for y in x])
+            v = tuple([Check.clean(y, digits, typed) for y in x])
         elif t is dict:
-            v = sorted([(Check.clean(k, digits), Check.clean(v, digits)) for (k, v) in x.items()])
+            v = sorted([(Check.clean(k, digits, typed), Check.clean(v, digits, typed)) for (k, v) in x.items()])
         elif t is set:
-            v = sorted([Check.clean(y, digits) for y in x])
+            v = sorted([Check.clean(y, digits, typed) for y in x])
         else:
             v = x
-        return (t, v)
+        return (t, v) if typed else v
 
     @staticmethod
     def secret(x, hint=None, clean=None):
