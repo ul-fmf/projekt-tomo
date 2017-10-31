@@ -118,7 +118,7 @@ def homepage(request):
         if request.user.is_favourite_course(course):
             user_courses.append(course)
             course.annotate_for_user(request.user)
-            course.annotated_problem_sets = course.annotated_problem_sets[-1:-4:-1]
+            course.annotated_problem_sets = [course for course in course.annotated_problem_sets if course.visible][-1:-4:-1]
         else:
             not_user_courses.append(course)
     return render(request, 'homepage.html', {
