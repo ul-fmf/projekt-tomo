@@ -202,4 +202,5 @@ def _validate_current_file():
 {% endfor %}
     Check.summarize()
 
-_validate_current_file()
+if __name__ == '__main__':
+    _validate_current_file()

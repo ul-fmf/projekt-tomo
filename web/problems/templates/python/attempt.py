@@ -273,4 +273,5 @@ def _validate_current_file():
             print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
     Check.summarize()
 
-_validate_current_file()
+if __name__ == '__main__':
+    _validate_current_file()

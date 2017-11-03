@@ -49,7 +49,8 @@ Check.part()
 # =============================================================================
 
 
-_validate_current_file()
+if __name__ == '__main__':
+    _validate_current_file()
 
 # =L=I=B=R=A=R=Y=@=
 
