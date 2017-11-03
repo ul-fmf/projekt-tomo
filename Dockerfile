@@ -1,8 +1,8 @@
 # vim:set ft=dockerfile:
 FROM debian:jessie
-MAINTAINER Gregor Jerše <gregor@jerse.info>
+MAINTAINER Matija Pretnar <matija.pretnar@fmf.uni-lj.si>
 
-ENV TOMO_GIT_LOCATION=https://github.com/matijapretnar/projekt-tomo.git
+ENV TOMO_GIT_LOCATION=https://github.com/ul-fmf/projekt-tomo.git
 ENV TOMO_GIT_BRANCH=master
 
 # Secret key is only here to make collectstatic work.
