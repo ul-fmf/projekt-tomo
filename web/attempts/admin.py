@@ -21,6 +21,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
         'user__username',
         'part__description',
     )
+    date_hierarchy = 'submission_date'
 
     def problem(self, obj):
         return obj.part.problem

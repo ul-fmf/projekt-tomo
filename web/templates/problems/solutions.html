@@ -52,8 +52,8 @@
                     <div class="inside inside-full-height">
                       <div class="content">
                         <div class="tomo-solution-code-user">
-						Čas oddaje: {{part.attempt.created}}
                           {% if part.attempt %}
+                          Čas oddaje: {{ part.attempt.submission_date }}
                           <div class="tomo-pre">{{ part.attempt.solution }}</div>
                           {% else %}
                           {# Translators: in solution comparison table #}
