@@ -1,3 +1,5 @@
+from contextlib import contextmanager
+
 class Check:
     @staticmethod
     def has_solution(part):
@@ -32,24 +34,26 @@ class Check:
         Check.feedback(message, *args, **kwargs)
 
     @staticmethod
-    def clean(x, digits=6):
-        if type(x) is float:
+    def clean(x, digits=6, typed=False):
+        t = type(x)
+        if t is float:
             x = round(x, digits)
             # Since -0.0 differs from 0.0 even after rounding,
             # we change it to 0.0 abusing the fact it behaves as False.
-            return x if x else 0.0
-        elif type(x) is complex:
-            return complex(Check.clean(x.real, digits), Check.clean(x.imag, digits))
-        elif type(x) is list:
-            return list([Check.clean(y, digits) for y in x])
-        elif type(x) is tuple:
-            return tuple([Check.clean(y, digits) for y in x])
-        elif type(x) is dict:
-            return sorted([(Check.clean(k, digits), Check.clean(v, digits)) for (k, v) in x.items()])
-        elif type(x) is set:
-            return sorted([Check.clean(y, digits) for y in x])
+            v = x if x else 0.0
+        elif t is complex:
+            v = complex(Check.clean(x.real, digits, typed), Check.clean(x.imag, digits, typed))
+        elif t is list:
+            v = list([Check.clean(y, digits, typed) for y in x])
+        elif t is tuple:
+            v = tuple([Check.clean(y, digits, typed) for y in x])
+        elif t is dict:
+            v = sorted([(Check.clean(k, digits, typed), Check.clean(v, digits, typed)) for (k, v) in x.items()])
+        elif t is set:
+            v = sorted([Check.clean(y, digits, typed) for y in x])
         else:
-            return x
+            v = x
+        return (t, v) if typed else v
 
     @staticmethod
     def secret(x, hint=None, clean=None):
