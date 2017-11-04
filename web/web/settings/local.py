@@ -1,5 +1,10 @@
 from .common import *
 
+INSTALLED_APPS += [
+    'silk',
+]
+MIDDLEWARE_CLASSES.insert(0, 'silk.middleware.SilkyMiddleware')
+
 SECRET_KEY = '0vb+-_-52phz@ii^cxr+mlgvmn6fctd+v5qpnv&k+-00#u-==0'
 
 DEBUG = True

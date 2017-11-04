@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
@@ -37,3 +38,8 @@ urlpatterns = [
 ]
 
 urlpatterns += courses.urls.urlpatterns
+
+if 'silk' in settings.INSTALLED_APPS:
+    urlpatterns += [
+        url(r'^silk/', include('silk.urls', namespace='silk')),
+    ]
