@@ -51,10 +51,9 @@ class AttemptSerializer(ModelSerializer):
     def check_token(validated_data, user):
         if not validated_data['part'].problem.verify_attempt_tokens:
             validated_data.pop('token', None)
-            return
+            return True
         data = signing.loads(validated_data.pop('token'))
-        if data['user'] != user.pk or data['part'] != validated_data['part'].pk:
-            raise PermissionDenied()
+        return data['user'] == user.pk and data['part'] == validated_data['part'].pk
 
     def create(self, validated_data):
         self.check_secret(validated_data)
@@ -85,7 +84,8 @@ class AttemptViewSet(ModelViewSet):
             attempts = []
             wrong_indices = {}
             for attempt_data in serializer.validated_data:
-                AttemptSerializer.check_token(attempt_data, request.user)
+                if not AttemptSerializer.check_token(attempt_data, request.user):
+                    raise PermissionDenied()
                 wrong_index = AttemptSerializer.check_secret(attempt_data)
                 wrong_indices[attempt_data['part'].pk] = wrong_index
                 updated_fields = None
