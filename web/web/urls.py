@@ -3,7 +3,7 @@ from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from attempts.rest import AttemptViewSet
 from problems.rest import ProblemViewSet
-from courses.rest import CourseViewSet
+from courses.rest import ProblemSetViewSet, CourseViewSet
 from courses.views import homepage
 from utils.views import help, terms_of_service
 from users.views import mobile_app_token
@@ -14,6 +14,7 @@ import django.contrib.auth.views
 router = DefaultRouter()
 router.register(r'attempts', AttemptViewSet, base_name='attempts')
 router.register(r'problems', ProblemViewSet, base_name='problems')
+router.register(r'problem_sets', ProblemSetViewSet, base_name='problem_sets')
 router.register(r'courses', CourseViewSet, base_name='courses')
 
 
