@@ -49,8 +49,10 @@ class AttemptSerializer(ModelSerializer):
 
     @staticmethod
     def check_token(validated_data, user):
-        data = signing.loads(validated_data.pop('token'))
-        return data['user'] == user.pk and data['part'] == validated_data['part'].pk
+        token = validated_data.pop('token', None)
+        if token:
+            data = signing.loads(token)
+            return data['user'] == user.pk and data['part'] == validated_data['part'].pk
 
     def create(self, validated_data):
         self.check_secret(validated_data)
