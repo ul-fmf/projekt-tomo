@@ -215,8 +215,11 @@
 
   body <- list()
   indices <- c()
-  {% for part, _, _ in parts %}
+  {% for part, _, token in parts %}
   if (check$part()) {
+    {% if problem.verify_attempt_tokens %}
+    check$parts[[check$part.counter]]$token <- '{{ token }}'
+    {% endif %}
     tryCatch({
       {{ part.validation|indent:"      "|safe }}
     },
