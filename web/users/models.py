@@ -16,13 +16,13 @@ class User(AbstractUser):
             return False
 
     def is_teacher(self, course):
-        return course.teachers.filter(pk=self.id).exists()
+        return self in course.teachers.all()
 
     def is_teacher_anywhere(self):
         return self.taught_courses.exists()
 
     def is_student(self, course):
-        return course.students.filter(pk=self.id).exists()
+        return self in course.students.all()
 
     def can_edit_course(self, course):
         return self.is_teacher(course)

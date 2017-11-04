@@ -114,7 +114,7 @@ def homepage(request):
     """Show a list of all problems in a problem set."""
     user_courses = []
     not_user_courses = []
-    for course in Course.objects.all():
+    for course in Course.objects.all().prefetch_related('students', 'teachers'):
         if request.user.is_favourite_course(course):
             user_courses.append(course)
             course.annotate_for_user(request.user)
