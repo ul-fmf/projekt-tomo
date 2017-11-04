@@ -23,7 +23,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
         ('python', 'Python 3'),
         ('octave', 'Octave'),
         ('r', 'R')), default='python')
-    verify_attempt_tokens = models.BooleanField(default=True)
     EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
     MIMETYPES = {'python': 'text/x-python',
                  'octave': 'text/x-octave',

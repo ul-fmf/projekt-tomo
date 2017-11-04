@@ -49,9 +49,6 @@ class AttemptSerializer(ModelSerializer):
 
     @staticmethod
     def check_token(validated_data, user):
-        if not validated_data['part'].problem.verify_attempt_tokens:
-            validated_data.pop('token', None)
-            return True
         data = signing.loads(validated_data.pop('token'))
         return data['user'] == user.pk and data['part'] == validated_data['part'].pk
 

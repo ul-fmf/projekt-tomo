@@ -243,9 +243,7 @@ def _validate_current_file():
     Check.initialize(file_parts)
 {% for part, _, token in parts %}
     if Check.part():
-        {% if problem.verify_attempt_tokens %}
         Check.current_part['token'] = '{{ token }}'
-        {% endif %}
         try:
             {{ part.validation|default:"pass"|indent:"            "|safe }}
         except:
