@@ -1,4 +1,4 @@
-# =============================================================================
+{% load i18n %}# =============================================================================
 # {{ problem.title|safe }}{% if problem.description %}
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
@@ -261,13 +261,12 @@ def _validate_current_file():
         print('Rešitve so shranjene.')
         update_attempts(Check.parts, response)
         if 'update' in response:
-            print("Posodabljam datoteko... ", end="")
+            print('{% trans "Updating file" %}... ', end="")
             backup_filename = backup(filename)
-            r = urlopen(response['update'])
-            with open(filename, 'w', encoding='utf-8') as f:
-                f.write(r.read().decode('utf-8'))
-            print("Stara datoteka je preimenovana v {0}.".format(os.path.basename(backup_filename)))
-            print("Če se datoteka v urejevalniku ni osvežila, jo zaprite ter ponovno odprite.")
+            with open(__file__, 'w', encoding='utf-8') as f:
+                f.write(response['update'])
+            print('{% trans "Previous file has been renamed to" %} {0}.'.format(backup_filename))
+            print('{% trans "If the file did not refresh in your editor, close and reopen it." %}')
     Check.summarize()
 
 if __name__ == '__main__':

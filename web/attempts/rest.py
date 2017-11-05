@@ -85,9 +85,15 @@ class AttemptViewSet(ModelViewSet):
             attempts = []
             wrong_indices = {}
             obsolete_api = False
+            valid_tokens = True
             for attempt_data in serializer.validated_data:
-                if not AttemptSerializer.check_token(attempt_data, request.user):
+                valid_token = AttemptSerializer.check_token(attempt_data, request.user)
+                valid_tokens &= bool(valid_token)
+                if valid_token is None:
                     obsolete_api = True
+                elif not valid_token:
+                    # if the token is not valid, do not save the attempt
+                    continue
                 wrong_index = AttemptSerializer.check_secret(attempt_data)
                 wrong_indices[attempt_data['part'].pk] = wrong_index
                 updated_fields = None
@@ -104,16 +110,22 @@ class AttemptViewSet(ModelViewSet):
                 'attempts': AttemptSerializer(attempts, many=True).data,
                 'wrong_indices': wrong_indices
             }
-            if obsolete_api:
+            if not valid_tokens:
+                # if not all tokens were valid, invalidate all solutions and update the local file
                 for attempt_data in data['attempts']:
                     attempt_data['valid'] = False
-                last_part_feedback = json.loads(data['attempts'][-1]['feedback'])
-                last_part_feedback.append(
-                    'DATOTEKA Z REŠITVIJO IMA ZASTARELO OBLIKO. '
-                    + 'PROSIMO, PRENESITE SI NOVO DATOTEKO S STRANI\n  '
-                    + request.build_absolute_uri(reverse('problem_attempt_file', args=[attempt.part.problem.pk]))
-                )
-                data['attempts'][-1]['feedback'] = json.dumps(last_part_feedback)
+                # if the file is a recent one, trigger an update
+                if not obsolete_api:
+                    data['update'] = attempt.part.problem.attempt_file(request.user)[1]
+                # if not, tell user where to get the new file
+                else:
+                    last_part_feedback = json.loads(data['attempts'][-1]['feedback'])
+                    last_part_feedback.append(
+                        'DATOTEKA Z REŠITVIJO IMA ZASTARELO OBLIKO.\n'
+                        + 'PROSIMO, PRENESITE SI NOVO DATOTEKO S STRANI\n  '
+                        + request.build_absolute_uri(reverse('problem_attempt_file', args=[attempt.part.problem.pk]))
+                    )
+                    data['attempts'][-1]['feedback'] = json.dumps(last_part_feedback)
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
