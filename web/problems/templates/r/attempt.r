@@ -1,4 +1,4 @@
-# ========================================================================
+{% load i18n %}# ========================================================================
 # {{ problem.title }} {% if problem.description %}
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
@@ -217,9 +217,7 @@
   indices <- c()
   {% for part, _, token in parts %}
   if (check$part()) {
-    {% if problem.verify_attempt_tokens %}
     check$parts[[check$part.counter]]$token <- '{{ token }}'
-    {% endif %}
     tryCatch({
       {{ part.validation|indent:"      "|safe }}
     },
@@ -270,7 +268,7 @@
       }
     }
     if("update" %in% names(response)) {
-      cat("Posodabljam datoteko... ")
+      cat("{% trans "Updating file" %}... ")
       index <- 1
       while(file.exists(paste(.filename, ".", index, sep = "")))
         index <- index + 1
@@ -280,8 +278,8 @@
       f <- file(.filename, encoding="UTF-8")
       writeLines(r, f)
       close.connection(f)
-      cat("Stara datoteka je preimenovana v ", basename(backup.filename), ".\n", sep = "")
-      cat("Če se datoteka v urejevalniku ni osvežila, jo shranite ter ponovno zaženite.\n")
+      cat("{% trans "Previous file has been renamed to" %} ", basename(backup.filename), ".\n", sep = "")
+      cat("{% trans "If the file did not refresh in your editor, close and reopen it." %}\n")
     }
     check$summarize()
   },
