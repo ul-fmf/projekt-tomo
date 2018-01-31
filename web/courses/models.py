@@ -7,6 +7,8 @@ from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
 from attempts.models import Attempt
 from problems.models import Part
+from copy import deepcopy
+
 
 
 class Course(models.Model):
@@ -112,6 +114,14 @@ class Course(models.Model):
             student.empty = part_count - student.valid - student.invalid
         return students
 
+    def duplicate(self):
+        new_course = deepcopy(self)
+        new_course.id = None
+        new_course.title += ' (copy)'
+        new_course.save()
+        for problem_set in self.problem_sets.all():
+            problem_set.copy_to(new_course)
+        return new_course
 
 
 class StudentEnrollment(models.Model):
@@ -250,3 +260,12 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                 self.SOLUTION_VISIBLE: self.SOLUTION_HIDDEN}
         self.solution_visibility = next[self.solution_visibility]
         self.save()
+
+    def copy_to(self, course):
+        new_problem_set = deepcopy(self)
+        new_problem_set.id = None
+        new_problem_set.course = course
+        new_problem_set.save()
+        for problem in self.problems.all():
+            problem.copy_to(new_problem_set)
+        return new_problem_set
