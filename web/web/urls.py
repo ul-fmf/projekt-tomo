@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^help$', help, name='help'),
     url(r'^help/students$', help, {'special': 'students'}, name='help_students'),
     url(r'^help/teachers$', help, {'special': 'teachers'}, name='help_teachers'),
-    url('', include('social.apps.django_app.urls', namespace='social')),
+    url('', include('social_django.urls', namespace='social')),
     url(r'^accounts/', include([
         url(r'^login/$', django.contrib.auth.views.login, {'template_name': 'login.html'}, name='login'),
         url(r'^logout/$', django.contrib.auth.views.logout, name='logout'),

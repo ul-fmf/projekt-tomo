@@ -46,8 +46,8 @@ LOGIN_REDIRECT_URL = '/'
 SUBMISSION_URL = 'https://www.projekt-tomo.si'
 
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOAuth2',
-    'social.backends.facebook.FacebookOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
     'shibboleth.backends.ShibbolethRemoteUserBackend',
 )
