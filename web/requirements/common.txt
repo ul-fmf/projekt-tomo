@@ -4,5 +4,6 @@ djangorestframework==3.3.3
 Markdown==2.6.6
 django-simple-history==1.8.1
 django-taggit==0.18.1
+psycopg2>=2.6
+git+https://github.com/matijapretnar/social-core.git@fix-redirect-uri#egg=social-auth-core
 social-auth-app-django==2.1.0
-

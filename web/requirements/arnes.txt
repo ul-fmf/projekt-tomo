@@ -1,3 +1,2 @@
 -r common.txt
-psycopg2>=2.6
 -e git://github.com/denisvlr/django-shibboleth-remoteuser.git@custom-user#egg=django-shibboleth-remoteuser
