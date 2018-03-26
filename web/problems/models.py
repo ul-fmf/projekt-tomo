@@ -76,6 +76,20 @@ class Problem(OrderWithRespectToMixin, models.Model):
         })
         return filename, contents
 
+    def bare_file(self, user):
+        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
+        parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
+        username = user.get_full_name() or user.username
+        problem_slug = slugify(username).replace("-", "_")
+        extension = self.EXTENSIONS[self.language]
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string("{0}/bare.{1}".format(self.language, extension), {
+            "problem": self,
+            "parts": parts,
+            "user": user,
+        })
+        return filename, contents
+ 
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse('problems-submit')

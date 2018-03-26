@@ -221,6 +221,8 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             for user in users.all():
                 filename, contents = problem.marking_file(user)
                 files.append(('{0}/{1}'.format(folder, filename), contents))
+                filename, contents = problem.bare_file(user)
+                files.append(('bare-{0}/{1}'.format(folder, filename), contents))
 
         users = []
         for user in User.objects.filter(id__in=user_ids).order_by('last_name'):
