@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from users.models import User
 from utils.models import OrderWithRespectToMixin
 from taggit.managers import TaggableManager
-from attempts.models import Attempt
+from attempts.models import Attempt, HistoricalAttempt
 from problems.models import Part
 from copy import deepcopy
 
@@ -200,6 +200,18 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         archive_name = "{0}-edit".format(slugify(self.title))
         return archive_name, files
 
+    def attempt_history(self):
+        user_attempts = {}
+        attempts = HistoricalAttempt.objects.filter(
+            part__problem__problem_set=self
+        ).select_related(
+            'part__problem',
+            'user'
+        ).distinct().order_by('history_date')
+        for attempt in attempts:
+            user_attempts.setdefault(attempt.user, []).append(attempt)
+        return user_attempts
+
     def results_archive(self, user):
         students = self.course.students.all()
         user_ids = set()
@@ -227,6 +239,17 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
         for filename, contents in bare_files.items():
             files.append(('bare/{0}'.format(filename), contents))
+
+        for user, history in self.attempt_history().items():
+            username = user.get_full_name() or user.username
+            problem_slug = slugify(username).replace("-", "_")
+            extension = 'py'
+            filename = "{0}.{1}".format(problem_slug, extension)
+            contents = render_to_string("history.py".format(extension), {
+                "history": history,
+            })
+            files.append(('history/{0}'.format(filename), contents))
+
 
         users = []
         for user in User.objects.filter(id__in=user_ids).order_by('last_name'):
