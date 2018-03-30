@@ -75,7 +75,7 @@ def extract_problem(filename):
         r'(?P<template>(#( [^\n]*)?\n)*))?'    # solution template
         r'# ===+\n'                            # end of part header
         r'(?P<solution>.*?)'                   # solution
-        r'^Check\.part\(\)\n'                  # beginning of validation
+        r'^Check\s*\.\s*part\s*\(\s*\)\s*\n'   # beginning of validation
         r'(?P<validation>.*?)'                 # validation
         r'(?=\n(# )?# =+@)',                   # beginning of next part
         flags=re.DOTALL | re.MULTILINE

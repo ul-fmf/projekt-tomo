@@ -3,7 +3,7 @@ function parts = extract_parts(src)
     part_regex = [part_regex '(?<description>(#( [^\n]*)?\n)+)']; # description
     part_regex = [part_regex '# =+\n'];           # end of header
     part_regex = [part_regex '(?<solution>.*?)']; # solution
-    part_regex = [part_regex 'check_part\(\)\n']; # beginning of validation
+    part_regex = [part_regex 'check_part\s*\(\s*\)\s*\n']; # beginning of validation
     part_regex = [part_regex '(?<validation>.*?)']; # validation
     part_regex = [part_regex '(?=\n(# )?# =+@)']; # beginning of next part        
     [s, e, te, m, t, nm, sp] = regexp(src,part_regex,'dotall');

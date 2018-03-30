@@ -66,7 +66,7 @@ check$challenge <- function(x, hint = "") {
       '((#( [^\n]*)?\n)*))?',  # solution template
       '^# =+\\1@=\n',          # end of part header
       '.*?',                   # solution
-      '^check\\$part\\(\\)\n', # beginning of validation
+      '^\\s*check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n', # beginning of validation
       '.*?',                   # validation
       '^(# )?(?=# =+@)',       # beginning of next part
       sep=""
@@ -78,7 +78,7 @@ check$challenge <- function(x, hint = "") {
       '(# ---+\n((#( [^\n]*)?\n)*))?',  # solution template
       '^# =+(\\d+)@=\n',       # end of part header
       '.*?',                   # solution
-      'check\\$part\\(\\)\n',  # beginning of validation
+      'check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n',  # beginning of validation
       '.*?',                   # validation
       '^(# )?'                 # beginning of next part
     ), .source)
