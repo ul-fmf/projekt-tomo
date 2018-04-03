@@ -203,9 +203,10 @@ function validation = validate_current_file(src)
   file_parts = extract_parts(src);
   check_initialize(file_parts);
 
-  {% for part, _, _ in parts %}
+  {% for part, _, token in parts %}
       if check_part()
-          try
+        check.current_part.token = '{{ token }}'
+        try
               {{ part.validation|default:"0;"|indent:"  "|safe }}
           catch err
               check_error(["Testi sprožijo izjemo\n" err.message]);

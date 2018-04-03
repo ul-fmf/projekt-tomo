@@ -9,6 +9,8 @@ from utils.rest import JSONStringField
 from .models import Attempt
 from django.core import signing
 from rest_framework.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
+import json
 
 
 def update_fields(obj, new_values):
@@ -49,12 +51,10 @@ class AttemptSerializer(ModelSerializer):
 
     @staticmethod
     def check_token(validated_data, user):
-        if not validated_data['part'].problem.verify_attempt_tokens:
-            validated_data.pop('token', None)
-            return
-        data = signing.loads(validated_data.pop('token'))
-        if data['user'] != user.pk or data['part'] != validated_data['part'].pk:
-            raise PermissionDenied()
+        token = validated_data.pop('token', None)
+        if token:
+            data = signing.loads(token)
+            return data['user'] == user.pk and data['part'] == validated_data['part'].pk
 
     def create(self, validated_data):
         self.check_secret(validated_data)
@@ -84,8 +84,16 @@ class AttemptViewSet(ModelViewSet):
         if serializer.is_valid():
             attempts = []
             wrong_indices = {}
+            obsolete_api = False
+            valid_tokens = True
             for attempt_data in serializer.validated_data:
-                AttemptSerializer.check_token(attempt_data, request.user)
+                valid_token = AttemptSerializer.check_token(attempt_data, request.user)
+                valid_tokens &= bool(valid_token)
+                if valid_token is None:
+                    obsolete_api = True
+                elif not valid_token:
+                    # if the token is not valid, do not save the attempt
+                    continue
                 wrong_index = AttemptSerializer.check_secret(attempt_data)
                 wrong_indices[attempt_data['part'].pk] = wrong_index
                 updated_fields = None
@@ -102,6 +110,22 @@ class AttemptViewSet(ModelViewSet):
                 'attempts': AttemptSerializer(attempts, many=True).data,
                 'wrong_indices': wrong_indices
             }
+            if not valid_tokens:
+                # if not all tokens were valid, invalidate all solutions and update the local file
+                for attempt_data in data['attempts']:
+                    attempt_data['valid'] = False
+                # if the file is a recent one, trigger an update
+                if not obsolete_api:
+                    data['update'] = attempt.part.problem.attempt_file(request.user)[1]
+                # if not, tell user where to get the new file
+                else:
+                    last_part_feedback = json.loads(data['attempts'][-1]['feedback'])
+                    last_part_feedback.append(
+                        'DATOTEKA Z REŠITVIJO IMA ZASTARELO OBLIKO.\n'
+                        + 'PROSIMO, PRENESITE SI NOVO DATOTEKO S STRANI\n  '
+                        + request.build_absolute_uri(reverse('problem_attempt_file', args=[attempt.part.problem.pk]))
+                    )
+                    data['attempts'][-1]['feedback'] = json.dumps(last_part_feedback)
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
