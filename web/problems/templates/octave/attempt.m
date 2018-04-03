@@ -205,9 +205,7 @@ function validation = validate_current_file(src)
 
   {% for part, _, token in parts %}
       if check_part()
-        {% if problem.verify_attempt_tokens %}
         check.current_part.token = '{{ token }}'
-        {% endif %}
         try
               {{ part.validation|default:"0;"|indent:"  "|safe }}
           catch err
