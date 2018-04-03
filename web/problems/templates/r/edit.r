@@ -11,7 +11,7 @@ eval(parse(text = substr(.source, gregexpr(paste0("# =L=I=B=", "R=A=R=Y=@="), .s
 # {{ part.description|indent:"# "|safe }}{% if part.template %}
 # ------------------------------------------------------------------------
 # {{ part.template|indent:"# "|safe }}{% endif %}
-# ================================================================{{ part.id|stringformat:'06d'}}@=
+# ========================================================================
 {{ part.solution|safe }}
 
 check$part()
@@ -28,7 +28,7 @@ check$part()
 # #     21
 # #     > multiply(6, 7)
 # #     42{% endblocktrans %}
-# # ================================================================000000@=
+# # ========================================================================
 #
 # {% trans "multiply" %} <- function(x, y) x * y
 #
@@ -64,7 +64,7 @@ check$challenge <- function(x, hint = "") {
       '(^\\s*#( [^\n]*)?\n)+?',    # description
       '(\\s*# ---+\\s*\n',         # optional beginning of template
       '((\\s*#( [^\n]*)?\n)*))?',  # solution template
-      '^\\s*# =+\\1@=\\s*?\n',     # end of part header
+      '^\\s*# ===+\\s*?\n',        # end of part header
       '.*?',                       # solution
       '^\\s*check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n', # beginning of validation
       '.*?',                       # validation
@@ -76,7 +76,7 @@ check$challenge <- function(x, hint = "") {
       '=\\s*\n',                   # beginning of part header
       '(^\\s*#( [^\n]*)?\n)+?',    # description
       '(\\s*# ---+\n(\\s*#( [^\n]*)?\n)*)?', # solution template
-      '^\\s*# =+(\\d+)@=\\s*?\n',  # end of part header
+      '^\\s*# ===+\\s*?\n',        # end of part header
       '.*?',                       # solution
       'check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n', # beginning of validation
       '.*?'                        # validation
