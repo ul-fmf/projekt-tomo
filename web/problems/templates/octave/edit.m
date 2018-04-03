@@ -14,7 +14,9 @@ check_initialize(file_parts);
 #
 # {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
-# {{ part.description|indent:"# "|safe }}
+# {{ part.description|indent:"# "|safe }}{% if part.template %}
+# -----------------------------------------------------------------------------
+# {{ part.template|indent:"# "|safe }}{% endif %}
 # =============================================================================
 {{ part.solution|safe }}
 
@@ -93,15 +95,15 @@ function validation = validate_current_file(src,parts)
     valid  = [valid parts{i}.valid];
     parts{i} = rmfield(rmfield(rmfield(parts{i},'valid'),'feedback'),'part');
   end
-  problem_regex = ['# =+\n',...                      # beginning of header
-      '# (?<title>[^\n]*)\n',...              # title
-      '(?<description>(#( [^\n]*)?\n)*)',...  # description
-      '(?=(# )?# =+@)',];                     # beginning of first part
+  problem_regex = ['# =+\s*\n',...               # beginning of header
+      '\s*# (?<title>[^\n]*)\n',...              # title
+      '(?<description>(\s*#( [^\n]*)?\n)*)',...  # description
+      '(?=\s*(# )?# =+@)',];                     # beginning of first part
   [s, e, te, m, t, nm, sp] = regexp(src,problem_regex,'dotall');
   problem = struct(
     "parts",{parts},
     "title",strtrim(nm.title),
-    "description",regexprep(strtrim(nm.description),'^#','','lineanchors'),
+    "description",regexprep(strtrim(nm.description),'^\s*# ?','','lineanchors'),
     "id", {{ problem.id }},
     "problem_set", {{ problem.problem_set.id }}
   );

@@ -64,20 +64,20 @@ def extract_problem(filename):
             return ''
         else:
             lines = description.strip().splitlines()
-            return "\n".join(line[2:] for line in lines)
+            return "\n".join(line[line.index('#')+2:] for line in lines)
 
     with open(filename, encoding='utf-8') as f:
         source = f.read()
     part_regex = re.compile(
-        r'# ===+@(?P<part>\d+)=\n'             # beginning of part header
-        r'(?P<description>(#( [^\n]*)?\n)+?)'  # description
-        r'(# ---+\n'                           # optional beginning of template
-        r'(?P<template>(#( [^\n]*)?\n)*))?'    # solution template
-        r'# ===+\n'                            # end of part header
-        r'(?P<solution>.*?)'                   # solution
-        r'^Check\s*\.\s*part\s*\(\s*\)\s*\n'   # beginning of validation
-        r'(?P<validation>.*?)'                 # validation
-        r'(?=\n(# )?# =+@)',                   # beginning of next part
+        r'# ===+@(?P<part>\d+)=\s*\n'             # beginning of part header
+        r'(?P<description>(\s*#( [^\n]*)?\n)+?)'  # description
+        r'(\s*# ---+\s*\n'                        # optional beginning of template
+        r'(?P<template>(\s*#( [^\n]*)?\n)*))?'    # solution template
+        r'\s*# ===+\s*?\n'                        # end of part header
+        r'(?P<solution>.*?)'                      # solution
+        r'^Check\s*\.\s*part\s*\(\s*\)\s*?(?=\n)' # beginning of validation
+        r'(?P<validation>.*?)'                    # validation
+        r'(?=\n\s*(# )?# =+@)',                   # beginning of next part
         flags=re.DOTALL | re.MULTILINE
     )
     parts = [{
@@ -89,10 +89,10 @@ def extract_problem(filename):
         'problem': {{ problem.id }}
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
-        r'^# =+\n'                             # beginning of header
-        r'^# (?P<title>[^\n]*)\n'              # title
-        r'(?P<description>(^#( [^\n]*)?\n)*)'  # description
-        r'(?=(# )?# =+@)',                     # beginning of first part
+        r'^\s*# =+\s*\n'                         # beginning of header
+        r'^\s*# (?P<title>[^\n]*)\n'             # title
+        r'(?P<description>(^\s*#( [^\n]*)?\n)*)' # description
+        r'(?=\s*(# )?# =+@)',                    # beginning of first part
         source, flags=re.DOTALL | re.MULTILINE)
     return {
         'title': problem_match.group('title').strip(),

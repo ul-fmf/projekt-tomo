@@ -189,19 +189,19 @@
   .source <- paste(readLines(.filename), collapse="\n")
 
   matches <- regex_break(paste(
-      '# =+@(\\d+)=\n',    # beginning of header
-      '(#( [^\n]*)?\n)+',  # description
-      '# =+\n',            # end of header
-      '.*?',               # solution
-      '(?=\n# =+@)',       # beginning of next part
+      '# =+@(\\d+)=\n',        # beginning of header
+      '(\\s*#( [^\n]*)?\n)+?', # description
+      '\\s*# =+\n',            # end of header
+      '.*?',                   # solution
+      '(?=\n\\s*# =+@)',       # beginning of next part
       sep=""
-  ),  c(
-      '# =+@',             # beginning of header
-      '(\\d+)',            # beginning of header (?P<part>)
-      '=\n',               # beginning of header
-      '(#( [^\n]*)?\n)+',  # description
-      '# =+\n',            # end of header
-      '.*?'                # solution
+  ), c(
+      '# =+@',                 # beginning of header
+      '(\\d+)',                # beginning of header (?P<part>)
+      '=\n',                   # beginning of header
+      '(\\s*#( [^\n]*)?\n)+?', # description
+      '\\s*# =+\n',            # end of header
+      '.*?'                    # solution
   ), .source)
 
   check$initialize(

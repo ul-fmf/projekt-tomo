@@ -200,7 +200,7 @@ function validation = validate_current_file(src)
 %        return backup_filename
 %
 %
-  file_parts = extract_parts(src);
+  file_parts = extract_solutions(src);
   check_initialize(file_parts);
 
   {% for part, _, _ in parts %}

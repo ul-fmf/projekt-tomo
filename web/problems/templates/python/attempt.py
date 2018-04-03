@@ -173,11 +173,11 @@ def _validate_current_file():
         with open(filename, encoding='utf-8') as f:
             source = f.read()
         part_regex = re.compile(
-            r'# =+@(?P<part>\d+)=\n'  # beginning of header
-            r'(#( [^\n]*)?\n)+'       # description
-            r'# =+\n'                 # end of header
-            r'(?P<solution>.*?)'      # solution
-            r'(?=\n# =+@)',           # beginning of next part
+            r'# =+@(?P<part>\d+)=\s*\n' # beginning of header
+            r'(\s*#( [^\n]*)?\n)+?'     # description
+            r'\s*# =+\s*?\n'            # end of header
+            r'(?P<solution>.*?)'        # solution
+            r'(?=\n\s*# =+@)',          # beginning of next part
             flags=re.DOTALL | re.MULTILINE
         )
         parts = [{
