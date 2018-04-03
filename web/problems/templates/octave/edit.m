@@ -20,7 +20,7 @@ check_initialize(file_parts);
 # =============================================================================
 {{ part.solution|safe }}
 
-check_part()
+check_part();
 {{ part.validation|safe }}
 
 {% endfor %}
@@ -38,16 +38,16 @@ check_part()
 # # =============================================================================
 #
 # function p = {% trans "multiply" %}(x, y)
-#     p =  x * y
+#     p =  x * y;
 # endfunction
 #
-# check_part()
+# check_part();
 #
-# check_equal('{% trans "multiply" %}(3, 7)', 21)
-# check_equal('{% trans "multiply" %}(6, 7)', 42)
-# check_equal('{% trans "multiply" %}(10, 10)', 100)
-# check_secret({% trans "multiply" %}(100, 100))
-# check_secret({% trans "multiply" %}(500, 123))
+# check_equal('{% trans "multiply" %}(3, 7)', 21);
+# check_equal('{% trans "multiply" %}(6, 7)', 42);
+# check_equal('{% trans "multiply" %}(10, 10)', 100);
+# check_secret({% trans "multiply" %}(100, 100));
+# check_secret({% trans "multiply" %}(500, 123));
 
 
 # ===========================================================================@=
