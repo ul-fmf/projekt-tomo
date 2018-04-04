@@ -11,7 +11,7 @@ eval(parse(text = substr(.source, gregexpr(paste0("# =L=I=B=", "R=A=R=Y=@="), .s
 # {{ part.description|indent:"# "|safe }}{% if part.template %}
 # ------------------------------------------------------------------------
 # {{ part.template|indent:"# "|safe }}{% endif %}
-# ================================================================{{ part.id|stringformat:'06d'}}@=
+# ========================================================================
 {{ part.solution|safe }}
 
 check$part()
@@ -28,7 +28,7 @@ check$part()
 # #     21
 # #     > multiply(6, 7)
 # #     42{% endblocktrans %}
-# # ================================================================000000@=
+# # ========================================================================
 #
 # {% trans "multiply" %} <- function(x, y) x * y
 #
@@ -60,27 +60,26 @@ check$challenge <- function(x, hint = "") {
 
 .extract.problem <- function() {
     matches <- regex_break(paste(
-      '^# ===+@(\\d+)=\n',     # beginning of part header
-      '(^#( [^\n]*)?\n)*',     # description
-      '(# ---+\n',             # optional beginning of template
-      '((#( [^\n]*)?\n)*))?',  # solution template
-      '^# =+\\1@=\n',          # end of part header
-      '.*?',                   # solution
-      '^check\\$part\\(\\)\n', # beginning of validation
-      '.*?',                   # validation
-      '^(# )?(?=# =+@)',       # beginning of next part
+      '^\\s*# ===+@(\\d+)=\\s*\n', # beginning of part header
+      '(^\\s*#( [^\n]*)?\n)+?',    # description
+      '(\\s*# ---+\\s*\n',         # optional beginning of template
+      '((\\s*#( [^\n]*)?\n)*))?',  # solution template
+      '^\\s*# ===+\\s*?\n',        # end of part header
+      '.*?',                       # solution
+      '^\\s*check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n', # beginning of validation
+      '.*?',                       # validation
+      '^(?=\\s*(# )?# =+@)',       # beginning of next part
       sep=""
     ), c(
-      '^# ===+@',              # beginning of part header
-      '(\\d+)',                # beginning of part header (?P<part>)
-      '=\n',                   # beginning of part header
-      '(^#( [^\n]*)?\n)*?',    # description
-      '(# ---+\n((#( [^\n]*)?\n)*))?',  # solution template
-      '^# =+(\\d+)@=\n',       # end of part header
-      '.*?',                   # solution
-      'check\\$part\\(\\)\n',  # beginning of validation
-      '.*?',                   # validation
-      '^(# )?'                 # beginning of next part
+      '^\\s*# ===+@',              # beginning of part header
+      '(\\d+)',                    # beginning of part header (?P<part>)
+      '=\\s*\n',                   # beginning of part header
+      '(^\\s*#( [^\n]*)?\n)+?',    # description
+      '(\\s*# ---+\n(\\s*#( [^\n]*)?\n)*)?', # solution template
+      '^\\s*# ===+\\s*?\n',        # end of part header
+      '.*?',                       # solution
+      'check\\s*\\$\\s*part\\s*\\(\\s*\\)\\s*\n', # beginning of validation
+      '.*?'                        # validation
     ), .source)
 
     check$initialize(
@@ -88,7 +87,7 @@ check$challenge <- function(x, hint = "") {
           part = as.numeric(match[2]),
           description = super_strip(match[4]),
           solution = strip(match[7]),
-          template = super_strip(gsub("^[^\n]+\n", "", match[5])),
+          template = super_strip(gsub("^\\s*# ---+\n", "", match[5])),
           validation = strip(match[9]),
           problem = {{ problem.id }}
         )
@@ -96,19 +95,17 @@ check$challenge <- function(x, hint = "") {
     )
 
     problem_match <- regex_break(paste(
-      '^# =+\n',           # beginning of header
-      '^# ([^\n]*)\n',     # title
-      '^(#\\s*\n)*',       # empty rows
-      '(^#( [^\n]*)?\n)*', # description
-      '^(# )?(?==+@)',     # beginning of first part
+      '^\\s*# =+\n',           # beginning of header
+      '^\\s*# ([^\n]*)\n',     # title
+      '(^\\s*#( [^\n]*)?\n)*', # description
+      '^(?=\\s*(# )?=+@)',     # beginning of first part
       sep = ""
     ), c(
-      '^# =+\n',           # beginning of header
-      '^# ',               # title
-      '([^\n]*)',          # title (?P<title>)
-      '\n^(#\\s*\n)*',     # title & empty rows
-      '(^#( [^\n]*)?\n)*', # description
-      '^(# )?'             # beginning of first part
+      '^\\s*# =+\n',           # beginning of header
+      '^\\s*# ',               # title
+      '([^\n]*)',              # title (?P<title>)
+      '\n',                    # title
+      '(^\\s*#( [^\n]*)?\n)*'  # description
       ), .source)
 
     if(length(problem_match) == 0)
