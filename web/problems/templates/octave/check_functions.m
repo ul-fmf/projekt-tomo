@@ -36,7 +36,7 @@ function res = check_equal(koda, rezultat)
   global check;
   res = 0;
   actual_result = eval(koda);
-  if norm(actual_result - rezultat) > 1e-6
+  if any(size(actual_result) != size(rezultat)) || (norm(actual_result - rezultat) > 1e-6)
     check_error(["Izraz ", koda, " vrne ", mat2str(actual_result), " namesto ", mat2str(rezultat)]);
     res = 1;
   end
