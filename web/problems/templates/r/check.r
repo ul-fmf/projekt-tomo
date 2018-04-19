@@ -9,7 +9,7 @@ check$initialize <- function(parts) {
     return(part)
   }
   check$parts <<- lapply(parts, init.part)
-  check$current <<- NA
+  check$current.part <<- NA
   check$part.counter <<- NA
 }
 
@@ -19,7 +19,8 @@ check$part <- function() {
   } else {
     check$part.counter <<- check$part.counter + 1
   }
-  return(strip(check$parts[[check$part.counter]]$solution) != "")
+  check$current.part <<- check$parts[[check$part.counter]]
+  return(strip(check$current.part$solution) != "")
 }
 
 check$feedback <- function(msg, ...) {
