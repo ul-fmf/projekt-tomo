@@ -77,10 +77,12 @@ check$equal <- function(example, value = NA, exception = NA,
       returned <- eval(example)
       check$error("Izraz %s vrne %s namesto da bi sprožil izjemo '%s'.",
                   deparse(example), pretty.print(returned), exception)
+      return(FALSE)
     }, error = function(e) {
       if(e$message != exception)
         check$error("Izraz %s sproži izjemo '%s' namesto '%s'.",
                     deparse(example), e$message, exception)
+        return(FALSE)
     })
   } else {
     returned <- eval(example)
@@ -88,8 +90,10 @@ check$equal <- function(example, value = NA, exception = NA,
     if(!is.na(reason)) {
       check$error("Izraz %s vrne %s namesto %s (%s)",
                   deparse(example), pretty.print(returned), pretty.print(value), reason)
+      return(FALSE)
     }
   }
+  return(TRUE)
 }
 
 check$random <- function(example, period = 10, sample = 100, uniqueness = 0.9) {
