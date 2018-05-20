@@ -142,6 +142,22 @@ check$expected <- function(example, interval, sample = 100) {
   }
 }
 
+check$in_file <- function(filename, content, statements) {
+  code <- substitute(statements)
+  cat(paste0(content, "\n", collapse = ""), file = filename)
+  old_feedback <- check$parts[[check$part.counter]]$feedback
+  eval(code, parent.frame())
+  new_feedback <- check$parts[[check$part.counter]]$feedback
+  if (length(new_feedback) > length(old_feedback)) {
+    check$parts[[check$part.counter]]$feedback <<- old_feedback
+    check$error("Pri vhodni datoteki %s z vsebino\n  %s\nso se pojavile naslednje napake:\n- %s",
+                filename, paste(content, collapse = "\n  "),
+                paste(gsub("\n", "\n    ",
+                           new_feedback[(length(old_feedback) + 1) : length(new_feedback)]),
+                      collapse = "\n- "))
+  }
+}
+
 check$summarize <- function() {
   for(i in 1:length(check$parts)) {
     if(strip(check$parts[[i]]$solution) == "") {
