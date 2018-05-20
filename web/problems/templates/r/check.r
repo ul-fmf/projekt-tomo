@@ -39,8 +39,27 @@ check$secret <- function(x, hint = "") {
     c(check$parts[[check$part.counter]]$secret, list(pair))
 }
 
-check$run <- function(example, state) {
-  # yet to be implemented
+check$run <- function(statements, expected_state) {
+  code <- substitute(statements)
+  statements <- paste0("  > ", paste(unlist(strsplit(deparse(code), "\n")),
+                                     collapse = "\n  > "))
+  env <- new.env(parent = parent.frame())
+  eval(code, env)
+  errors <- character(0)
+  for (x in names(expected_state)) {
+    if (! x %in% names(env)) {
+      errors <- c(errors, sprintf("morajo nastaviti spremenljivko %s, vendar je ne", x))
+    } else if (check$canonize(env[[x]]) != check$canonize(expected_state[[x]])) {
+      errors <- c(errors, sprintf("nastavijo %s na %s namesto na %s",
+                                  x, env[[x]], expected_state[[x]]))
+    }
+  }
+  if (length(errors) > 0) {
+    check$error("Ukazi\n%s\n%s.", statements, paste(errors, collapse = ";\n"))
+    return(FALSE)
+  } else {
+    return(TRUE)
+  }
 }
 
 check$canonize <- function(x, digits = 6) {
