@@ -94,7 +94,7 @@ check$equal <- function(example, value = NA, exception = NA,
 
   if(!is.na(exception)) {
     tryCatch({
-      returned <- eval(example)
+      returned <- eval(example, parent.frame())
       check$error("Izraz %s vrne %s namesto da bi sprožil izjemo '%s'.",
                   deparse(example), pretty.print(returned), exception)
       return(FALSE)
@@ -105,7 +105,7 @@ check$equal <- function(example, value = NA, exception = NA,
         return(FALSE)
     })
   } else {
-    returned <- eval(example)
+    returned <- eval(example, parent.frame())
     reason <- difference(clean(returned), clean(value))
     if(!is.na(reason)) {
       check$error("Izraz %s vrne %s namesto %s (%s)",
@@ -118,7 +118,7 @@ check$equal <- function(example, value = NA, exception = NA,
 
 check$random <- function(example, period = 10, sample = 100, uniqueness = 0.9) {
   example <- substitute(example)
-  results <- replicate(sample, toString(check$canonize(replicate(period, eval(example)))))
+  results <- replicate(sample, toString(check$canonize(replicate(period, eval(example, parent.frame())))))
   if (length(unique(results)) < uniqueness * sample) {
     check$error("Izraz %s ne vrača naključnih rezultatov.", deparse(example))
   }
@@ -126,7 +126,7 @@ check$random <- function(example, period = 10, sample = 100, uniqueness = 0.9) {
 
 check$probability <- function(example, interval, sample = 100) {
   example <- substitute(example)
-  results <- replicate(sample, isTRUE(eval(example)))
+  results <- replicate(sample, isTRUE(eval(example, parent.frame())))
   prob <- sum(results) / sample
   if (!(interval[1] < prob && prob <= interval[2])) {
     check$error("Izraz %s velja z verjetnostjo %.2f, ki je izven pričakovanega intervala [%.2f, %.2f].", deparse(example), prob, interval[1], interval[2])
@@ -135,7 +135,7 @@ check$probability <- function(example, interval, sample = 100) {
 
 check$expected <- function(example, interval, sample = 100) {
   example <- substitute(example)
-  results <- replicate(sample, eval(example))
+  results <- replicate(sample, eval(example, parent.frame()))
   prob <- sum(results) / sample
   if (!(interval[1] < prob && prob <= interval[2])) {
     check$error("Povprečna vrednost izraza %s je %.2f, kar je izven pričakovanega intervala [%.2f, %.2f].", deparse(example), prob, interval[1], interval[2])
