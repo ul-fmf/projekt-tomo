@@ -158,6 +158,41 @@ check$in_file <- function(filename, content, statements) {
   }
 }
 
+check$out_file <- function(filename, content) {
+  tryCatch({
+    f <- file(filename)
+    out.lines <- readLines(f)
+    diff <- check$difflines(out.lines, content)
+    if (diff$equal) {
+      return(TRUE)
+    } else {
+      check$error('Izhodna datoteka %s\n je enaka%s  namesto:\n  %s',
+                  filename, paste(rep(" ", diff$line.width - 7), collapse = ""),
+                  paste(diff$diff, collapse = "\n  "))
+    }
+  }, finally = {
+    close(f)
+  })
+  return(FALSE)
+}
+
+check$difflines <- function(actual.lines, expected.lines) {
+  actual.len <- length(actual.lines)
+  expected.len <- length(expected.lines)
+  if (actual.len < expected.len) {
+    actual.lines <- c(actual.lines, rep("\n", expected.len - actual.len))
+  } else {
+    expected.lines <- c(expected.lines, rep("\n", actual.len - expected.len))
+  }
+  equal <- TRUE
+  out <- trimws(actual.lines, "right")
+  given <- trimws(expected.lines, "right")
+  line.width <- max(sapply(c(out, "je enaka"), nchar))
+  format <- paste0("%-", line.width, "s %s %s")
+  diff <- sprintf(format, out, ifelse(out == given, "|", "*"), given)
+  return(list(equal = all(out == given), diff = diff, line.width = line.width))
+}
+
 check$summarize <- function() {
   for(i in 1:length(check$parts)) {
     if(strip(check$parts[[i]]$solution) == "") {
