@@ -166,7 +166,7 @@ check$out_file <- function(filename, content) {
     if (diff$equal) {
       return(TRUE)
     } else {
-      check$error('Izhodna datoteka %s\n je enaka%s  namesto:\n  %s',
+      check$error('Izhodna datoteka %s\n  je enaka%s  namesto:\n  %s',
                   filename, paste(rep(" ", diff$line.width - 7), collapse = ""),
                   paste(diff$diff, collapse = "\n  "))
     }
@@ -174,6 +174,19 @@ check$out_file <- function(filename, content) {
     close(f)
   })
   return(FALSE)
+}
+
+check$output <- function(statements, content) {
+  output <- capture.output(statements)
+  diff <- check$difflines(output, content)
+  if (diff$equal) {
+    return(TRUE)
+  } else {
+    check$error('Program izpiše%s  namesto:\n  %s',
+                paste(rep(" ", diff$line.width - 13), collapse = ""),
+                paste(diff$diff, collapse = "\n  "))
+    return(FALSE)
+  }
 }
 
 check$difflines <- function(actual.lines, expected.lines) {
@@ -187,7 +200,7 @@ check$difflines <- function(actual.lines, expected.lines) {
   equal <- TRUE
   out <- trimws(actual.lines, "right")
   given <- trimws(expected.lines, "right")
-  line.width <- max(sapply(c(out, "je enaka"), nchar))
+  line.width <- max(sapply(c(out, "Program izpiše"), nchar))
   format <- paste0("%-", line.width, "s %s %s")
   diff <- sprintf(format, out, ifelse(out == given, "|", "*"), given)
   return(list(equal = all(out == given), diff = diff, line.width = line.width))
