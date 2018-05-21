@@ -57,14 +57,14 @@ class Check:
 
     @staticmethod
     def secret(x, hint=None, clean=None):
-        clean = clean or Check.clean
+        clean = Check.get('clean', clean)
         Check.current_part['secret'].append((str(clean(x)), hint))
 
     @staticmethod
-    def equal(expression, expected_result, clean=None, env={}):
-        local_env = locals()
-        local_env.update(env)
-        clean = clean or Check.clean
+    def equal(expression, expected_result, clean=None, env=None, use_locals=None):
+        local_env = dict(locals()) if Check.get('use_locals', use_locals) is not False else {}
+        local_env.update(Check.get('env', env))
+        clean = Check.get('clean', clean)
         actual_result = eval(expression, globals(), local_env)
         if clean(actual_result) != clean(expected_result):
             Check.error('Izraz {0} vrne {1!r} namesto {2!r}.',
@@ -74,12 +74,12 @@ class Check:
             return True
 
     @staticmethod
-    def run(statements, expected_state, clean=None, env={}):
+    def run(statements, expected_state, clean=None, env=None, use_locals=None):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
-        s = {}
-        s.update(env)
-        clean = clean or Check.clean
+        s = dict(locals()) if Check.get('use_locals', use_locals) else {}
+        s.update(Check.get('env', env))
+        clean = Check.get('clean', clean)
         exec(code, globals(), s)
         errors = []
         for (x, v) in expected_state.items():
@@ -96,6 +96,7 @@ class Check:
     @staticmethod
     @contextmanager
     def in_file(filename, content, encoding=None):
+        encoding = Check.get('encoding', encoding)
         with open(filename, 'w', encoding=encoding) as f:
             for line in content:
                 print(line, file=f)
@@ -110,6 +111,7 @@ class Check:
     @staticmethod
     @contextmanager
     def input(content, encoding=None):
+        encoding = Check.get('encoding', encoding)
         old_stdin = sys.stdin
         old_feedback = Check.current_part['feedback'][:]
         sys.stdin = io.StringIO('\n'.join(content))
@@ -125,6 +127,7 @@ class Check:
 
     @staticmethod
     def out_file(filename, content, encoding=None):
+        encoding = Check.get('encoding', encoding)
         with open(filename, encoding=encoding) as f:
             out_lines = f.readlines()
         equal, diff, line_width = Check.difflines(out_lines, content)
@@ -135,7 +138,8 @@ class Check:
             return False
 
     @staticmethod
-    def output(expression, content, use_globals=False):
+    def output(expression, content, use_globals=None):
+        use_globals = Check.get('use_globals', use_globals)
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         try:
@@ -172,11 +176,11 @@ class Check:
         return equal, diff, line_width
 
     @staticmethod
-    def generator(expression, expected_values, should_stop=False, further_iter=0, env={}, clean=None):
+    def generator(expression, expected_values, should_stop=None, further_iter=None, env=None, clean=None, use_locals=None):
         from types import GeneratorType
-        local_env = locals()
-        local_env.update(env)
-        clean = clean or Check.clean
+        local_env = dict(locals()) if Check.get('use_locals', use_locals) is not False else {}
+        local_env.update(Check.get('env', env))
+        clean = Check.get('clean', clean)
         gen = eval(expression, globals(), local_env)
         if not isinstance(gen, GeneratorType):
             Check.error("Izraz {0} ni generator.", expression)
@@ -189,13 +193,13 @@ class Check:
                     Check.error("Vrednost #{0}, ki jo vrne generator {1} je {2!r} namesto {3!r}.",
                                 iteration, expression, actual_value, expected_value)
                     return False
-            for _ in range(further_iter):
+            for _ in range(Check.get('further_iter', further_iter)):
                 next(gen)  # we will not validate it
         except StopIteration:
             Check.error("Generator {0} se prehitro izteče.", expression)
             return False
         
-        if should_stop:
+        if Check.get('should_stop', should_stop):
             try:
                 next(gen)
                 Check.error("Generator {0} se ne izteče (dovolj zgodaj).", expression)
@@ -214,3 +218,46 @@ class Check:
                 print('{0}. podnaloga ima veljavno rešitev.'.format(i + 1))
             for message in part['feedback']:
                 print('  - {0}'.format('\n    '.join(message.splitlines())))
+
+    settings_stack = [{
+        'clean': clean.__func__,
+        'encoding': None,
+        'env': {},
+        'further_iter': 0,
+        'should_stop': False,
+        'use_globals': False,
+        'use_locals': None,
+    }]
+
+    @staticmethod
+    def get(key, value = None):
+        if value is None:
+            return Check.settings_stack[-1][key]
+        return value
+
+    @staticmethod
+    @contextmanager
+    def set(**kwargs):
+        settings = dict(Check.settings_stack[-1])
+        settings.update(kwargs)
+        Check.settings_stack.append(settings)
+        try:
+            yield
+        finally:
+            Check.settings_stack.pop()
+
+    @staticmethod
+    @contextmanager
+    def set_clean(clean = None, **kwargs):
+        clean = clean or Check.clean
+        with Check.set(clean = (lambda x: clean(x, **kwargs))
+                       if kwargs else clean):
+            yield
+
+    @staticmethod
+    @contextmanager
+    def set_environment(**kwargs):
+        env = dict(Check.get('env'))
+        env.update(kwargs)
+        with Check.set(env = env):
+            yield
