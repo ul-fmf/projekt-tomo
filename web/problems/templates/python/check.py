@@ -61,9 +61,8 @@ class Check:
         Check.current_part['secret'].append((str(clean(x)), hint))
 
     @staticmethod
-    def equal(expression, expected_result, clean=None, env=None, use_locals=None):
-        local_env = dict(locals()) if Check.get('use_locals', use_locals) is not False else {}
-        local_env.update(Check.get('env', env))
+    def equal(expression, expected_result, clean=None, env=None):
+        local_env = dict(Check.get('env', env))
         clean = Check.get('clean', clean)
         actual_result = eval(expression, globals(), local_env)
         if clean(actual_result) != clean(expected_result):
@@ -74,11 +73,10 @@ class Check:
             return True
 
     @staticmethod
-    def run(statements, expected_state, clean=None, env=None, use_locals=None):
+    def run(statements, expected_state, clean=None, env=None):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
-        s = dict(locals()) if Check.get('use_locals', use_locals) else {}
-        s.update(Check.get('env', env))
+        s = dict(Check.get('env', env))
         clean = Check.get('clean', clean)
         exec(code, globals(), s)
         errors = []
@@ -176,10 +174,9 @@ class Check:
         return equal, diff, line_width
 
     @staticmethod
-    def generator(expression, expected_values, should_stop=None, further_iter=None, env=None, clean=None, use_locals=None):
+    def generator(expression, expected_values, should_stop=None, further_iter=None, env=None, clean=None):
         from types import GeneratorType
-        local_env = dict(locals()) if Check.get('use_locals', use_locals) is not False else {}
-        local_env.update(Check.get('env', env))
+        local_env = dict(Check.get('env', env))
         clean = Check.get('clean', clean)
         gen = eval(expression, globals(), local_env)
         if not isinstance(gen, GeneratorType):
@@ -226,7 +223,6 @@ class Check:
         'further_iter': 0,
         'should_stop': False,
         'use_globals': False,
-        'use_locals': None,
     }]
 
     @staticmethod
