@@ -1,4 +1,16 @@
+import io, sys
 from contextlib import contextmanager
+
+class VisibleStringIO(io.StringIO):
+    def read(self, size=None):
+        x = io.StringIO.read(self, size)
+        print(x, end='')
+        return x
+
+    def readline(self, size=None):
+        line = io.StringIO.readline(self, size)
+        print(line, end='')
+        return line
 
 class Check:
     @staticmethod
@@ -108,13 +120,13 @@ class Check:
 
     @staticmethod
     @contextmanager
-    def input(content, encoding=None):
-        encoding = Check.get('encoding', encoding)
+    def input(content, visible=None):
         old_stdin = sys.stdin
         old_feedback = Check.current_part['feedback'][:]
-        sys.stdin = io.StringIO('\n'.join(content))
         try:
-            yield
+            with Check.set_stringio(visible):
+                sys.stdin = Check.get('stringio')('\n'.join(content) + '\n')
+                yield
         finally:
             sys.stdin = old_stdin
         new_feedback = Check.current_part['feedback'][len(old_feedback):]
@@ -230,6 +242,7 @@ class Check:
         'env': {},
         'further_iter': 0,
         'should_stop': False,
+        'stringio': VisibleStringIO,
         'update_env': False,
         'use_globals': False,
     }]
@@ -266,3 +279,16 @@ class Check:
         env.update(kwargs)
         with Check.set(env = env):
             yield
+
+    @staticmethod
+    @contextmanager
+    def set_stringio(stringio):
+        if stringio is None or stringio is Check.get('stringio'):
+            yield
+        else:
+            if stringio is True:
+                stringio = VisibleStringIO
+            elif not stringio:
+                stringio = io.StringIO
+            with Check.set(stringio=stringio):
+                yield
