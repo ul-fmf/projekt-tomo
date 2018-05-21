@@ -62,7 +62,7 @@ class Check:
 
     @staticmethod
     def equal(expression, expected_result, clean=None, env=None):
-        local_env = dict(Check.get('env', env))
+        local_env = Check.get('env', env)
         clean = Check.get('clean', clean)
         actual_result = eval(expression, globals(), local_env)
         if clean(actual_result) != clean(expected_result):
@@ -73,17 +73,17 @@ class Check:
             return True
 
     @staticmethod
-    def run(statements, expected_state, clean=None, env=None):
+    def run(statements, expected_state, clean=None, use_globals=None, env=None, update_env=None):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
-        s = dict(Check.get('env', env))
+        global_env, local_env = Check.init_environments(use_globals=use_globals, env=env, update_env=update_env)
         clean = Check.get('clean', clean)
-        exec(code, globals(), s)
+        exec(code, global_env, local_env)
         errors = []
         for (x, v) in expected_state.items():
-            if x not in s:
+            if x not in local_env:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
-            elif clean(s[x]) != clean(v):
+            elif clean(local_env[x]) != clean(v):
                 errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
@@ -136,16 +136,12 @@ class Check:
             return False
 
     @staticmethod
-    def output(expression, content, use_globals=None):
-        use_globals = Check.get('use_globals', use_globals)
+    def output(expression, content, use_globals=None, env=None, update_env=None):
+        global_env, local_env = Check.init_environments(use_globals=use_globals, env=env, update_env=update_env)
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         try:
-            def visible_input(prompt):
-                inp = input(prompt)
-                print(inp)
-                return inp
-            exec(expression, globals() if use_globals else {'input': visible_input})
+            exec(expression, global_env, local_env)
         finally:
             output = sys.stdout.getvalue().strip().splitlines()
             sys.stdout = old_stdout
@@ -174,9 +170,21 @@ class Check:
         return equal, diff, line_width
 
     @staticmethod
+    def init_environments(use_globals=None, env=None, update_env=None):
+        global_env = globals()
+        if Check.get('use_globals', use_globals):
+            local_env = global_env
+        else:
+            global_env = dict(global_env)
+            local_env = Check.get('env', env)
+            if not Check.get('update_env', update_env):
+                local_env = dict(local_env)
+        return (global_env, local_env)
+
+    @staticmethod
     def generator(expression, expected_values, should_stop=None, further_iter=None, env=None, clean=None):
         from types import GeneratorType
-        local_env = dict(Check.get('env', env))
+        local_env = Check.get('env', env)
         clean = Check.get('clean', clean)
         gen = eval(expression, globals(), local_env)
         if not isinstance(gen, GeneratorType):
@@ -222,11 +230,12 @@ class Check:
         'env': {},
         'further_iter': 0,
         'should_stop': False,
+        'update_env': False,
         'use_globals': False,
     }]
 
     @staticmethod
-    def get(key, value = None):
+    def get(key, value=None):
         if value is None:
             return Check.settings_stack[-1][key]
         return value
