@@ -131,7 +131,7 @@ class Check:
         if equal:
             return True
         else:
-            Check.error('Izhodna datoteka {0}\n je enaka{1}  namesto:\n  {2}', filename, (line_width - 7) * ' ', '\n  '.join(diff))
+            Check.error('Izhodna datoteka {0}\n  je enaka{1}  namesto:\n  {2}', filename, (line_width - 7) * ' ', '\n  '.join(diff))
             return False
 
     @staticmethod
@@ -162,7 +162,7 @@ class Check:
         else:
             expected_lines += (actual_len - expected_len) * ['\n']
         equal = True
-        line_width = max(len(actual_line.rstrip()) for actual_line in actual_lines + ['je enaka'])
+        line_width = max(len(actual_line.rstrip()) for actual_line in actual_lines + ['Program izpiše'])
         diff = []
         for out, given in zip(actual_lines, expected_lines):
             out, given = out.rstrip(), given.rstrip()
