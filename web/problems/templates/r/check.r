@@ -39,19 +39,19 @@ check$secret <- function(x, hint = "") {
     c(check$parts[[check$part.counter]]$secret, list(pair))
 }
 
-check$run <- function(statements, expected_state) {
+check$run <- function(statements, expected.state) {
   code <- substitute(statements)
   statements <- paste0("  > ", paste(unlist(strsplit(deparse(code), "\n")),
                                      collapse = "\n  > "))
   env <- new.env(parent = parent.frame())
   eval(code, env)
   errors <- character(0)
-  for (x in names(expected_state)) {
+  for (x in names(expected.state)) {
     if (! x %in% names(env)) {
       errors <- c(errors, sprintf("morajo nastaviti spremenljivko %s, vendar je ne", x))
-    } else if (check$canonize(env[[x]]) != check$canonize(expected_state[[x]])) {
+    } else if (check$canonize(env[[x]]) != check$canonize(expected.state[[x]])) {
       errors <- c(errors, sprintf("nastavijo %s na %s namesto na %s",
-                                  x, env[[x]], expected_state[[x]]))
+                                  x, env[[x]], expected.state[[x]]))
     }
   }
   if (length(errors) > 0) {
@@ -142,23 +142,23 @@ check$expected <- function(example, interval, sample = 100) {
   }
 }
 
-check$in_file <- function(filename, content, statements) {
+check$in.file <- function(filename, content, statements) {
   code <- substitute(statements)
   cat(paste0(content, "\n", collapse = ""), file = filename)
-  old_feedback <- check$parts[[check$part.counter]]$feedback
+  old.feedback <- check$parts[[check$part.counter]]$feedback
   eval(code, parent.frame())
-  new_feedback <- check$parts[[check$part.counter]]$feedback
-  if (length(new_feedback) > length(old_feedback)) {
-    check$parts[[check$part.counter]]$feedback <<- old_feedback
+  new.feedback <- check$parts[[check$part.counter]]$feedback
+  if (length(new.feedback) > length(old.feedback)) {
+    check$parts[[check$part.counter]]$feedback <<- old.feedback
     check$error("Pri vhodni datoteki %s z vsebino\n  %s\nso se pojavile naslednje napake:\n- %s",
                 filename, paste(content, collapse = "\n  "),
                 paste(gsub("\n", "\n    ",
-                           new_feedback[(length(old_feedback) + 1) : length(new_feedback)]),
+                           new.feedback[(length(old.feedback) + 1) : length(new.feedback)]),
                       collapse = "\n- "))
   }
 }
 
-check$out_file <- function(filename, content) {
+check$out.file <- function(filename, content) {
   tryCatch({
     f <- file(filename)
     out.lines <- readLines(f)
