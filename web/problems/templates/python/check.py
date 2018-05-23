@@ -283,12 +283,12 @@ class Check:
     @staticmethod
     @contextmanager
     def set_stringio(stringio):
+        if stringio is True:
+            stringio = VisibleStringIO
+        elif stringio is False:
+            stringio = io.StringIO
         if stringio is None or stringio is Check.get('stringio'):
             yield
         else:
-            if stringio is True:
-                stringio = VisibleStringIO
-            elif not stringio:
-                stringio = io.StringIO
             with Check.set(stringio=stringio):
                 yield
