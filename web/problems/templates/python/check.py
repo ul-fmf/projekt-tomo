@@ -266,10 +266,10 @@ class Check:
 
     @staticmethod
     @contextmanager
-    def set_clean(clean = None, **kwargs):
+    def set_clean(clean=None, **kwargs):
         clean = clean or Check.clean
-        with Check.set(clean = (lambda x: clean(x, **kwargs))
-                       if kwargs else clean):
+        with Check.set(clean=(lambda x: clean(x, **kwargs))
+                             if kwargs else clean):
             yield
 
     @staticmethod
@@ -277,7 +277,7 @@ class Check:
     def set_environment(**kwargs):
         env = dict(Check.get('env'))
         env.update(kwargs)
-        with Check.set(env = env):
+        with Check.set(env=env):
             yield
 
     @staticmethod
