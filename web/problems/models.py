@@ -33,6 +33,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def guarded_description(self):
+        return 'Navodila so napisana na listu' if self.problem_set.solution_visibility == self.problem_set.PROBLEM_HIDDEN else self.description
+
     def get_absolute_url(self):
         return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
 
@@ -155,6 +159,10 @@ class Part(OrderWithRespectToMixin, models.Model):
 
     def __str__(self):
         return '@{0:06d} ({1})'.format(self.pk, truncate(self.description))
+
+    @property
+    def guarded_description(self):
+        return 'Navodila so napisana na listu' if self.problem.problem_set.solution_visibility == self.problem.problem_set.PROBLEM_HIDDEN else self.description
 
     def get_absolute_url(self):
         return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
