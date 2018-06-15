@@ -87,6 +87,8 @@ class AttemptViewSet(ModelViewSet):
             obsolete_api = False
             valid_tokens = True
             for attempt_data in serializer.validated_data:
+                if not request.user.can_view_problem(attempt_data['part'].problem):
+                    return Response(serializer.errors, status=status.HTTP_403_FORBIDDEN)
                 valid_token = AttemptSerializer.check_token(attempt_data, request.user)
                 valid_tokens &= bool(valid_token)
                 if valid_token is None:
