@@ -139,7 +139,7 @@
           {% if problem.description and problem.description.strip %}
           <div class="panel-body">
             <p> 
-              {{ problem.description|latex_markdown }}
+              {{ problem.guarded_description|latex_markdown }}
             </p>
           </div>
           {% endif %}
@@ -149,7 +149,7 @@
             <li class="list-group-item" id="{{ part.anchor }}">
               {# Translators: problem set detail #}
               <h5>{{ forloop.counter }}. {% trans "part" %}</h5>
-              <p>{{ part.description|latex_markdown }}</p>
+              <p>{{ part.guarded_description|latex_markdown }}</p>
             </li>
             {% endfor %}
           </ul>

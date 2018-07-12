@@ -1,10 +1,10 @@
 {% load i18n %}# =============================================================================
 # {{ problem.title|safe }}{% if problem.description %}
 #
-# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
+# {{ problem.guarded_description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt in parts %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
 # {{ forloop.counter }}. podnaloga
-# {{ part.description|indent:"# "|safe }}
+# {{ part.guarded_description|indent:"# "|safe }}
 # =============================================================================
 {{ solution_attempt|safe }}{% endfor %}
 

@@ -136,10 +136,12 @@ class StudentEnrollment(models.Model):
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
+    PROBLEM_HIDDEN = 'P'
     SOLUTION_HIDDEN = 'H'
     SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
     SOLUTION_VISIBLE = 'V'
     SOLUTION_VISIBILITY_CHOICES = (
+        (PROBLEM_HIDDEN, _('Problem descriptions and official solutions are hidden')),
         (SOLUTION_HIDDEN, _('Official solutions are hidden')),
         (SOLUTION_VISIBLE_WHEN_SOLVED, _('Official solutions are visible when solved')),
         (SOLUTION_VISIBLE, _('Official solutions are visible')),
