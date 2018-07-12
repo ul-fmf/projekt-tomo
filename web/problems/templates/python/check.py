@@ -139,7 +139,7 @@ class Check:
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         try:
-            def visible_input(prompt):
+            def visible_input(prompt=''):
                 inp = input(prompt)
                 print(inp)
                 return inp
