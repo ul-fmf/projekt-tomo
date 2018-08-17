@@ -207,6 +207,7 @@ check$difflines <- function(actual.lines, expected.lines) {
 }
 
 check$summarize <- function() {
+  if (length(check$parts) == 0) return()
   for(i in 1:length(check$parts)) {
     if(strip(check$parts[[i]]$solution) == "") {
       cat("Podnaloga", i, "je brez rešitve.\n")

@@ -95,17 +95,17 @@ check$challenge <- function(x, hint = "") {
     )
 
     problem_match <- regex_break(paste(
-      '^\\s*# =+\n',           # beginning of header
-      '^\\s*# ([^\n]*)\n',     # title
-      '(^\\s*#( [^\n]*)?\n)*', # description
-      '^(?=\\s*(# )?=+@)',     # beginning of first part
+      '^\\s*# =+\n',            # beginning of header
+      '^\\s*# ([^\n]*)\n',      # title
+      '(^\\s*#( [^\n]*)?\n)*?', # description
+      '^(?=\\s*(# )?# =+@)',    # beginning of first part
       sep = ""
     ), c(
       '^\\s*# =+\n',           # beginning of header
       '^\\s*# ',               # title
       '([^\n]*)',              # title (?P<title>)
       '\n',                    # title
-      '(^\\s*#( [^\n]*)?\n)*'  # description
+      '(^\\s*#( [^\n]*)?\n)*?' # description
       ), .source)
 
     if(length(problem_match) == 0)
@@ -133,11 +133,13 @@ check$challenge <- function(x, hint = "") {
           part
         })
         .problem$parts <<- check$parts
+        names(.problem$parts) <<- NULL
         r <- POST(
           '{{ submission_url }}',
-          body = .problem,
-          encode = "json",
-          add_headers(Authorization = 'Token {{ authentication_token }}')
+          body = toJSON(.problem),
+          encode = "raw",
+          add_headers(Authorization = 'Token {{ authentication_token }}'),
+          content_type_json()
         )
         response <- content(r)
         if (is.atomic(response)) {
