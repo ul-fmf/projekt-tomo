@@ -16,13 +16,17 @@ if (.error) {
 
 regex_break <- function(whole_regex, regexes, source) {
     whole_matches <- gregexpr(paste("(?sm)", whole_regex, sep=""), source, perl=TRUE)[[1]]
-    whole_matches <- mapply(
-        function(start, end) substr(source, start, end),
-        whole_matches,
-        whole_matches + attr(whole_matches, "match.length") - 1
-    )
-    m <- length(whole_matches)
     n <- length(regexes)
+    if (whole_matches > 0) {
+      whole_matches <- mapply(
+          function(start, end) substr(source, start, end),
+          whole_matches,
+          whole_matches + attr(whole_matches, "match.length") - 1
+      )
+      m <- length(whole_matches)
+    } else {
+      return(matrix("", nrow=0, ncol=n))
+    }
     matches <- matrix("", nrow=m, ncol=n)
     for (i in 1:m) {
         whole <- whole_matches[i]

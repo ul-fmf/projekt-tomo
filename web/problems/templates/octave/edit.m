@@ -97,9 +97,12 @@ function validation = validate_current_file(src,parts)
   end
   problem_regex = ['# =+\s*\n',...               # beginning of header
       '\s*# (?<title>[^\n]*)\n',...              # title
-      '(?<description>(\s*#( [^\n]*)?\n)*)',...  # description
+      '(?<description>(\s*#( [^\n]*)?\n)*?)',... # description
       '(?=\s*(# )?# =+@)',];                     # beginning of first part
   [s, e, te, m, t, nm, sp] = regexp(src,problem_regex,'dotall');
+  if isempty(parts)
+    parts = {}
+  end
   problem = struct(
     "parts",{parts},
     "title",strtrim(nm.title),
@@ -111,8 +114,8 @@ function validation = validate_current_file(src,parts)
     shranim = input("Ali rešitve shranim na strežnik? (da/ne) ","s");
     if strtrim(shranim) == "da"
       printf('Shranjujem rešitve na strežnik... ');
-      url = "{{ submission_url }}"; #'https://www.projekt-tomo.si/api/attempts/submit/';
-      token = "Token {{ authentication_token }}"; #'Token 0779d82c83d98c1e4a5480e4e6f57b906598f5ee';
+      url = "{{ submission_url }}";
+      token = "Token {{ authentication_token }}";
       response = submit_parts(problem, url, token);
     end
   else

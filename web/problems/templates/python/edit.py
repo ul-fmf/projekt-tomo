@@ -89,10 +89,10 @@ def extract_problem(filename):
         'problem': {{ problem.id }}
     } for match in part_regex.finditer(source)]
     problem_match = re.search(
-        r'^\s*# =+\s*\n'                         # beginning of header
-        r'^\s*# (?P<title>[^\n]*)\n'             # title
-        r'(?P<description>(^\s*#( [^\n]*)?\n)*)' # description
-        r'(?=\s*(# )?# =+@)',                    # beginning of first part
+        r'^\s*# =+\s*\n'                          # beginning of header
+        r'^\s*# (?P<title>[^\n]*)\n'              # title
+        r'(?P<description>(^\s*#( [^\n]*)?\n)*?)' # description
+        r'(?=\s*(# )?# =+@)',                     # beginning of first part
         source, flags=re.DOTALL | re.MULTILINE)
     return {
         'title': problem_match.group('title').strip(),
