@@ -49,6 +49,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
 
+    @property
+    def slug(self):
+        return slugify(self.title).replace("-", "_")
+
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
@@ -61,8 +65,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
             "problem": self,
             "parts": parts,
             "submission_url": url,
-            "authentication_token": authentication_token,
-            "problem_slug": problem_slug
+            "authentication_token": authentication_token
         })
         return filename, contents
 
@@ -102,8 +105,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
             "problem": self,
             "submission_url": url,
-            "authentication_token": authentication_token,
-            "problem_slug": problem_slug
+            "authentication_token": authentication_token
         })
         return filename, contents
 

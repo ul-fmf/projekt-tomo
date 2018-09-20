@@ -1,4 +1,4 @@
-function {{ problem_slug|safe }}
+function {{ problem.slug|safe }}
 
 check = struct();
 % NE BRIŠI prvih dveh vrstic

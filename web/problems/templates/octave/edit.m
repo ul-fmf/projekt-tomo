@@ -1,4 +1,4 @@
-function {{ problem_slug|safe }}_edit
+function {{ problem.slug|safe }}_edit
 check = struct();
 if exist('OCTAVE_VERSION','builtin')
   src = char(fileread(mfilename('fullpathext')));
