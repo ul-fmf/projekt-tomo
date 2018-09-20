@@ -21,7 +21,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     tags = TaggableManager(blank=True)
     language = models.CharField(max_length=8, choices=(
         ('python', 'Python 3'),
-        ('octave', 'Octave'),
+        ('octave', 'Octave/Matlab'),
         ('r', 'R')), default='python')
     EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
     MIMETYPES = {'python': 'text/x-python',
@@ -61,7 +61,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
             "problem": self,
             "parts": parts,
             "submission_url": url,
-            "authentication_token": authentication_token
+            "authentication_token": authentication_token,
+            "problem_slug": problem_slug
         })
         return filename, contents
 
@@ -101,7 +102,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
         contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
             "problem": self,
             "submission_url": url,
-            "authentication_token": authentication_token
+            "authentication_token": authentication_token,
+            "problem_slug": problem_slug
         })
         return filename, contents
 
