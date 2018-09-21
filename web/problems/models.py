@@ -21,7 +21,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     tags = TaggableManager(blank=True)
     language = models.CharField(max_length=8, choices=(
         ('python', 'Python 3'),
-        ('octave', 'Octave'),
+        ('octave', 'Octave/Matlab'),
         ('r', 'R')), default='python')
     EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
     MIMETYPES = {'python': 'text/x-python',
@@ -48,6 +48,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def user_solutions(self, user):
         return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
+
+    @property
+    def slug(self):
+        return slugify(self.title).replace("-", "_")
 
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)

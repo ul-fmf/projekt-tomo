@@ -1,88 +1,93 @@
-global check;
+function {{ problem.slug|safe }}_edit
 check = struct();
-src = char(fileread(mfilename("fullpathext")));
-eval(strsplit(src,["# =L=I=B=R" "=A=R=Y=@="]){2});
+if exist('OCTAVE_VERSION','builtin')
+  src = char(fileread(mfilename('fullpathext')));
+else
+                                % mfilename in Matlab does not return .m
+  src = char(fileread(strcat(mfilename('fullpathext'),'.m')));
+end
+eval(strsplit(src,["% =L=I=B=R" "=A=R=Y=@="]){2});
 
 
 file_parts = extract_parts(src);
 check_initialize(file_parts);
 {% load i18n %}
-# NE BRIŠI prvih vrstic
+% NE BRIŠI prvih vrstic
 
-# =============================================================================
-# {{ problem.title|safe }}{% if problem.description %}
-#
-# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part in problem.parts.all %}
-# =====================================================================@{{ part.id|stringformat:'06d'}}=
-# {{ part.description|indent:"# "|safe }}{% if part.template %}
-# -----------------------------------------------------------------------------
-# {{ part.template|indent:"# "|safe }}{% endif %}
-# =============================================================================
+% =============================================================================
+% {{ problem.title|safe }}{% if problem.description %}
+%
+% {{ problem.description|indent:"% "|safe }}{% endif %}{% for part in problem.parts.all %}
+% =====================================================================@{{ part.id|stringformat:'06d'}}=
+% {{ part.description|indent:"% "|safe }}{% if part.template %}
+% -----------------------------------------------------------------------------
+% {{ part.template|indent:"% "|safe }}{% endif %}
+% =============================================================================
 {{ part.solution|safe }}
 
 check_part();
 {{ part.validation|safe }}
 
 {% endfor %}
-# # =====================================================================@000000=
-# # {% blocktrans %}  This is a template for a new problem part. To create a new part, uncomment
-# # the template and fill in your content.
-# #
-# # Define a function `multiply(x, y)` that returns the product of `x` and `y`.
-# # For example:
-# #
-# #     octave> multiply(3, 7)
-# #     ans = 21
-# #     octave> multiply(6, 7)
-# #     ans = 42{% endblocktrans %}
-# # =============================================================================
-#
-# function p = {% trans "multiply" %}(x, y)
-#     p =  x * y;
-# endfunction
-#
-# check_part();
-#
-# check_equal('{% trans "multiply" %}(3, 7)', 21);
-# check_equal('{% trans "multiply" %}(6, 7)', 42);
-# check_equal('{% trans "multiply" %}(10, 10)', 100);
-# check_secret({% trans "multiply" %}(100, 100));
-# check_secret({% trans "multiply" %}(500, 123));
+% % =====================================================================@000000=
+% % {% blocktrans %}  This is a template for a new problem part. To create a new part, uncomment
+% % the template and fill in your content.
+% %
+% % Define a function `multiply(x, y)` that returns the product of `x` and `y`.
+% % For example:
+% %
+% %     octave> multiply(3, 7)
+% %     ans = 21
+% %     octave> multiply(6, 7)
+% %     ans = 42{% endblocktrans %}
+% % =============================================================================
+%
+% function p = {% trans "multiply" %}(x, y)
+%     p =  x * y;
+% end
+%
+% check_part();
+%
+% check_equal('{% trans "multiply" %}(3, 7)', 21);
+% check_equal('{% trans "multiply" %}(6, 7)', 42);
+% check_equal('{% trans "multiply" %}(10, 10)', 100);
+% check_secret({% trans "multiply" %}(100, 100));
+% check_secret({% trans "multiply" %}(500, 123));
 
 
-# ===========================================================================@=
-# {% trans "Do not change this line or anything below it." %}
-# =============================================================================
+% ===========================================================================@=
+% {% trans "Do not change this line or anything below it." %}
+% =============================================================================
 
 validate_current_file(src,check.parts);
 
-# =L=I=B=R=A=R=Y=@=
+% =L=I=B=R=A=R=Y=@=
 
 'Če vam Octave sporoča, da je v tej vrstici sintaktična napaka,';
 'se napaka v resnici skriva v zadnjih vrsticah vaše kode.';
 
 'Kode od tu naprej NE SPREMINJAJTE!';
 
-# check.m
+% check.m
 {% include 'octave/check_functions.m' %}
-# check.m
-# varargin2struct.m
+% check.m
+% varargin2struct.m
 {% include 'octave/jsonlab.m' %}
 
 {% include 'octave/utils.m' %}
 
 function validation = validate_current_file(src,parts)
-#    def backup(filename):
-#        backup_filename = None
-#        suffix = 1
-#        while not backup_filename or os.path.exists(backup_filename):
+%    def backup(filename):
+%        backup_filename = None
+%        suffix = 1
+%        while not backup_filename or os.path.exists(backup_filename):
 %            backup_filename = '{0}.{1}'.format(filename, suffix)
 %            suffix += 1
 %        shutil.copy(filename, backup_filename)
 %        return backup_filename
 %
 %
- # split solution to solution and validation
+ % split solution to solution and validation
   n = length(parts);
   valid = [];
   for i=1:n
@@ -95,10 +100,10 @@ function validation = validate_current_file(src,parts)
     valid  = [valid parts{i}.valid];
     parts{i} = rmfield(rmfield(rmfield(parts{i},'valid'),'feedback'),'part');
   end
-  problem_regex = ['# =+\s*\n',...               # beginning of header
-      '\s*# (?<title>[^\n]*)\n',...              # title
-      '(?<description>(\s*#( [^\n]*)?\n)*?)',... # description
-      '(?=\s*(# )?# =+@)',];                     # beginning of first part
+  problem_regex = ['% =+\s*\n',...               % beginning of header
+      '\s*% (?<title>[^\n]*)\n',...              % title
+      '(?<description>(\s*%( [^\n]*)?\n)*?)',... % description
+      '(?=\s*(% )?% =+@)',];                     % beginning of first part
   [s, e, te, m, t, nm, sp] = regexp(src,problem_regex,'dotall');
   if isempty(parts)
     parts = {}
@@ -106,7 +111,7 @@ function validation = validate_current_file(src,parts)
   problem = struct(
     "parts",{parts},
     "title",strtrim(nm.title),
-    "description",regexprep(strtrim(nm.description),'^\s*# ?','','lineanchors'),
+    "description",regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),
     "id", {{ problem.id }},
     "problem_set", {{ problem.problem_set.id }}
   );
@@ -124,4 +129,4 @@ function validation = validate_current_file(src,parts)
   check_summarize()
 endfunction
 
-# attempt.m
+% attempt.m
