@@ -17,7 +17,7 @@ if (.error) {
 regex_break <- function(whole_regex, regexes, source) {
     whole_matches <- gregexpr(paste("(?sm)", whole_regex, sep=""), source, perl=TRUE)[[1]]
     n <- length(regexes)
-    if (whole_matches > 0) {
+    if (whole_matches[1] > 0) {
       whole_matches <- mapply(
           function(start, end) substr(source, start, end),
           whole_matches,
