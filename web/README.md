@@ -13,7 +13,7 @@ Namestimo vse potrebne pakete vključno z djangom
 pip3 install -r requirements/sqlite_local.txt
 ```
 
-Čeprav za delovni strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic. Če kljub vsemu želite uporabiti *postrges*, lahko namesto `local_sqlite.txt` uporabite  `local.txt`.
+Čeprav za delovni strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic. Če kljub vsemu želite uporabiti *postrges*, lahko namesto `sqlite_local` uporabite  `local`.
 
 Najprej nastavimo privzete nastavitve
 ```
