@@ -101,6 +101,7 @@ function validation = validate_current_edit_file(src,parts)
     "id", {{ problem.id }},
     "problem_set", {{ problem.problem_set.id }}
   );
+  check_summarize()
   if all(valid)
     shranim = input("Ali rešitve shranim na strežnik? (da/ne) ","s");
     if strtrim(shranim) == "da"
@@ -112,7 +113,6 @@ function validation = validate_current_edit_file(src,parts)
   else
     disp("Problem ni dobro formuliran!");
   end
-  check_summarize()
 end
 
 end	% edit.m

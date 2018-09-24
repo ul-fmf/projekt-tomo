@@ -37,7 +37,7 @@ while(i<=len)
     end
     i=i+1;
 end
-endfunction
+end
 #jsonopt.m
 function val=jsonopt(key,default,varargin)
 %
@@ -74,7 +74,7 @@ if(isstruct(opt))
        val=getfield(opt,lower(key));
     end
 end
-endfunction
+end
 # savejson.m
 function json=savejson(rootname,obj,varargin)
 %
@@ -239,7 +239,7 @@ if(~isempty(filename))
     end
     fclose(fid);
 end
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=obj2json(name,item,level,varargin)
 
@@ -254,7 +254,7 @@ elseif(isobject(item))
 else
     txt=mat2json(name,item,level,varargin{:});
 end
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=cell2json(name,item,level,varargin)
 txt={};
@@ -308,7 +308,7 @@ if(len>bracketlevel)
     txt(end+1:end+3)={nl,padding0,']'};
 end
 txt = sprintf('%s',txt{:});
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=struct2json(name,item,level,varargin)
 txt={};
@@ -384,7 +384,7 @@ if(forcearray)
     txt(end+1:end+3)={nl,padding0,']'};
 end
 txt = sprintf('%s',txt{:});
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=str2json(name,item,level,varargin)
 txt={};
@@ -429,7 +429,7 @@ if(len>1)
     txt(end+1:end+3)={nl,padding1,']'};
 end
 txt = sprintf('%s',txt{:});
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=mat2json(name,item,level,varargin)
 if(~isnumeric(item) && ~islogical(item))
@@ -507,7 +507,7 @@ else
     end
 end
 txt=sprintf('%s%s%s',txt,padding1,'}');
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=matlabobject2json(name,item,level,varargin)
 if numel(item) == 0 %empty object
@@ -524,7 +524,7 @@ else
     end
 end
 txt=struct2json(name,st,level,varargin{:});
-endfunction
+end
 %%-------------------------------------------------------------------------
 function txt=matdata2json(mat,level,varargin)
 
@@ -575,7 +575,7 @@ end
 if(any(isnan(mat(:))))
     txt=regexprep(txt,'NaN',jsonopt('NaN','"_NaN_"',varargin{:}));
 end
-endfunction
+end
 %%-------------------------------------------------------------------------
 function newname=checkname(name,varargin)
 isunpack=jsonopt('UnpackHex',1,varargin{:});
@@ -604,7 +604,7 @@ if(isunpack)
         end
     end
 end
-endfunction
+end
 %%-------------------------------------------------------------------------
 function newstr=escapejsonstring(str)
 newstr=str;
@@ -628,6 +628,6 @@ else
   end
   newstr=regexprep(newstr,'\\\\(u[0-9a-fA-F]{4}[^0-9a-fA-F]*)','\\$1');
 end
-endfunction
+end
 
 # savejson.m
