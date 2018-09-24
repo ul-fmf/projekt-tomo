@@ -3,11 +3,8 @@ check = struct();
 if exist('OCTAVE_VERSION','builtin')
   src = char(fileread(mfilename('fullpathext')));
 else
-                                % mfilename in Matlab does not return .m
   src = char(fileread(strcat(mfilename('fullpathext'),'.m')));
 end
-eval(strsplit(src,["% =L=I=B=R" "=A=R=Y=@="]){2});
-
 
 file_parts = extract_parts(src);
 check_initialize(file_parts);
@@ -59,14 +56,14 @@ check_part();
 % {% trans "Do not change this line or anything below it." %}
 % =============================================================================
 
-validate_current_file(src,check.parts);
+validate_current_edit_file(src,check.parts);
 
 % =L=I=B=R=A=R=Y=@=
 
-'Če vam Octave sporoča, da je v tej vrstici sintaktična napaka,';
-'se napaka v resnici skriva v zadnjih vrsticah vaše kode.';
+% 'Če vam Octave sporoča, da je v tej vrstici sintaktična napaka,';
+% 'se napaka v resnici skriva v zadnjih vrsticah vaše kode.';
 
-'Kode od tu naprej NE SPREMINJAJTE!';
+% 'Kode od tu naprej NE SPREMINJAJTE!';
 
 % check.m
 {% include 'octave/check_functions.m' %}
@@ -76,18 +73,7 @@ validate_current_file(src,check.parts);
 
 {% include 'octave/utils.m' %}
 
-function validation = validate_current_file(src,parts)
-%    def backup(filename):
-%        backup_filename = None
-%        suffix = 1
-%        while not backup_filename or os.path.exists(backup_filename):
-%            backup_filename = '{0}.{1}'.format(filename, suffix)
-%            suffix += 1
-%        shutil.copy(filename, backup_filename)
-%        return backup_filename
-%
-%
- % split solution to solution and validation
+function validation = validate_current_edit_file(src,parts)
   n = length(parts);
   valid = [];
   for i=1:n
@@ -127,6 +113,6 @@ function validation = validate_current_file(src,parts)
     disp("Problem ni dobro formuliran!");
   end
   check_summarize()
-endfunction
+end
 
-% attempt.m
+end	% edit.m
