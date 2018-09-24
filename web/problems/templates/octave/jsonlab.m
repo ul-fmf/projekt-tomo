@@ -38,7 +38,7 @@ while(i<=len)
     i=i+1;
 end
 end
-#jsonopt.m
+%jsonopt.m
 function val=jsonopt(key,default,varargin)
 %
 % val=jsonopt(key,default,optstruct)
@@ -75,7 +75,7 @@ if(isstruct(opt))
     end
 end
 end
-# savejson.m
+% savejson.m
 function json=savejson(rootname,obj,varargin)
 %
 % json=savejson(rootname,obj,filename)
@@ -630,4 +630,4 @@ else
 end
 end
 
-# savejson.m
+% savejson.m

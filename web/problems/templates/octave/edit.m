@@ -9,16 +9,16 @@ end
 file_parts = extract_parts(src);
 check_initialize(file_parts);
 {% load i18n %}
-% NE BRIŠI prvih vrstic
+% NE SPREMINJAJ prvih vrstic
 
 % =============================================================================
 % {{ problem.title|safe }}{% if problem.description %}
 %
-% {{ problem.description|indent:"% "|safe }}{% endif %}{% for part in problem.parts.all %}
+% {{ problem.description|indent:'% '|safe }}{% endif %}{% for part in problem.parts.all %}
 % =====================================================================@{{ part.id|stringformat:'06d'}}=
-% {{ part.description|indent:"% "|safe }}{% if part.template %}
+% {{ part.description|indent:'% '|safe }}{% if part.template %}
 % -----------------------------------------------------------------------------
-% {{ part.template|indent:"% "|safe }}{% endif %}
+% {{ part.template|indent:'% '|safe }}{% endif %}
 % =============================================================================
 {{ part.solution|safe }}
 
@@ -39,29 +39,29 @@ check_part();
 % %     ans = 42{% endblocktrans %}
 % % =============================================================================
 %
-% function p = {% trans "multiply" %}(x, y)
+% function p = {% trans 'multiply' %}(x, y)
 %     p =  x * y;
 % end
 %
 % check_part();
 %
-% check_equal('{% trans "multiply" %}(3, 7)', 21);
-% check_equal('{% trans "multiply" %}(6, 7)', 42);
-% check_equal('{% trans "multiply" %}(10, 10)', 100);
-% check_secret({% trans "multiply" %}(100, 100));
-% check_secret({% trans "multiply" %}(500, 123));
+% check_equal('{% trans 'multiply' %}(3, 7)', 21);
+% check_equal('{% trans 'multiply' %}(6, 7)', 42);
+% check_equal('{% trans 'multiply' %}(10, 10)', 100);
+% check_secret({% trans 'multiply' %}(100, 100));
+% check_secret({% trans 'multiply' %}(500, 123));
 
 
 % ===========================================================================@=
-% {% trans "Do not change this line or anything below it." %}
+% {% trans 'Do not change this line or anything below it.' %}
 % =============================================================================
 
 validate_current_edit_file(src,check.parts);
 
 % =L=I=B=R=A=R=Y=@=
 
-% 'Če vam Octave sporoča, da je v tej vrstici sintaktična napaka,';
-% 'se napaka v resnici skriva v zadnjih vrsticah vaše kode.';
+% 'Ako vam Octave/Matlab javi, da je v tej vrstici napaka,';
+% 'se napaka v resnici skriva v zadnjih vrsticah kode, ki ste jo napisali.';
 
 % 'Kode od tu naprej NE SPREMINJAJTE!';
 
@@ -95,23 +95,23 @@ function validation = validate_current_edit_file(src,parts)
     parts = {}
   end
   problem = struct(
-    "parts",{parts},
-    "title",strtrim(nm.title),
-    "description",regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),
-    "id", {{ problem.id }},
-    "problem_set", {{ problem.problem_set.id }}
+    'parts',{parts},
+    'title',strtrim(nm.title),
+    'description',regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),
+    'id', {{ problem.id }},
+    'problem_set', {{ problem.problem_set.id }}
   );
   check_summarize()
   if all(valid)
-    shranim = input("Ali rešitve shranim na strežnik? (da/ne) ","s");
-    if strtrim(shranim) == "da"
-      printf('Shranjujem rešitve na strežnik... ');
-      url = "{{ submission_url }}";
-      token = "Token {{ authentication_token }}";
+    shranim = input('Ali nalogo shranim v oddaljeno zbirko? (da/ne) ','s');
+    if strtrim(shranim) == 'da'
+      printf('Shranjujem nalogo v oddaljeno zbirko... ');
+      url = '{{ submission_url }}';
+      token = 'Token {{ authentication_token }}';
       response = submit_parts(problem, url, token);
     end
   else
-    disp("Problem ni dobro formuliran!");
+    disp('Problem ni dobro formuliran!');
   end
 end
 
