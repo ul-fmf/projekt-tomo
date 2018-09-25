@@ -158,8 +158,8 @@ check = struct();
 % ============================================================================@
 
 
-% "Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
-% se napaka v resnici skriva v zadnjih vrsticah va"se kode.
+% Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
+% se napaka v resnici skriva v zadnjih vrsticah vase kode.
 
 % 'Kode od tu naprej NE SPREMINJAJTE!';
 
@@ -207,7 +207,7 @@ function validation = validate_current_attempt_file(src)
         try
               {{ part.validation|default:'0;'|indent:'  '|safe }}
           catch err
-              check_error(['Testi spro"zijo izjemo\n' err.message]);
+              check_error(['Testi sprozijo izjemo\n' err.message]);
           end
       end
   {% endfor %}

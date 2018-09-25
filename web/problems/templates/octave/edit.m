@@ -60,8 +60,8 @@ validate_current_edit_file(src,check.parts);
 
 % =L=I=B=R=A=R=Y=@=
 
-% "Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
-% se napaka v resnici skriva v zadnjih vrsticah va"se kode.
+% Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
+% se napaka v resnici skriva v zadnjih vrsticah vase kode.
 
 % Kode od tu naprej NE SPREMINJAJTE!
 
@@ -103,7 +103,7 @@ function validation = validate_current_edit_file(src,parts)
   );
   check_summarize()
   if all(valid)
-    shranim = input('Ali nalogo shranim na "stre"znik? (da/ne) ','s');
+    shranim = input('Ali nalogo shranim na streznik? (da/ne) ','s');
     if strtrim(shranim) == 'da'
       printf('Shranjujem nalogo... ');
       url = '{{ submission_url }}';
