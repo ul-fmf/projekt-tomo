@@ -6,8 +6,8 @@ function check_initialize(parts)
   check.parts = parts;
   for i =1:length(parts)
     check.parts{i}.valid = 1;
-    check.parts{i}.feedback = cell();
-    check.parts{i}.secret = cell();
+    check.parts{i}.feedback = cell(0);
+    check.parts{i}.secret = cell(0);
   end
   check.part_counter = 0;
 end
@@ -45,11 +45,11 @@ end
 function check_summarize()
   for i=1:check.part_counter
     if not(check_has_solution(check.parts{i}))
-      fprintf('%d. podnaloga je brez rešitve.\n', i);
+      fprintf('%d. podnaloga je brez resitve.\n', i);
     elseif not(check.parts{i}.valid)
-      fprintf('%d. podnaloga nima veljavne rešitve.\n',i);
+      fprintf('%d. podnaloga nima veljavne resitve.\n',i);
     else
-      fprintf('%d. podnaloga ima veljavno rešitev.\n', i);
+      fprintf('%d. podnaloga ima veljavno resitev.\n', i);
     end
     for j = 1:length(check.parts{i}.feedback)
       fprintf('  - %d ',j);

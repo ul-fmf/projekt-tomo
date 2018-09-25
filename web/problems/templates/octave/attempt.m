@@ -1,16 +1,16 @@
 function {{ problem.slug|safe }}
 
 check = struct();
-% NE BRIŠI prvih dveh vrstic
+% NE SPREMINJAJ prvih dveh vrstic
 
 %
 % =============================================================================
 % {{ problem.title|safe }}{% if problem.description %}
 %
-% {{ problem.description|indent:"% "|safe }}{% endif %}{% for part, solution_attempt in parts %}
+% {{ problem.description|indent:'% '|safe }}{% endif %}{% for part, solution_attempt in parts %}
 % =====================================================================@{{ part.id|stringformat:'06d'}}=
 % {{ forloop.counter }}. podnaloga
-% {{ part.description|indent:"% "|safe }}
+% {{ part.description|indent:'% '|safe }}
 % =============================================================================
 {{ solution_attempt|safe }}{% endfor %}
 
@@ -158,8 +158,8 @@ check = struct();
 % ============================================================================@
 
 
-% 'Če vam Octave/Matlab sporoča, da je v tej vrstici sintaktična napaka,';
-% 'se napaka v resnici skriva v zadnjih vrsticah vaše kode.';
+% Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
+% se napaka v resnici skriva v zadnjih vrsticah vase kode.
 
 % 'Kode od tu naprej NE SPREMINJAJTE!';
 
@@ -184,7 +184,7 @@ validate_current_attempt_file(src);
 {% include 'octave/utils.m' %}
 
 function update_attempts(response)
-  valid_regex = "([0-9]+): *([01])";
+  valid_regex = '([0-9]+): *([01])';
   [s,e,te,m,t,nm,sp] = regexp(char(response),valid_regex);
   for i = 1:length(t)
     for j = 1:length(check.parts)
@@ -205,9 +205,9 @@ function validation = validate_current_attempt_file(src)
       if check_part()
         check.current_part.token = '{{ token }}';
         try
-              {{ part.validation|default:"0;"|indent:"  "|safe }}
+              {{ part.validation|default:'0;'|indent:'  '|safe }}
           catch err
-              check_error(["Testi sprožijo izjemo\n" err.message]);
+              check_error(['Testi sprozijo izjemo\n' err.message]);
           end
       end
   {% endfor %}
@@ -220,8 +220,8 @@ function validation = validate_current_attempt_file(src)
      end
   end
 
-  url = "{{ submission_url }}";
-  token = "Token {{ authentication_token }}";
+  url = '{{ submission_url }}';
+  token = 'Token {{ authentication_token }}';
 
   response = submit_parts(submited_parts, url, token);
   update_attempts(response);

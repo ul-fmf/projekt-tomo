@@ -47,7 +47,6 @@ end
 
 
 function [response,output] = submit_parts(submited_parts, url, token)
-       %data = [data "]" ];
        data = savejson('',submited_parts); %.encode('utf-8')
        % test for python 3
        py_version = 'import sys; print(sys.version_info[0])';
@@ -60,7 +59,7 @@ function [response,output] = submit_parts(submited_parts, url, token)
        else
          fprintf('napaka: Python ni na voljo!\nProsimo, da namestite Python 3 (www.python.org) in poskrbite, da je v sistemski poti.\n')
        end
-       fprintf('Shranjujem na strežnik ... ')
+       fprintf('Shranjujem na streznik... ')
        py_file = tempname();
        fp = fopen(py_file,'wt');
        fprintf(fp,'import json, urllib.request\n');
@@ -75,7 +74,7 @@ function [response,output] = submit_parts(submited_parts, url, token)
        fclose(fp);
        [response,output] = system([py_cmd ' ' py_file ' 2>&1']);
        if response
-         disp('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
+         disp('PRI SHRANJEVANJU SE JE ZGODILA NAPAKA! Poskusite znova.')
          disp(output)
        else
          disp('OK')
