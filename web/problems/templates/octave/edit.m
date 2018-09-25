@@ -60,10 +60,10 @@ validate_current_edit_file(src,check.parts);
 
 % =L=I=B=R=A=R=Y=@=
 
-% 'Ako vam Octave/Matlab javi, da je v tej vrstici napaka,';
-% 'se napaka v resnici skriva v zadnjih vrsticah kode, ki ste jo napisali.';
+% "Ce vam Octave/Matlab javi, da je v tej vrstici napaka,
+% se napaka v resnici skriva v zadnjih vrsticah va"se kode.
 
-% 'Kode od tu naprej NE SPREMINJAJTE!';
+% Kode od tu naprej NE SPREMINJAJTE!
 
 % check.m
 {% include 'octave/check_functions.m' %}
@@ -103,9 +103,9 @@ function validation = validate_current_edit_file(src,parts)
   );
   check_summarize()
   if all(valid)
-    shranim = input('Ali nalogo shranim v oddaljeno zbirko? (da/ne) ','s');
+    shranim = input('Ali nalogo shranim na "stre"znik? (da/ne) ','s');
     if strtrim(shranim) == 'da'
-      printf('Shranjujem nalogo v oddaljeno zbirko... ');
+      printf('Shranjujem nalogo... ');
       url = '{{ submission_url }}';
       token = 'Token {{ authentication_token }}';
       response = submit_parts(problem, url, token);

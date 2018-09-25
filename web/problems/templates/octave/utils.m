@@ -59,7 +59,7 @@ function [response,output] = submit_parts(submited_parts, url, token)
        else
          fprintf('napaka: Python ni na voljo!\nProsimo, da namestite Python 3 (www.python.org) in poskrbite, da je v sistemski poti.\n')
        end
-       fprintf('Shranjujem v oblak... ')
+       fprintf('Shranjujem na stre"znik... ')
        py_file = tempname();
        fp = fopen(py_file,'wt');
        fprintf(fp,'import json, urllib.request\n');

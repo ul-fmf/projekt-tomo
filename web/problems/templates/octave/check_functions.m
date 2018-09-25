@@ -45,11 +45,11 @@ end
 function check_summarize()
   for i=1:check.part_counter
     if not(check_has_solution(check.parts{i}))
-      fprintf('%d. podnaloga je brez kode.\n', i);
+      fprintf('%d. podnaloga je brez re"sitve.\n', i);
     elseif not(check.parts{i}.valid)
-      fprintf('%d. podnaloga nima pravilne kode.\n',i);
+      fprintf('%d. podnaloga nima pravilne re"sitve.\n',i);
     else
-      fprintf('%d. podnaloga ima pravilno kodo.\n', i);
+      fprintf('%d. podnaloga ima pravilno re"sitev.\n', i);
     end
     for j = 1:length(check.parts{i}.feedback)
       fprintf('  - %d ',j);
