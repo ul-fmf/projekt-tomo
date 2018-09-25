@@ -47,9 +47,9 @@ function check_summarize()
     if not(check_has_solution(check.parts{i}))
       fprintf('%d. podnaloga je brez re"sitve.\n', i);
     elseif not(check.parts{i}.valid)
-      fprintf('%d. podnaloga nima pravilne re"sitve.\n',i);
+      fprintf('%d. podnaloga nima veljavne re"sitve.\n',i);
     else
-      fprintf('%d. podnaloga ima pravilno re"sitev.\n', i);
+      fprintf('%d. podnaloga ima veljavno re"sitev.\n', i);
     end
     for j = 1:length(check.parts{i}.feedback)
       fprintf('  - %d ',j);
