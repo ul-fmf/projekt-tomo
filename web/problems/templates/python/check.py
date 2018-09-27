@@ -73,10 +73,10 @@ class Check:
         Check.current_part['secret'].append((str(clean(x)), hint))
 
     @staticmethod
-    def equal(expression, expected_result, clean=None, env=None):
-        local_env = Check.get('env', env)
+    def equal(expression, expected_result, clean=None, env=None, update_env=None):
+        global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get('clean', clean)
-        actual_result = eval(expression, globals(), local_env)
+        actual_result = eval(expression, global_env)
         if clean(actual_result) != clean(expected_result):
             Check.error('Izraz {0} vrne {1!r} namesto {2!r}.',
                         expression, actual_result, expected_result)
@@ -85,12 +85,12 @@ class Check:
             return True
 
     @staticmethod
-    def run(statements, expected_state, clean=None, use_globals=None, env=None, update_env=None):
+    def run(statements, expected_state, clean=None, env=None, update_env=None):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
-        global_env, local_env = Check.init_environments(use_globals=use_globals, env=env, update_env=update_env)
+        global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get('clean', clean)
-        exec(code, global_env, local_env)
+        exec(code, global_env)
         errors = []
         for (x, v) in expected_state.items():
             if x not in local_env:
@@ -148,12 +148,12 @@ class Check:
             return False
 
     @staticmethod
-    def output(expression, content, use_globals=None, env=None, update_env=None):
-        global_env, local_env = Check.init_environments(use_globals=use_globals, env=env, update_env=update_env)
+    def output(expression, content, env=None, update_env=None):
+        global_env = Check.init_environment(env=env, update_env=update_env)
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         try:
-            exec(expression, global_env, local_env)
+            exec(expression, global_env)
         finally:
             output = sys.stdout.getvalue().strip().splitlines()
             sys.stdout = old_stdout
@@ -182,23 +182,19 @@ class Check:
         return equal, diff, line_width
 
     @staticmethod
-    def init_environments(use_globals=None, env=None, update_env=None):
+    def init_environment(env=None, update_env=None):
         global_env = globals()
-        if Check.get('use_globals', use_globals):
-            local_env = global_env
-        else:
+        if not Check.get('update_env', update_env):
             global_env = dict(global_env)
-            local_env = Check.get('env', env)
-            if not Check.get('update_env', update_env):
-                local_env = dict(local_env)
-        return (global_env, local_env)
+        global_env.update(Check.get('env', env))
+        return global_env
 
     @staticmethod
-    def generator(expression, expected_values, should_stop=None, further_iter=None, env=None, clean=None):
+    def generator(expression, expected_values, should_stop=None, further_iter=None, clean=None, env=None, update_env=None):
         from types import GeneratorType
-        local_env = Check.get('env', env)
+        global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get('clean', clean)
-        gen = eval(expression, globals(), local_env)
+        gen = eval(expression, global_env)
         if not isinstance(gen, GeneratorType):
             Check.error("Izraz {0} ni generator.", expression)
             return False
@@ -244,7 +240,6 @@ class Check:
         'should_stop': False,
         'stringio': VisibleStringIO,
         'update_env': False,
-        'use_globals': False,
     }]
 
     @staticmethod
