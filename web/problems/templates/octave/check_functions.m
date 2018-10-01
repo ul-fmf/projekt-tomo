@@ -42,6 +42,14 @@ function check_secret(x,hint)
   check.parts{check.part_counter}.secret{end+1} = x;
 end
 
+function res = check_substring(koda, podniz)
+  res = 0;
+  if ~isempty(strfind(koda,podniz))
+    check_error(['Resitev ne sme vsebovati niza ',podniz]);
+    res = 1;
+  end
+end
+
 function check_summarize()
   for i=1:check.part_counter
     if not(check_has_solution(check.parts{i}))
