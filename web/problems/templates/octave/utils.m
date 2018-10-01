@@ -9,18 +9,11 @@ function parts = extract_parts(src)
     part_regex = [part_regex '(?<validation>.*?)'];  % validation
     part_regex = [part_regex '(?=\n\s*(% )?% =+@)']; % beginning of next part
     [s, e, te, m, t, nm, sp] = regexp(src,part_regex,'dotall');
-    if iscell(nm.part)
-      for i=1:length(nm.part)
-        parts{end+1} =  struct('part', nm.part(i),'solution', strtrim(nm.solution(i)),...
-          'validation', strtrim(nm.validation(i)),...
-          'description', regexprep(strtrim(nm.description(i)),'^\s*% ?','','lineanchors'),...
-          'template', regexprep(regexprep(strtrim(nm.template(i)), '^\s*% -+\n', ''), '^\s*% ?','','lineanchors'));
-      end
-    else
-      parts{1} = struct('part', nm.part,'solution', strtrim(nm.solution),...
-      'validation', strtrim(nm.validation),...
-      'description', regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),...
-      'template', regexprep(regexprep(strtrim(nm.template), '^\s*% -+\n', ''), '^\s*% ?','','lineanchors'));
+    for i=1:length(nm)
+        parts{i} =  struct('part', nm(i).part,'solution', strtrim(nm(i).solution),...
+            'validation', strtrim(nm(i).validation),...
+            'description', regexprep(strtrim(nm(i).description),'^\s*% ?','','lineanchors'),...
+            'template', regexprep(regexprep(strtrim(nm(i).template), '^\s*% -+\n', ''), '^\s*% ?','','lineanchors'));
     end
     % The last solution extends all the way to the validation code,
     % so we strip any trailing whitespace from it.
@@ -34,12 +27,8 @@ function parts = extract_solutions(src)
     part_regex = [part_regex '(?<solution>.*?)'];    % solution
     part_regex = [part_regex '(?=\n\s*(% )?% =+@)']; % beginning of next part
     [s, e, te, m, t, nm, sp] = regexp(src,part_regex,'dotall');
-    if iscell(nm.part)
-      for i=1:length(nm.part)
-        parts{end+1} =  struct('part', nm.part(i), 'solution', strtrim(nm.solution(i)));
-      end
-    else
-      parts{1} = struct('part', nm.part, 'solution', strtrim(nm.solution));
+    for i=1:length(nm)
+       parts{i} =  struct('part', nm(i).part, 'solution', strtrim(nm(i).solution));
     end
     % The last solution extends all the way to the validation code,
     % so we strip any trailing whitespace from it.
