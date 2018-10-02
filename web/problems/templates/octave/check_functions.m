@@ -28,10 +28,11 @@ function check_feedback(message)
   check.parts{check.part_counter}.feedback(end+1) = {message};
 end
 
-function res = check_equal(koda, rezultat)
+function res = check_equal(koda, rezultat, tol)
   res = 0;
+  if nargin<3, tol = 1e-6; end
   actual_result = eval(koda);
-  if any(size(actual_result) ~= size(rezultat)) || (norm(actual_result - rezultat) > 1e-6) || any(isnan(actual_result) ~= isnan(rezultat))
+  if any(size(actual_result) ~= size(rezultat)) || (norm(actual_result - rezultat) > tol) || any(any(isnan(actual_result) ~= isnan(rezultat)))
     check_error(['Izraz ', koda, ' vrne ', mat2str(actual_result), ' namesto ', mat2str(rezultat)]);
     res = 1;
   end

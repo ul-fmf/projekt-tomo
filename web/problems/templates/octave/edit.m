@@ -80,7 +80,7 @@ function validation = validate_current_edit_file(src,parts)
     parts{i}.problem = {{ problem.id }};
     parts{i}.solution = parts{i}.solution;
     parts{i}.validation = parts{i}.validation;
-    if str2num(parts{i}.part) != 0
+    if str2num(parts{i}.part) ~= 0
       parts{i}.id = str2num(parts{i}.part);
     end
     valid  = [valid parts{i}.valid];
@@ -94,18 +94,17 @@ function validation = validate_current_edit_file(src,parts)
   if isempty(parts)
     parts = {}
   end
-  problem = struct(
-    'parts',{parts},
-    'title',strtrim(nm.title),
-    'description',regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),
-    'id', {{ problem.id }},
-    'problem_set', {{ problem.problem_set.id }}
+  problem = struct(...
+    'parts',{parts},...
+    'title',strtrim(nm.title),...
+    'description',regexprep(strtrim(nm.description),'^\s*% ?','','lineanchors'),...
+    'id', {{ problem.id }},...
+    'problem_set', {{ problem.problem_set.id }} ...
   );
   check_summarize()
   if all(valid)
     shranim = input('Ali nalogo shranim na streznik? (da/ne) ','s');
     if strtrim(shranim) == 'da'
-      printf('Shranjujem nalogo... ');
       url = '{{ submission_url }}';
       token = 'Token {{ authentication_token }}';
       response = submit_parts(problem, url, token);
