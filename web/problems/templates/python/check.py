@@ -93,9 +93,9 @@ class Check:
         exec(code, global_env)
         errors = []
         for (x, v) in expected_state.items():
-            if x not in local_env:
+            if x not in global_env:
                 errors.append('morajo nastaviti spremenljivko {0}, vendar je ne'.format(x))
-            elif clean(local_env[x]) != clean(v):
+            elif clean(global_env[x]) != clean(v):
                 errors.append('nastavijo {0} na {1!r} namesto na {2!r}'.format(x, s[x], v))
         if errors:
             Check.error('Ukazi\n{0}\n{1}.', statements,  ";\n".join(errors))
