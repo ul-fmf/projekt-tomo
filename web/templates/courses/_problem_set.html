@@ -47,21 +47,26 @@
                  <form action="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" method="post">
                     {% csrf_token %}
                         <button class="btn btn-default btn-sm" aria-label="Set Solution Visibility"
-                            {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+                            {% if problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
+                                {# Translators: Besedila nalog so skrita #}
+                                title = "{% trans 'Problem descriptions are hidden' %}"
+                            {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
                                 {# Translators: Uradne rešitve so skrite #}
                                 title = "{% trans 'Official solutions are hidden' %}"   
                             {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
                                 {# Translators: Uradne rešitve so pogojno vidne #}
                                 title = "{% trans 'Official solutions are visible when solved' %}"
-                            {% else %}
+                            {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
                                 {# Translators: Uradne rešitve so vidne #}
                                 title = "{% trans 'Official solutions are visible' %}"
                             {% endif %}>
-                            {% if problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
-                                <i class="fa fa-ban"></i>{% endif %}
-                            {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
-                                <i class="fa fa-times-circle-o"></i>{% endif %}
-                            {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
+                            {% if problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
+                                <i class="fa fa-question-circle"></i>
+                            {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN %}
+                                <i class="fa fa-ban"></i>
+                            {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
+                                <i class="fa fa-times-circle-o"></i>
+                            {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE %}
                                 <i class="fa fa-check-circle-o"></i>
                             {% endif %}
                         </button>

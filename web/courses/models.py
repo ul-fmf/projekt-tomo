@@ -286,10 +286,13 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         self.save()
 
     def toggle_solution_visibility(self):
-        next = {self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED,
-                self.SOLUTION_VISIBLE_WHEN_SOLVED: self.SOLUTION_VISIBLE,
-                self.SOLUTION_VISIBLE: self.SOLUTION_HIDDEN}
-        self.solution_visibility = next[self.solution_visibility]
+        next_state = {
+            self.PROBLEM_HIDDEN: self.SOLUTION_HIDDEN,
+            self.SOLUTION_HIDDEN: self.SOLUTION_VISIBLE_WHEN_SOLVED,
+            self.SOLUTION_VISIBLE_WHEN_SOLVED: self.SOLUTION_VISIBLE,
+            self.SOLUTION_VISIBLE: self.PROBLEM_HIDDEN,
+        }
+        self.solution_visibility = next_state[self.solution_visibility]
         self.save()
 
     def copy_to(self, course):
