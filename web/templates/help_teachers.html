@@ -32,7 +32,9 @@
 
 <img class="center_image" src="{% static 'img_help/seznam_sklopov_ucitelj.png' %}" alt="Seznam sklopov, kot ga vidi učitelj.">
 
-<div class="center_text">Slika 2: Seznam sklopov v predmetu</div>
+<div class="center_text">Slika 2: Seznam sklopov v predmetu.</div>
+<br>
+
 
 <p>Desno od seznama sklopov so našteta imena učiteljev v tem predmetu. Pod njimi je seznam učenecev - to so uporabniki, ki so predmet dodali med priljubljene. Poleg vsakega imena so (skriti) gumbi za spremembo statusa tega udeleženca - iz učitelja v učenca oziroma iz učenca v učitelja. Gumb se pokaže, ko miško postavimo na ime. Poleg učencev se pokaže <img src="{% static 'img_help/ikona_status_v_ucitelja.png' %}" alt="Ikona Spremeni status v učitelja.">, poleg učiteljev pa <img src="{% static 'img_help/ikona_status_v_ucenca.png' %}" alt="Ikona Spremeni status v učenca.">.</p>
 
@@ -46,7 +48,8 @@
 
 <img class="center_image" src="{% static 'img_help/vsebina_sklopa_ucitelj.png' %}" alt="Stran posameznega sklopa, kot jo vidi učitelj.">
 
-<div class="center_text">Slika 3: Stran posameznega sklopa</div>
+<div class="center_text">Slika 3: Stran posameznega sklopa.</div>
+<br>
 
 <p>Krogci poleg naslovov nalog na desni prikazujejo, kako uspešno so učenci reševali posamezno nalogo. Rdeča barva prikazuje tiste, ki naloge še niso začeli reševati, rumena barva tiste, ki so nalogo neuspešno rešili in zelena barva tiste, ki so nalogo uspešno rešili. Prikaz uspešnosti reševanja je bolj podrobno opisan v poglavju <b>Pregled učenčevega dela</b>.</p>
 
@@ -106,7 +109,8 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 
 <img class="center_image" src="{% static 'img_help/primer_naloge_ucitelj.png' %}" alt="Naloga, kot jo vidi učitelj.">
 
-<div class="center_text">Slika 4: Primer naloge</div>
+<div class="center_text">Slika 4: Primer naloge.</div>
+<br>
 
 <p>Za urejanje nalog imamo na voljo naslednja orodja:</p>
 
@@ -157,7 +161,8 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 
 <img class="center_image" src="{% static 'img_help/datoteka_za_urejanje_ucitelj.png' %}" alt="Vsebina datoteke za urejanje.">
 
-<div class="center_text">Slika 6: Vsebina datoteke</div>
+<div class="center_text">Slika 6: Vsebina datoteke.</div>
+<br>
 
 <p>Za oblikovanje besedila uporabimo jezik Markdown. Osnovne ukaze najdemo <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">tukaj</a>. Brskalnik bo na podlagi uporabljenih ukazov prikazal ustrezno oblikovano besedilo. **Krog** bo na primer videti kot <b>Krog</b>.</p>
 
@@ -168,6 +173,7 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 <img class="center_image" src="{% static 'img_help/datoteka_za_urejanje_s_podnalogo.png' %}" alt="Besedilo prve podnaloge ter njena rešitev in testi.">
 
 <div class="center_text">Slika 7: Besedilo prve podnaloge ter njena rešitev in testi.</div>
+<br>
 
 <p>Ko napišemo vse, kar smo želeli, datoteko poženemo. S tem vsebino shranimo na strežnik in hkrati preverimo, ali smo vse pravilno zapisali. Ob zagonu se bo naša uradna rešitev preverila na napisanih testih, ki nam bodo javili morebitne napake.</p>
 
@@ -229,7 +235,7 @@ Check.equal('razdalja(1, 2, 3, 4)**2', 8)
 
 <h3>Check.run</h3>
                   
-<p>Ko preverjamo programe, ki spreminjajo vrednost lokalnih spremenljivk (na primer seznamov ali slovarjev), moramo poleg rezultata programa preveriti tudi vrednosti spremenljivk. V ta namen uporabimo funkcijo `Check.run(izrazi, pricakovano_stanje)`. izrazi so izrazi v jeziku Python, zapisani kot niz (torej med narekovaji). `pricakovano_stanje` je slovar vrednosti, ki naj bi jih spremenljivke imele po izračunu podanih izrazov. Na primer:</p>
+<p>Ko preverjamo programe, ki spreminjajo vrednost lokalnih spremenljivk (na primer seznamov ali slovarjev), moramo poleg rezultata programa preveriti tudi vrednosti spremenljivk. V ta namen uporabimo funkcijo `Check.run(izrazi, pricakovano_stanje)`. Izrazi so izrazi v jeziku Python, zapisani kot niz (torej med narekovaji). `pricakovano_stanje` je slovar vrednosti, ki naj bi jih spremenljivke imele po izračunu podanih izrazov. Na primer:</p>
 
 <pre><code># =========================================================
 # Napiši funkcijo ’spremeni_predznak(stevila)’, ki spremeni
@@ -284,7 +290,7 @@ Check.out_file('abeceda.txt', [
 
 <h3>Check.in_file</h3>
 
-<p>Za testiranje programov, ki berejo iz podane datoteke, uporabljamo `Check.in_file(ime_datoteke, vsebina)`. Funkcija ustvari datoteko z danim imenom in vsebino.Delovanje si oglejmo na primeru `Napiši funkcijo prestej_vrstice(ime_datoteke), ki vrne število vrstic v podani datoteki.` Testi bi bili na primer takšni:</p>
+<p>Za testiranje programov, ki berejo iz podane datoteke, uporabljamo `Check.in_file(ime_datoteke, vsebina)`. Funkcija ustvari datoteko z danim imenom in vsebino. Delovanje si oglejmo na primeru `Napiši funkcijo prestej_vrstice(ime_datoteke), ki vrne število vrstic v podani datoteki.` Testi bi bili na primer takšni:</p>
 
 <pre><code>with Check.in_file('test_vhodna_1.txt', ['a', 'b', 'c',]):
     Check.equal('prestej_vrstice("test_vhodna_1.txt")', 3)
@@ -341,18 +347,20 @@ je prišlo do naslednjih napak:
 <img class="center_image" src="{% static 'img_help/prikaz_uspesnosti_naloge_ucitelj.png' %}" alt="Prikaz uspešnosti pri posameznih nalogah.">
 
 <div class="center_text">Slika 8: Prikaz uspešnosti pri posameznih nalogah.</div>
+<br>
 
 <p>Če si želimo uspešnost reševanja ogledati bolj podrobno, kliknemo na ime naloge. Odpre se stran, kjer je prikazana uspešnost reševanja posameznih študentov pri posameznih podnalogah. Rdeče obarvan krogec pomeni, da učenec podnaloge še ni poskušal reševati. Rumen krogec pomeni, da je učenec podnalogo rešil napačno, zelen krogec pa, da je učenčeva rešitev sprejeta.</p>
 
 <img class="center_image" src="{% static 'img_help/uspesnost_ucencev_pri_nalogi_ucitelj.png' %}" alt="Prikaz uspešnosti učencev pri določeni nalogi.">
 
 <div class="center_text">Slika 9: Prikaz uspešnosti učencev pri določeni nalogi.</div>
+<br>
 
 <p>Če kliknemo na obarvani krogec, se nam odpre stran z rešitvami tega učenca. Poleg učenčevih rešitev vidimo še uradne rešitve podnalog.</p>
 
 <img class="center_image" src="{% static 'img_help/ogled_resitev_ucenca_ucitelj.png' %}" alt="Ogled rešitev določenega učenca.">
 
-<div class="center_text">Slika 10: Prikaz učenčevih in učiteljevih rešitev</div>
+<div class="center_text">Slika 10: Prikaz učenčevih in učiteljevih rešitev.</div>
 
 <h3>Statistika za posameznega učenca</h3>
 
@@ -361,6 +369,7 @@ je prišlo do naslednjih napak:
 <img class="center_image" src="{% static 'img_help/uspeh_ucenca_pri_predmetu_ucitelj.png' %}" alt="Prikaz uspešnosti določenega učenca pri predmetu.">
 
 <div class="center_text">Slika 11: Napredek učenca pri predmetu.</div>
+<br>
 
 <p>Če kliknemo na obarvani krogec, se nam odpre stran z rešitvami tega učenca (glej sliko 10).</p>
 {% endfilter %}
