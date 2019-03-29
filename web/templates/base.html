@@ -38,7 +38,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav navbar-right">
                     {# Translators: Link for logout in navigation bar (top right) #}
-                    <li><a href="{% if user.uses_shibboleth %}/Shibboleth.sso/Logout?return={% else %}{% url 'logout' %}?next={% endif %}{% url 'login' %}">{{ user.get_full_name }} {% trans "(logout)" %}</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% if user.uses_shibboleth %}/Shibboleth.sso/Logout?return={% else %}{% url 'logout' %}?next={% endif %}{% url 'login' %}">{{ user.get_full_name|default:user.username }} {% trans "(logout)" %}</a></li>
+                    {% endif %}
                     <li><a href="{% url 'help' %}"><i class="fa fa-question-circle fa-lg"></i><span class="sr-only">{% trans 'Help' %}</span></a></li>
                 </ul>
             </div>
