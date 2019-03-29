@@ -28,7 +28,7 @@
 
 <div class="content-section-y tomo-other">
   <div class="container tomo-other">
-    <h2>Ostali predmeti</h2>
+    <h2>Ostale ustanove, ki ponujajo predmete</h2>
       {% regroup not_user_courses by institution as institution_list %}
       {% for institution in institution_list %}
       <a class="hide-courses" data-toggle="collapse" href="#inst-{{ forloop.counter}}" aria-expanded="false" aria-controls="inst-{{ forloop.counter}}">{{ institution.grouper }}</a>
@@ -61,6 +61,8 @@
       </div>
       {% endfor %}
     </div>
+      {% empty %}
+        <p style="margin-left:30px;">Ni ostalih ustanov.</p>
       {% endfor %}
   </div>
 </div>
