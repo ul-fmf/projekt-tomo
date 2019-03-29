@@ -7,29 +7,55 @@ Strežnik za Projekt Tomo je aplikacija za [Django](https://www.djangoproject.co
 
 Priprava okolja
 ---------------
+Ustvarimo virtual environment v ukazni vrstici, odprti v mapi projekta. Poskrbeti moramo, da je narejen za Python 3.
 
-Namestimo vse potrebne pakete vključno z djangom
 ```
-pip3 install -r requirements/sqlite_local.txt
+python -m venv venv
+```
+in ga aktiviramo (okolje Windows)
+
+```
+.\venv\Scripts\activate
+```
+ali za Linux
+
+```
+source venv/scripts/activate
+```
+Namestimo vse potrebne pakete vključno z Djangom
+
+```
+pip install -r requirements/sqlite_local.txt
 ```
 
 Čeprav za delovni strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic. Če kljub vsemu želite uporabiti *postrges*, lahko namesto `sqlite_local` uporabite  `local`.
 
-Najprej nastavimo privzete nastavitve
+Nato nastavimo privzete nastavitve. V okolju Linux:
+
 ```
 export DJANGO_SETTINGS_MODULE=web.settings.sqlite_local
+```
+V okolju Windows:
+
+```
+set DJANGO_SETTINGS_MODULE=web.settings.sqlite_local
+```
+Namesto tega pa lahko neodvisno od okolja po vsakem ukazu dodamo še:
+
+```
+--settings=web.settings.sqlite_local
 ```
 
 Ustvarimo tabele v podatkovni bazi
 
 ```
-python3 manage.py migrate
+python manage.py migrate
 ```
 
 Nato ustvarimo administratorski račun
 
 ```
-python3 manage.py createsuperuser
+python manage.py createsuperuser
 ```
 
 Projekt Tomo je pripravljen na zagon.
@@ -40,7 +66,7 @@ Zagon strežnika
 Lokalni strežnik poženemo z ukazom
 
 ```
-python3 manage.py runserver
+python manage.py runserver
 ```
 Ker je zaradi ArnesAAI specifičen login, je edini način za prijavo na [administratorskega vmesnika](http://localhost:8000/admin/), saj je po prijavi v administratorski vmesnik mogoče dostopati tudi na običajno stran.
 
