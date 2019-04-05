@@ -16,11 +16,11 @@
 {% filter latex_markdown %}
 <h1>Delo v sistemu</h1>
 
-<p>V sistem se je prijavimo preko Facebook, Google ali Twitter računa oziroma z uporabniškim  imenom in geslom, ki nam je bilo dodeljeno.</p>
+<p>V sistem se prijavimo preko Facebook, Google ali Twitter računa oziroma z uporabniškim  imenom in geslom, ki nam je bilo dodeljeno.</p>
  
 <p>Po uspešni prijavi se nam pokaže seznam predmetov, ki so v sistemu. Na vrhu seznama vidimo predmete, ki smo jih že dodali med priljubljene. To pomeni, da je naše ime na seznamu udeležencev (učencev) in da učitelj predmeta lahko pregleduje naše rešitve nalog. Predmeti, ki smo jih dodali na seznam priljubljenih, so označeni z <img style="max-width: 80%" src="{% static 'img_help/ikona_vpisan_v_predmet.png' %}" alt="Ikona Sledimo predmetu.">. Predmet dodamo med priljubljene s klikom na <img style="max-width: 80%" src="{% static 'img_help/ikona_ni_vpisan_v_predmet.png' %}" alt="Ikona Ne sledimo predmetu."></p>
 
-Slika 1: Predmet, v katerega smo že vpisani in predmet, v katerega še nismo vpisani
+<!-- Slika 1: Predmet, v katerega smo že vpisani in predmet, v katerega še nismo vpisani. -->
 
 <p>Pri predmetih, v katere smo že vpisani, vidimo zadnje tri sklope. Poleg vsakega sklopa je  zabeleženo, kolikšen delež nalog v tem sklopu smo že rešili tako, da so naše rešitve sprejete.</p>
 
@@ -28,18 +28,18 @@ Slika 1: Predmet, v katerega smo že vpisani in predmet, v katerega še nismo vp
 
 <p>Ko odpremo predmet, vidimo seznam sklopov nalog. Sklopi ponavadi zajemajo naloge podobne sorte. Ko odpremo sklop, najprej vidimo uvodno besedilo, v katerem so običajno razloženi osnovni ukazi, obravnavani v sklopu, temu pa sledijo posamezne naloge. Naloge so med seboj neodvisne, vsaka pa je sestavljena iz ene ali več podnalog, ki običajno gradijo ena na drugi in so postopoma težje.</p>
 
-Slika 2: Stran posameznega sklopa
+<!-- Slika 2: Stran posameznega sklopa. -->
 
 <h2>Reševanje nalog</h2>
 
 <p>Izberemo nalogo, ki jo želimo reševati in s strežnika s klikom na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_datoteko_ucenec.png' %}" alt="Gumb Prenesi datoteko."> prenesemo Python datoteko na svoj računalnik. Če želimo, lahko s klikom na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_vse_datoteke_ucenec.png' %}" alt="Gumb Prenesi vse datoteke."> prenesemo tudi ZIP datoteko, ki vsebuje datoteke vseh nalog v ustreznem sklopu.</p>
 <p>V datoteki je besedilo naloge in podnalog, zapisano kot komentar. Med besedilom je prazen prostor, v katerega bomo vpisali rešitve.</p>
 
-Slika 3: Primer datoteke z nalogo
+<!-- Slika 3: Primer datoteke z nalogo. -->
 
 <p>Ko rešitve vpišemo v datoteko, datoteko poženemo (v IDLE s klikom na Run oziroma s klikom na F5). Ob zagonu se s pomočjo testov, ki jih je v naprej pripravil učitelj, preveri pravilnost naloge. Rezultati testov se bodo izpisali v ukazni lupini.</p>
 
-Slika 4: Primer delno izpolnjene rešitve in strežnikovega odziva
+<!-- Slika 4: Primer delno izpolnjene rešitve in strežnikovega odziva. -->
 
 <p>Ko datoteko poženemo, se naše rešitve shranijo na strežnik - ne glede na pravilnost. To pomeni, da reševanje lahko nadaljujemo kasneje, na drugem računalniku. Ko se bomo ponovno prijavili v sistem in prenesli datoteko z že reševano nalogo, bodo v datoteki tudi naše rešitve.</p>
 
@@ -47,7 +47,7 @@ Slika 4: Primer delno izpolnjene rešitve in strežnikovega odziva
 
 <p>Svoje rešitve določene naloge vidimo, če kliknemo na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prikazi_resitve.png' %}" alt="Gumb Prikaži rešitve."> ob imenu naloge. Odpre se nam nova stran, kjer so na levi strani zaslona prikazane naše rešitve, na desni pa rešitve tistega, ki je nalogo sestavil.</p>
 
-Slika 5: Primerjava z uradno rešitvijo
+<!-- Slika 5: Primerjava z uradno rešitvijo. -->
 
 <p>Vidnost uradnih rešitev določa učitelj predmeta. Skrbnik lahko določi, da uradne rešitve vidimo:
     <ul>
@@ -59,7 +59,7 @@ Slika 5: Primerjava z uradno rešitvijo
 
 <p>Ko je naša rešitev podnaloge sprejeta, se ob naslovu podnaloge izriše zelena ikona. Če smo podnalogo poskusili reševati, vendar rešitev ni pravilna, se izriše rdeča ikona. Tako na prvi pogled vidimo, katere podnaloge moramo še rešiti.</p>
 
-Slika 6: Ikone, ki označujejo sprejetost rešitev in obarvanost naslova naloge
+<!-- Slika 6: Ikone, ki označujejo sprejetost rešitev in obarvanost naslova naloge. -->
 
 <p>Tudi naslov naloge se bo obarval glede na rešenost podnalog:
     <ul>
