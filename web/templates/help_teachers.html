@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% load i18n %}               
+{% load i18n %}
 {% load staticfiles %}
 
 {% block title %}Tomo – {% trans 'Terms of service' %}{% endblock %}
 
- 
-{% block navigation-left %} 
+
+{% block navigation-left %}
 <a class="navbar-brand topnav" href="{% url 'help' %}">{% trans 'Help' %}</a>
 <a class="navbar-brand topnav" href="{% url 'help_teachers' %}">Navodila za učitelje</a>
 {% endblock %}
@@ -20,19 +20,21 @@
 <p>Po uspešni prijavi se nam pokaže seznam predmetov, ki so v sistemu. Na vrhu seznama vidimo predmete, ki smo jih že dodali med priljubljene. To pomeni, da je naše ime na seznamu udeležencev (učencev) in da učitelj predmeta lahko pregleduje naše rešitve nalog. Predmeti, ki smo jih dodali na seznam priljubljenih, so označeni z <img src="{% static 'img_help/ikona_vpisan_v_predmet.png' %}" alt="Ikona Sledimo predmetu.">. Predmet dodamo med priljubljene s klikom na <img src="{% static 'img_help/ikona_ni_vpisan_v_predmet.png' %}" alt="Ikona Ne sledimo predmetu."></p>
 
 <p>Če hočemo postati učitelj v predmetu, se moramo vanj najprej vpisati. Status učitelja v določenem predmetu nam bo dodelil eden od učiteljev tega predmeta oziroma administrator storitve Tomo. Predmeti, v katerih imamo status učitelja, so označeni z <img src="{% static 'img_help/ikona_ucitelj_v_predmetu.png' %}" alt="Ikona Učitelj v predmetu.">.
-</p> 
+</p>
 
-<img class="center_image" src="{% static 'img_help/seznam_predmetov_ucitelj.png' %}" alt="Seznam predmetov, kot ga vidi učitelj.">
-
-<div class="center_text">Slika 1: Seznam predmetov, v katere smo vpisani in seznam predmetov, v katere nismo vpisani.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/seznam_predmetov_ucitelj.png' %}" alt="Seznam predmetov, kot ga vidi učitelj.">
+    <figcaption>Slika 1: Seznam predmetov, v katere smo vpisani in seznam predmetov, v katere nismo vpisani.</figcaption>
+</figure>
 
 <h2>Predmeti</h2>
 
 <p>Predmet je sestavljen iz sklopov nalog. Na spodnji sliki vidimo predmet ‘Uvod v programiranje’ in seznam sklopov v njem.</p>
 
-<img class="center_image" src="{% static 'img_help/seznam_sklopov_ucitelj.png' %}" alt="Seznam sklopov, kot ga vidi učitelj.">
-
-<div class="center_text">Slika 2: Seznam sklopov v predmetu</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/seznam_sklopov_ucitelj.png' %}" alt="Seznam sklopov, kot ga vidi učitelj.">
+    <figcaption>Slika 2: Seznam sklopov v predmetu.</figcaption>
+</figure>
 
 <p>Desno od seznama sklopov so našteta imena učiteljev v tem predmetu. Pod njimi je seznam učenecev - to so uporabniki, ki so predmet dodali med priljubljene. Poleg vsakega imena so (skriti) gumbi za spremembo statusa tega udeleženca - iz učitelja v učenca oziroma iz učenca v učitelja. Gumb se pokaže, ko miško postavimo na ime. Poleg učencev se pokaže <img src="{% static 'img_help/ikona_status_v_ucitelja.png' %}" alt="Ikona Spremeni status v učitelja.">, poleg učiteljev pa <img src="{% static 'img_help/ikona_status_v_ucenca.png' %}" alt="Ikona Spremeni status v učenca.">.</p>
 
@@ -44,9 +46,10 @@
 
 <p>Na sliki 3 je prikazana vsebina sklopa ‘Pogojni stavek’:</p>
 
-<img class="center_image" src="{% static 'img_help/vsebina_sklopa_ucitelj.png' %}" alt="Stran posameznega sklopa, kot jo vidi učitelj.">
-
-<div class="center_text">Slika 3: Stran posameznega sklopa</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/vsebina_sklopa_ucitelj.png' %}" alt="Stran posameznega sklopa, kot jo vidi učitelj.">
+    <figcaption>Slika 3: Stran posameznega sklopa.</figcaption>
+</figure>
 
 <p>Krogci poleg naslovov nalog na desni prikazujejo, kako uspešno so učenci reševali posamezno nalogo. Rdeča barva prikazuje tiste, ki naloge še niso začeli reševati, rumena barva tiste, ki so nalogo neuspešno rešili in zelena barva tiste, ki so nalogo uspešno rešili. Prikaz uspešnosti reševanja je bolj podrobno opisan v poglavju <b>Pregled učenčevega dela</b>.</p>
 
@@ -54,34 +57,37 @@
 
 <p>Za urejanje sklopov imamo na voljo naslednja orodja (gumbi se nahajajo desno od imen sklopov na seznamu vseh sklopov v predmetu):</p>
 
-<table class="help-table" style="width:60%">
+<table class="help-table">
     <tr>
         <th>Gumb</th>
         <th>Pomen</th>
     </tr>
     <tr>
-        <td style="width:15%"><img class="center_image" src="{% static 'img_help/gumb_uredi.png' %}" alt="gumb Uredi."></td>
+        <td style="width:15%"><img src="{% static 'img_help/gumb_uredi.png' %}" alt="gumb Uredi."></td>
         <td>Odpre meni za urejanje lastnosti sklopa (naslov, uvodno besedilo, vidnost sklopa in vidnost rešitev).</td>
     </tr>
     <tr>
-        <td><img class="center_image" src="{% static 'img_help/gumb_brisi.png' %}" alt="gumb Briši."></td>
+        <td><img src="{% static 'img_help/gumb_brisi.png' %}" alt="gumb Briši."></td>
         <td>Zbriše sklop in vse naloge v njem.</td>
     </tr>
     <tr>
-        <td><img class="center_image" src="{% static 'img_help/gumb_puscici_gor_dol.png' %}" alt="gumba za premikanje sklopa gor oziroma dol po seznamu"></td>
+        <td><img src="{% static 'img_help/gumb_puscici_gor_dol.png' %}" alt="gumba za premikanje sklopa gor oziroma dol po seznamu"></td>
         <td>Sklop premaknemo za eno mesto višje oziroma nižje na seznamu sklopov v predmetu.</td>
     </tr>
     <tr>
-        <td style="text-align:center"><img class="center_image" src="{% static 'img_help/gumb_sklop_viden.png' %}" alt="gumb Sklop je viden."> ali
-            <img class="center_image" src="{% static 'img_help/gumb_sklop_skrit.png' %}" alt="gumb Sklop je skrit.">
+        <td>
+            <img src="{% static 'img_help/gumb_sklop_viden.png' %}" alt="gumb Sklop je viden."> ali
+            <img src="{% static 'img_help/gumb_sklop_skrit.png' %}" alt="gumb Sklop je skrit.">
         </td>
         <td>Ikona <img src="{% static 'img_help/ikona_sklop_skrit.png' %}" alt="ikona Sklop je skrit."> označuje, da uporabniki s statusom učenca tega sklopa ne vidijo. Uporabniki s statusom učitelja bodo sklop vseeno lahko videli in urejali.
- <img src="{% static 'img_help/ikona_sklop_viden.png' %}" alt="ikona Sklop je viden."> označuje, da lahko sklop in vso njegovo vsebino vidijo tudi učenci.</td>
+            <img src="{% static 'img_help/ikona_sklop_viden.png' %}" alt="ikona Sklop je viden."> označuje, da lahko sklop in vso njegovo vsebino vidijo tudi učenci.
+        </td>
     </tr>
     <tr>
-        <td style="text-align:center"><img class="center_image" src="{% static 'img_help/gumb_resitve_vidne.png' %}" alt="gumb Rešitve nalog so vidne."> ali
-            <img class="center_image" src="{% static 'img_help/gumb_resitve_pogojno_vidne.png' %}" alt="gumb Rešitve nalog so pogojno vidne."> ali
-            <img class="center_image" src="{% static 'img_help/gumb_resitve_skrite.png' %}" alt="gumb Rešitve nalog so skrite.">
+        <td>
+            <img src="{% static 'img_help/gumb_resitve_vidne.png' %}" alt="gumb Rešitve nalog so vidne."> ali
+            <img src="{% static 'img_help/gumb_resitve_pogojno_vidne.png' %}" alt="gumb Rešitve nalog so pogojno vidne."> ali
+            <img src="{% static 'img_help/gumb_resitve_skrite.png' %}" alt="gumb Rešitve nalog so skrite.">
         </td>
         <td>Te ikone označujejo vidnost rešitev za vse naloge v sklopu:
             <ul>
@@ -95,18 +101,19 @@
                     <img src="{% static 'img_help/ikona_resitve_skrite.png' %}" alt="ikona Rešitve nalog so skrite."> pomeni, da učiteljeva rešitev ne bo vidna niti po tem, ko bo učenčeva rešitev sprejeta.
                 </li>
             </ul>
-
-Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
+            Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.
+        </td>
     </tr>
 </table>
 
 <h2>Naloge</h2>
 
-<p>Naloge so med seboj neodvisne, vsaka pa je sestavljena iz ene ali več podnalog, ki običajno gradijo ena na drugi in so postopoma težje.</p> 
+<p>Naloge so med seboj neodvisne, vsaka pa je sestavljena iz ene ali več podnalog, ki običajno gradijo ena na drugi in so postopoma težje.</p>
 
-<img class="center_image" src="{% static 'img_help/primer_naloge_ucitelj.png' %}" alt="Naloga, kot jo vidi učitelj.">
-
-<div class="center_text">Slika 4: Primer naloge</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/primer_naloge_ucitelj.png' %}" alt="Naloga, kot jo vidi učitelj.">
+    <figcaption>Slika 4: Primer naloge.</figcaption>
+</figure>
 
 <p>Za urejanje nalog imamo na voljo naslednja orodja:</p>
 
@@ -116,35 +123,36 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
          <th>Pomen</th>
      </tr>
      <tr>
-         <td style="width:15%"><img class="center_image" src="{% static 'img_help/gumb_puscici_gor_dol.png' %}" alt="gumba za premikanje naloge gor oziroma dol po seznamu"></td>
+         <td style="width:15%"><img src="{% static 'img_help/gumb_puscici_gor_dol.png' %}" alt="gumba za premikanje naloge gor oziroma dol po seznamu"></td>
          <td>Nalogo premaknemo za eno mesto višje oziroma nižje na seznamu nalog v sklopu.</td>
      </tr>
      <tr>
-         <td><img class="center_image" src="{% static 'img_help/gumb_uredi.png' %}" alt="gumb Uredi."></td>
+         <td><img src="{% static 'img_help/gumb_uredi.png' %}" alt="gumb Uredi."></td>
          <td>Odpre meni za urejanje lastnosti naloge (naslov in uvodno besedilo).</td>
      </tr>
      <tr>
-         <td><img class="center_image" src="{% static 'img_help/gumb_brisi.png' %}" alt="gumb Briši."></td>
+         <td><img src="{% static 'img_help/gumb_brisi.png' %}" alt="gumb Briši."></td>
          <td>Zbriše nalogo in vse podnaloge v njej.</td>
      </tr>
      <tr>
-         <td><img class="center_image" src="{% static 'img_help/gumb_kopiraj.png' %}" alt="gumb Kopiraj."></td>
+         <td><img src="{% static 'img_help/gumb_kopiraj.png' %}" alt="gumb Kopiraj."></td>
          <td>Odpre meni za kopiranje naloge v drug sklop. Izbiramo lahko med sklopi v predmetih, kjer imamo status učitelja.</td>
      </tr>
-</table> 
+</table>
 
 <h3>Prikaz rešitev</h3>
 
 <p>S klikom na gumb <img src="{% static 'img_help/gumb_prikazi_resitve.png' %}" alt="gumb Prikaži rešitve"> odpremo stran, ki prikazuje rešitve dane naloge. Na strani so prikazane naše rešitve in rešitve tistega, ki je nalogo sestavil - uradne rešitve. Primer vidimo na spodnji sliki:</p>
 
-<img class="center_image" src="{% static 'img_help/prikaz_resitev_ucitelj.png' %}" alt="Primerjava naših in uradnih rešitev naloge.">
-
-<div class="center_text">Slika 5: Primerjava naših in uradnih rešitev naloge.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/prikaz_resitev_ucitelj.png' %}" alt="Primerjava naših in uradnih rešitev naloge.">
+    <figcaption>Slika 5: Primerjava naših in uradnih rešitev naloge.</figcaption>
+</figure>
 
 <h3>Dodajanje novih nalog</h3>
 
 <p>S klikom na gumb <i>Dodaj nalogo</i> (nahaja se na dnu seznama nalog) odpremo obrazec, v katerega vpišemo naslov in uvodno besedilo nove naloge. Ko vsebino obrazca shranimo, se na strežniku naredi nova datoteka, ki vsebuje naslov in uvodno besedilo nove naloge (v obliki komentarjev) ter vso podporno programsko kodo, ki skrbi za komunikacijo s strežnikom. Mi moramo dodati samo še besedilo podnalog ter njihove rešitve.</p>
- 
+
 <p>Besedilo in rešitve podnalog vpisujemo neposredno v datoteko. Zato datoteko najprej prenesemo s strežnika in sicer s klikom na gumb <img src="{% static 'img_help/gumb_prenesi_datoteko_ucitelj.png' %}" alt="Gumb Prenesi datoteko."> pri čemer izberemo možnost <i>Datoteka za urejanje</i>.</p>
 
 <p>S klikom na možnost <i>Datoteka za reševanje</i> prenesemo datoteko, pripravljeno za reševanje. To pomeni, da datoteka ne vsebuje naših rešitev in testov, ampak samo besedilo naloge. Tako datoteko s strežnika prenesejo učenci in vanjo vpisujejo svoje rešitve.</p>
@@ -155,9 +163,10 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 
 <p>Na sliki 6 vidimo naslov in uvodno besedilo naloge ‘Ploščine likov’. Nad in pod besedilom je programska koda, ki skrbi za komunikacijo s strežnikom. Te kode ne spreminjamo.</p>
 
-<img class="center_image" src="{% static 'img_help/datoteka_za_urejanje_ucitelj.png' %}" alt="Vsebina datoteke za urejanje.">
-
-<div class="center_text">Slika 6: Vsebina datoteke</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/datoteka_za_urejanje_ucitelj.png' %}" alt="Vsebina datoteke za urejanje.">
+    <figcaption>Slika 6: Vsebina datoteke.</figcaption>
+</figure>
 
 <p>Za oblikovanje besedila uporabimo jezik Markdown. Osnovne ukaze najdemo <a href="http://daringfireball.net/projects/markdown/basics" target="_blank">tukaj</a>. Brskalnik bo na podlagi uporabljenih ukazov prikazal ustrezno oblikovano besedilo. **Krog** bo na primer videti kot <b>Krog</b>.</p>
 
@@ -165,9 +174,10 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 
 <p>Besedilo podnaloge napišemo pod `#=====`..., kot je prikazano na sliki 8. Za navodili napišemo uradno rešitev, za uradno rešitvijo pa teste, ki jih mora oddana rešitev prestati. Rešitev od testov ločimo z ukazom `Check.part()`.</p>
 
-<img class="center_image" src="{% static 'img_help/datoteka_za_urejanje_s_podnalogo.png' %}" alt="Besedilo prve podnaloge ter njena rešitev in testi.">
-
-<div class="center_text">Slika 7: Besedilo prve podnaloge ter njena rešitev in testi.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/datoteka_za_urejanje_s_podnalogo.png' %}" alt="Besedilo prve podnaloge ter njena rešitev in testi.">
+    <figcaption>Slika 7: Besedilo prve podnaloge ter njena rešitev in testi.</figcaption>
+</figure>
 
 <p>Ko napišemo vse, kar smo želeli, datoteko poženemo. S tem vsebino shranimo na strežnik in hkrati preverimo, ali smo vse pravilno zapisali. Ob zagonu se bo naša uradna rešitev preverila na napisanih testih, ki nam bodo javili morebitne napake.</p>
 
@@ -177,12 +187,12 @@ Vidnost rešitev lahko kadarkoli spremenimo s klikanjem na ta gumb.</td>
 
 <p>Za testiranje rešitev imamo na voljo funkcije, opisane v nadaljevanju.</p>
 
-<h3>Check.equal</h3> 
-                  
+<h3>Check.equal</h3>
+
 <p>S `Check.equal(''izraz'', pricakovani_rezultat)`, preverimo, ali je rezultat danega izraza enak pričakovanemu. Izraz je ponavadi kar klic funkcije, ki jo preverjamo, ni pa nujno - lahko je poljubno število, niz, izraz ... v jeziku Python. Izraz mora biti podan kot niz, torej zapisan med narekovaji. Pričakovani rezultat je lahko poljubno število, niz, izraz … v jeziku Python.</p>
 <p>Oglejmo si spodnji primer:</p>
 
-<pre><code># ====================================================    
+<pre><code># ====================================================
 # Napiši funkcijo 'razdalja(x1, y1, x2, y2)', ki vrne
 # razdaljo med točkama (x1, y1) in (x2, y2).
 # ====================================================
@@ -203,7 +213,7 @@ Check.equal('razdalja(1, 2, 3, 4)**2', 8)
 </code></pre>
 
 <h3>Check.secret</h3>
-                   
+
 <p>Ker se testiranje rešitve izvrši na učenčevem računalniku, so vsi testi vsebovani v datoteki za reševanje. Učenci lahko teste najdejo in vidijo pričakovane rezultate. Nato napišejo rešitev, ki uspešno prestane vse teste in bo zato sprejeta, vendar ni pravilna:</p>
 
 <pre><code>def razdalja(x1, y1, x2, y2):
@@ -228,8 +238,8 @@ Check.equal('razdalja(1, 2, 3, 4)**2', 8)
 <p>Funkcija `Check.secret` je zato najbolj primerna za preverjanje izpitnih nalog ali ko želimo zagotoviti, da učenci pri reševanju ne bodo ubirali bližnjic.</p>
 
 <h3>Check.run</h3>
-                  
-<p>Ko preverjamo programe, ki spreminjajo vrednost lokalnih spremenljivk (na primer seznamov ali slovarjev), moramo poleg rezultata programa preveriti tudi vrednosti spremenljivk. V ta namen uporabimo funkcijo `Check.run(izrazi, pricakovano_stanje)`. izrazi so izrazi v jeziku Python, zapisani kot niz (torej med narekovaji). `pricakovano_stanje` je slovar vrednosti, ki naj bi jih spremenljivke imele po izračunu podanih izrazov. Na primer:</p>
+
+<p>Ko preverjamo programe, ki spreminjajo vrednost lokalnih spremenljivk (na primer seznamov ali slovarjev), moramo poleg rezultata programa preveriti tudi vrednosti spremenljivk. V ta namen uporabimo funkcijo `Check.run(izrazi, pricakovano_stanje)`. Izrazi so izrazi v jeziku Python, zapisani kot niz (torej med narekovaji). `pricakovano_stanje` je slovar vrednosti, ki naj bi jih spremenljivke imele po izračunu podanih izrazov. Na primer:</p>
 
 <pre><code># =========================================================
 # Napiši funkcijo ’spremeni_predznak(stevila)’, ki spremeni
@@ -263,7 +273,7 @@ je vrednost spremenljivke a enaka [1, 3, -5, 2, -6] namesto [-1, -3, 5, -2, 6].
 
 <h3>Check.out_file</h3>
 
-<p>Za preverjanje rešitev, ki vračajo datoteke, uporabljamo `Check.out_file(ime_datoteke, pricakovana_vsebina)`. Funkcija preveri, ali se vsebina datoteke `ime_datoteke` ujema s `pricakovana_vsebina`. `Pricakovana_vsebina` je seznam vrstic, ki naj bi jih datoteka vsebovala.</p> 
+<p>Za preverjanje rešitev, ki vračajo datoteke, uporabljamo `Check.out_file(ime_datoteke, pricakovana_vsebina)`. Funkcija preveri, ali se vsebina datoteke `ime_datoteke` ujema s `pricakovana_vsebina`. `Pricakovana_vsebina` je seznam vrstic, ki naj bi jih datoteka vsebovala.</p>
 
 <p>Če na primer naloga zahteva, da učenec napiše funkcijo `napisi_abecedo(n, abeceda.txt)`, ki v datoteko `abeceda.txt` zapiše prvih `n` črk abecede, bi test izgledal takole:</p>
 
@@ -284,7 +294,7 @@ Check.out_file('abeceda.txt', [
 
 <h3>Check.in_file</h3>
 
-<p>Za testiranje programov, ki berejo iz podane datoteke, uporabljamo `Check.in_file(ime_datoteke, vsebina)`. Funkcija ustvari datoteko z danim imenom in vsebino.Delovanje si oglejmo na primeru `Napiši funkcijo prestej_vrstice(ime_datoteke), ki vrne število vrstic v podani datoteki.` Testi bi bili na primer takšni:</p>
+<p>Za testiranje programov, ki berejo iz podane datoteke, uporabljamo `Check.in_file(ime_datoteke, vsebina)`. Funkcija ustvari datoteko z danim imenom in vsebino. Delovanje si oglejmo na primeru `Napiši funkcijo prestej_vrstice(ime_datoteke), ki vrne število vrstic v podani datoteki.` Testi bi bili na primer takšni:</p>
 
 <pre><code>with Check.in_file('test_vhodna_1.txt', ['a', 'b', 'c',]):
     Check.equal('prestej_vrstice("test_vhodna_1.txt")', 3)
@@ -338,29 +348,33 @@ je prišlo do naslednjih napak:
 
 <p>Splošna statistika za posamezno nalogo je prikazana s tortnimi grafikoni. Grafikoni se nahajajo poleg seznama vseh nalog v sklopu, kot prikazuje spodnja slika. Vsaka podnaloga dane naloge ima svoj grafikon. Rdeča barva prikazuje delež učencev, ki podnaloge še niso začeli reševati. Rumena barva prikazuje tiste, ki so nalogo rešili narobe in zelena barva tiste, katerih rešitev je sprejeta.</p>
 
-<img class="center_image" src="{% static 'img_help/prikaz_uspesnosti_naloge_ucitelj.png' %}" alt="Prikaz uspešnosti pri posameznih nalogah.">
-
-<div class="center_text">Slika 8: Prikaz uspešnosti pri posameznih nalogah.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/prikaz_uspesnosti_naloge_ucitelj.png' %}" alt="Prikaz uspešnosti pri posameznih nalogah.">
+    <figcaption>Slika 8: Prikaz uspešnosti pri posameznih nalogah.</figcaption>
+</figure>
 
 <p>Če si želimo uspešnost reševanja ogledati bolj podrobno, kliknemo na ime naloge. Odpre se stran, kjer je prikazana uspešnost reševanja posameznih študentov pri posameznih podnalogah. Rdeče obarvan krogec pomeni, da učenec podnaloge še ni poskušal reševati. Rumen krogec pomeni, da je učenec podnalogo rešil napačno, zelen krogec pa, da je učenčeva rešitev sprejeta.</p>
 
-<img class="center_image" src="{% static 'img_help/uspesnost_ucencev_pri_nalogi_ucitelj.png' %}" alt="Prikaz uspešnosti učencev pri določeni nalogi.">
-
-<div class="center_text">Slika 9: Prikaz uspešnosti učencev pri določeni nalogi.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/uspesnost_ucencev_pri_nalogi_ucitelj.png' %}" alt="Prikaz uspešnosti učencev pri določeni nalogi.">
+    <figcaption>Slika 9: Prikaz uspešnosti učencev pri določeni nalogi.</figcaption>
+</figure>
 
 <p>Če kliknemo na obarvani krogec, se nam odpre stran z rešitvami tega učenca. Poleg učenčevih rešitev vidimo še uradne rešitve podnalog.</p>
 
-<img class="center_image" src="{% static 'img_help/ogled_resitev_ucenca_ucitelj.png' %}" alt="Ogled rešitev določenega učenca.">
-
-<div class="center_text">Slika 10: Prikaz učenčevih in učiteljevih rešitev</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/ogled_resitev_ucenca_ucitelj.png' %}" alt="Ogled rešitev določenega učenca.">
+    <figcaption>Slika 10: Prikaz učenčevih in učiteljevih rešitev.</figcaption>
+</figure>
 
 <h3>Statistika za posameznega učenca</h3>
 
 <p>Na prvi strani predmeta je objavljen seznam vseh učencev v predmetu. S klikom na ime učenca odpremo stran, ki prikazuje, kako uspešno je ta učenec reševal naloge v celotnem predmetu. Tudi tukaj rdeča barva pomeni, da učenec podnaloge še ni poskušal reševati. Rumena barva pomeni, da njegova rešitev podnaloge ni bila sprejeta in zelena barva pomeni, da je podnalogo uspešno rešil.</p>
 
-<img class="center_image" src="{% static 'img_help/uspeh_ucenca_pri_predmetu_ucitelj.png' %}" alt="Prikaz uspešnosti določenega učenca pri predmetu.">
-
-<div class="center_text">Slika 11: Napredek učenca pri predmetu.</div>
+<figure class="help_fig">
+    <img src="{% static 'img_help/uspeh_ucenca_pri_predmetu_ucitelj.png' %}" alt="Prikaz uspešnosti določenega učenca pri predmetu.">
+    <figcaption>Slika 11: Napredek učenca pri predmetu.</figcaption>
+</figure>
 
 <p>Če kliknemo na obarvani krogec, se nam odpre stran z rešitvami tega učenca (glej sliko 10).</p>
 {% endfilter %}

@@ -7,14 +7,14 @@ body, h1, h2, h3, h4, h5, h6 {
 }
 
 /* for centering images according to HTML5 standard */
-.center_image {
-  margin: 20px auto;
-  display:block;
-    max-width: 80%;
+.help_fig {
+  text-align: center;
+  margin-bottom: 20pt;
+  margin-top: 10pt;
 }
 
-.center_text {
-  text-align:center;
+.help_fig img {
+  max-width: 80%;
 }
 
 .help-table {
@@ -23,6 +23,7 @@ body, h1, h2, h3, h4, h5, h6 {
 
 .help-table, th, td {
   border: 1px solid black;
+  padding: 5px 10px;
 }
 
 
