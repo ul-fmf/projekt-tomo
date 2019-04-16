@@ -155,7 +155,7 @@ class Check:
         try:
             exec(expression, global_env)
         finally:
-            output = sys.stdout.getvalue().strip().splitlines()
+            output = sys.stdout.getvalue().rstrip().splitlines()
             sys.stdout = old_stdout
         equal, diff, line_width = Check.difflines(output, content)
         if equal:
