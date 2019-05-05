@@ -68,6 +68,7 @@ def problem_set_detail(request, problem_set_pk):
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
         'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
+        'student_statistics': problem_set.student_statistics(),
     })
 
 
@@ -80,7 +81,10 @@ def course_detail(request, course_pk):
         students = course.student_success()
     else:
         students = []
-    course.annotate_for_user(request.user)
+
+    course.prepare_annotated_problem_sets(request.user)
+    course.annotate(request.user)
+
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'students': students,
@@ -126,8 +130,9 @@ def homepage(request):
     for course in Course.objects.all().prefetch_related('students', 'teachers'):
         if request.user.is_favourite_course(course):
             user_courses.append(course)
-            course.annotate_for_user(request.user)
+            course.prepare_annotated_problem_sets(request.user)
             course.annotated_problem_sets = [course for course in course.annotated_problem_sets if course.visible][-1:-4:-1]
+            course.annotate(request.user)
         else:
             not_user_courses.append(course)
     return render(request, 'homepage.html', {

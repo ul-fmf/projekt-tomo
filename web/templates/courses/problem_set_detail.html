@@ -168,19 +168,17 @@
 
       <div class="col-md-3" id="rightCol">
         <ul class="nav nav-stacked" id="sidebar">
-          {% for problem in problem_set.problems.all %}
+          {% for problem in student_statistics %}
           <li>
             <a href="#{{ problem.anchor }}">
               {{ problem.title }}
             </a>
             <div class="subtasks">
-              {% for part in problem.parts.all %}
+              {% for part in problem.parts %}
               {% if show_teacher_forms %}
-                {% with part.student_success as success %}
                 <a href="{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}"
                    data-toggle="tooltip"
-                   title="{{ success.valid }} {% trans "valid" %} / {{ success.invalid }} {% trans "invalid" %} / {{ success.empty }} {% trans "empty" %} ">
-                  {% endwith %}
+                   title="{{ part.valid }} {% trans "valid" %} / {{ part.invalid }} {% trans "invalid" %} / {{ part.empty }} {% trans "empty" %} ">
               {% else %}
                 <a href="#{{part.anchor}}">
               {% endif %}
@@ -203,15 +201,13 @@
 <script src="{% static 'js/piechart.js' %}"></script>
 <script>
 $(function() {
-  {% for problem in problem_set.problems.all %}
-  {% for part in problem.parts.all %}
+  {% for problem in student_statistics %}
+  {% for part in problem.parts %}
   {% if show_teacher_forms %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
-    {% with part.student_success as success %}
-    {value: {{ success.valid }}, color: "#878F28"},
-    {value: {{ success.invalid }}, color: "#D7A02C"},
-    {value: {{ success.empty }}, color: "#A92D2D"},
-    {% endwith %}
+    {value: {{ part.valid }}, color: "#878F28"},
+    {value: {{ part.invalid }}, color: "#D7A02C"},
+    {value: {{ part.empty }}, color: "#A92D2D"},
   ]);
   {% else %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([

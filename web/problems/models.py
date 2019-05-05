@@ -192,20 +192,6 @@ class Part(OrderWithRespectToMixin, models.Model):
                 return False, i
         return True, None
 
-    def student_success(self):
-        students = self.problem.problem_set.course.observed_students()
-        student_count = len(students)
-        attempts = self.attempts.filter(user__in=students)
-        submitted_count = attempts.count()
-        valid_count = attempts.filter(valid=True).count()
-        invalid_count = submitted_count - valid_count
-        empty_count = student_count - valid_count - invalid_count
-
-        return {
-            'valid': valid_count,
-            'invalid': invalid_count,
-            'empty': empty_count
-        }
 
     def copy_to(self, problem):
         new_part = deepcopy(self)

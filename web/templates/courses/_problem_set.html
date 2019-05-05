@@ -2,22 +2,20 @@
 {% load staticfiles %}
 <li class="list-group-item">
   {% if course.is_taught %}
-  {% with problem_set.student_success as success %}
   {% spaceless %}
   <div data-toggle="tooltip"
-       title="{{ success.valid }}% {% trans "valid" %} / {{ success.invalid }}% {% trans "invalid" %} / {{ success.empty }}% {% trans "empty" %} ">
-  {% if success.valid %}
-  <hr class="indicator background5" width="{{ success.valid }}%">
+       title="{{ problem_set.valid }}% {% trans "valid" %} / {{ problem_set.invalid }}% {% trans "invalid" %} / {{ problem_set.empty }}% {% trans "empty" %} ">
+  {% if problem_set.valid %}
+  <hr class="indicator background5" width="{{ problem_set.valid }}%">
   {% endif %}
-  {% if success.invalid %}
-  <hr class="indicator background3" width="{{ success.invalid }}%">
+  {% if problem_set.invalid %}
+  <hr class="indicator background3" width="{{ problem_set.invalid }}%">
   {% endif %}
-  {% if success.empty %}
-  <hr class="indicator background1" width="{{ success.empty }}%">
+  {% if problem_set.empty %}
+  <hr class="indicator background1" width="{{ problem_set.empty }}%">
   {% endif %}
   </div>
   {% endspaceless %}
-  {% endwith %}
   {% else %}
   <hr class="indicator background{{problem_set.grade}}" width="{{ problem_set.percentage }}%">
   {% endif %}
@@ -105,11 +103,9 @@
 
     {% if course.is_taught %}
     <div class="media-left">
-      {% with problem_set.student_success as success %}
-      <p class="success text-danger color{{ success.grade }}">
-        {{ success.valid }}<small>%</small>
+      <p class="success text-danger color{{ problem_set.grade }}">
+        {{ problem_set.valid }}<small>%</small>
       </p>
-      {% endwith %}
     </div>
     {% else %}
     <div class="media-left">
