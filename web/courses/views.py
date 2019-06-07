@@ -39,7 +39,7 @@ def problem_set_static(request, problem_set_pk):
 def problem_set_izpit(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
-    return render(request, "courses/problem_set_izpit.md", {
+    return render(request, "courses/problem_set_izpit.html", {
         'problem_set': problem_set,
     })
 
