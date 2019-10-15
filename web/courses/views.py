@@ -2,7 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from .models import Course, ProblemSet
+from django import forms
+from .models import Course, ProblemSet, CourseGroup, GroupMembership
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -239,6 +240,9 @@ def problem_set_results(request, problem_set_pk):
     archive_name, files = problem_set.results_archive(request.user)
     return zip_archive(archive_name, files)
 
+###############################################################################
+# Course Groups related views
+
 @login_required
 def course_groups(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
@@ -248,5 +252,50 @@ def course_groups(request, course_pk):
         "courses/course_groups.html",
         {
             "course" : course,
+            'show_teacher_forms': request.user.can_create_course_groups(course),
         }
     )
+
+class CourseGroupForm(forms.Form):
+    title = forms.CharField()
+    description = forms.Textarea()
+    course = forms.ModelChoiceField(Course.objects.all())
+    students = forms.ModelMultipleChoiceField(User.objects.all())
+
+class CourseGroupCreate(CreateView):
+    model = CourseGroup
+    # students = forms.ModelMultipleChoiceField(User.objects.all())
+    fields = ['title', 'description', 'course', 'students']
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseGroupCreate, self).get_context_data(**kwargs)
+        context['course_pk'] = self.kwargs['course_pk']
+        return context
+
+    def form_valid(self, form):
+        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        verify(self.request.user.can_create_course_groups(course))
+        form.instance.course = course
+        return super(CourseGroupCreate, self).form_valid(form)
+
+
+class CourseGroupUpdate(UpdateView):
+    model = CourseGroup
+    fields = ['title', 'description', 'course', 'students']
+
+    def get_object(self, *args, **kwargs):
+        obj = super(CourseGroupUpdate, self).get_object(*args, **kwargs)
+        verify(self.request.user.can_create_course_group(obj))
+        return obj
+
+
+# class ProblemSetDelete(DeleteView):
+#     model = ProblemSet
+
+#     def get_object(self, *args, **kwargs):
+#         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
+#         verify(self.request.user.can_edit_course(obj.course))
+#         return obj
+
+#     def get_success_url(self):
+#         return self.object.course.get_absolute_url()
