@@ -64,4 +64,7 @@ urlpatterns = [
     url(r'^course/(?P<course_pk>\d+)/progress/(?P<user_pk>\d+)/$',
         views.course_progress,
         name='course_progress'),
+    url(r'^course/(?P<course_pk>\d+)/groups/$',
+        views.course_groups,
+        name='course_groups'),
 ]

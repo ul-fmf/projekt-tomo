@@ -238,3 +238,15 @@ def problem_set_results(request, problem_set_pk):
     verify(request.user.can_view_problem_set_attempts(problem_set))
     archive_name, files = problem_set.results_archive(request.user)
     return zip_archive(archive_name, files)
+
+@login_required
+def course_groups(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_view_course_groups(course))
+    return render(
+        request, 
+        "courses/course_groups.html",
+        {
+            "course" : course,
+        }
+    )
