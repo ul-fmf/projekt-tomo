@@ -5,7 +5,7 @@
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
-    	{% trans "Course Groups" %}
+    	{% trans "Skupine" %}
     	<span class="sr-only">
     		{# Translators: current page in navigation #}
     		{% trans "(current)" %}
@@ -17,40 +17,41 @@
 {% block content %}
 <div class="content-section-a tomo-overview-student">
   <div class="container">
-    <h2>{{ problem_set.title }}</h2>
-    <div class="row">
-      {% for problem in problem_set.problems.all %}
+    <h2>{{ course.title }}</h2>
+      {% for group in course.groups.all %}
+      <div class="row">
       <div class="col-md-4">
-        <h3 id="{{ problem.anchor }}"><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></h3>
+        <a href="{% url 'course_groups_update' course.pk %}" > <h3 id="{{ group.pk }}">{{ group.title }}</a></h3> </a>
       </div>
       <div class="col-md-8">
         <table class="table table-condensed">
           <tbody>
-            {% for observed_user in problem.attempts_by_user %}
+            {% for student in group.list_all_members %}
             <tr>
               <td>
-                <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}"
+                {% comment %} <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}"
                    data-toggle="tooltip"
                    title="{{ observed_user.valid }} {% trans "valid" %} / {{ observed_user.invalid }} {% trans "invalid" %} / {{ observed_user.empty }} {% trans "empty" %} ">
-                   {{ observed_user.get_full_name }}</a>
+                   {{ observed_user.get_full_name }}</a> {% endcomment %}
               </td>
               <td width='60%'>
-                {% for attempt in observed_user.these_attempts %}
-                <a href="{% url 'problem_solution' problem.pk observed_user.pk %}">
-                  {% if attempt.valid %}<i class="color5 fa fa-circle fa-lg"></i>
-                  {% elif attempt %}<i class="color3 fa fa-circle fa-lg"></i>
-                  {% else %}<i class="color1 fa fa-circle fa-lg"></i>
-                  {% endif %}
-                </a>
-                {% endfor %}
+                  <a href="{% url 'course_progress' course.pk student.pk %}"> {{ student.get_full_name }} </a>
               </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
       </div>
+      </div>
       {% endfor %}
-    </div>
+    {% if show_teacher_forms %}
+          <hr>
+          <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'course_groups_create' course.id %}">
+            <i class="fa fa-download fa-plus"></i>
+            {# Translators: Button for creating new problem. #}
+            {% trans "Add new course group" %}
+          </button>
+    {% endif %}
   </div>
 </div>
 {% endblock %} {# content #}

@@ -140,7 +140,7 @@ class CourseGroup(models.Model):
 
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    course = models.ForeignKey(Course, null=False)
+    course = models.ForeignKey(Course, null=False, related_name='groups')
     students = models.ManyToManyField(User, blank=True, related_name='course_groups', through='GroupMembership')
 
     def __str__(self):
@@ -155,7 +155,7 @@ class CourseGroup(models.Model):
         membership.delete()
     
     def list_all_members(self):
-        return User.objects.filter(GroupMembership__group=self)
+        return User.objects.filter(groupmembership__group=self)
 
 class GroupMembership(models.Model):
 
