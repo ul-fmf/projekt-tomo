@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, ProblemSet, StudentEnrollment
+from .models import Course, ProblemSet, StudentEnrollment, CourseGroup, GroupMembership
 
 
 class StudentEnrollmentInline(admin.StackedInline):
@@ -43,5 +43,13 @@ class ProblemSetAdmin(admin.ModelAdmin):
         'description',
     )
 
+class GroupMembershipInline(admin.StackedInline):
+    model = GroupMembership
+
+class CourseGroupAdmin(admin.ModelAdmin):
+
+    inlines = (GroupMembershipInline, )
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(ProblemSet, ProblemSetAdmin)
+admin.site.register(CourseGroup, CourseGroupAdmin)

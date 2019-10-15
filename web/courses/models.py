@@ -10,7 +10,6 @@ from problems.models import Part
 from copy import deepcopy
 
 
-
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
@@ -132,6 +131,40 @@ class StudentEnrollment(models.Model):
     class Meta:
         ordering = ['user', 'course']
         unique_together = ('course', 'user')
+
+
+class CourseGroup(models.Model):
+    """
+    With this model we will be able to create subgroups of students within some course.
+    """
+
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    course = models.ForeignKey(Course, null=False)
+    students = models.ManyToManyField(User, blank=True, related_name='course_groups', through='GroupMembership')
+
+    def __str__(self):
+        return self.title + ' -- ' + str(self.course)
+
+    def add_user(self, user):
+        membership = GroupMembership(group=self, user=user)
+        membership.save()
+    
+    def remove_user(self, user):
+        membership = GroupMembership.objects.get(group=self, user=user)
+        membership.delete()
+    
+    def list_all_members(self):
+        return User.objects.filter(GroupMembership__group=self)
+
+class GroupMembership(models.Model):
+
+    group = models.ForeignKey(CourseGroup, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['user', 'group']
+        unique_together = ('group', 'user')
 
 
 
