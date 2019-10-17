@@ -269,9 +269,10 @@ class CourseGroupForm(forms.ModelForm):
             'students' : forms.CheckboxSelectMultiple()
         }
     
-    def __init__(self, course_pk, *args, **kwargs):
+    def __init__(self, course_pk=None, *args, **kwargs):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
-        self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
+        if course_pk is not None:
+            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
 
 @login_required
 def course_group_create(request, course_pk):
@@ -289,15 +290,20 @@ def course_group_create(request, course_pk):
         form = CourseGroupForm(course_pk)
     return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course_pk})
 
+@login_required
+def course_group_update(request, group_pk):
+    group = get_object_or_404(CourseGroup, id=group_pk)
+    course = get_object_or_404(Course, id=group.course.pk)
 
-class CourseGroupUpdate(UpdateView):
-    model = CourseGroup
-    form_class = CourseGroupForm
-
-    def get_object(self, *args, **kwargs):
-        obj = super(CourseGroupUpdate, self).get_object(*args, **kwargs)
-        verify(self.request.user.can_create_course_group(obj))
-        return obj
+    if request.method == 'POST':
+        form = CourseGroupForm(course.pk, request.POST, instance=group)
+        if form.is_valid():
+            if request.user.can_create_course_groups(course):
+                group = form.save()
+                return redirect('course_groups', course_pk=course.pk)
+    else:
+        form = CourseGroupForm(course.pk, instance=group)
+    return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course.pk})
 
 
 # class ProblemSetDelete(DeleteView):

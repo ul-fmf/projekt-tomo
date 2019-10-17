@@ -71,6 +71,6 @@ urlpatterns = [
         views.course_group_create,
         name='course_groups_create'),
     url(r'^groups/(?P<group_pk>\d+)/update$',
-        views.CourseGroupUpdate.as_view(),
+        views.course_group_update,
         name='course_groups_update'),
 ]

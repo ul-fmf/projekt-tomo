@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% if form.instance.pk %}
-	<form action="{% url 'course_groups_update' group.pk %}"  method="post" id='edit_course_group_form'>
+	<form action="{% url 'course_groups_update' form.instance.pk %}"  method="post" id='edit_course_group_form'>
 {% else %}
 	<form action="{% url 'course_groups_create' course_pk %}"  method="post" id='add_course_group_form'>
 {% endif %}
