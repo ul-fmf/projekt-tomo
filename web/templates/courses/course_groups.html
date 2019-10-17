@@ -48,7 +48,7 @@
       {% endfor %}
     {% if show_teacher_forms %}
           <hr>
-          <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'course_groups_create' %}">
+          <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'course_groups_create'  course.pk %}">
             <i class="fa fa-download fa-plus"></i>
             {# Translators: Button for creating new problem. #}
             {% trans "Add new course group" %}

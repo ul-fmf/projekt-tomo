@@ -260,26 +260,34 @@ def course_groups(request, course_pk):
 class CourseGroupForm(forms.ModelForm):
 
     class Meta:
+
+        students = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+
         model = CourseGroup
-        fields = ['title', 'description', 'course', 'students']
+        fields = ['title', 'description', 'students']
         widgets = {
             'students' : forms.CheckboxSelectMultiple()
         }
+    
+    def __init__(self, course_pk, *args, **kwargs):
+        super(CourseGroupForm, self).__init__(*args, **kwargs)
+        self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
 
-class CourseGroupCreate(CreateView):
-
-    model = CourseGroup 
-    form_class = CourseGroupForm
-
-    def get_context_data(self, **kwargs):
-        context = super(CourseGroupCreate, self).get_context_data(**kwargs)
-        return context
-
-    def form_valid(self, form):
-        course = get_object_or_404(Course, id=form.cleaned_data['course'].id)
-        verify(self.request.user.can_create_course_groups(course))
-        form.instance.course = course
-        return super(CourseGroupCreate, self).form_valid(form)
+@login_required
+def course_group_create(request, course_pk):
+    course = get_object_or_404(Course, id=course_pk)
+    if request.method == 'POST':
+        form = CourseGroupForm(course_pk, request.POST)
+        if form.is_valid():
+            if request.user.can_create_course_groups(course):
+                group = form.save(commit=False)
+                group.course = get_object_or_404(Course, id=course_pk) # We get the course from the url
+                group.save()
+                form.save_m2m() # We need to call this in order to save all the many to many instances (group, member)
+                return redirect('course_groups', course_pk=course_pk)
+    else:
+        form = CourseGroupForm(course_pk)
+    return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course_pk})
 
 
 class CourseGroupUpdate(UpdateView):

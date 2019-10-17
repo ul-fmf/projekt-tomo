@@ -4,7 +4,7 @@
 {% if form.instance.pk %}
 	<form action="{% url 'course_groups_update' group.pk %}"  method="post" id='edit_course_group_form'>
 {% else %}
-	<form action="{% url 'course_groups_create' %}"  method="post" id='add_course_group_form'>
+	<form action="{% url 'course_groups_create' course_pk %}"  method="post" id='add_course_group_form'>
 {% endif %}
 	{% csrf_token %}
     	<input type="hidden" name="course" id="id_course" value="{{ form.instance.course.id }}" />
