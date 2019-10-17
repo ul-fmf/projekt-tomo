@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django import forms
-from .models import Course, ProblemSet, CourseGroup, GroupMembership
+from .models import Course, ProblemSet, CourseGroup
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -256,24 +257,26 @@ def course_groups(request, course_pk):
         }
     )
 
-class CourseGroupForm(forms.Form):
-    title = forms.CharField()
-    description = forms.Textarea()
-    course = forms.ModelChoiceField(Course.objects.all())
-    students = forms.ModelMultipleChoiceField(User.objects.all())
+class CourseGroupForm(forms.ModelForm):
+
+    class Meta:
+        model = CourseGroup
+        fields = ['title', 'description', 'course', 'students']
+        widgets = {
+            'students' : forms.CheckboxSelectMultiple()
+        }
 
 class CourseGroupCreate(CreateView):
-    model = CourseGroup
-    # students = forms.ModelMultipleChoiceField(User.objects.all())
-    fields = ['title', 'description', 'course', 'students']
+
+    model = CourseGroup 
+    form_class = CourseGroupForm
 
     def get_context_data(self, **kwargs):
         context = super(CourseGroupCreate, self).get_context_data(**kwargs)
-        context['course_pk'] = self.kwargs['course_pk']
         return context
 
     def form_valid(self, form):
-        course = get_object_or_404(Course, id=self.kwargs['course_pk'])
+        course = get_object_or_404(Course, id=form.cleaned_data['course'].id)
         verify(self.request.user.can_create_course_groups(course))
         form.instance.course = course
         return super(CourseGroupCreate, self).form_valid(form)
@@ -281,7 +284,7 @@ class CourseGroupCreate(CreateView):
 
 class CourseGroupUpdate(UpdateView):
     model = CourseGroup
-    fields = ['title', 'description', 'course', 'students']
+    form_class = CourseGroupForm
 
     def get_object(self, *args, **kwargs):
         obj = super(CourseGroupUpdate, self).get_object(*args, **kwargs)

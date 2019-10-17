@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{{ media }}
+
 {% block navigation-left %} 
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">
@@ -21,7 +23,7 @@
       {% for group in course.groups.all %}
       <div class="row">
       <div class="col-md-4">
-        <a href="{% url 'course_groups_update' course.pk %}" > <h3 id="{{ group.pk }}">{{ group.title }}</a></h3> </a>
+        <h3 id="{{ group.pk }}">{{ group.title }}</h3>
       </div>
       <div class="col-md-8">
         <table class="table table-condensed">
@@ -46,7 +48,7 @@
       {% endfor %}
     {% if show_teacher_forms %}
           <hr>
-          <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'course_groups_create' course.id %}">
+          <button class="btn btn-default btn-lg btn-for-modal tomo-add-task" aria-label="Create" data-url="{% url 'course_groups_create' %}">
             <i class="fa fa-download fa-plus"></i>
             {# Translators: Button for creating new problem. #}
             {% trans "Add new course group" %}
