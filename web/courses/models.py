@@ -141,31 +141,25 @@ class CourseGroup(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     course = models.ForeignKey(Course, null=False, related_name='groups')
-    students = models.ManyToManyField(User, blank=True, related_name='course_groups', through='GroupMembership')
+    students = models.ManyToManyField(User, blank=True, related_name='course_groups')
 
     def __str__(self):
         return self.title + ' -- ' + str(self.course)
 
-    def add_user(self, user):
-        membership = GroupMembership(group=self, user=user)
-        membership.save()
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('course_groups', args=[str(self.course.pk)])
+
+    # def add_user(self, user):
+    #     membership = GroupMembership(group=self, user=user)
+    #     membership.save()
     
-    def remove_user(self, user):
-        membership = GroupMembership.objects.get(group=self, user=user)
-        membership.delete()
+    # def remove_user(self, user):
+    #     membership = GroupMembership.objects.get(group=self, user=user)
+    #     membership.delete()
     
     def list_all_members(self):
-        return User.objects.filter(groupmembership__group=self)
-
-class GroupMembership(models.Model):
-
-    group = models.ForeignKey(CourseGroup, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    class Meta:
-        ordering = ['user', 'group']
-        unique_together = ('group', 'user')
-
+        return self.students.all()
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
