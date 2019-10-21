@@ -122,6 +122,14 @@ class Course(models.Model):
             problem_set.copy_to(new_course)
         return new_course
 
+    def student_success_by_problem_set(self):
+        """
+        Function that will for each user calculate the solve rate for each problemset in the course. For example if the user
+        has solved 3 problem parts out of 10 problem parts in the problemset, then his solve rate for that problemset
+        would be 30%.
+        """
+        pass
+
 
 class StudentEnrollment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -150,14 +158,6 @@ class CourseGroup(models.Model):
         from django.core.urlresolvers import reverse
         return reverse('course_groups', args=[str(self.course.pk)])
 
-    # def add_user(self, user):
-    #     membership = GroupMembership(group=self, user=user)
-    #     membership.save()
-    
-    # def remove_user(self, user):
-    #     membership = GroupMembership.objects.get(group=self, user=user)
-    #     membership.delete()
-    
     def list_all_members(self):
         return self.students.all()
 

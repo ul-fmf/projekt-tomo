@@ -23,12 +23,20 @@
       {% for group in course.groups.all %}
       <div class="row">
       <div class="col-md-4">
-        <h3 id="{{ group.pk }}">{{ group.title }}</h3> <div class="btn-group btn-group-sm" role="group" aria-label="Update">
+        <h3 id="{{ group.pk }}">{{ group.title }}</h3> 
+        <div class="btn-group btn-group-sm" role="group" aria-label="Update">
                     <button class="btn btn-default btn-for-modal" data-url="{% url 'course_groups_update' group.pk %}" aria-label="Update"
                         data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </button>
-                 </div>
+        </div>
+        <div class="btn-group btn-group-sm" role="group" aria-label="Delete">
+          <button class="btn btn-default btn-for-modal" data-url="{% url 'course_groups_confirm_delete' group.pk %}" aria-label="Delete"
+            data-toggle="tooltip" title="{% trans 'Delete' %}" data-container:'body'>
+            <i class="fa fa-trash-o" aria-hidden="true"></i>
+          </button>
+        </div> <br> <br>
+        <span style='font-weight:normal' >{{ group.description }}</span>
       </div>
       <div class="col-md-8">
         <table class="table table-condensed">

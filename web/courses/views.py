@@ -27,6 +27,14 @@ def problem_set_progress(request, problem_set_pk):
         'problem_set': problem_set,
     })
 
+@login_required
+def problem_set_progress_groups(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_view_problem_set_attempts(problem_set))
+    return render(request, "courses/problem_set_progress_groups.html", {
+        'problem_set' : problem_set
+    })
+
 
 @login_required
 def problem_set_static(request, problem_set_pk):
@@ -275,7 +283,7 @@ class CourseGroupForm(forms.ModelForm):
             self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
 
 @login_required
-def course_group_create(request, course_pk):
+def course_groups_create(request, course_pk):
     course = get_object_or_404(Course, id=course_pk)
     if request.method == 'POST':
         form = CourseGroupForm(course_pk, request.POST)
@@ -291,7 +299,7 @@ def course_group_create(request, course_pk):
     return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course_pk})
 
 @login_required
-def course_group_update(request, group_pk):
+def course_groups_update(request, group_pk):
     group = get_object_or_404(CourseGroup, id=group_pk)
     course = get_object_or_404(Course, id=group.course.pk)
 
@@ -305,14 +313,15 @@ def course_group_update(request, group_pk):
         form = CourseGroupForm(course.pk, instance=group)
     return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course.pk})
 
+@login_required
+def course_groups_confirm_delete(request, group_pk):
+    return render(request, 'courses/coursegroup_confirm_delete.html', {'group_pk' : group_pk})
 
-# class ProblemSetDelete(DeleteView):
-#     model = ProblemSet
+@login_required
+def course_groups_delete(request, group_pk):
+    group = get_object_or_404(CourseGroup, id=group_pk)
+    course_pk = group.course.pk
+    group.delete()
 
-#     def get_object(self, *args, **kwargs):
-#         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
-#         verify(self.request.user.can_edit_course(obj.course))
-#         return obj
+    return redirect('course_groups', course_pk=course_pk)
 
-#     def get_success_url(self):
-#         return self.object.course.get_absolute_url()
