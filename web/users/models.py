@@ -41,6 +41,12 @@ class User(AbstractUser):
     
     def can_create_course_groups(self, course):
         return self.is_teacher(course)
+    
+    def can_update_course_groups(self, course):
+        return self.is_teacher(course)
+    
+    def can_delete_course_groups(self, course):
+        return self.is_teacher(course)
 
     def can_view_problem_set_attempts(self, problem_set):
         return self.can_view_course_attempts(problem_set.course)

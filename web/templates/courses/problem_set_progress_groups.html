@@ -21,8 +21,8 @@
     <h2>{{ problem_set.title }}</h2>
     <div class="col-md-9">
       {% for group in problem_set.course.groups.all %}
-        <h3 class='color5'> {{ group.title }}</h3>
-        <div class="row" id='group-{{ group.pk }}'>
+        <h3 class='color5' id='group-{{ group.pk }}'> {{ group.title }}</h3>
+        <div class="row">
           {% for problem in problem_set.problems.all %}
           <div class="col-md-4">
             <h3 id="{{ problem.anchor }}"><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></h3>
