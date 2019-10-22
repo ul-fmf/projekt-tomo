@@ -1,5 +1,6 @@
 from django.test import TestCase
 from courses.models import Course, ProblemSet
+from problems.templates.python.check import Check
 from .models import Problem, Part
 
 
@@ -26,3 +27,20 @@ class PartTestCase(TestCase):
         self.assertEqual(part2.check_secret([1, "2"]), (False, 0))
         self.assertEqual(part2.check_secret(["1", 2]), (False, 1))
         self.assertEqual(part2.check_secret(["1", "2", "3"]), (False, None))
+
+
+class ApproxTestCase(TestCase):
+    def test_basic(self):
+        import numpy as np
+        a = np.array([1, 2, 3], dtype=float)
+        Check.initialize([{'solution': '...'}])
+        Check.part()
+        self.assertTrue(Check.approx("np.array([1, 2, 3], dtype='float')", a))
+        self.assertFalse(Check.approx("[1, 2, 3]", a))
+        self.assertEquals(Check.current_part['feedback'][-1],
+                          "Rezultat ima napačen tip. Pričakovan tip: ndarray, dobljen tip: list.")
+        self.assertFalse(Check.approx("np.zeros((2, 3))", a))
+        self.assertEquals(Check.current_part['feedback'][-1],
+                          "Obliki se ne ujemata. Pričakovana oblika: (3,), dobljena oblika: (2, 3).")
+        self.assertFalse(Check.approx("np.array([1, 2, 3.1])", a))
+        self.assertRegexpMatches(Check.current_part['feedback'][-1], r"Rezultat ni pravilen\..*")
