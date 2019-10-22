@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block navigation-left %} 
+  <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+  <a class="navbar-brand topnav" href="#">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "Progress" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+  </a>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-overview-student">
+  <div class="container">
+    <h2>{{ problem_set.title }}</h2>
+    <div class="col-md-9">
+      {% for group in problem_set.course.groups.all %}
+        <h3 class='color5' id='group-{{ group.pk }}'> {{ group.title }}</h3>
+        <div class="row">
+          {% for problem in problem_set.problems.all %}
+          <div class="col-md-4">
+            <h3 id="{{ problem.anchor }}"><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></h3>
+          </div>
+          <div class="col-md-8">
+            <table class="table table-condensed">
+              <tbody>
+                {% for observed_user in problem.attempts_by_user_all %}
+                  {% if observed_user in group.students.all %}
+                    <tr>
+                      <td>
+                        <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}"
+                          data-toggle="tooltip"
+                          title="{{ observed_user.valid }} {% trans "valid" %} / {{ observed_user.invalid }} {% trans "invalid" %} / {{ observed_user.empty }} {% trans "empty" %} ">
+                          {{ observed_user.get_full_name }}</a>
+                      </td>
+                      <td width='60%'>
+                        {% for attempt in observed_user.these_attempts %}
+                        <a href="{% url 'problem_solution' problem.pk observed_user.pk %}">
+                          {% if attempt.valid %}<i class="color5 fa fa-circle fa-lg"></i>
+                          {% elif attempt %}<i class="color3 fa fa-circle fa-lg"></i>
+                          {% else %}<i class="color1 fa fa-circle fa-lg"></i>
+                          {% endif %}
+                        </a>
+                        {% endfor %}
+                      </td>
+                    </tr>
+                  {% endif %}
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+    <div class='col-md-3'>
+      <ul class="nav nav-stacked" id="sidebar">
+        <br> <br> 
+        <a href="{% url 'problem_set_progress' problem_set.pk %}"> Celotni pregled </a> <br>
+        {% for group in problem_set.course.groups.all %}
+          <a href="{% url 'problem_set_progress_groups' problem_set.pk %}#group-{{ group.pk }}"> {{ group.title }} </a> <br>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %} {# content #}

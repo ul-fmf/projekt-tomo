@@ -10,7 +10,6 @@ from problems.models import Part
 from copy import deepcopy
 
 
-
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
@@ -123,6 +122,91 @@ class Course(models.Model):
             problem_set.copy_to(new_course)
         return new_course
 
+    def student_success_by_problem_set(self):
+        """
+        Function that will for each user calculate the solve rate for each problemset in the course. For example if the user
+        has solved 3 problem parts out of 10 problem parts in the problemset, then his solve rate for that problemset
+        would be 30%.
+
+        Returns the dictionary of this form:
+        {
+            student : {
+                problem_set : {
+                    'valid' : float,
+                    'invalid' : float,
+                    'empty' : float
+                }
+            }
+        }
+        """
+        
+        students = self.observed_students()
+        student_success_by_problemset = {student :  {} for student in students}
+        student_solve_rate_by_problemset = {student : {} for student in students}
+
+        for problem_set in self.problem_sets.all().prefetch_related('problems', 'problems__parts'):
+            different_subtasks = 0
+            for problem in problem_set.problems.all():
+                for part in problem.parts.all():
+                    different_subtasks += 1
+            
+            # In case there are no parts, we do not want to divide by 0
+            if different_subtasks == 0:
+                different_subtasks = 1
+
+            for student in students:
+                student_success_by_problemset[student][problem_set] = [0, 0] # Valid, invalid
+
+            attempts = Attempt.objects.filter(part__problem__problem_set=problem_set, user__in=students)
+            for attempt in attempts:
+                if attempt.valid:
+                    student_success_by_problemset[attempt.user][problem_set][0] += 1
+                else:
+                    student_success_by_problemset[attempt.user][problem_set][1] += 1
+
+            for student in students:
+                valid, invalid = student_success_by_problemset[student][problem_set]
+                student_solve_rate_by_problemset[student][problem_set] = {
+                    'valid' : round(valid/different_subtasks, 2),
+                    'invalid' : round(invalid/different_subtasks, 2),
+                    'empty' : round(1 - (valid + invalid) / different_subtasks, 2)
+                }
+
+        return student_solve_rate_by_problemset
+    
+    def student_success_by_problemset_grouped_by_groups(self):
+        """
+        Function does the same as student_success_by_problem_set except that it groups students that are in the same group.
+        Therefore we get a dictionary that will be easier to use inside a django template. An 
+        alternative would be to create django templatetags app and define filters with which we could
+        access dictionary keys inside django templates.
+
+        Returns a dictionary of the following form:
+
+        {
+            group : {
+                student : {
+                    problem_set : {
+                        'valid' : float,
+                        'invalid' : float,
+                        'empty' : float
+                    }
+                }
+            ]
+        }
+        """
+
+        groups = self.groups.all()
+        student_success = self.student_success_by_problem_set()
+
+        student_sucess_by_groups = {}
+        for group in groups:
+            student_sucess_by_groups[group] = {}
+            for student in group.students.all():
+                student_sucess_by_groups[group][student] = student_success[student]
+        
+        return student_sucess_by_groups
+
 
 class StudentEnrollment(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -133,6 +217,26 @@ class StudentEnrollment(models.Model):
         ordering = ['user', 'course']
         unique_together = ('course', 'user')
 
+
+class CourseGroup(models.Model):
+    """
+    With this model we will be able to create subgroups of students within some course.
+    """
+
+    title = models.CharField(max_length=100)
+    description = models.TextField(blank=True)
+    course = models.ForeignKey(Course, null=False, related_name='groups')
+    students = models.ManyToManyField(User, blank=True, related_name='course_groups')
+
+    def __str__(self):
+        return self.title + ' -- ' + str(self.course)
+
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('course_groups', args=[str(self.course.pk)])
+
+    def list_all_members(self):
+        return self.students.all()
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):

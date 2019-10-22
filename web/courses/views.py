@@ -1,8 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from .models import Course, ProblemSet
+from django import forms
+from .models import Course, ProblemSet, CourseGroup
 from users.models import User
 from utils.views import zip_archive
 from utils import verify
@@ -23,6 +25,14 @@ def problem_set_progress(request, problem_set_pk):
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(request, "courses/problem_set_progress.html", {
         'problem_set': problem_set,
+    })
+
+@login_required
+def problem_set_progress_groups(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_view_problem_set_attempts(problem_set))
+    return render(request, "courses/problem_set_progress_groups.html", {
+        'problem_set' : problem_set
     })
 
 
@@ -238,3 +248,108 @@ def problem_set_results(request, problem_set_pk):
     verify(request.user.can_view_problem_set_attempts(problem_set))
     archive_name, files = problem_set.results_archive(request.user)
     return zip_archive(archive_name, files)
+
+###############################################################################
+# Course Groups related views
+
+@login_required
+def course_groups(request, course_pk):
+    """
+    Main course groups view where we are able to see all current groups and their students,
+    update and delete existing groups and create new ones.
+    """
+
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_view_course_groups(course))
+
+    return render(
+        request, 
+        "courses/course_groups.html",
+        {
+            "course" : course,
+            'show_teacher_forms': request.user.can_create_course_groups(course),
+            'student_success' : course.student_success_by_problemset_grouped_by_groups()
+        }
+    )
+
+class CourseGroupForm(forms.ModelForm):
+
+    class Meta:
+
+        students = forms.ModelMultipleChoiceField(queryset=User.objects.all())
+
+        model = CourseGroup
+        fields = ['title', 'description', 'students']
+        widgets = {
+            'students' : forms.CheckboxSelectMultiple()
+        }
+    
+    def __init__(self, course_pk=None, *args, **kwargs):
+        super(CourseGroupForm, self).__init__(*args, **kwargs)
+        # If the course is given, we can filter the students queryset and only show those enrolled in the course
+        if course_pk is not None:
+            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
+
+@login_required
+def course_groups_create(request, course_pk):
+    """
+    Create view for groups following Projekt Tomo's design.
+    """
+
+    course = get_object_or_404(Course, id=course_pk)
+    if request.method == 'POST':
+        form = CourseGroupForm(course_pk, request.POST)
+        if form.is_valid():
+            if request.user.can_create_course_groups(course):
+                group = form.save(commit=False)
+                group.course = get_object_or_404(Course, id=course_pk) # We get the course from the url
+                group.save()
+                form.save_m2m() # We need to call this in order to save all the many to many instances (group, member)
+                return redirect('course_groups', course_pk=course_pk)
+    else:
+        form = CourseGroupForm(course_pk)
+    return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course_pk})
+
+@login_required
+def course_groups_update(request, group_pk):
+    """
+    Update view for groups following Projekt Tomo's design.
+    """
+
+    group = get_object_or_404(CourseGroup, id=group_pk)
+    course = get_object_or_404(Course, id=group.course.pk)
+
+    if request.method == 'POST':
+        form = CourseGroupForm(course.pk, request.POST, instance=group)
+        if form.is_valid():
+            if request.user.can_update_course_groups(course):
+                group = form.save()
+                return redirect('course_groups', course_pk=course.pk)
+    else:
+        form = CourseGroupForm(course.pk, instance=group)
+    return render(request, 'courses/coursegroup_form.html', {'form' : form, 'course_pk' : course.pk})
+
+@login_required
+def course_groups_confirm_delete(request, group_pk):
+    """
+    This view will serve a modal window to tell the user if he is sure he wants to 
+    delete this group.
+    """
+
+    group = get_object_or_404(CourseGroup, id=group_pk)
+    course_pk = group.course.pk
+    course = get_object_or_404(Course, id=course_pk)
+    verify(request.user.can_delete_course_groups(course))
+    return render(request, 'courses/coursegroup_confirm_delete.html', {'group_pk' : group_pk})
+
+@login_required
+def course_groups_delete(request, group_pk):
+    group = get_object_or_404(CourseGroup, id=group_pk)
+    course_pk = group.course.pk
+    course = get_object_or_404(Course, id=course_pk)
+    verify(request.user.can_delete_course_groups(course))
+    
+    group.delete()
+
+    return redirect('course_groups', course_pk=course_pk)
+

@@ -120,9 +120,12 @@ class Problem(OrderWithRespectToMixin, models.Model):
         for student in self.problem_set.course.students.all():
             if student not in attempts:
                 attempts[student] = {}
+
         observed_students = self.problem_set.course.observed_students()
+        
         if active_only:
             observed_students = observed_students.filter(attempts__part__problem=self).distinct()
+        
         observed_students = list(observed_students)
         for user in observed_students:
             user.valid = user.invalid = user.empty = 0
@@ -135,6 +138,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
                 else:
                     user.invalid += 1
         return observed_students
+            
+    def attempts_by_user_all(self):
+        return self.attempts_by_user(active_only=False)
 
     def copy_to(self, problem_set):
         new_problem = deepcopy(self)
