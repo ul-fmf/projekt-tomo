@@ -12,7 +12,12 @@ class VisibleStringIO(io.StringIO):
         print(line, end='')
         return line
 
+
 class Check:
+    parts = None
+    current_part = None
+    part_counter = None
+
     @staticmethod
     def has_solution(part):
         return part['solution'].strip() != ''
@@ -24,8 +29,6 @@ class Check:
             part['valid'] = True
             part['feedback'] = []
             part['secret'] = []
-        Check.current_part = None
-        Check.part_counter = None
 
     @staticmethod
     def part():
@@ -83,6 +86,37 @@ class Check:
             return False
         else:
             return True
+
+    @staticmethod
+    def approx(expression, expected_result, tol=1e-6, env=None, update_env=None):
+        try:
+            import numpy as np
+        except ImportError:
+            Check.error('Namestiti morate numpy.')
+            return False
+        if not isinstance(expected_result, np.ndarray):
+            Check.error('Ta funkcija je namenjena testiranju za tip np.ndarray.')
+
+        if env is None:
+            env = dict()
+        env.update({'np': np})
+        global_env = Check.init_environment(env=env, update_env=update_env)
+        actual_result = eval(expression, global_env)
+        if type(actual_result) is not type(expected_result):
+            Check.error("Rezultat ima napačen tip. Pričakovan tip: {}, dobljen tip: {}.",
+                        type(expected_result).__name__, type(actual_result).__name__)
+            return False
+        exp_shape = expected_result.shape
+        act_shape = actual_result.shape
+        if exp_shape != act_shape:
+            Check.error("Obliki se ne ujemata. Pričakovana oblika: {}, dobljena oblika: {}.", exp_shape, act_shape)
+            return False
+        try:
+            np.testing.assert_allclose(expected_result, actual_result, atol=tol, rtol=tol)
+            return True
+        except AssertionError as e:
+            Check.error("Rezultat ni pravilen." + str(e))
+            return False
 
     @staticmethod
     def run(statements, expected_state, clean=None, env=None, update_env=None):
