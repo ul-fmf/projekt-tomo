@@ -8,6 +8,10 @@ from rest_framework.authtoken.models import Token
 class User(AbstractUser):
     class Meta:
         ordering = ['last_name', 'first_name']
+    
+    def __str__(self):
+        # In the forms, the __str__ method is used when showing model instances.
+        return self.get_full_name()
 
     def uses_shibboleth(self):
         try:

@@ -90,7 +90,7 @@ class Course(models.Model):
         enrollment.save()
 
     def observed_students(self):
-        return User.objects.filter(studentenrollment__course=self, studentenrollment__observed=True)
+        return User.objects.filter(studentenrollment__course=self, studentenrollment__observed=True).order_by('first_name')
 
     def student_success(self):
         students = self.observed_students()
@@ -236,7 +236,7 @@ class CourseGroup(models.Model):
         return reverse('course_groups', args=[str(self.course.pk)])
 
     def list_all_members(self):
-        return self.students.all()
+        return self.students.all().order_by('first_name')
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):

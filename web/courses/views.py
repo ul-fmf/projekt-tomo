@@ -11,6 +11,8 @@ from users.models import User
 from utils.views import zip_archive
 from utils import verify
 
+from silk.profiling.profiler import silk_profile
+
 
 @login_required
 def problem_set_attempts(request, problem_set_pk):
@@ -21,6 +23,7 @@ def problem_set_attempts(request, problem_set_pk):
     return zip_archive(archive_name, files)
 
 
+@silk_profile(name='Problem_set_progress')
 @login_required
 def problem_set_progress(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
@@ -277,11 +280,11 @@ def course_groups(request, course_pk):
 
     return render(
         request, 
-        "courses/course_groups.html",
+        "courses/course_groups_2.html",
         {
             "course" : course,
             'show_teacher_forms': request.user.can_create_course_groups(course),
-            'student_success' : course.student_success_by_problemset_grouped_by_groups()
+            # 'student_success' : course.student_success_by_problemset_grouped_by_groups()
         }
     )
 
@@ -301,7 +304,8 @@ class CourseGroupForm(forms.ModelForm):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
         # If the course is given, we can filter the students queryset and only show those enrolled in the course
         if course_pk is not None:
-            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
+            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk,
+                                                                     studentenrollment__observed=True).order_by('first_name')
 
 @login_required
 def course_groups_create(request, course_pk):
