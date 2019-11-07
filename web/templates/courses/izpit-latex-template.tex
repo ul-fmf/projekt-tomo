@@ -1,0 +1,79 @@
+{% load latex %}
+\documentclass{izpit}  % naložite iz https://github.com/ul-fmf/izpit
+% Paket lahko naložite z neobveznimi možnostmi:
+% - arhiv:
+%     Izpis, namenjen za objavo izpita v arhivu. Naloge se pišejo ena pod
+%     drugo, brez vmesnega prostora za reševanje, v glavi pa ni vpisnih polj.
+% - izpolnjen:
+%     Izpis, namenjen za generirane domače naloge. V glavi ni vpisnih polj,
+%     saj se predpostavlja, da so že izpolnjena (vsak študent ima svojo
+%     verzijo)
+% - brezpaketov:
+%     Prepreči nalaganje paketov amsmath, amssym, babel in inputenc. To
+%     možnost uporabite, če je kakšen od teh paketov v konfliktu z vašimi.
+%     Paketi ifthen, keyval, geometry in tikz se vedno naložijo, saj so
+%     za uporabo paketa izpit obvezni.
+% - sumniki:
+%     Če vaš urejevalnik pod Windowsi ne pozna kodne tabele UTF-8
+%     (ostali operacijski sistemi že leta podpirajo UTF-8),
+%     uporabite možnost sumniki, da boste lahko pisali č namesto "c, ali \v c.
+% - 10pt, 11pt, fleqn, ...
+%     Uporabite lahko tudi vse ostale možnosti ki obstajajo v paketu article.
+%     V osnovi je velikost črk 11pt.
+
+\usepackage{hyperref}
+\usepackage{minted}
+\setminted{fontsize=\small, baselinestretch=1, autogobble, breaklines, breakanywhere}
+\newmintinline[py]{Python}{}
+
+\begin{document}
+
+% Vsak izpit se začne z ukazom \izpit{predmet}{datum}{pravila}.
+% Če želite v eni datoteki ustvariti več izpitov, lahko ukaz uporabite večkrat.
+%
+% Ukaz \izpit sprejme naslednje neobvezne možnosti:
+% - ucilnica:
+%     V glavo izpita se natisne shema učilnice, na kateri študentje lahko
+%     označijo svoj sedež. Na voljo so učilnice: 201, 202, 203, 204, 205,
+%     304, 305, 306, 307, 310, 311, 312, P01, P02, P04, P05, F1, F2, MFP in VFP.
+%     Povejte, katere učilnice bi še potrebovali. Za idejo in pomoč pri izdelavi
+%     se zahvaljujem Alešu Vavpetiču, Jaki Smrekarju in Janošu Vidaliju.
+% - sedezni red:
+%     Na shemi učilnice so dovoljeni sedeži odebeljeni.
+% - naloge:
+%     V glavo izpita se natisnejo okenca za vpis točk posameznih nalog ter
+%     skupnega števila točk. Če je število nalog enako 0, se natisne samo
+%     okence skupnega števila točk, če pa je negativno, se ne natisne nič. V
+%     osnovi se natisnejo okenca za 4 naloge ter skupne točke.
+% - anglescina:
+%     Če želite izpit sestaviti v angleščini, uporabite parameter
+%     'anglescina'. Prevedena bodo polja za ime, vpisno številko, oznake nalog
+%     ter števila točk (če ste uporabili ukaz \tocke{} - glej spodaj).
+% - nadaljuj:
+%     Če izpit obsega več listov, lahko ukaz \izpit ponovimo na novem listu,
+%     da se ponovno izpiše glava. Parameter 'nadaljuj' poskrbi za to, da se
+%     števec nalog ne ponastavi in se tako številčenje nadaljuje na novem listu.
+% - brez vpisne:
+%     Polje za vnos vpisne številke se ne izriše.
+
+\izpit[ucilnica = MFP, naloge = {{ problem_set.problems.all|length }}]
+  {FIXME {{ problem_set.course.title }}: {{ problem_set.title }}}{FIXME {% now "j.~n.~Y" %}}{
+  Čas pisanja je TODO minut. Možno je doseči TODO točk. Veliko uspeha!
+}
+
+% Nalogo začnete z ukazom \naloga, podnalogo pa z ukazom \podnaloga. Oba ukaza
+% sprejmeta neobvezen parameter, v katerega zapišete število točk.
+% Na voljo vam je ukaz \tocke, ki sprejme število ter na konec doda besedo
+% 'točke' (oz 'marks') s primerno končnico: \tocke{5} zapiše 5 točk,
+% \tocke{102} zapiše 102 točki, ...
+{% for problem in problem_set.problems.all %}
+\naloga[{{ problem.title|md2tex }}, \tocke{TODO}]
+{{ problem.description|md2tex }}
+
+{% for part in problem.parts.all %}
+\podnaloga[TODO] {{ part.description|md2tex }}
+{% endfor %}
+
+{% endfor %}
+
+\end{document}

@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.http import HttpResponse
+from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -53,6 +55,17 @@ def problem_set_izpit(request, problem_set_pk):
         'problem_set': problem_set,
     })
 
+@login_required
+def problem_set_tex(request, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    tex = render_to_string("courses/izpit-latex-template.tex", {'problem_set': problem_set})
+    response = HttpResponse()
+    response.write(tex)
+    response['Content-Type'] = 'application/x-tex; charset=utf-8'
+    file_name = 'izpit{}.tex'.format(problem_set.pk)
+    response['Content-Disposition'] = 'attachment; filename={0}'.format(file_name)
+    return response
 
 @login_required
 def problem_set_edit(request, problem_set_pk):
@@ -352,4 +365,3 @@ def course_groups_delete(request, group_pk):
     group.delete()
 
     return redirect('course_groups', course_pk=course_pk)
-
