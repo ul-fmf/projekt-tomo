@@ -19,8 +19,9 @@
 <div class="content-section-a tomo-overview-student">
   <div class="container">
     <h2>{{ problem_set.title }}</h2>
-    <div class='row'>
-      <div class="col-md-9">
+    <div class="col-md-9">
+      <h3 class='color5'> Vsi študenti </h3>
+        <div class="row">
         {% for problem in problem_set.problems.all %}
         <div class="col-md-4">
           <h3 id="{{ problem.anchor }}"><a href="{{ problem.get_absolute_url }}">{{ problem.title }}</a></h3>
@@ -52,12 +53,15 @@
           </table>
         </div>
         {% endfor %}
+        </div>
       </div>
       <div class='col-md-3'>
         <ul class="nav nav-stacked" id="sidebar">
+          <br>
+          <br>
           <a href="{% url 'problem_set_progress' problem_set.pk %}"> Celotni pregled </a> <br>
           {% for group in problem_set.course.groups.all %}
-            <a href="{% url 'problem_set_progress_groups' problem_set.pk %}#group-{{ group.pk }}"> {{ group.title }} </a> <br>
+            <a href="{% url 'problem_set_progress_groups' problem_set.pk group.pk %}"> {{ group.title }} </a> <br>
           {% endfor %}
         </ul>
       </div>

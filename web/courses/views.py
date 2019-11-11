@@ -33,11 +33,13 @@ def problem_set_progress(request, problem_set_pk):
     })
 
 @login_required
-def problem_set_progress_groups(request, problem_set_pk):
+def problem_set_progress_groups(request, problem_set_pk, group_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    group = get_object_or_404(CourseGroup, pk=group_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(request, "courses/problem_set_progress_groups.html", {
-        'problem_set' : problem_set
+        'problem_set' : problem_set,
+        'group' : group
     })
 
 

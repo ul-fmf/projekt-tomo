@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^(?P<problem_set_pk>\d+)/progress/$',
         views.problem_set_progress,
         name='problem_set_progress'),
-    url(r'^(?P<problem_set_pk>\d+)/progress/groups$',
+    url(r'^(?P<problem_set_pk>\d+)/progress/groups/(?P<group_pk>\d+)$',
         views.problem_set_progress_groups,
         name='problem_set_progress_groups'),
     url(r'^course/(?P<course_pk>\d+)/$',
