@@ -282,7 +282,7 @@ def course_groups(request, course_pk):
 
     return render(
         request, 
-        "courses/course_groups_2.html",
+        "courses/course_groups.html",
         {
             "course" : course,
             'show_teacher_forms': request.user.can_create_course_groups(course),
