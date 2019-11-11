@@ -63,7 +63,9 @@
           </form>
           {% endfor %}
         </ul>
-        <a href="{% url 'course_groups' course.pk %}"> Pregled skupin </a>
+        <hr>
+        <a href="{% url 'course_groups' course.pk %}"> Pregled skupin </a> <br>
+        <a href="{% url 'statistics' course.pk %}"> Statistika </a>
         <hr>
         <ul class="tomo-students">
           {% for student in students %}

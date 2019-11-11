@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block navigation-left %} 
+  <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+  <a class="navbar-brand topnav" href="#">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "Statistika" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+  </a>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-overview-student">
+  <div class="container">
+    <h2>Statistika za predmet {{ course.title }}</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="nav nav-stacked" id="sidebar">
+            <h3 class='color5'>Kazalo</h3>
+            Placeholder 1 <br>
+            Placeholder 2 <br>
+            Placeholder 3 <br>
+            <br>
+            <br>
+            </ul>
+        </div>
+        <div class='col-md-9'>
+        <br>
+        Zaradi zahtevnosti izračuna statistike in boljše uporabniške izkušnje, se ta stran cachira na vsakih 24 ur. Če hočeš ponovno naložiti stran s svežimi podatki, pritisni CTRL+F5.
+        
+        <br><br>
+        Placeholder
+
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {# content #}

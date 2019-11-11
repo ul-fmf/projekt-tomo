@@ -71,6 +71,9 @@ class User(AbstractUser):
     def can_view_problem_solution(self, problem, student):
         return self.can_view_problem(problem) and \
                (self == student or self.is_teacher(problem.problem_set.course))
+    
+    def can_view_course_statistics(self, course):
+        return self.is_teacher(course)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

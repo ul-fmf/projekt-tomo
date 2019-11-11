@@ -85,4 +85,7 @@ urlpatterns = [
     url(r'^groups/(?P<group_pk>\d+)/confirm_delete$',
         views.course_groups_confirm_delete,
         name='course_groups_confirm_delete'),
+    url(r'^statistics/(?P<course_pk>\d+)$',
+        views.course_statistics,
+        name='statistics'),
 ]
