@@ -11,9 +11,6 @@ from users.models import User
 from utils.views import zip_archive
 from utils import verify
 
-from silk.profiling.profiler import silk_profile
-
-
 @login_required
 def problem_set_attempts(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
@@ -371,16 +368,14 @@ def course_groups_delete(request, group_pk):
     group.delete()
 
     return redirect('course_groups', course_pk=course_pk)
-<<<<<<< HEAD
-=======
 
 
 ##################################################################################################
 # Statistics related views
 
+@login_required
 def course_statistics(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course_statistics(course))
     return render(request, 'statistics/statistics_contents.html', {'course' : course})
 
->>>>>>> basic landing page for statistics
