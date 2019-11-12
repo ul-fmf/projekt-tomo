@@ -8,6 +8,10 @@ from rest_framework.authtoken.models import Token
 class User(AbstractUser):
     class Meta:
         ordering = ['last_name', 'first_name']
+    
+    def __str__(self):
+        # In the forms, the __str__ method is used when showing model instances.
+        return self.get_full_name()
 
     def uses_shibboleth(self):
         try:
@@ -67,6 +71,9 @@ class User(AbstractUser):
     def can_view_problem_solution(self, problem, student):
         return self.can_view_problem(problem) and \
                (self == student or self.is_teacher(problem.problem_set.course))
+    
+    def can_view_course_statistics(self, course):
+        return self.is_teacher(course)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

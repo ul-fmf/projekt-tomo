@@ -20,7 +20,6 @@
   <div class="container">
     <h2>{{ problem_set.title }}</h2>
     <div class="col-md-9">
-      {% for group in problem_set.course.groups.all %}
         <h3 class='color5' id='group-{{ group.pk }}'> {{ group.title }}</h3>
         <div class="row">
           {% for problem in problem_set.problems.all %}
@@ -57,14 +56,13 @@
           </div>
           {% endfor %}
         </div>
-      {% endfor %}
     </div>
     <div class='col-md-3'>
       <ul class="nav nav-stacked" id="sidebar">
         <br> <br> 
         <a href="{% url 'problem_set_progress' problem_set.pk %}"> Celotni pregled </a> <br>
         {% for group in problem_set.course.groups.all %}
-          <a href="{% url 'problem_set_progress_groups' problem_set.pk %}#group-{{ group.pk }}"> {{ group.title }} </a> <br>
+          <a href="{% url 'problem_set_progress_groups' problem_set.pk group.pk %}"> {{ group.title }} </a> <br>
         {% endfor %}
       </ul>
     </div>

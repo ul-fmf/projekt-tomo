@@ -11,7 +11,6 @@ from users.models import User
 from utils.views import zip_archive
 from utils import verify
 
-
 @login_required
 def problem_set_attempts(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
@@ -19,7 +18,6 @@ def problem_set_attempts(request, problem_set_pk):
     verify(request.user.can_view_problem_set(problem_set))
     archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
-
 
 @login_required
 def problem_set_progress(request, problem_set_pk):
@@ -30,11 +28,13 @@ def problem_set_progress(request, problem_set_pk):
     })
 
 @login_required
-def problem_set_progress_groups(request, problem_set_pk):
+def problem_set_progress_groups(request, problem_set_pk, group_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    group = get_object_or_404(CourseGroup, pk=group_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(request, "courses/problem_set_progress_groups.html", {
-        'problem_set' : problem_set
+        'problem_set' : problem_set,
+        'group' : group
     })
 
 
@@ -281,7 +281,7 @@ def course_groups(request, course_pk):
         {
             "course" : course,
             'show_teacher_forms': request.user.can_create_course_groups(course),
-            'student_success' : course.student_success_by_problemset_grouped_by_groups()
+            # 'student_success' : course.student_success_by_problemset_grouped_by_groups()
         }
     )
 
@@ -301,7 +301,8 @@ class CourseGroupForm(forms.ModelForm):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
         # If the course is given, we can filter the students queryset and only show those enrolled in the course
         if course_pk is not None:
-            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk, studentenrollment__observed=True)
+            self.fields['students'].queryset = User.objects.filter(studentenrollment__course__pk=course_pk,
+                                                                     studentenrollment__observed=True).order_by('first_name')
 
 @login_required
 def course_groups_create(request, course_pk):
@@ -365,3 +366,14 @@ def course_groups_delete(request, group_pk):
     group.delete()
 
     return redirect('course_groups', course_pk=course_pk)
+
+
+##################################################################################################
+# Statistics related views
+
+@login_required
+def course_statistics(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_view_course_statistics(course))
+    return render(request, 'statistics/statistics_contents.html', {'course' : course})
+

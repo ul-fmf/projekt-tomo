@@ -19,7 +19,7 @@
 <div class="content-section-a tomo-overview-student">
   <div class="container">
     <h2>{{ course.title }}</h2>
-      {% for group, students in student_success.items %}
+      {% for group in course.groups.all %}
       <div class="row">
       <div class="col-md-4">
         <h3 id="{{ group.pk }}">{{ group.title }}</h3> 
@@ -40,15 +40,9 @@
       <div class="col-md-8">
         <table class="table table-condensed">
           <tbody>
-            {% for student, problemsets in students.items %}
+            {% for student in group.list_all_members %}
             <tr>
               <td>
-                {% for problemset, success_rate in problemsets.items %}
-                  <a href="{% url 'problem_set_progress' problemset.pk %}"
-                    data-toggle="tooltip"
-                    title="{{ problemset.title}} : {{ success_rate.valid }} {% trans "valid" %} / {{ success_rate.invalid }} {% trans "invalid" %} / {{ success_rate.empty }} {% trans "empty" %} ">
-                    <span id="pieChart-{{ group.pk }}-{{ student.pk }}-{{ problemset.pk }}" class="chart"></span> {{ problemset.pk }} </a>
-                {% endfor %}
               </td>
               <td width='60%'>
                   <a href="{% url 'course_progress' course.pk student.pk %}"> {{ student.get_full_name }} </a>
@@ -72,26 +66,3 @@
 </div>
 
 {% endblock content %} {# content #}
-
-{% block extra_js %}
-<!-- for Tree view and modals-->
-<script src="{% static 'js/bootstrap-treeview.js' %}"></script>
-<script src="{% static 'js/sidebar.js' %}"></script>
-<script src="{% static 'js/piechart.js' %}"></script>
-<script>
-$(function() {
-  {% for group, students in student_success.items %}
-  {% for student, problemsets in students.items %}
-  {% for problemset, success_rate in problemset.items %}
-  $("#pieChart-{{ group.pk }}-{{ student.pk }}-{{ problemset.pk }}").drawPieChart(
-    [{value: {{ success_rate.valid }}, color: "#878F28"},
-    {value: {{ success_rate.invalid }}, color: "#D7A02C"},
-    {value: {{ success_rate.empty }}, color: "#A92D2D"},
-    ]
-  );
-  {% endfor %}
-  {% endfor %}
-  {% endfor %}
-});
-</script>
-{% endblock extra_js %}

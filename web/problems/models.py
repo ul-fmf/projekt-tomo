@@ -111,7 +111,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def attempts_by_user(self, active_only=True):
         attempts = {}
-        for part in self.parts.all():
+        for part in self.parts.all().prefetch_related('attempts', 'attempts__user'):
             for attempt in part.attempts.all():
                 if attempt.user in attempts:
                     attempts[attempt.user][part] = attempt
