@@ -19,8 +19,6 @@ def problem_set_attempts(request, problem_set_pk):
     archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
 
-
-@silk_profile(name='Problem_set_progress')
 @login_required
 def problem_set_progress(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
