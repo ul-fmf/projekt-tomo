@@ -23,8 +23,11 @@
 
 \usepackage{hyperref}
 \usepackage{minted}
-\setminted{fontsize=\small, baselinestretch=1, autogobble, breaklines, breakanywhere}
+\setminted{fontsize=\small, autogobble, breaklines, breakanywhere, frame=lines, framesep=2mm}
 \newmintinline[py]{Python}{}
+\BeforeBeginEnvironment{minted}{\vspace{-14pt}}
+% \AfterEndEnvironment{minted}{\vspace{-14pt}}
+\newcommand{\Primer}{\vspace{\baselineskip} \noindent Primer:}
 
 \begin{document}
 
@@ -58,7 +61,7 @@
 
 \izpit[ucilnica = MFP, naloge = {{ problem_set.problems.all|length }}]
   {FIXME {{ problem_set.course.title }}: {{ problem_set.title }}}{FIXME {% now "j.~n.~Y" %}}{
-  Čas pisanja je TODO minut. Možno je doseči TODO točk. Veliko uspeha!
+  Čas pisanja je TODO minut. Možno je doseči TODO točk, od tega TODO za slog kode. Veliko uspeha!
 }
 
 % Nalogo začnete z ukazom \naloga, podnalogo pa z ukazom \podnaloga. Oba ukaza
