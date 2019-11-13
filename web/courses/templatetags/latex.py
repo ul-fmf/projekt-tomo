@@ -22,6 +22,9 @@ def itemizer(matchobj):
     content = ["  \item " + g + "\n" for g in matchobj.group(0).strip('\n- ').split('\n- ')]
     return "\\begin{itemize}\n%s\\end{itemize}" % ''.join(content)
 
+def codeblock(matchobj):
+    code = matchobj.group(0).rstrip('\n') + '\n'
+    return "\\begin{minted}{Python}\n%s\\end{minted}" % code
 
 @register.filter
 @stringfilter
@@ -30,8 +33,9 @@ def md2tex(md):
     md = BOLD.sub(r"\\textbf{\1}", md)
     md = ITALIC.sub(r"\\textit{\1}", md)
     md = INLINE_CODE.sub(r"\\py{\1}", md)
-    md = CODE_BLOCK.sub(r"\\begin{minted}{Python}\n\g<0>\\end{minted}", md)
+    md = CODE_BLOCK.sub(codeblock, md)
     md = URL.sub(r"\1 (\\url{\2})", md)
     md = LIST.sub(itemizer, md)
+    md = md.replace("\nPrimer:", "\n\\Primer")
     return mark_safe(md)
 
