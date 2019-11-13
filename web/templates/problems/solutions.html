@@ -53,7 +53,7 @@
                       <div class="content">
                         <div class="tomo-solution-code-user">
                           {% if part.attempt %}
-                          Čas oddaje: {{ part.attempt.submission_date }}
+                          {% trans 'Last submission time:' %} {{ part.attempt.submission_date }}
                           <div class="tomo-pre">{{ part.attempt.solution }}</div>
                           {% else %}
                           {# Translators: in solution comparison table #}
