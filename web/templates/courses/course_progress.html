@@ -35,10 +35,10 @@
               </td>
               <td width='60%'>
                 {% for attempt in problem_attempts %}
-                <a href="{% url 'problem_solution' problem.pk observed_user.pk %}">
-                  {% if attempt.valid %}<i class="color5 fa fa-circle fa-lg"></i>
-                  {% elif attempt %}<i class="color3 fa fa-circle fa-lg"></i>
-                  {% else %}<i class="color1 fa fa-circle fa-lg"></i>
+                <a href="{% url 'problem_solution' problem.pk observed_user.pk %}" class="solution-circle">
+                  {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                  {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                  {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
                   {% endif %}
                 </a>
                 {% endfor %}
