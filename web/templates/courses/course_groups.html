@@ -2,11 +2,11 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block navigation-left %} 
+{% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
-    	{% trans "Skupine" %}
+    	{% trans "Course groups" %}
     	<span class="sr-only">
     		{# Translators: current page in navigation #}
     		{% trans "(current)" %}
@@ -22,7 +22,7 @@
       {% for group in course.groups.all %}
       <div class="row">
       <div class="col-md-4">
-        <h3 id="{{ group.pk }}">{{ group.title }}</h3> 
+        <h3 id="{{ group.pk }}">{{ group.title }}</h3>
         <div class="btn-group btn-group-sm" role="group" aria-label="Update">
                     <button class="btn btn-default btn-for-modal" data-url="{% url 'course_groups_update' group.pk %}" aria-label="Update"
                         data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
