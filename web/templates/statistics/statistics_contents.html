@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block navigation-left %} 
+{% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
-    	{% trans "Statistika" %}
+    	{% trans "Statistics" %}
     	<span class="sr-only">
     		{# Translators: current page in navigation #}
     		{% trans "(current)" %}
@@ -32,7 +32,7 @@
         <div class='col-md-9'>
         <br>
         Zaradi zahtevnosti izračuna statistike in boljše uporabniške izkušnje, se ta stran cachira na vsakih 24 ur. Če hočeš ponovno naložiti stran s svežimi podatki, pritisni CTRL+F5.
-        
+
         <br><br>
         Placeholder
 
