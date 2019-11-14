@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, ProblemSet, StudentEnrollment, CourseGroup
+from .models import Course, ProblemSet, StudentEnrollment, CourseGroup, Institution
 
 class StudentEnrollmentInline(admin.StackedInline):
     model = StudentEnrollment
@@ -12,6 +12,9 @@ class CourseAdmin(admin.ModelAdmin):
     )
     inlines = (
         StudentEnrollmentInline,
+    )
+    list_filter = (
+        'institution__name',
     )
 
     def podvoji(self, request, queryset):
@@ -48,6 +51,18 @@ class CourseGroupAdmin(admin.ModelAdmin):
         'students',
     )
 
+class InstitutionAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+    )
+    ordering = (
+        'name',
+    )
+    search_fields = (
+        'name',
+    )
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(ProblemSet, ProblemSetAdmin)
 admin.site.register(CourseGroup, CourseGroupAdmin)
+admin.site.register(Institution, InstitutionAdmin)

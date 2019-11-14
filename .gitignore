@@ -1,5 +1,4 @@
 *.pyc
-db.sqlite3
 .coverage
 .pydevproject
 .project

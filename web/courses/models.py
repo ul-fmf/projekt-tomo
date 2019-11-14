@@ -10,12 +10,19 @@ from problems.models import Part
 from copy import deepcopy
 
 
+class Institution(models.Model):
+    name = models.CharField(max_length=140)
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses', through='StudentEnrollment')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
-    institution = models.CharField(max_length=140)
+    institution = models.ForeignKey(Institution, related_name='institution')
     tags = TaggableManager(blank=True)
 
     class Meta:
@@ -139,7 +146,7 @@ class Course(models.Model):
             }
         }
         """
-        
+
         students = self.observed_students()
         student_success_by_problemset = {student :  {} for student in students}
         student_solve_rate_by_problemset = {student : {} for student in students}
@@ -149,7 +156,7 @@ class Course(models.Model):
             for problem in problem_set.problems.all():
                 for part in problem.parts.all():
                     different_subtasks += 1
-            
+
             # In case there are no parts, we do not want to divide by 0
             if different_subtasks == 0:
                 different_subtasks = 1
@@ -173,11 +180,11 @@ class Course(models.Model):
                 }
 
         return student_solve_rate_by_problemset
-    
+
     def student_success_by_problemset_grouped_by_groups(self):
         """
         Function does the same as student_success_by_problem_set except that it groups students that are in the same group.
-        Therefore we get a dictionary that will be easier to use inside a django template. An 
+        Therefore we get a dictionary that will be easier to use inside a django template. An
         alternative would be to create django templatetags app and define filters with which we could
         access dictionary keys inside django templates.
 
@@ -204,7 +211,7 @@ class Course(models.Model):
             student_sucess_by_groups[group] = {}
             for student in group.students.all():
                 student_sucess_by_groups[group][student] = student_success[student]
-        
+
         return student_sucess_by_groups
 
 
