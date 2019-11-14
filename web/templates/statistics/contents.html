@@ -19,24 +19,17 @@
   <div class="container">
     <h2>Statistika za predmet {{ course.title }}</h2>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <ul class="nav nav-stacked" id="sidebar">
             <h3 class='color5'>Kazalo</h3>
-            Placeholder 1 <br>
-            Placeholder 2 <br>
+            <a href='{% url "statistics_landing_page" course.pk %}'> Začetna stran <br>
+            <a href='{% url "statistics_submission_history" course.pk %}'>Zgodovina oddaj </a> <br>
             Placeholder 3 <br>
             <br>
             <br>
             </ul>
         </div>
-        <div class='col-md-9'>
-        <br>
-        Zaradi zahtevnosti izračuna statistike in boljše uporabniške izkušnje, se ta stran cachira na vsakih 24 ur. Če hočeš ponovno naložiti stran s svežimi podatki, pritisni CTRL+F5.
-
-        <br><br>
-        Placeholder
-
-        </div>
+        {% block statistics_content %} {% endblock %}
     </div>
   </div>
 </div>
