@@ -3,38 +3,45 @@
 {% block statistics_content %}
 
 <div class='col-md-2'>
-    <h3 class='color5'>Učenci</h3>
-    {% for student in course.observed_students %}
-        <a href="{% url 'statistics_user_submission_history' course.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+    <h3 class='color5'>Sklopi nalog</h3>
+    {% for problem_set in course.problem_sets.all %}
+        {% if problem_set == problemset %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% else %}
+            <a href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% endif %}
     {% endfor %}
 </div>
-<div class='col-md-8'>
+<div class='col-md-2'>
+    <h3 class='color5'>Učenci</h3>
+    {% for student in course.observed_students %}
+        {% if student == user %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+        {% else %}
+            <a href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class='col-md-6' style="height: 100vh;; overflow:auto">
 <br>
-{% for problem_set, problems in history.items %}
-    {{ problem_set.title }} <br>
+{% for problem, timeline in history.items %}
+    {{ problem.title }} <br>
     <div class=row>
         <div class='col-md-2'>
         </div>
-        <div class='col-md-7'>
-            <br>
-            {% for problem, timeline in problems.items %}
-                {{ problem.title }} <br>
-                <div class='col-md-4'>
-                </div>
-                <div class='col-md-8'>
-                    {% for time, state in timeline %}
-                        {{ time }} : 
-                        {% for attempt in state %}
-                            {% comment %} <a href="{% url 'problem_solution' problem.pk observed_user.pk %}"> {% endcomment %}
-                                {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
-                                {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
-                                {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
-                                {% endif %}
-                            {% comment %} </a> {% endcomment %}
-                        {% endfor %} <br>
-                    {% endfor %}
-                </div>
+        <div class='col-md-10'>
+            {% for time, state in timeline %}
+                {{ time }} : 
+                {% for attempt in state %}
+                    {% comment %} <a href="{% url 'problem_solution' problem.pk observed_user.pk %}"> {% endcomment %}
+                        {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                        {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                        {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                        {% endif %}
+                    {% comment %} </a> {% endcomment %}
+                {% endfor %} <br>
             {% endfor %}
+            <br>
         </div>
     </div>
 {% endfor %}

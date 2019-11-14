@@ -38,10 +38,12 @@ def problem_timeline(problem, submissions):
     index = 0
     while index < len(sorted_attempts):
 
+        print('Calculating', index, len(sorted_attempts))
+
         current_time = sorted_attempts[index][0]
 
         same_time_index = index
-        while same_time_index < len(sorted_attempts) and sorted_attempts[same_time_index][0] == current_time:
+        while same_time_index < len(sorted_attempts) and (sorted_attempts[same_time_index][0] - current_time) < datetime.timedelta(seconds=5):
             historical_attempt = sorted_attempts[same_time_index][1]
             part = historical_attempt.part
             part_index = parts_list.index(part)
@@ -53,39 +55,34 @@ def problem_timeline(problem, submissions):
 
     return timeline
 
-def get_submission_history(course, user):
+def get_submission_history(problemset, user):
     """
     Function that will return a queryset of users submissions in a given course.
 
     Parameters:
-        course : Course instance
-            course in which we are interested
+        problemset : ProblemSet instance
+            Problem set in which we are interested
         user : User instance
             user for which we want the submission history
 
     Returns:
-        dictionary of {problem_set : { problem : {part : [history] }}}
+        dictionary of { problem : {part : [history] }}
     """
 
     submission_history = {}
-
-    for problem_set in course.problem_sets.all():
-        submission_history[problem_set] = {}
-        for problem in problem_set.problems.all():
-            submission_history[problem_set][problem] = []
+    for problem in problemset.problems.all():
+        submission_history[problem] = []
 
 
     user_attempts = HistoricalAttempt.objects.filter(
-        user=user, part__problem__problem_set__course=course
+        user=user, part__problem__problem_set=problemset
     ).prefetch_related('part', 'part__problem', 'part__problem__problem_set')
 
     for attempt in user_attempts:
         problem = attempt.part.problem
-        problem_set = problem.problem_set
-        submission_history[problem_set][problem].append(attempt)
+        submission_history[problem].append(attempt)
     
-    for problem_set in submission_history:
-        for problem, submissions in submission_history[problem_set].items():
-            submission_history[problem_set][problem] = problem_timeline(problem, submissions)
+    for problem, submissions in submission_history.items():
+        submission_history[problem] = problem_timeline(problem, submissions)
 
     return submission_history

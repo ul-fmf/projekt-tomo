@@ -1,0 +1,25 @@
+{% extends 'statistics/contents.html' %}
+
+{% block statistics_content %}
+
+<div class='col-md-2'>
+    <h3 class='color5'>Sklopi nalog</h3>
+    {% for problem_set in course.problem_sets.all %}
+        {% if problem_set == problemset %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% else %}
+            <a href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class='col-md-2'>
+    <h3 class='color5'>Učenci</h3>
+    {% for student in course.observed_students %}
+        <a href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+    {% endfor %}
+</div>
+<div class='col-md-6' style="height: 100vh;; overflow:auto">
+<br>
+Prazen div
+</div>
+{% endblock %} {# content #}

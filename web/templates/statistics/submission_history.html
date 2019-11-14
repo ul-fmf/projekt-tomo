@@ -3,9 +3,9 @@
 {% block statistics_content %}
 
 <div class='col-md-2'>
-    <h3 class='color5'>Učenci</h3>
-    {% for student in course.observed_students %}
-        <a href="{% url 'statistics_user_submission_history' course.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+    <h3 class='color5'>Sklopi nalog</h3>
+    {% for problem_set in course.problem_sets.all %}
+        <a href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
     {% endfor %}
 </div>
 <div class='col-md-7'>
