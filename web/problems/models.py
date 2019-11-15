@@ -204,6 +204,15 @@ class Problem(OrderWithRespectToMixin, models.Model):
             part.copy_to(new_problem)
         return new_problem
 
+    # premakni problem nekam #preveri ce je prav
+    def move_to(self, problem_set):
+        # ne naredi kopije, ampak ga samo premakne
+        # self.pk = None
+        self.problem_set = problem_set
+        self.save()
+        # for part in self.parts.all():
+        #    part.move_to(new_problem)
+
     def content_type(self):
         return self.MIMETYPES[self.language]
 
@@ -265,6 +274,13 @@ class Part(OrderWithRespectToMixin, models.Model):
         new_part.problem = problem
         new_part.save()
         return new_part
+
+    # preveri ce je prav
+    def move_to(self, problem):
+        # self.pk = None
+        self.problem = problem
+        self.save()
+        return self
 
     def attempt_token(self, user):
         return signing.dumps(
