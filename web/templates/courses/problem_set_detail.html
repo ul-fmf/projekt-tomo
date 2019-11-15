@@ -89,27 +89,23 @@
                     </div>
                     <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
-                            data-toggle="tooltip" title="{% trans 'Move up' %}" data-container:'body'>
-                            <i class="fa fa-arrow-up" aria-hidden="true"></i>
+                            data-toggle="tooltip" title="{% trans 'Move up' %}" data-container="body">
+                          <i class="fa fa-arrow-up" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id 1 %}" role="button" aria-label="Move Down"
-                            data-toggle="tooltip" title="{% trans 'Move down' %}" data-container:'body'>
-                            <i class="fa fa-arrow-down" aria-hidden="true"></i>
+                            data-toggle="tooltip" title="{% trans 'Move down' %}" data-container="body">
+                          <i class="fa fa-arrow-down" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-for-modal edit-btn" aria-label="Update" data-url="{% url 'problem_update' problem.id %}"
-                            data-toggle="tooltip" title="{% trans 'Update' %}" data-container:'body'>
-                            <i class="fa fa-cog" aria-hidden="true"></i>
+                            data-toggle="tooltip" title="{% trans 'Update' %}" data-container="body">
+                          <i class="fa fa-cog" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
-                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
-                        <i class="fa fa-copy" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-default btn-for-modal edit-btn" aria-label="Move" data-url="{% url 'problem_move_to' problem.id %}"
-                            data-toggle="tooltip" title="{% trans 'Move to' %}" data-container:'body'>
-                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container="body">
+                          <i class="fa fa-copy" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-for-modal edit-btn trash-btn" aria-label="Delete" data-url="{% url 'problem_delete' problem.id %}">
-                        <i class="fa fa-trash" aria-hidden="true"></i>
+                          <i class="fa fa-trash" aria-hidden="true"></i>
                         </a>
                     </div>
 
@@ -127,7 +123,7 @@
                     {% if user.is_teacher_anywhere %}
                     <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
-                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
+                            data-toggle="tooltip" title="{% trans 'Copy' %}" data-container="body">
                         <i class="fa fa-copy" aria-hidden="true"></i>
                         </a>
                     </div>
