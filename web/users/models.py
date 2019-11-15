@@ -8,7 +8,7 @@ from rest_framework.authtoken.models import Token
 class User(AbstractUser):
     class Meta:
         ordering = ['last_name', 'first_name']
-    
+
     def __str__(self):
         # In the forms, the __str__ method is used when showing model instances.
         return self.get_full_name()
@@ -39,16 +39,16 @@ class User(AbstractUser):
 
     def can_view_course_attempts(self, course):
         return self.is_teacher(course)
-    
+
     def can_view_course_groups(self, course):
         return self.is_teacher(course)
-    
+
     def can_create_course_groups(self, course):
         return self.is_teacher(course)
-    
+
     def can_update_course_groups(self, course):
         return self.is_teacher(course)
-    
+
     def can_delete_course_groups(self, course):
         return self.is_teacher(course)
 
@@ -71,7 +71,7 @@ class User(AbstractUser):
     def can_view_problem_solution(self, problem, student):
         return self.can_view_problem(problem) and \
                (self == student or self.is_teacher(problem.problem_set.course))
-    
+
     def can_view_course_statistics(self, course):
         return self.is_teacher(course)
 
@@ -81,6 +81,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-User._meta.get_field('username').max_length = 70 
-User._meta.get_field('first_name').max_length = 70 
-User._meta.get_field('last_name').max_length = 70 
+User._meta.get_field('username').max_length = 70
+User._meta.get_field('first_name').max_length = 70
+User._meta.get_field('last_name').max_length = 70

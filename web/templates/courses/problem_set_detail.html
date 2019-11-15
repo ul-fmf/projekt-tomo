@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% load i18n %}	              
+{% load i18n %}
 {% load staticfiles %}
 
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
 
- 
-{% block navigation-left %} 
+
+{% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
   <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
 {% endblock %}
@@ -102,7 +102,11 @@
                         </a>
                         <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
                             data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
-                        <i class="fa fa-copy" aria-hidden="true"></i>                          
+                        <i class="fa fa-copy" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-default btn-for-modal edit-btn" aria-label="Move" data-url="{% url 'problem_move_to' problem.id %}"
+                            data-toggle="tooltip" title="{% trans 'Move to' %}" data-container:'body'>
+                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
                         </a>
                         <a class="btn btn-default btn-for-modal edit-btn trash-btn" aria-label="Delete" data-url="{% url 'problem_delete' problem.id %}">
                         <i class="fa fa-trash" aria-hidden="true"></i>
@@ -124,7 +128,7 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default btn-for-modal edit-btn" aria-label="Copy" data-url="{% url 'problem_copy' problem.id %}"
                             data-toggle="tooltip" title="{% trans 'Copy' %}" data-container:'body'>
-                        <i class="fa fa-copy" aria-hidden="true"></i>                          
+                        <i class="fa fa-copy" aria-hidden="true"></i>
                         </a>
                     </div>
                     {% endif %}
@@ -138,7 +142,7 @@
 
           {% if problem.description and problem.description.strip %}
           <div class="panel-body">
-            <p> 
+            <p>
               {{ problem.guarded_description|latex_markdown }}
             </p>
           </div>

@@ -276,7 +276,7 @@ def course_groups(request, course_pk):
     verify(request.user.can_view_course_groups(course))
 
     return render(
-        request, 
+        request,
         "courses/course_groups.html",
         {
             "course" : course,
@@ -296,7 +296,7 @@ class CourseGroupForm(forms.ModelForm):
         widgets = {
             'students' : forms.CheckboxSelectMultiple()
         }
-    
+
     def __init__(self, course_pk=None, *args, **kwargs):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
         # If the course is given, we can filter the students queryset and only show those enrolled in the course
@@ -346,7 +346,7 @@ def course_groups_update(request, group_pk):
 @login_required
 def course_groups_confirm_delete(request, group_pk):
     """
-    This view will serve a modal window to tell the user if he is sure he wants to 
+    This view will serve a modal window to tell the user if he is sure he wants to
     delete this group.
     """
 
@@ -362,7 +362,7 @@ def course_groups_delete(request, group_pk):
     course_pk = group.course.pk
     course = get_object_or_404(Course, id=course_pk)
     verify(request.user.can_delete_course_groups(course))
-    
+
     group.delete()
 
     return redirect('course_groups', course_pk=course_pk)
