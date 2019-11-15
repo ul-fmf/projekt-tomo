@@ -245,7 +245,7 @@ class Check:
         except StopIteration:
             Check.error("Generator {0} se prehitro izteče.", expression)
             return False
-        
+
         if Check.get('should_stop', should_stop):
             try:
                 next(gen)
