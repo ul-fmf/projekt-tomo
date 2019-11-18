@@ -4,6 +4,7 @@
 .project
 *eclipse*
 *~
-mobile/platforms
-mobile/plugins
+*.sqlite3
+debug.log
+.idea/
 venv/
