@@ -11,8 +11,11 @@ urlpatterns = [
     url(r'^(?P<course_pk>\d+)/submission_history/(?P<problemset_pk>\d+)$',
         views.course_submission_history_problemset,
         name='statistics_submission_history_problemset'),
-    
     url(r'^(?P<course_pk>\d+)/submission_history/(?P<problemset_pk>\d+)/(?P<user_pk>\d+)$',
         views.course_user_submission_history_problemset,
         name='statistics_submission_history_problemset_user'),
+    url(r'^historical_attempt/(?P<historical_attempt_pk>\d+)$',
+        views.user_problem_solution_at_time,
+        name='user_problem_solution_at_time'),
+    
 ]

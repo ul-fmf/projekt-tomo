@@ -38,8 +38,6 @@ def problem_timeline(problem, submissions):
     index = 0
     while index < len(sorted_attempts):
 
-        print('Calculating', index, len(sorted_attempts))
-
         current_time = sorted_attempts[index][0]
 
         same_time_index = index
@@ -86,3 +84,36 @@ def get_submission_history(problemset, user):
         submission_history[problem] = problem_timeline(problem, submissions)
 
     return submission_history
+
+def get_problem_solve_state_at_time(historical_attempt):
+    """
+    Function that will recreate the status of problems solution of particular user at a specific
+    point in time.
+
+    From historical_attempt object we are able to get both the problem and the user that attempted the problem.
+
+    Parameters:
+        historical_attempt : HistoricalAttempt instance
+            referencing the user, problem and the point in time
+    
+    Returns:
+        list(user_solution_to_problem_part_at_given_time for part in problem.parts.all)
+    """
+
+    problem = historical_attempt.part.problem
+    user = historical_attempt.user
+    point_in_time = historical_attempt.submission_date
+    parts = problem.parts.all()
+
+    for part in parts:
+        try:
+            user_attempt = HistoricalAttempt.objects.filter(
+                user=user,
+                part=part,
+                submission_date__lte=point_in_time
+            ).latest('submission_date')
+            part.attempt = user_attempt
+        except:
+            part.attempt = None
+
+    return parts

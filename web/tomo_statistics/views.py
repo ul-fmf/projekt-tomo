@@ -2,9 +2,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
 from courses.models import Course, ProblemSet
+from attempts.models import HistoricalAttempt
 from users.models import User
 from utils import verify
-from tomo_statistics.statistics_utils import get_submission_history
+from tomo_statistics.statistics_utils import (get_submission_history, 
+    get_problem_solve_state_at_time
+    )
 
 @login_required
 def course_statistics(request, course_pk):
@@ -44,4 +47,23 @@ def course_user_submission_history_problemset(request, course_pk, problemset_pk,
                     'user' : user,
                     'history' : user_history
                 })
+
+@login_required
+def user_problem_solution_at_time(request, historical_attempt_pk):
+    historical_attempt = get_object_or_404(HistoricalAttempt, pk=historical_attempt_pk)
+    problem = historical_attempt.part.problem
+    course = problem.problem_set.course
+    user = historical_attempt.user
+    problem_state = get_problem_solve_state_at_time(historical_attempt)
+    verify(request.user.can_view_course_statistics(course))
+    return render(request,
+                 "statistics/solution_at_time.html",
+                 {
+                    "historical_attempt" : historical_attempt,
+                    "problem" : problem,
+                    "user" : user,
+                    "parts" : problem_state,
+                 })
+
+
 

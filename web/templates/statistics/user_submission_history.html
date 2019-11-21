@@ -1,5 +1,7 @@
 {% extends 'statistics/contents.html' %}
 
+{% block statistics_section_name %}- zgodovina oddaj {% endblock %}
+
 {% block statistics_content %}
 
 <div class='col-md-2'>
@@ -22,7 +24,7 @@
         {% endif %}
     {% endfor %}
 </div>
-<div class='col-md-6' style="height: 100vh;; overflow:auto">
+<div class='col-md-6' style="height: 100vh; overflow:auto">
 <br>
 {% for problem, timeline in history.items %}
     {{ problem.title }} <br>
@@ -33,12 +35,18 @@
             {% for time, state in timeline %}
                 {{ time }} : 
                 {% for attempt in state %}
-                    {% comment %} <a href="{% url 'problem_solution' problem.pk observed_user.pk %}"> {% endcomment %}
+                    {% if attempt != None %}
+                        <a href="{% url 'user_problem_solution_at_time' attempt.pk %}">
+                            {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                            {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                            {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                            {% endif %} </a>
+                    {% else %}
                         {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
                         {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
                         {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
                         {% endif %}
-                    {% comment %} </a> {% endcomment %}
+                    {% endif %}
                 {% endfor %} <br>
             {% endfor %}
             <br>

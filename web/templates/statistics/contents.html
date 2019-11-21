@@ -5,7 +5,7 @@
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
-    	{% trans "Statistics" %}
+    	{% trans "Pregled" %}
     	<span class="sr-only">
     		{# Translators: current page in navigation #}
     		{% trans "(current)" %}
@@ -17,7 +17,7 @@
 {% block content %}
 <div class="content-section-a tomo-overview-student">
   <div class="container">
-    <h2>Statistika za predmet {{ course.title }}</h2>
+    <h2>Pregled - {{ course.title }} {% block statistics_section_name %}{% endblock %}</h2>
     <div class="row">
         <div class="col-md-2">
             <ul class="nav nav-stacked" id="sidebar">
