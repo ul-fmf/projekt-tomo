@@ -22,6 +22,10 @@
 </div>
 <div class='col-md-6' style="height: 100vh;; overflow:auto">
 <br>
-Prazen div
+{% for problem in problemset.problems.all %}
+    {{ problem.title }} <br>
+    <div class=row>
+    </div>
+{% endfor %}
 </div>
 {% endblock %} {# content #}

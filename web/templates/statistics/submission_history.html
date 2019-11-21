@@ -10,12 +10,17 @@
         <a href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
     {% endfor %}
 </div>
-<div class='col-md-7'>
-<br>
-Zaradi zahtevnosti izračuna statistike in boljše uporabniške izkušnje, se ta stran cachira na vsakih 24 ur. Če hočeš ponovno naložiti stran s svežimi podatki, pritisni CTRL+F5.
-
-<br><br>
-Placeholder
-
+<div class='col-md-2'>
+    <h3 class='color5'>Učenci</h3>
+    {% for student in course.observed_students %}
+            {{ student.get_full_name }} <br>
+    {% endfor %}
+</div>
+<div class='col-md-6'>
+<h3 class='color2'>Navodila</h3>
+Zavihek <i>zgodovina oddaj</i> ti omogoča vpogled v zgodovino oddaj za vsakega učenca znotraj predmeta. Izberi sklop nalog in nato željenega učenca. Dobiš boš časovnico
+oddaj za izbranega učenca za vsako nalogo/podnalogo v sklopu. <br> <br>
+Časovnica oddaj za posamezno nalogo je sestavljena iz datumov ob katerih je učenec oddajal rešitev in pa stanja 
+rešenih podnalog v tem danem trenutku. S klikom na krogec z oznako pravilnosti rešitve pa lahko tudi vidiš uporabnikovo rešitev ob tem času.
 </div>
 {% endblock %} {# content #}
