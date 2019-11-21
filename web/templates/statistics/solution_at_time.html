@@ -5,7 +5,7 @@
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem.problem_set.course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="{% url 'statistics_landing_page' problem.problem_set.course.pk %}"> Pregled </a>
   <a class="navbar-brand topnav" href="{% url 'statistics_submission_history_problemset_user' problem.problem_set.course.pk problem.problem_set.pk user.pk %}"> 
-  Zgodovina oddaj ({{problem.problem_set.title}} - {{ user.get_full_name}})</a>
+  Zgodovina oddaj ({{problem.problem_set.title}} - {{ student.get_full_name}})</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
     	{% trans "Stanje oddaj" %}
@@ -20,7 +20,7 @@
 <div class="content-section-a tomo-top-section">
   <div class="container tomo-task-solutions">
     <div class="tomo-task">
-      <h3>{{ problem.title }} - stanje oddaj za učenca {{ user.get_full_name }} ob času <span class='color1'> {{ historical_attempt.submission_date }}</span></h3>
+      <h3>{{ problem.title }} - stanje oddaj za učenca {{ student.get_full_name }} ob času <span class='color1'> {{ historical_attempt.submission_date }}</span></h3>
       {% if problem_set.description and problem_set.description.strip %}
       {{ problem_set.description|latex_markdown }}
       {% endif %}

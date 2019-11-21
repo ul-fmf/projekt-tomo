@@ -12,8 +12,8 @@
 </div>
 <div class='col-md-2'>
     <h3 class='color5'>Učenci</h3>
-    {% for student in course.observed_students %}
-            {{ student.get_full_name }} <br>
+    {% for observed_student in course.observed_students %}
+            {{ observed_student.get_full_name }} <br>
     {% endfor %}
 </div>
 <div class='col-md-6'>

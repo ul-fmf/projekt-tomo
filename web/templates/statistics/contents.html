@@ -24,12 +24,16 @@
             <h3 class='color5'>Kazalo</h3>
             <a href='{% url "statistics_landing_page" course.pk %}'> Začetna stran <br>
             <a href='{% url "statistics_submission_history" course.pk %}'>Zgodovina oddaj </a> <br>
-            Placeholder 3 <br>
             <br>
             <br>
             </ul>
         </div>
-        {% block statistics_content %} {% endblock %}
+        {% block statistics_content %} 
+        <h3 class='color2'> Opis </h2>
+        <p> Na tej strani bodo orodja, ki bodo učitelju omogočala večji vpogled v uspešnost in napredek njegovih učencev. </p>
+        <p> Stran se bom tekom časa še dopoljnevala z funkcionalnostmi. V načrtu je več različnih grafov agregiranih po razredu/skupinah/učencu,
+        orodje, ki bo omogočalo lep in pregleden način za ugotavljanje plagiatorstva dveh rešitev itd. </p>
+        {% endblock %}
     </div>
   </div>
 </div>

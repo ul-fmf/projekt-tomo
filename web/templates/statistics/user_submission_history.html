@@ -16,11 +16,11 @@
 </div>
 <div class='col-md-2'>
     <h3 class='color5'>Učenci</h3>
-    {% for student in course.observed_students %}
-        {% if student == user %}
-            <a class='color2' href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+    {% for observed_student in course.observed_students %}
+        {% if observed_student == student %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk observed_student.pk %}">{{ observed_student.get_full_name }}</a> <br>
         {% else %}
-            <a href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk student.pk %}">{{ student.get_full_name }}</a> <br>
+            <a href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk observed_student.pk %}">{{ observed_student.get_full_name }}</a> <br>
         {% endif %}
     {% endfor %}
 </div>
