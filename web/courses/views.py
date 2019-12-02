@@ -91,6 +91,7 @@ def problem_set_detail(request, problem_set_pk):
         'valid_parts_ids': valid_parts_ids,
         'invalid_parts_ids': invalid_parts_ids,
         'show_teacher_forms': request.user.can_edit_problem_set(problem_set),
+        'student_statistics': problem_set.student_statistics(),
     })
 
 
@@ -103,7 +104,10 @@ def course_detail(request, course_pk):
         students = course.student_success()
     else:
         students = []
-    course.annotate_for_user(request.user)
+
+    course.prepare_annotated_problem_sets(request.user)
+    course.annotate(request.user)
+
     return render(request, 'courses/course_detail.html', {
         'course': course,
         'students': students,
@@ -146,11 +150,12 @@ def homepage(request):
     """Show a list of all problems in a problem set."""
     user_courses = []
     not_user_courses = []
-    for course in Course.objects.all().prefetch_related('students', 'teachers'):
+    for course in Course.objects.order_by('institution__name').select_related('institution').prefetch_related('students', 'teachers'):
         if request.user.is_favourite_course(course):
             user_courses.append(course)
-            course.annotate_for_user(request.user)
+            course.prepare_annotated_problem_sets(request.user)
             course.annotated_problem_sets = [course for course in course.annotated_problem_sets if course.visible][-1:-4:-1]
+            course.annotate(request.user)
         else:
             not_user_courses.append(course)
     return render(request, 'homepage.html', {
@@ -276,7 +281,7 @@ def course_groups(request, course_pk):
     verify(request.user.can_view_course_groups(course))
 
     return render(
-        request, 
+        request,
         "courses/course_groups.html",
         {
             "course" : course,
@@ -296,7 +301,7 @@ class CourseGroupForm(forms.ModelForm):
         widgets = {
             'students' : forms.CheckboxSelectMultiple()
         }
-    
+
     def __init__(self, course_pk=None, *args, **kwargs):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
         # If the course is given, we can filter the students queryset and only show those enrolled in the course
@@ -346,7 +351,7 @@ def course_groups_update(request, group_pk):
 @login_required
 def course_groups_confirm_delete(request, group_pk):
     """
-    This view will serve a modal window to tell the user if he is sure he wants to 
+    This view will serve a modal window to tell the user if he is sure he wants to
     delete this group.
     """
 
@@ -362,7 +367,7 @@ def course_groups_delete(request, group_pk):
     course_pk = group.course.pk
     course = get_object_or_404(Course, id=course_pk)
     verify(request.user.can_delete_course_groups(course))
-    
+
     group.delete()
 
     return redirect('course_groups', course_pk=course_pk)

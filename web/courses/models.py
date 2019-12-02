@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
@@ -10,12 +11,19 @@ from problems.models import Part
 from copy import deepcopy
 
 
+class Institution(models.Model):
+    name = models.CharField(max_length=140)
+
+    def __str__(self):
+        return self.name
+
+
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     students = models.ManyToManyField(User, blank=True, related_name='courses', through='StudentEnrollment')
     teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
-    institution = models.CharField(max_length=140)
+    institution = models.ForeignKey(Institution, related_name='institution')
     tags = TaggableManager(blank=True)
 
     class Meta:
@@ -56,17 +64,79 @@ class Course(models.Model):
             sorted_attempts.append((problem_set, problem_set_attempts, prob_set_valid, prob_set_invalid, prob_set_empty))
         return sorted_attempts
 
-    def annotate_for_user(self, user):
+    def prepare_annotated_problem_sets(self, user):
         self.is_taught = user.can_edit_course(self)
         self.is_favourite = user.is_favourite_course(self)
         self.annotated_problem_sets = []
         for problem_set in self.problem_sets.all():
             if user.can_view_problem_set(problem_set):
-                problem_set.percentage = problem_set.valid_percentage(user)
-                if problem_set.percentage is None:
-                    problem_set.percentage = 0
-                problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
                 self.annotated_problem_sets.append(problem_set)
+
+    def annotate(self, user):
+        if self.is_taught:
+            self.annotate_for_teacher()
+        else:
+            self.annotate_for_user(user)
+
+    def annotate_for_user(self, user):
+        for problem_set in self.annotated_problem_sets:
+            problem_set.percentage = problem_set.valid_percentage(user)
+            if problem_set.percentage is None:
+                problem_set.percentage = 0
+            problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+
+    def annotate_for_teacher(self):
+        students = self.observed_students()
+        student_count = len(students)
+
+        part_sets = Part.objects.filter(problem__problem_set__in=self.annotated_problem_sets)
+        parts_count = part_sets.values('problem__problem_set_id').annotate(count=Count('problem__problem_set_id')).order_by('count')
+        parts_dict = {}
+        for part in parts_count:
+            problem_set_id = part['problem__problem_set_id']
+            parts_dict[problem_set_id] = part['count']
+
+        attempts_full = Attempt.objects.filter(user__in=students,
+                                          part__problem__problem_set__in=self.annotated_problem_sets)
+        attempts = attempts_full.values('valid', 'part__problem__problem_set_id')
+        attempts_dict = {}
+        for attempt in attempts:
+            problem_set_id = attempt['part__problem__problem_set_id']
+            if problem_set_id in attempts_dict:
+                attempts_dict[problem_set_id]['submitted_count'] += 1
+                attempts_dict[problem_set_id]['valid_count'] += 1 if attempt['valid'] else 0
+            else:
+                attempts_dict[problem_set_id] = {
+                    'submitted_count': 1,
+                    'valid_count': 1 if attempt['valid'] else 0
+                }
+
+        for problem_set in self.annotated_problem_sets:
+            part_count = parts_dict[problem_set.id] if problem_set.id in parts_dict else 0
+
+            if problem_set.id in attempts_dict:
+                submitted_count = attempts_dict[problem_set.id]['submitted_count']
+                valid_count = attempts_dict[problem_set.id]['valid_count']
+            else:
+                submitted_count = 0
+                valid_count = 0
+
+            invalid_count = submitted_count - valid_count
+            total_count = student_count * part_count
+
+            if total_count:
+                valid_percentage = int(100.0 * valid_count / total_count)
+                invalid_percentage = int(100.0 * invalid_count / total_count)
+            else:
+                valid_percentage = 0
+                invalid_percentage = 0
+
+            empty_percentage = 100 - valid_percentage - invalid_percentage
+
+            problem_set.valid = valid_percentage
+            problem_set.invalid = invalid_percentage
+            problem_set.empty = empty_percentage
+            problem_set.grade = min(5, int(valid_percentage / 20) + 1)
 
     def enroll_student(self, user):
         enrollment = StudentEnrollment(course=self, user=user)
@@ -97,7 +167,6 @@ class Course(models.Model):
         problem_sets = self.problem_sets.filter(visible=True)
         part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
         attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
-        from django.db.models import Count
         valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
         all_attempts = attempts.values('user').annotate(Count('user'))
         def to_dict(attempts):
@@ -139,7 +208,7 @@ class Course(models.Model):
             }
         }
         """
-        
+
         students = self.observed_students()
         student_success_by_problemset = {student :  {} for student in students}
         student_solve_rate_by_problemset = {student : {} for student in students}
@@ -149,7 +218,7 @@ class Course(models.Model):
             for problem in problem_set.problems.all():
                 for part in problem.parts.all():
                     different_subtasks += 1
-            
+
             # In case there are no parts, we do not want to divide by 0
             if different_subtasks == 0:
                 different_subtasks = 1
@@ -173,11 +242,11 @@ class Course(models.Model):
                 }
 
         return student_solve_rate_by_problemset
-    
+
     def student_success_by_problemset_grouped_by_groups(self):
         """
         Function does the same as student_success_by_problem_set except that it groups students that are in the same group.
-        Therefore we get a dictionary that will be easier to use inside a django template. An 
+        Therefore we get a dictionary that will be easier to use inside a django template. An
         alternative would be to create django templatetags app and define filters with which we could
         access dictionary keys inside django templates.
 
@@ -204,7 +273,7 @@ class Course(models.Model):
             student_sucess_by_groups[group] = {}
             for student in group.students.all():
                 student_sucess_by_groups[group][student] = student_success[student]
-        
+
         return student_sucess_by_groups
 
 
@@ -265,32 +334,6 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def __str__(self):
         return self.title
-
-    def student_success(self):
-        students = self.course.observed_students()
-        student_count = len(students)
-        attempts = Attempt.objects.filter(user__in=students,
-                                          part__problem__problem_set=self)
-        submitted_count = attempts.count()
-        valid_count = attempts.filter(valid=True).count()
-        part_count = Part.objects.filter(problem__problem_set=self).count()
-        invalid_count = submitted_count - valid_count
-        total_count = student_count * part_count
-
-        if total_count:
-            valid_percentage = int(100.0 * valid_count / total_count)
-            invalid_percentage = int(100.0 * invalid_count / total_count)
-        else:
-            valid_percentage = 0
-            invalid_percentage = 0
-
-        empty_percentage = 100 - valid_percentage - invalid_percentage
-        return {
-            'valid': valid_percentage,
-            'invalid': invalid_percentage,
-            'empty': empty_percentage,
-            'grade': min(5, int(valid_percentage / 20) + 1)
-        }
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
@@ -372,6 +415,55 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         })
         files.append((spreadsheet_filename, spreadsheet_contents))
         return archive_name, files
+
+
+    def student_statistics(self):
+        students = self.course.observed_students()
+        student_count = len(students)
+
+        attempts = Attempt.objects.filter(part__problem__problem_set=self,
+                                          user__in=students).values('part_id', 'valid')
+        attempts_dict = {}
+        for attempt in attempts:
+            part_id = attempt['part_id']
+            if part_id in attempts_dict:
+                attempts_dict[part_id]['valid_count'] += 1 if attempt['valid'] else 0
+                attempts_dict[part_id]['submitted_count'] += 1
+            else:
+                attempts_dict[part_id] = {
+                    'submitted_count': 1,
+                    'valid_count': 1 if attempt['valid'] else 0,
+                }
+
+        statistics = []
+        for problem in self.problems.all():
+            parts = []
+            for part in problem.parts.all():
+                if part.id in attempts_dict:
+                    submitted_count = attempts_dict[part.id]['submitted_count']
+                    valid_count = attempts_dict[part.id]['valid_count']
+                else:
+                    submitted_count = 0
+                    valid_count = 0
+
+                invalid_count = submitted_count - valid_count
+                empty_count = student_count - valid_count - invalid_count
+
+                parts.append({
+                    'anchor': part.anchor(),
+                    'pk': part.pk,
+                    'valid': valid_count,
+                    'invalid': invalid_count,
+                    'empty': empty_count,
+                })
+            statistics.append({
+                'anchor': problem.anchor(),
+                'title': problem.title,
+                'pk': problem.pk,
+                'parts': parts,
+            })
+        return statistics
+
 
     def valid_percentage(self, user):
         '''
