@@ -25,7 +25,11 @@
         <div class="row">
             <div class="col-md-2 nav">
             {% for problem_part in part.problem.parts.all %}
-                <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}"> {{ forloop.counter }}. podnaloga </a> <br>
+                {% if problem_part.pk == part.pk %}
+                    <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}" class='color2'> {{ forloop.counter }}. podnaloga </a> <br>
+                {% else%}
+                    <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}"> {{ forloop.counter }}. podnaloga </a> <br>
+                {% endif %}
             {% endfor %}
             </div>
             <div class="col-md-7">
