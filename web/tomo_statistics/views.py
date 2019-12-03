@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 
+from problems.models import Part
 from courses.models import Course, ProblemSet
 from attempts.models import HistoricalAttempt
 from users.models import User
 from utils import verify
 from tomo_statistics.statistics_utils import (get_submission_history, 
-    get_problem_solve_state_at_time
+    get_problem_solve_state_at_time, append_time_differences_between_attempts
     )
 
 @login_required
@@ -33,9 +34,9 @@ def course_submission_history_problemset(request, course_pk, problemset_pk):
                 })
 
 @login_required
-def course_user_submission_history_problemset(request, course_pk, problemset_pk, user_pk):
+def course_user_submission_history_problemset(request, course_pk, problemset_pk, student_pk):
     course = get_object_or_404(Course, pk=course_pk)
-    student = get_object_or_404(User, pk=user_pk)
+    student = get_object_or_404(User, pk=student_pk)
     problemset = get_object_or_404(ProblemSet, pk=problemset_pk)
     verify(request.user.can_view_course_statistics(course))
     user_history = get_submission_history(problemset, student)
@@ -63,7 +64,30 @@ def user_problem_solution_at_time(request, historical_attempt_pk):
                     "problem" : problem,
                     "student" : student,
                     "parts" : problem_state,
+                    "course" : course,
+                    "show_teacher_forms" : request.user.can_view_course_statistics(course)
                  })
+
+@login_required
+def user_problem_solution_through_time(request, student_pk, part_pk):
+    student = get_object_or_404(User, pk=student_pk)
+    part = get_object_or_404(Part, pk=part_pk)
+    course = part.problem.problem_set.course
+    user_part_attempts = list(HistoricalAttempt.objects.filter(part=part, user=student).reverse())
+    modified_attempts = append_time_differences_between_attempts(user_part_attempts)
+
+    verify(request.user.can_view_course_statistics(course))
+    return render(
+        request,
+        "statistics/user_problem_part_solution_history.html",
+        {
+            "student" : student,
+            "part" : part,
+            "course" : course,
+            "user_part_attempts" : modified_attempts
+        }
+
+    )
 
 
 

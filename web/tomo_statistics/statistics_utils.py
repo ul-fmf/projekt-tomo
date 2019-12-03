@@ -27,9 +27,10 @@ def problem_timeline(problem, submissions):
 
     sorted_attempts = []
     for attempt in submissions:
-        sorted_attempts.append((attempt.submission_date, attempt))
+        sorted_attempts.append((attempt.history_date, attempt))
     
-    sorted_attempts.sort()
+    # Since historicalattempts dont have "<" defined
+    sorted_attempts.sort(key=lambda x : x[0])
 
     timeline = []
     parts_list = list(problem.parts.all())
@@ -102,7 +103,7 @@ def get_problem_solve_state_at_time(historical_attempt):
 
     problem = historical_attempt.part.problem
     user = historical_attempt.user
-    point_in_time = historical_attempt.submission_date
+    point_in_time = historical_attempt.history_date
     parts = problem.parts.all()
 
     for part in parts:
@@ -110,10 +111,53 @@ def get_problem_solve_state_at_time(historical_attempt):
             user_attempt = HistoricalAttempt.objects.filter(
                 user=user,
                 part=part,
-                submission_date__lte=point_in_time
-            ).latest('submission_date')
+                history_date__lte=point_in_time + datetime.timedelta(seconds=5)
+                # In timeline we group solutions that are within 5 seconds of eachother. Therefore we need to add those 5 
+                # seconds here, in order to get the correct solution state of all problem parts.
+            ).latest('history_date')
             part.attempt = user_attempt
         except:
             part.attempt = None
 
     return parts
+
+def append_time_differences_between_attempts(attempts):
+    """
+    Function that will receive (sorted) list of (historical) attempts and to each atttempt add a temporary
+    field "time_difference" - the time difference since users last attempt and a message that we will use
+    in the user_solution_history view.
+    
+    if attempt_1 and attempt_2 are 2 consecutive attempts, then time difference is 
+    attempt_2.history_date - attempt_1.history_date (datetime.timedelta object)
+
+    The first attempt in the list gets "time_difference" set to datetime.timedelta(seconds=0).
+
+    The message will be either:
+        - "" for first attempt in the list
+        - > 60 minutes for attempts with time_differences more than 60 minutes
+        - {} minutes, {} seconds
+
+    Parameters:
+        attempts : list(Attempt)
+            list of (historical) attempts 
+    
+    Returns 
+        same list of attempts with field "time_difference" added
+    """
+
+    if len(attempts) == 0:
+        return attempts
+
+    attempts[0].time_difference = datetime.timedelta(seconds=0)
+    attempts[0].time_difference_message = ""
+
+    for i in range(1, len(attempts)):
+        time_diff = attempts[i].history_date - attempts[i-1].history_date
+        attempts[i].time_difference = time_diff
+        minutes, seconds = (time_diff.seconds // 60) % 60, time_diff.seconds % 60
+        if time_diff > datetime.timedelta(minutes=60):
+            attempts[i].time_difference_message = "> 60 minut"
+        else:
+            attempts[i].time_difference_message = "minut : {}, sekund : {}".format(minutes, seconds)
+
+    return attempts
