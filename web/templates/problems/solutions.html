@@ -35,7 +35,11 @@
             {% for part in parts %}
             <li class="list-group-item">
               {# Translators: in solution comparison table #}
-              <p>{{ forloop.counter }}. {% trans 'part' %}</p>
+              {% if is_teacher and part.attempt %}
+                <a href="{% url 'user_problem_solution_through_time' student.pk part.pk %}"><p>{{ forloop.counter }}. {% trans 'part' %}</p> </a>
+              {% else %}
+                <p>{{ forloop.counter }}. {% trans 'part' %}</p>
+              {% endif %}
               <div class="row">
                 <div class="col-xs-12 col-sm-6">
                   <div class="tomo-solution-user">
