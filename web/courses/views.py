@@ -372,13 +372,3 @@ def course_groups_delete(request, group_pk):
 
     return redirect('course_groups', course_pk=course_pk)
 
-
-##################################################################################################
-# Statistics related views
-
-@login_required
-def course_statistics(request, course_pk):
-    course = get_object_or_404(Course, pk=course_pk)
-    verify(request.user.can_view_course_statistics(course))
-    return render(request, 'statistics/statistics_contents.html', {'course' : course})
-
