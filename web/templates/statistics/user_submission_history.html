@@ -1,6 +1,7 @@
 {% extends 'statistics/contents.html' %}
+{% load staticfiles %}
 
-{% block statistics_section_name %}- zgodovina oddaj {% endblock %}
+{% block statistics_section_name %}-> zgodovina oddaj {% endblock %}
 
 {% block statistics_content %}
 
@@ -27,7 +28,15 @@
 <div class='col-md-6' style="height: 100vh; overflow:auto">
 <br>
 {% for problem, timeline in history.items %}
-    {{ problem.title }} <br>
+    <div class='col-md-5'>
+        {{ problem.title }}
+    </div>
+    <div class='col-md-7'> &nbsp;
+    {% for part in problem.parts.all %}
+        <a href="{% url 'user_problem_solution_through_time' student.pk part.pk %}"> <i class="fa fa-arrow-down" aria-hidden="true"></i> </a>
+    {% endfor %}
+    </div>
+    <br>
     <div class=row>
         <div class='col-md-2'>
         </div>
