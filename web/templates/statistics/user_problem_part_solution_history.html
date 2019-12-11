@@ -24,6 +24,7 @@
         <h3> {{ part.problem.title}} - uporabnik {{ student.get_full_name }}</h3>
         <div class="row">
             <div class="col-md-2 nav">
+            <h5>Naloge</h5>
             {% for problem_part in part.problem.parts.all %}
                 {% if problem_part.pk == part.pk %}
                     <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}" class='color2'> {{ forloop.counter }}. podnaloga </a> <br>
@@ -33,7 +34,7 @@
             {% endfor %}
             </div>
             <div class="col-md-7">
-                <ul class="list-group" style="height: 100vh; overflow:auto">
+                <ul class="list-group">
                     {% for attempt in user_part_attempts %}
                         <li class="list-group-item" id="attempt-{{ attempt.pk }}">
                             <div class="tomo-solution-valid">
