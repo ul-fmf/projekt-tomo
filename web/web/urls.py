@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^api/mobile-app-token/', mobile_app_token, name='mobile_app_token'),
     url(r'^api/', include(router.urls)),
     url(r'^problems/', include('problems.urls')),
+    url(r'^statistics/', include('tomo_statistics.urls'))
 ]
 
 urlpatterns += courses.urls.urlpatterns

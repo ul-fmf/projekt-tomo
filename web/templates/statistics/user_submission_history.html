@@ -1,0 +1,64 @@
+{% extends 'statistics/contents.html' %}
+{% load staticfiles %}
+
+{% block statistics_content %}
+
+<div class='col-md-2'>
+    <h3 class='color5'>Sklopi nalog</h3>
+    {% for problem_set in course.problem_sets.all %}
+        {% if problem_set == problemset %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% else %}
+            <a href="{% url 'statistics_submission_history_problemset' course.pk problem_set.pk %}">{{ problem_set.title }}</a> <br>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class='col-md-2'>
+    <h3 class='color5'>Učenci</h3>
+    {% for observed_student in course.observed_students %}
+        {% if observed_student == student %}
+            <a class='color2' href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk observed_student.pk %}">{{ observed_student.get_full_name }}</a> <br>
+        {% else %}
+            <a href="{% url 'statistics_submission_history_problemset_user' course.pk problemset.pk observed_student.pk %}">{{ observed_student.get_full_name }}</a> <br>
+        {% endif %}
+    {% endfor %}
+</div>
+<div class='col-md-6' style="height: 100vh; overflow:auto">
+<br>
+{% for problem, timeline in history.items %}
+    <div class='col-md-5'>
+        {{ problem.title }}
+    </div>
+    <div class='col-md-7'> &nbsp;
+    {% for part in problem.parts.all %}
+        <a href="{% url 'user_problem_solution_through_time' student.pk part.pk %}"> <i class="fa fa-arrow-down"></i> </a>
+    {% endfor %}
+    </div>
+    <br>
+    <div class=row>
+        <div class='col-md-2'>
+        </div>
+        <div class='col-md-10'>
+            {% for time, state in timeline %}
+                {{ time }} : 
+                {% for attempt in state %}
+                    {% if attempt != None %}
+                        <a href="{% url 'user_problem_solution_at_time' attempt.pk %}">
+                            {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                            {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                            {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                            {% endif %} </a>
+                    {% else %}
+                        {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                        {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                        {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %} <br>
+            {% endfor %}
+            <br>
+        </div>
+    </div>
+{% endfor %}
+</div>
+{% endblock %} {# content #}

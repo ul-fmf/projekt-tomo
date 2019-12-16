@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block navigation-left %}
+  <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'statistics_landing_page' course.pk %}"> Pregled </a>
+  <a class="navbar-brand topnav" href="{% url 'statistics_submission_history_problemset_user' course.pk part.problem.problem_set.pk student.pk %}"> 
+  Zgodovina oddaj ({{ part.problem.problem_set.title }} - {{ student.get_full_name}})</a>
+  <a class="navbar-brand topnav" href="#">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "Skozi čas" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="content-section-a tomo-top-section">
+  <div class="container tomo-task-solutions">
+    <div class="tomo-task">
+        <h3> {{ part.problem.title}} - uporabnik {{ student.get_full_name }}</h3>
+        <div class="row">
+            <div class="col-md-2 nav">
+            <h5>Naloge</h5>
+            {% for problem_part in part.problem.parts.all %}
+                {% if problem_part.pk == part.pk %}
+                    <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}" class='color2'> {{ forloop.counter }}. podnaloga </a> <br>
+                {% else%}
+                    <a href="{% url 'user_problem_solution_through_time' student.pk problem_part.pk %}"> {{ forloop.counter }}. podnaloga </a> <br>
+                {% endif %}
+            {% endfor %}
+            </div>
+            <div class="col-md-7">
+                <ul class="list-group">
+                    {% for attempt in user_part_attempts %}
+                        <li class="list-group-item" id="attempt-{{ attempt.pk }}">
+                            <div class="tomo-solution-valid">
+                                {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                                {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                                {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                                {% endif %}
+                            </div>
+                            {{ attempt.history_date }} - <span class="color1">{{ attempt.time_difference_message }} </span> <br>
+                            <div class="row">
+                                <div class="row-height">
+                                    <div class="col-xs-12 col-sm-height">
+                                        <div class="tomo-pre">{{ attempt.solution }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3" id="rightCol">
+                 <div class="nav" id="sidebar">
+                    <h5 class="color2"> Vsi časi oddaj </h5>
+                    {% for attempt in user_part_attempts %}
+                        <a href="#attempt-{{ attempt.pk }}"> {{ attempt.history_date}} </a> <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script src="{% static 'js/sidebar.js' %}"></script>
+{% endblock extra_js %}

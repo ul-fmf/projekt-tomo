@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block navigation-left %}
+  <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'statistics_landing_page' course.pk %}"> Pregled </a>
+  <a class="navbar-brand topnav" href="{% url 'statistics_submission_history_problemset_user' course.pk problem.problem_set.pk student.pk %}"> 
+  Zgodovina oddaj ({{problem.problem_set.title}} - {{ student.get_full_name}})</a>
+  <a class="navbar-brand topnav" href="#">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "Stanje oddaj" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+  </a>
+{% endblock %}
+
+{% block content %}
+<div class="content-section-a tomo-top-section">
+  <div class="container tomo-task-solutions">
+    <div class="tomo-task">
+      <h3>{{ problem.title }} - stanje oddaj za učenca {{ student.get_full_name }} ob času <span class='color1'> {{ historical_attempt.history_date }}</span></h3>
+      {% if problem_set.description and problem_set.description.strip %}
+      {{ problem_set.description|latex_markdown }}
+      {% endif %}
+
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+            {% for part in parts %}
+            <li class="list-group-item">
+              {# Translators: in solution comparison table #}
+              {% if show_teacher_forms %}
+                <a href="{% url 'user_problem_solution_through_time' student.pk part.pk %}"><p>{{ forloop.counter }}. {% trans 'part' %}</p> </a>
+              {% else %}
+                <p>{{ forloop.counter }}. {% trans 'part' %}</p>
+              {% endif %}
+              <div class="row">
+                <div class="row-height">
+                  <div class="col-xs-12 col-sm-6 col-sm-height">
+                    <div class="tomo-solution-user">
+                      <div class="tomo-solution-valid">
+                        {% if part.attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                        {% elif part.attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                        {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                        {% endif %}
+                      </div>
+                      {# Translators: Title of user solutions column. #}
+                      {% trans 'Your solution' %} 
+                    </div>
+                    <div class="inside inside-full-height">
+                      <div class="content">
+                        <div class="tomo-solution-code-user">
+                          {% if part.attempt %}
+                          {% trans 'Last submission time:' %} {{ part.attempt.history_date }}
+                          <div class="tomo-pre">{{ part.attempt.solution }}</div>
+                          {% else %}
+                          {# Translators: in solution comparison table #}
+                          <div class="tomo-message">{% trans 'You did not attempt to solve this part.' %}</div>
+                          {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="col-xs-12 col-sm-6 col-sm-height">
+                  <div class="tomo-solution-official">
+                    {# Translators: Title of official solutions column. #}
+                    {% trans 'Official solution' %}
+                  </div>
+                  <div class="inside inside-full-height">
+                    <div class="content">
+                      <div class="tomo-solution-code-official">
+                        {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
+                        <div class="tomo-pre">{{ part.solution }}</div>
+
+                        {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN or problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
+                        {# Translators: in solution comparison table #}
+                        <div class="tomo-message">{% trans 'Official solutions are hidden.' %}</div>
+
+                        {% elif problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE_WHEN_SOLVED %}
+                        {% if part.attempt.valid %}
+                        <div class="tomo-pre">{{ part.solution }}</div>
+                        {% else %}
+                        {# Translators: in solution comparison table #}
+                        <div class="tomo-message">{% trans 'Official solution will be visible once you submit a valid solution.' %}</div>
+                        {% endif %}
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
