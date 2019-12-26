@@ -21,8 +21,9 @@
         <div class="col-md-2">
             <ul class="nav nav-stacked" id="sidebar">
             <h3 class='color5'>Kazalo</h3>
-            <a href='{% url "statistics_landing_page" course.pk %}'> Začetna stran <br>
+            <a href='{% url "statistics_landing_page" course.pk %}'> Začetna stran </a> <br>
             <a href='{% url "statistics_submission_history" course.pk %}'>Zgodovina oddaj </a> <br>
+            <a href='{% url "compare_solutions" course.pk %}'> Primerjava rešitev </a> <br>
             <br>
             <br>
             </ul>

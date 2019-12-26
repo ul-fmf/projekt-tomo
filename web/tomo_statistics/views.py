@@ -1,4 +1,4 @@
-from attempts.models import HistoricalAttempt
+from attempts.models import Attempt, HistoricalAttempt
 from courses.models import Course, ProblemSet
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
@@ -102,3 +102,91 @@ def user_problem_solution_through_time(request, student_pk, part_pk):
             "user_part_attempts": modified_attempts,
         },
     )
+
+
+@login_required
+def compare_solutions(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    problem_set_pk = request.POST.get("problemSetSelect")
+    first_student_pk = request.POST.get("firstStudentSelect")
+    second_student_pk = request.POST.get("secondStudentSelect")
+    compare_type = request.POST.get("compare_type")
+
+    problem_set = (
+        get_object_or_404(ProblemSet, pk=problem_set_pk)
+        if problem_set_pk is not None
+        else None
+    )
+    first_student = (
+        get_object_or_404(User, pk=first_student_pk)
+        if first_student_pk is not None
+        else None
+    )
+    second_student = (
+        get_object_or_404(User, pk=second_student_pk)
+        if second_student_pk is not None
+        else None
+    )
+
+    if compare_type == "timeline":
+        attempts = (
+            HistoricalAttempt.objects.filter(
+                user__in=[first_student, second_student],
+                part__problem__problem_set=problem_set,
+            )
+            .order_by("history_date")
+            .prefetch_related("part", "part__problem")
+        )
+
+        return render(
+            request,
+            "statistics/compare_solutions_timeline.html",
+            {
+                "course": course,
+                "problem_set": problem_set,
+                "first_student": first_student,
+                "second_student": second_student,
+                "attempts": attempts,
+                "cmp_type": "timeline",
+            },
+        )
+
+    else:
+        attempts = Attempt.objects.filter(
+            part__problem__problem_set=problem_set,
+            user__in=[first_student, second_student],
+        )
+
+        problems = None
+
+        if problem_set is not None:
+            problems = {
+                problem: problem.parts.all() for problem in problem_set.problems.all()
+            }
+            for problem in problems:
+                for part in problems[problem]:
+                    try:
+                        part.attempt_student1 = attempts.get(
+                            user=first_student, part=part
+                        )
+                    except:
+                        part.attempt_student1 = None
+                    try:
+                        part.attempt_student2 = attempts.get(
+                            user=second_student, part=part
+                        )
+                    except:
+                        part.attempt_student2 = None
+
+        return render(
+            request,
+            "statistics/compare_solutions_problems.html",
+            {
+                "course": course,
+                "problem_set": problem_set,
+                "problems": problems,
+                "first_student": first_student,
+                "second_student": second_student,
+                "cmp_type": "problems",
+            },
+        )

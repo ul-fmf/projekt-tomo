@@ -29,4 +29,5 @@ urlpatterns = [
         views.user_problem_solution_through_time,
         name="user_problem_solution_through_time",
     ),
+    path("<int:course_pk>/compare", views.compare_solutions, name="compare_solutions"),
 ]
