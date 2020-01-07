@@ -107,6 +107,7 @@ def user_problem_solution_through_time(request, student_pk, part_pk):
 @login_required
 def compare_solutions(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
+    verify(request.user.can_view_course_statistics(course))
     problem_set_pk = request.POST.get("problemSetSelect")
     first_student_pk = request.POST.get("firstStudentSelect")
     second_student_pk = request.POST.get("secondStudentSelect")
