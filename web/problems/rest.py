@@ -1,5 +1,5 @@
 from django.db import transaction
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework.serializers import ModelSerializer
 from rest_framework import decorators, status
 from rest_framework.response import Response
@@ -31,7 +31,7 @@ class ProblemSerializer(ModelSerializer):
         fields = '__all__'
 
 
-class ProblemViewSet(ModelViewSet, DownloadMixin):
+class ProblemViewSet(GenericViewSet, DownloadMixin):
     """
     A viewset for viewing and editing Problem instances.
     """
