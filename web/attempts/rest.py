@@ -4,7 +4,7 @@ from rest_framework import validators, decorators, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer, Field, CharField
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from utils.rest import JSONStringField
 from .models import Attempt
 from django.core import signing
@@ -65,7 +65,7 @@ class AttemptSerializer(ModelSerializer):
         return super(AttemptSerializer, self).update(instance, validated_data)
 
 
-class AttemptViewSet(ModelViewSet):
+class AttemptViewSet(GenericViewSet):
     """
     A viewset for viewing and editing Attempt instances.
     """

@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from problems.rest import ProblemSerializer
 from utils.rest import DownloadMixin
 from .models import Course, ProblemSet
@@ -45,7 +45,7 @@ class CourseSerializer(ModelSerializer):
         fields = ('id', 'title', 'problem_sets')
 
 
-class ProblemSetViewSet(ModelViewSet, DownloadMixin):
+class ProblemSetViewSet(GenericViewSet, DownloadMixin):
     """
     A viewset for serializing/deserializing ProblemSet instances.
     """
@@ -53,7 +53,7 @@ class ProblemSetViewSet(ModelViewSet, DownloadMixin):
     queryset = ProblemSet.objects.all()
 
 
-class CourseViewSet(ModelViewSet, DownloadMixin):
+class CourseViewSet(GenericViewSet, DownloadMixin):
     """
     A viewset for serializing/deserializing Course instances.
     """
