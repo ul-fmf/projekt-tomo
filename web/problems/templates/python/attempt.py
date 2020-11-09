@@ -256,7 +256,15 @@ def _validate_current_file():
         token = 'Token {{ authentication_token }}'
         response = submit_parts(Check.parts, url, token)
     except urllib.error.URLError:
-        print('PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE! Poskusite znova.')
+        message = ('\n'
+                   '-------------------------------------------------------------------\n'
+                   'PRI SHRANJEVANJU JE PRIŠLO DO NAPAKE!\n'
+                   'Preberite napako in poskusite znova ali se posvetujte z asistentom.\n'
+                   '-------------------------------------------------------------------\n')
+        print(message)
+        traceback.print_exc()
+        print(message)
+        sys.exit(1)
     else:
         print('Rešitve so shranjene.')
         update_attempts(Check.parts, response)
