@@ -1,5 +1,5 @@
 django-bootstrap3==7.0.1
-Django==1.9.5
+Django==2.2.24
 djangorestframework==3.3.3
 Markdown==2.6.6
 django-simple-history==1.8.1
