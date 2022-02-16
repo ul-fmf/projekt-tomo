@@ -4,6 +4,6 @@ djangorestframework~=3.6.3
 Markdown~=2.6.6
 django-simple-history~=1.8.1
 django-taggit~=0.18.1
-psycopg2-binary~=2.6
+psycopg2-binary==2.8.6
 social-auth-app-django~=3.1.0
 social-auth-core~=3.2.0

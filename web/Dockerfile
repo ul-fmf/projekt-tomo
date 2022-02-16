@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements/arnes.txt
 COPY . /src/
 RUN chown -R tomo /src
 USER tomo
-CMD ["uwsgi"]
+CMD ["/src/entrypoint.sh"]

@@ -29,7 +29,7 @@ services:
       - SOCIAL_AUTH_FACEBOOK_KEY
       - SOCIAL_AUTH_FACEBOOK_SECRET
       - STATIC_ROOT
-      - STATIC_URL
+      - STATIC_URL=${STATIC_URL}/
       - UWSGI_CHDIR=/src
       - UWSGI_MODULE=web.wsgi.arnes:application
       - UWSGI_MASTER=True
@@ -38,6 +38,6 @@ services:
       - UWSGI_MAX_REQUESTS=5000
       - UWSGI_UID=tomo
       - UWSGI_GID=tomo
-      - UWSGI_HTTP=:8080
+      - UWSGI_SOCKET=:8080
       - UWSGI_PLUGINS=python3
       - UWSGI_STATIC_MAP=${STATIC_URL}=${STATIC_ROOT}
