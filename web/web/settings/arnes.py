@@ -4,23 +4,23 @@ SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['www.projekt-tomo.si']
+ALLOWED_HOSTS = [os.environ['ALLOWED_HOSTS']]
 
 WSGI_APPLICATION = 'web.wsgi.arnes.application'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'tomo',
-        'USER': 'tomo',
-        'PASSWORD': 'tomo',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': 'db',
         'PORT': '',
     }
 }
 
-STATIC_ROOT = '/home/tomo/projekt-tomo/web/static'
-STATIC_URL = '/static/'
+STATIC_ROOT = os.environ['STATIC_ROOT']
+STATIC_URL = os.environ['STATIC_URL']
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,37 +1,43 @@
-version: '3'
+version: "3"
+   
 services:
-    db:
-        image: postgres:9.4
-        volumes:
-            - /srv/tomo-dbdata/:/var/lib/postgresql/data
-        environment:
-            - POSTGRES_USER=tomo
-            - POSTGRES_DB=tomo
-            - POSTGRES_PASSWORD=tomo
-
-    app:
-        image: matijapretnar/projekt-tomo
-        ports:
-            - "8080:8080"
-        links:
-            - db
-        environment:
-            - DJANGO_SETTINGS_MODULE=web.settings.arnes
-            - SECRET_KEY=TODO
-            - SOCIAL_AUTH_GOOGLE_OAUTH2_KEY=TODO
-            - SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=TODO
-            - SOCIAL_AUTH_FACEBOOK_KEY=TODO
-            - SOCIAL_AUTH_FACEBOOK_SECRET=TODO
-            - SOCIAL_AUTH_TWITTER_KEY=TODO
-            - SOCIAL_AUTH_TWITTER_SECRET=TODO
-            - UWSGI_CHDIR=/home/tomo/projekt-tomo/web
-            - UWSGI_MODULE=web.wsgi.arnes:application
-            - UWSGI_MASTER=True
-            - UWSGI_PIDFILE=/tmp/project-master.pid
-            - UWSGI_VACUUM=True
-            - UWSGI_MAX_REQUESTS=5000
-            - UWSGI_UID=tomo
-            - UWSGI_GID=tomo
-            - UWSGI_SOCKET=:8080
-            - UWSGI_PLUGINS=python3
-            - UWSGI_STATIC_MAP=/static=/home/tomo/projekt-tomo/web/static
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    restart: always
+    volumes:
+      - ${POSTGRES_DATA_PATH}:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+  web:
+    build: web
+    restart: always
+    ports:
+      - "${HTTP_PORT}:8080"
+    depends_on:
+      - db
+    environment:
+      - DJANGO_SETTINGS_MODULE
+      - ALLOWED_HOSTS
+      - SECRET_KEY
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - SOCIAL_AUTH_GOOGLE_OAUTH2_KEY
+      - SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+      - SOCIAL_AUTH_FACEBOOK_KEY
+      - SOCIAL_AUTH_FACEBOOK_SECRET
+      - STATIC_ROOT
+      - STATIC_URL
+      - UWSGI_CHDIR=/src
+      - UWSGI_MODULE=web.wsgi.arnes:application
+      - UWSGI_MASTER=True
+      - UWSGI_PIDFILE=/tmp/project-master.pid
+      - UWSGI_VACUUM=True
+      - UWSGI_MAX_REQUESTS=5000
+      - UWSGI_UID=tomo
+      - UWSGI_GID=tomo
+      - UWSGI_HTTP=:8080
+      - UWSGI_PLUGINS=python3
+      - UWSGI_STATIC_MAP=${STATIC_URL}=${STATIC_ROOT}

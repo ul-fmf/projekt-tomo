@@ -8,3 +8,5 @@
 debug.log
 .idea/
 venv/
+data/db
+.env
