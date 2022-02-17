@@ -218,7 +218,13 @@ def _validate_current_file():
             'content-type': 'application/json'
         }
         request = urllib.request.Request(url, data=data, headers=headers)
-        response = urllib.request.urlopen(request)
+        # This is a workaround because some clients (and not macOS ones!) report
+        # <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1129)>
+        import ssl
+        context = ssl._create_unverified_context()
+        response = urllib.request.urlopen(request, context=context)
+        # When the issue is resolved, the following should be used
+        # response = urllib.request.urlopen(request)
         return json.loads(response.read().decode('utf-8'))
 
     def update_attempts(old_parts, response):
