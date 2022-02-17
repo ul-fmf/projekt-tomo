@@ -19,8 +19,8 @@ DATABASES = {
     }
 }
 
-STATIC_ROOT = os.environ['STATIC_ROOT']
-STATIC_URL = os.environ['STATIC_URL']
+STATIC_ROOT = '/var/static/'
+STATIC_URL = '/static/'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

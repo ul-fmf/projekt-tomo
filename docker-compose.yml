@@ -13,6 +13,8 @@ services:
   web:
     build: web
     restart: always
+    volumes:
+      - ${STATIC_PATH}:/var/static
     ports:
       - "${HTTP_PORT}:8080"
     depends_on:
@@ -28,16 +30,3 @@ services:
       - SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
       - SOCIAL_AUTH_FACEBOOK_KEY
       - SOCIAL_AUTH_FACEBOOK_SECRET
-      - STATIC_ROOT
-      - STATIC_URL=${STATIC_URL}/
-      - UWSGI_CHDIR=/src
-      - UWSGI_MODULE=web.wsgi.arnes:application
-      - UWSGI_MASTER=True
-      - UWSGI_PIDFILE=/tmp/project-master.pid
-      - UWSGI_VACUUM=True
-      - UWSGI_MAX_REQUESTS=5000
-      - UWSGI_UID=tomo
-      - UWSGI_GID=tomo
-      - UWSGI_SOCKET=:8080
-      - UWSGI_PLUGINS=python3
-      - UWSGI_STATIC_MAP=${STATIC_URL}=${STATIC_ROOT}
