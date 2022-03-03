@@ -186,16 +186,22 @@ class Check:
         global_env = Check.init_environment(env=env, update_env=update_env)
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
+        too_many_read_requests = False
         try:
             exec(expression, global_env)
+        except EOFError:
+            too_many_read_requests = True
         finally:
             output = sys.stdout.getvalue().rstrip().splitlines()
             sys.stdout = old_stdout
         equal, diff, line_width = Check.difflines(output, content)
-        if equal:
+        if equal and not too_many_read_requests:
             return True
         else:
-            Check.error('Program izpiše{0}  namesto:\n  {1}', (line_width - 13) * ' ', '\n  '.join(diff))
+            if too_many_read_requests:
+                Check.error('Program ima pravilen izpis, a želi od uporabnika vnos, ko ta ni več potreben.')
+            if not equal:
+                Check.error('Program izpiše{0}  namesto:\n  {1}', (line_width - 13) * ' ', '\n  '.join(diff))
             return False
 
     @staticmethod
