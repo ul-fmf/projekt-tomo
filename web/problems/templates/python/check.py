@@ -199,7 +199,7 @@ class Check:
             return True
         else:
             if too_many_read_requests:
-                Check.error('Program ima pravilen izpis, a želi od uporabnika vnos, ko ta ni več potreben.')
+                Check.error('Program prevečkrat zahteva uporabnikov vnos.')
             if not equal:
                 Check.error('Program izpiše{0}  namesto:\n  {1}', (line_width - 13) * ' ', '\n  '.join(diff))
             return False
