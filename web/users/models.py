@@ -13,6 +13,16 @@ class User(AbstractUser):
         # In the forms, the __str__ method is used when showing model instances.
         return self.get_full_name()
 
+    def save(self, *args, **kwargs):
+        try:
+            self.first_name = bytearray(self.first_name, 'latin-1').decode('utf8')
+            self.last_name = bytearray(self.last_name, 'latin-1').decode('utf8')
+        except UnicodeEncodeError:
+            pass
+        except UnicodeDecodeError:
+            pass
+        super(User, self).save(*args, **kwargs)
+
     def uses_shibboleth(self):
         try:
             return self.backend == 'shibboleth.backends.ShibbolethRemoteUserBackend'
