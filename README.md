@@ -15,15 +15,15 @@ Ustvarimo virtual environment v ukazni vrstici, odprti v mapi projekta. Poskrbet
 ```
 python -m venv venv
 ```
-in ga aktiviramo (okolje Windows)
+in ga aktiviramo (okolje Linux)
+
+```
+source venv/bin/activate
+```
+ali za Windows
 
 ```
 .\venv\Scripts\activate
-```
-ali za Linux
-
-```
-source venv/scripts/activate
 ```
 Namestimo vse potrebne pakete vključno z Djangom
 
