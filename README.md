@@ -59,7 +59,8 @@ Namesto tega pa lahko neodvisno od okolja po vsakem ukazu dodamo še:
 --settings=web.settings.sqlite_local
 ```
 
-Ustvarimo tabele v podatkovni bazi
+Ustvarimo tabele v podatkovni bazi (od tukaj naprej stvari zaganjaš iz
+directory-ja web/)
 
 ```
 python manage.py migrate
