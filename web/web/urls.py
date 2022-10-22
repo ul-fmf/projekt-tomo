@@ -32,11 +32,11 @@ urlpatterns = [
             [
                 path(
                     r"login/",
-                    django.contrib.auth.views.login,
+                    django.contrib.auth.views.LoginView,
                     {"template_name": "login.html"},
                     name="login",
                 ),
-                path("logout/", django.contrib.auth.views.logout, name="logout"),
+                path("logout/", django.contrib.auth.views.LogoutView, name="logout"),
             ]
         ),
     ),
