@@ -2,7 +2,7 @@ from itertools import chain
 
 from courses.models import Course, ProblemSet
 from django.test import Client, TestCase
-from model_mommy import mommy
+from model_bakery import baker
 from django.urls import reverse
 from problems.models import Problem
 from users.models import User
@@ -14,14 +14,14 @@ class BasicViewsTestCase(TestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username="USER", password="PASS")
-        self.other_user = mommy.make("users.User")
-        self.course = mommy.make("courses.Course")
-        prob_set = mommy.make("courses.ProblemSet", course=self.course)
-        visible_prob_set = mommy.make(
+        self.other_user = baker.make("users.User")
+        self.course = baker.make("courses.Course")
+        prob_set = baker.make("courses.ProblemSet", course=self.course)
+        visible_prob_set = baker.make(
             "courses.ProblemSet", course=self.course, visible=True
         )
-        problem = mommy.make("problems.Problem", problem_set=prob_set)
-        visible_problem = mommy.make("problems.Problem", problem_set=visible_prob_set)
+        problem = baker.make("problems.Problem", problem_set=prob_set)
+        visible_problem = baker.make("problems.Problem", problem_set=visible_prob_set)
         self.views = {
             "public": [
                 ("login", dict()),

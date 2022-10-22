@@ -1,12 +1,12 @@
 django-bootstrap3~=12.0.0
-Django~=3.1.0
+Django~=3.2.0
 djangorestframework~=3.14.0
 Markdown~=2.6.6
 django-simple-history~=2.12.0
 django-taggit~=1.4.0
-social-auth-app-django~=2.1.0
+social-auth-app-django~=5.0.0
 django-nose~=1.4
 coverage~=3.7.1
 django-silk~=4.1.0
-model-mommy~=2.0.0
+model-baker~=1.9.0
 numpy~=1.21.6

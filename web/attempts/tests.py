@@ -2,7 +2,7 @@ import json
 
 from courses.models import Course, ProblemSet
 from django.test import TestCase
-from model_mommy import mommy
+from model_bakery import baker
 from problems.models import Part, Problem
 from rest_framework.test import APIClient
 from users.models import User
@@ -12,16 +12,16 @@ from .models import Attempt
 
 class AttemptSubmitTestCase(TestCase):
     def setUp(self):
-        course = mommy.make("courses.Course")
-        problem_set = mommy.make("courses.ProblemSet", course=course, visible=True)
-        problem = mommy.make("problems.Problem", problem_set=problem_set)
-        self.part1 = mommy.make("problems.Part", problem=problem, secret='["1"]')
-        self.part2 = mommy.make("problems.Part", problem=problem, secret='["1", "2"]')
-        self.part3 = mommy.make(
+        course = baker.make("courses.Course")
+        problem_set = baker.make("courses.ProblemSet", course=course, visible=True)
+        problem = baker.make("problems.Problem", problem_set=problem_set)
+        self.part1 = baker.make("problems.Part", problem=problem, secret='["1"]')
+        self.part2 = baker.make("problems.Part", problem=problem, secret='["1", "2"]')
+        self.part3 = baker.make(
             "problems.Part", problem=problem, secret='["1", "2", "3"]'
         )
 
-        user = mommy.make("users.User")
+        user = baker.make("users.User")
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + user.auth_token.key)
 
