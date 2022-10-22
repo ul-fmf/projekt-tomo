@@ -7,8 +7,10 @@ from utils import is_json_string_list
 
 
 class Attempt(models.Model):
-    user = models.ForeignKey(User, related_name="attempts")
-    part = models.ForeignKey("problems.Part", related_name="attempts")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="attempts")
+    part = models.ForeignKey(
+        "problems.Part", on_delete=models.PROTECT, related_name="attempts"
+    )
     solution = models.TextField(blank=True)
     valid = models.BooleanField(default=False)
     feedback = models.TextField(default="[]", validators=[is_json_string_list])

@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
             model_name="problem",
             name="problem_set",
             field=models.ForeignKey(
-                related_name="problems", to="courses.ProblemSet", null=True
+                related_name="problems",
+                on_delete=models.PROTECT,
+                to="courses.ProblemSet",
+                null=True,
             ),
             preserve_default=True,
         ),

@@ -24,8 +24,16 @@ class Migration(migrations.Migration):
                         primary_key=True,
                     ),
                 ),
-                ("course", models.ForeignKey(to="courses.Course")),
-                ("user", models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                (
+                    "course",
+                    models.ForeignKey(on_delete=models.CASCADE, to="courses.Course"),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=models.CASCADE, to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
         ),
         migrations.AddField(

@@ -74,7 +74,11 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "course",
-                    models.ForeignKey(related_name="problem_sets", to="courses.Course"),
+                    models.ForeignKey(
+                        related_name="problem_sets",
+                        on_delete=models.PROTECT,
+                        to="courses.Course",
+                    ),
                 ),
             ],
             options={},

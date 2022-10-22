@@ -3,10 +3,10 @@ from copy import deepcopy
 
 from django.conf import settings
 from django.core import signing
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.urls import reverse
 from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
 from taggit.managers import TaggableManager
@@ -17,7 +17,9 @@ from utils.models import OrderWithRespectToMixin
 class Problem(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    problem_set = models.ForeignKey("courses.ProblemSet", related_name="problems")
+    problem_set = models.ForeignKey(
+        "courses.ProblemSet", on_delete=models.PROTECT, related_name="problems"
+    )
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
     language = models.CharField(
@@ -182,7 +184,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
 
 class Part(OrderWithRespectToMixin, models.Model):
-    problem = models.ForeignKey(Problem, related_name="parts")
+    problem = models.ForeignKey(Problem, on_delete=models.PROTECT, related_name="parts")
     description = models.TextField(blank=True)
     template = models.TextField(blank=True)
     solution = models.TextField(blank=True)

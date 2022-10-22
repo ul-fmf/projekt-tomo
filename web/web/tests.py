@@ -1,9 +1,9 @@
 from itertools import chain
 
 from courses.models import Course, ProblemSet
-from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
 from model_mommy import mommy
+from django.urls import reverse
 from problems.models import Problem
 from users.models import User
 

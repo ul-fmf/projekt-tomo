@@ -1,35 +1,35 @@
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 from .views import ProblemCreate, ProblemDelete, ProblemUpdate
 
 urlpatterns = [
-    url(
-        r"^(?P<problem_pk>\d+)/solutions/(?P<user_pk>\d+)$",
+    path(
+        "<int:problem_pk>/solutions/<int:user_pk>",
         views.problem_solution,
         name="problem_solution",
     ),
-    url(
-        r"^(?P<problem_pk>\d+)/download/$",
+    path(
+        "<int:problem_pk>/download/",
         views.problem_attempt_file,
         name="problem_attempt_file",
     ),
-    url(
-        r"^(?P<problem_pk>\d+)/edit/$",
+    path(
+        "<int:problem_pk>/edit/",
         views.problem_edit_file,
         name="problem_edit_file",
     ),
-    url(
-        r"^(?P<problem_pk>\d+)/move/(?P<shift>-?\d+)/$",
+    path(
+        "<int:problem_pk>/move/<int:shift>/",
         views.problem_move,
         name="problem_move",
     ),
-    url(r"^(?P<pk>\d+)/update/$", ProblemUpdate.as_view(), name="problem_update"),
-    url(
-        r"^create/(?P<problem_set_id>\d+)/$",
+    path("<int:pk>/update/", ProblemUpdate.as_view(), name="problem_update"),
+    path(
+        "create/<int:problem_set_id>/",
         ProblemCreate.as_view(),
         name="problem_create",
     ),
-    url(r"^(?P<pk>\d+)/delete/", ProblemDelete.as_view(), name="problem_delete"),
-    url(r"^(?P<problem_pk>\d+)/copy/", views.copy_form, name="problem_copy"),
+    path(r"<int:pk>/delete/", ProblemDelete.as_view(), name="problem_delete"),
+    path(r"<int:problem_pk>/copy/", views.copy_form, name="problem_copy"),
 ]

@@ -2,8 +2,8 @@ import json
 
 from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.urls import reverse
 from rest_framework import decorators, status, validators
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import PermissionDenied

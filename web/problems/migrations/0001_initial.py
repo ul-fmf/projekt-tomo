@@ -49,7 +49,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="part",
             name="problem",
-            field=models.ForeignKey(related_name="parts", to="problems.Problem"),
+            field=models.ForeignKey(
+                related_name="parts", on_delete=models.PROTECT, to="problems.Problem"
+            ),
             preserve_default=True,
         ),
         migrations.AlterOrderWithRespectTo(
