@@ -1,30 +1,30 @@
-from django.conf.urls import include, url
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    url("<int:course_pk>", views.course_statistics, name="statistics_landing_page"),
-    url(
+    path("<int:course_pk>", views.course_statistics, name="statistics_landing_page"),
+    path(
         "<int:course_pk>/submission_history",
         views.course_submission_history,
         name="statistics_submission_history",
     ),
-    url(
+    path(
         "<int:course_pk>/submission_history/<int:problemset_pk>",
         views.course_submission_history_problemset,
         name="statistics_submission_history_problemset",
     ),
-    url(
+    path(
         "<int:course_pk>/submission_history/<int:problemset_pk>/<int:student_pk>",
         views.course_user_submission_history_problemset,
         name="statistics_submission_history_problemset_user",
     ),
-    url(
+    path(
         "historical_attempt/<int:historical_attempt_pk>",
         views.user_problem_solution_at_time,
         name="user_problem_solution_at_time",
     ),
-    url(
+    path(
         "<int:student_pk>/<int:part_pk>",
         views.user_problem_solution_through_time,
         name="user_problem_solution_through_time",

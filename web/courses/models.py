@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Count
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from problems.models import Part
 from taggit.managers import TaggableManager
 from users.models import User
