@@ -76,8 +76,8 @@ class AttemptViewSet(GenericViewSet):
     serializer_class = AttemptSerializer
     queryset = Attempt.objects.all()
 
-    @decorators.list_route(
-        methods=["post"], authentication_classes=[TokenAuthentication]
+    @decorators.action(
+        detail=False, methods=["post"], authentication_classes=[TokenAuthentication]
     )
     @transaction.atomic
     def submit(self, request):

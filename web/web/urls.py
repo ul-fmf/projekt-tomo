@@ -12,10 +12,10 @@ from users.views import mobile_app_token
 from utils.views import help, privacy_policy, terms_of_service
 
 router = DefaultRouter()
-router.register(r"attempts", AttemptViewSet, base_name="attempts")
-router.register(r"problems", ProblemViewSet, base_name="problems")
-router.register(r"problem_sets", ProblemSetViewSet, base_name="problem_sets")
-router.register(r"courses", CourseViewSet, base_name="courses")
+router.register(r"attempts", AttemptViewSet, basename="attempts")
+router.register(r"problems", ProblemViewSet, basename="problems")
+router.register(r"problem_sets", ProblemSetViewSet, basename="problem_sets")
+router.register(r"courses", CourseViewSet, basename="courses")
 
 
 urlpatterns = [

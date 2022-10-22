@@ -1,7 +1,7 @@
 import json
 
 from django.utils.text import slugify
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import action
 from rest_framework.fields import Field
 from rest_framework.renderers import JSONRenderer
 
@@ -23,7 +23,7 @@ class JSONStringField(Field):
 
 
 class DownloadMixin(object):
-    @detail_route(methods=["get"])
+    @action(detail=True, methods=["get"])
     def download(self, request, pk=None):
         o = self.get_queryset().get(pk=pk)
         serializer = self.get_serializer(o)
