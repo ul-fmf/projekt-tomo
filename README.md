@@ -6,7 +6,7 @@ A web service for teaching programming.
 
 Za testiranje novih funkcionalnosti, si lahko na lastnem računalniku poženemo lokalno instanco strežnika za projekt-tomo.
 
-Strežnik za Projekt Tomo je aplikacija za [Django](https://www.djangoproject.com/), ki je razvojno ogrodje za spletne aplikacije v [Python-u](https://www.python.org/). Preden se lotite dela, si poglejte kaj malega o Djangu in Pythonu.
+Strežnik za Projekt Tomo je aplikacija za [Django](https://www.djangoproject.com/), ki je razvojno ogrodje za spletne aplikacije v [Python-u](https://www.python.org/). Trenutno ne dela na Python-u 3.8 ali novejše. Preden se lotite dela, si poglejte kaj malega o Djangu in Pythonu.
 
 ### Priprava okolja
 
@@ -49,7 +49,7 @@ Namesto tega pa lahko neodvisno od okolja po vsakem ukazu dodamo še:
 --settings=web.settings.sqlite_local
 ```
 
-Ustvarimo tabele v podatkovni bazi
+Ustvarimo tabele v podatkovni bazi (od tukaj naprej stvari zaganjaš iz directory-ja web/)
 
 ```
 python manage.py migrate
@@ -70,8 +70,9 @@ Lokalni strežnik poženemo z ukazom
 ```
 python manage.py runserver
 ```
+
 Ker je zaradi ArnesAAI specifičen login, je edini način za prijavo na [administratorskega vmesnika](http://localhost:8000/admin/), saj je po prijavi v administratorski vmesnik mogoče dostopati tudi na običajno stran.
 
-Predmete in uporabnike ustvarimo kar v [administratorskem vmesniku](http://localhost:8000/admin/), prav tako jim tam lahko dodelimo pravice. 
+Predmete in uporabnike ustvarimo kar v [administratorskem vmesniku](http://localhost:8000/admin/), prav tako jim tam lahko dodelimo pravice.
 
 Veselo testiranje!
