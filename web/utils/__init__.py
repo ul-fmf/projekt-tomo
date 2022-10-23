@@ -53,23 +53,23 @@ def indent(source, indent):
 #
 # We, however, want to bundle it with app, that is why we copy the code here.
 # We hope that the author does not mind.
-class MathJaxPattern(markdown.inlinepatterns.Pattern):
-    def __init__(self):
-        markdown.inlinepatterns.Pattern.__init__(self, r"(?<!\\)(\$\$?)(.+?)\2")
+# class MathJaxPattern(markdown.inlinepatterns.Pattern):
+#     def __init__(self):
+#         markdown.inlinepatterns.Pattern.__init__(self, r"(?<!\\)(\$\$?)(.+?)\2")
 
-    def handleMatch(self, m):
-        node = markdown.util.etree.Element("mathjax")
-        node.text = markdown.util.AtomicString(m.group(2) + m.group(3) + m.group(2))
-        return node
-
-
-class MathJaxExtension(markdown.Extension):
-    def extendMarkdown(self, md, md_globals):
-        # Needs to come before escape matching because \ is pretty important in LaTeX
-        md.inlinePatterns.add("mathjax", MathJaxPattern(), "<escape")
+#     def handleMatch(self, m):
+#         node = markdown.util.etree.Element("mathjax")
+#         node.text = markdown.util.AtomicString(m.group(2) + m.group(3) + m.group(2))
+#         return node
 
 
-md = markdown.Markdown(extensions=[MathJaxExtension()])
+# class MathJaxExtension(markdown.Extension):
+#     def extendMarkdown(self, md):
+#         # Needs to come before escape matching because \ is pretty important in LaTeX
+#         md.inlinePatterns.add("mathjax", MathJaxPattern(), "<escape")
+
+
+md = markdown.Markdown(extensions=[])
 
 
 @register.filter
