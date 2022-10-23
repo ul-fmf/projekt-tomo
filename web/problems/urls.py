@@ -20,7 +20,7 @@ urlpatterns = [
         name="problem_edit_file",
     ),
     path(
-        "<int:problem_pk>/move/<int:shift>/",
+        "<int:problem_pk>/move/<shift>/",
         views.problem_move,
         name="problem_move",
     ),
