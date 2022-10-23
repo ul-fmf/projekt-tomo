@@ -1,4 +1,4 @@
-FROM python:3.7
+FROM python:3
 ENV PYTHONUNBUFFERED=1
 WORKDIR /src
 RUN groupadd -g 1000 tomo && useradd -m -u 1000 -g tomo tomo -s /bin/bash
