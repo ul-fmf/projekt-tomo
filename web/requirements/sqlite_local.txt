@@ -5,7 +5,6 @@ Markdown~=3.4.1
 django-simple-history~=3.1.1
 django-taggit~=3.0.0
 social-auth-app-django~=5.0.0
-django-nose~=1.4.7
 coverage~=6.5.0
 django-silk~=5.0.1
 model-bakery~=1.9.0
