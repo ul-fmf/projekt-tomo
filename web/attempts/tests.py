@@ -2,6 +2,7 @@ import json
 
 from courses.models import Course, ProblemSet
 from django.test import TestCase
+from model_mommy import mommy
 from problems.models import Part, Problem
 from rest_framework.test import APIClient
 from users.models import User
@@ -11,17 +12,16 @@ from .models import Attempt
 
 class AttemptSubmitTestCase(TestCase):
     def setUp(self):
-        course = Course.objects.create()
-        problem_set = ProblemSet.objects.create(course=course)
-        problem = Problem.objects.create(problem_set=problem_set)
-        self.part1 = Part(problem=problem, secret='["1"]')
-        self.part1.save()
-        self.part2 = Part(problem=problem, secret='["1", "2"]')
-        self.part2.save()
-        self.part3 = Part(problem=problem, secret='["1", "2", "3"]')
-        self.part3.save()
+        course = mommy.make("courses.Course")
+        problem_set = mommy.make("courses.ProblemSet", course=course, visible=True)
+        problem = mommy.make("problems.Problem", problem_set=problem_set)
+        self.part1 = mommy.make("problems.Part", problem=problem, secret='["1"]')
+        self.part2 = mommy.make("problems.Part", problem=problem, secret='["1", "2"]')
+        self.part3 = mommy.make(
+            "problems.Part", problem=problem, secret='["1", "2", "3"]'
+        )
 
-        user = User.objects.create_user(username="matija")
+        user = mommy.make("users.User")
         self.client = APIClient()
         self.client.credentials(HTTP_AUTHORIZATION="Token " + user.auth_token.key)
 
@@ -32,6 +32,7 @@ class AttemptSubmitTestCase(TestCase):
                 "feedback": ["f1", "f2"],
                 "secret": [],
                 "part": self.part1.pk,
+                "token": self.part1.attempt_token(user),
             },
             {
                 "solution": "s2",
@@ -39,6 +40,7 @@ class AttemptSubmitTestCase(TestCase):
                 "feedback": ["Error"],
                 "secret": ["1"],
                 "part": self.part2.pk,
+                "token": self.part2.attempt_token(user),
             },
             {
                 "solution": "",
@@ -46,6 +48,7 @@ class AttemptSubmitTestCase(TestCase):
                 "feedback": [],
                 "secret": ["1", "2", "3"],
                 "part": self.part3.pk,
+                "token": self.part3.attempt_token(user),
             },
             {
                 "solution": "",
@@ -53,6 +56,7 @@ class AttemptSubmitTestCase(TestCase):
                 "feedback": [],
                 "secret": ["1", "4", "3"],
                 "part": self.part3.pk,
+                "token": self.part3.attempt_token(user),
             },
         ]
 
