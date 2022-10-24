@@ -6,10 +6,9 @@ from django.db import transaction
 from django.urls import reverse
 from rest_framework import decorators, status, validators
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.serializers import CharField, Field, ModelSerializer
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 from utils.rest import JSONStringField
 
 from .models import Attempt
@@ -121,7 +120,8 @@ class AttemptViewSet(GenericViewSet):
                 "wrong_indices": wrong_indices,
             }
             if not valid_tokens:
-                # if not all tokens were valid, invalidate all solutions and update the local file
+                # if not all tokens were valid, invalidate all solutions
+                # and update the local file
                 for attempt_data in data["attempts"]:
                     attempt_data["valid"] = False
                 # if the file is a recent one, trigger an update

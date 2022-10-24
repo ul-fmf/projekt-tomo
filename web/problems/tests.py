@@ -1,9 +1,6 @@
-from courses.models import Course, ProblemSet
 from django.test import TestCase
 from model_bakery import baker
 from problems.templates.python.check import Check
-
-from .models import Part, Problem
 
 
 class PartTestCase(TestCase):

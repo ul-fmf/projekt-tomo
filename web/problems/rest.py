@@ -3,7 +3,7 @@ from rest_framework import decorators, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 from utils.rest import DownloadMixin, JSONStringField
 
 from .models import Part, Problem
@@ -92,7 +92,8 @@ class ProblemViewSet(GenericViewSet, DownloadMixin):
         # Prepare custom sort order
         # Assign None to ids of not already created parts
         sort_order = [part.get("id", None) for part in parts_data]
-        # First save the problem instance, use partial since essential parts data is missing
+        # First save the problem instance,
+        # use partial since essential parts data is missing
         problem_serializer = ProblemSerializer(
             data=problem_data, instance=problem, partial=True
         )
@@ -109,7 +110,7 @@ class ProblemViewSet(GenericViewSet, DownloadMixin):
         # Insert ids of created tasks into sort order
         created_position = 0
         for i in range(len(sort_order)):
-            if sort_order[i] == None:
+            if sort_order[i] is None:
                 sort_order[i] = created_ids[created_position]
                 created_position += 1
         problem.set_part_order(sort_order)

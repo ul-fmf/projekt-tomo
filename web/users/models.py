@@ -26,7 +26,7 @@ class User(AbstractUser):
     def uses_shibboleth(self):
         try:
             return self.backend == "shibboleth.backends.ShibbolethRemoteUserBackend"
-        except:
+        except AttributeError:
             return False
 
     def is_teacher(self, course):

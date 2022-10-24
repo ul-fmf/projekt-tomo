@@ -16,7 +16,7 @@ def is_json_string_list(s):
     """
     try:
         val = json.loads(s)
-    except:
+    except (TypeError, json.decoder.JSONDecodeError):
         raise ValidationError("Not a JSON value.")
     if type(val) is not list:
         raise ValidationError("Not a JSON list.")

@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -322,8 +321,8 @@ def problem_set_results(request, problem_set_pk):
 @login_required
 def course_groups(request, course_pk):
     """
-    Main course groups view where we are able to see all current groups and their students,
-    update and delete existing groups and create new ones.
+    Main course groups view where we are able to see all current groups and their
+    students, update and delete existing groups and create new ones.
     """
 
     course = get_object_or_404(Course, pk=course_pk)
@@ -335,7 +334,7 @@ def course_groups(request, course_pk):
         {
             "course": course,
             "show_teacher_forms": request.user.can_create_course_groups(course),
-            # 'student_success' : course.student_success_by_problemset_grouped_by_groups()
+            # 'success' : course.student_success_by_problemset_grouped_by_groups()
         },
     )
 
@@ -351,7 +350,8 @@ class CourseGroupForm(forms.ModelForm):
 
     def __init__(self, course_pk=None, *args, **kwargs):
         super(CourseGroupForm, self).__init__(*args, **kwargs)
-        # If the course is given, we can filter the students queryset and only show those enrolled in the course
+        # If the course is given, we can filter the students queryset and only show
+        # those enrolled in the course
         if course_pk is not None:
             self.fields["students"].queryset = User.objects.filter(
                 studentenrollment__course__pk=course_pk,
@@ -375,7 +375,9 @@ def course_groups_create(request, course_pk):
                     Course, id=course_pk
                 )  # We get the course from the url
                 group.save()
-                form.save_m2m()  # We need to call this in order to save all the many to many instances (group, member)
+                # We need to call this in order to save all the
+                # many to many instances (group, member)
+                form.save_m2m()
                 return redirect("course_groups", course_pk=course_pk)
     else:
         form = CourseGroupForm(course_pk)

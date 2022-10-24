@@ -1,6 +1,6 @@
 from problems.rest import ProblemSerializer
 from rest_framework.serializers import ModelSerializer
-from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from rest_framework.viewsets import GenericViewSet
 from utils.rest import DownloadMixin
 
 from .models import Course, ProblemSet

@@ -1,8 +1,7 @@
 import datetime
 
 from attempts.models import HistoricalAttempt
-from courses.models import Course
-from users.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def problem_timeline(problem, submissions):
@@ -92,10 +91,11 @@ def get_submission_history(problemset, user):
 
 def get_problem_solve_state_at_time(historical_attempt):
     """
-    Function that will recreate the status of problems solution of particular user at a specific
-    point in time.
+    Function that will recreate the status of problems solution of particular user
+    at a specific point in time.
 
-    From historical_attempt object we are able to get both the problem and the user that attempted the problem.
+    From historical_attempt object we are able to get both the problem and the user
+    that attempted the problem.
 
     Parameters:
         historical_attempt : HistoricalAttempt instance
@@ -116,11 +116,12 @@ def get_problem_solve_state_at_time(historical_attempt):
                 user=user,
                 part=part,
                 history_date__lte=point_in_time + datetime.timedelta(seconds=5)
-                # In timeline we group solutions that are within 5 seconds of eachother. Therefore we need to add those 5
-                # seconds here, in order to get the correct solution state of all problem parts.
+                # In timeline we group solutions that are within 5 seconds of eachother.
+                # Therefore we need to add those 5 seconds here,
+                # in order to get the correct solution state of all problem parts.
             ).latest("history_date")
             part.attempt = user_attempt
-        except:
+        except ObjectDoesNotExist:
             part.attempt = None
 
     return parts
@@ -128,14 +129,15 @@ def get_problem_solve_state_at_time(historical_attempt):
 
 def append_time_differences_between_attempts(attempts):
     """
-    Function that will receive (sorted) list of (historical) attempts and to each atttempt add a temporary
-    field "time_difference" - the time difference since users last attempt and a message that we will use
-    in the user_solution_history view.
+    Function that will receive (sorted) list of (historical) attempts and to each
+    attempt add a temporary field "time_difference" - the time difference since users
+    last attempt and a message that we will use in the user_solution_history view.
 
     if attempt_1 and attempt_2 are 2 consecutive attempts, then time difference is
     attempt_2.history_date - attempt_1.history_date (datetime.timedelta object)
 
-    The first attempt in the list gets "time_difference" set to datetime.timedelta(seconds=0).
+    The first attempt in the list gets "time_difference" set to
+    datetime.timedelta(seconds=0).
 
     The message will be either:
         - "" for first attempt in the list

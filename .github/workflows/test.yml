@@ -9,7 +9,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: pip install -r web/requirements/sqlite_local.txt 
-      - run: pip install black isort
+      - run: pip install black isort flake8
       - run: python3 -m black .
       - run: python3 -m isort .
+      - run: flake8
       - run: cd web && python3 ./manage.py test --settings=web.settings.sqlite_local

@@ -1,0 +1,3 @@
+[flake8]
+exclude = migrations,web/problems/templates,web/web
+max-line-length = 88

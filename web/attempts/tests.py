@@ -1,11 +1,8 @@
 import json
 
-from courses.models import Course, ProblemSet
 from django.test import TestCase
 from model_bakery import baker
-from problems.models import Part, Problem
 from rest_framework.test import APIClient
-from users.models import User
 
 from .models import Attempt
 

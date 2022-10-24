@@ -229,9 +229,9 @@ class Course(models.Model):
 
     def student_success_by_problem_set(self):
         """
-        Function that will for each user calculate the solve rate for each problemset in the course. For example if the user
-        has solved 3 problem parts out of 10 problem parts in the problemset, then his solve rate for that problemset
-        would be 30%.
+        Function that will for each user calculate the solve rate for each problemset in
+        the course. For example if the user has solved 3 problem parts out of 10 problem
+        parts in the problemset, then his solve rate for that problemset would be 30%.
 
         Returns the dictionary of this form:
         {
@@ -288,10 +288,11 @@ class Course(models.Model):
 
     def student_success_by_problemset_grouped_by_groups(self):
         """
-        Function does the same as student_success_by_problem_set except that it groups students that are in the same group.
-        Therefore we get a dictionary that will be easier to use inside a django template. An
-        alternative would be to create django templatetags app and define filters with which we could
-        access dictionary keys inside django templates.
+        Function does the same as student_success_by_problem_set except that it groups
+        students that are in the same group. Therefore we get a dictionary that will be
+        easier to use inside a django template. An alternative would be to create django
+        templatetags app and define filters with which we could access dictionary keys
+        inside django templates.
 
         Returns a dictionary of the following form:
 
@@ -413,7 +414,6 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         return user_attempts
 
     def results_archive(self, user):
-        students = self.course.students.all()
         user_ids = set()
         attempt_dict = {}
         attempts = Attempt.objects.filter(part__problem__problem_set=self)
@@ -446,7 +446,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             extension = "py"
             filename = "{0}.{1}".format(problem_slug, extension)
             contents = render_to_string(
-                "history.py".format(extension),
+                "history.{0}".format(extension),
                 {
                     "history": history,
                 },

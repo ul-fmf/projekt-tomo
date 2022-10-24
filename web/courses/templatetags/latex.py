@@ -24,7 +24,7 @@ LIST = re.compile(r"((\n- .*)+)")
 
 def itemizer(matchobj):
     content = [
-        "  \item " + g + "\n" for g in matchobj.group(0).strip("\n- ").split("\n- ")
+        "  \\item " + g + "\n" for g in matchobj.group(0).strip("\n- ").split("\n- ")
     ]
     return "\\begin{itemize}\n%s\\end{itemize}" % "".join(content)
 

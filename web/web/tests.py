@@ -1,10 +1,8 @@
 from itertools import chain
 
-from courses.models import Course, ProblemSet
 from django.test import Client, TestCase
-from model_bakery import baker
 from django.urls import reverse
-from problems.models import Problem
+from model_bakery import baker
 from users.models import User
 
 

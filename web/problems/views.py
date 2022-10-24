@@ -1,5 +1,6 @@
 from courses.models import ProblemSet
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms import Form, IntegerField
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -149,7 +150,7 @@ def problem_solution(request, problem_pk, user_pk):
     for part in parts:
         try:
             part.attempt = attempts.get(part=part)
-        except:
+        except ObjectDoesNotExist:
             part.attempt = None
     return render(
         request,
