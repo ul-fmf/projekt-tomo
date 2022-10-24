@@ -1,0 +1,17 @@
+name: Test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+      - run: pip install -r web/requirements/sqlite_local.txt 
+      - run: pip install black isort
+      - run: python3 -m black .
+      - run: python3 -m isort .
+      - run: cd web && python3 ./manage.py test --settings=web.settings.sqlite_local

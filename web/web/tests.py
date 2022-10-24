@@ -3,6 +3,7 @@ from itertools import chain
 from courses.models import Course, ProblemSet
 from django.core.urlresolvers import reverse
 from django.test import Client, TestCase
+from model_mommy import mommy
 from problems.models import Problem
 from users.models import User
 
@@ -12,19 +13,15 @@ class BasicViewsTestCase(TestCase):
     fixtures = []
 
     def setUp(self):
-        self.user = User.objects.create_user(
-            username="gregor", email="gregor@jerse.info", password="gregor"
+        self.user = User.objects.create_user(username="USER", password="PASS")
+        self.other_user = mommy.make("users.User")
+        self.course = mommy.make("courses.Course")
+        prob_set = mommy.make("courses.ProblemSet", course=self.course)
+        visible_prob_set = mommy.make(
+            "courses.ProblemSet", course=self.course, visible=True
         )
-
-        self.other_user = User.objects.create_user(
-            username="sonja", email="sonja@jerse.info", password="sonja"
-        )
-
-        self.course = Course.objects.create()
-        prob_set = ProblemSet.objects.create(course=self.course)
-        visible_prob_set = ProblemSet.objects.create(course=self.course, visible=True)
-        problem = Problem.objects.create(problem_set=prob_set)
-        visible_problem = Problem.objects.create(problem_set=visible_prob_set)
+        problem = mommy.make("problems.Problem", problem_set=prob_set)
+        visible_problem = mommy.make("problems.Problem", problem_set=visible_prob_set)
         self.views = {
             "public": [
                 ("login", dict()),
@@ -73,7 +70,7 @@ class BasicViewsTestCase(TestCase):
 
     def login(self):
         self.assertTrue(
-            self.client.login(username="gregor", password="gregor"), "Login failed"
+            self.client.login(username="USER", password="PASS"), "Login failed"
         )
 
     def logout(self):
