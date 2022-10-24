@@ -1,13 +1,13 @@
+from courses.models import ProblemSet
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from django.forms import Form, IntegerField
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from problems.models import Problem
-from courses.models import ProblemSet
 from users.models import User
-from utils.views import plain_text
 from utils import verify
+from utils.views import plain_text
 
 
 @login_required
@@ -37,21 +37,22 @@ def problem_move(request, problem_pk, shift):
 
 
 class ProblemCreate(CreateView):
-    '''
+    """
     Create new problem by specifying title and description.
-    '''
+    """
+
     model = Problem
-    fields = ['title', 'description', 'language']
+    fields = ["title", "description", "language"]
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)
-        problem_set = get_object_or_404(ProblemSet, id=self.kwargs['problem_set_id'])
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_id"])
         verify(self.request.user.can_edit_problem_set(problem_set))
-        context['problem_set'] = problem_set
+        context["problem_set"] = problem_set
         return context
 
     def form_valid(self, form):
-        problem_set = get_object_or_404(ProblemSet, id=self.kwargs['problem_set_id'])
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_id"])
         verify(self.request.user.can_edit_problem_set(problem_set))
         form.instance.author = self.request.user
         form.instance.problem_set = problem_set
@@ -59,11 +60,12 @@ class ProblemCreate(CreateView):
 
 
 class ProblemUpdate(UpdateView):
-    '''
+    """
     Update problem title and description.
-    '''
+    """
+
     model = Problem
-    fields = '__all__'
+    fields = "__all__"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
@@ -79,9 +81,10 @@ class ProblemUpdate(UpdateView):
 
 
 class ProblemDelete(DeleteView):
-    '''
+    """
     Delete a problem and all it's parts and attempts.
-    '''
+    """
+
     model = Problem
 
     def get_success_url(self):
@@ -98,7 +101,7 @@ class ProblemDelete(DeleteView):
 
 
 class CopyProblemForm(Form):
-    problem_set_id = IntegerField(label='Problem set id')
+    problem_set_id = IntegerField(label="Problem set id")
 
 
 def copy_form(request, problem_pk):
@@ -107,10 +110,10 @@ def copy_form(request, problem_pk):
     """
     problem = Problem.objects.get(pk=problem_pk)
     verify(request.user.can_view_problem(problem))
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CopyProblemForm(request.POST)
         if form.is_valid():
-            problem_set_pk = form.cleaned_data['problem_set_id']
+            problem_set_pk = form.cleaned_data["problem_set_id"]
             problem_set = ProblemSet.objects.get(pk=problem_set_pk)
             verify(request.user.can_edit_problem_set(problem_set))
             problem.copy_to(problem_set)
@@ -123,12 +126,13 @@ def copy_form(request, problem_pk):
         form = CopyProblemForm()
         courses = request.user.taught_courses.all()
         return render(
-            request, 'courses/problem_copy_form.html',
+            request,
+            "courses/problem_copy_form.html",
             {
-                'form': form,
-                'courses': courses,
-                'problem': problem,
-            }
+                "form": form,
+                "courses": courses,
+                "problem": problem,
+            },
         )
 
 
@@ -147,12 +151,14 @@ def problem_solution(request, problem_pk, user_pk):
             part.attempt = attempts.get(part=part)
         except:
             part.attempt = None
-    return render(request, 'problems/solutions.html',
-                  {
-                      'problem': problem,
-                      'problem_set': problem_set,
-                      'parts': parts,
-                      'student': student,
-                      'is_teacher': request.user.can_edit_problem_set(problem_set),
-                  }
-                  )
+    return render(
+        request,
+        "problems/solutions.html",
+        {
+            "problem": problem,
+            "problem_set": problem_set,
+            "parts": parts,
+            "student": student,
+            "is_teacher": request.user.can_edit_problem_set(problem_set),
+        },
+    )

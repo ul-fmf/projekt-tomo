@@ -17,7 +17,7 @@ def transfer_student_enrollment(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('courses', '0008_auto_20160420_1212'),
+        ("courses", "0008_auto_20160420_1212"),
     ]
 
     operations = [

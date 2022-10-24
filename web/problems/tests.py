@@ -1,7 +1,8 @@
-from django.test import TestCase
 from courses.models import Course, ProblemSet
+from django.test import TestCase
 from problems.templates.python.check import Check
-from .models import Problem, Part
+
+from .models import Part, Problem
 
 
 class PartTestCase(TestCase):
@@ -32,15 +33,22 @@ class PartTestCase(TestCase):
 class ApproxTestCase(TestCase):
     def test_basic(self):
         import numpy as np
+
         a = np.array([1, 2, 3], dtype=float)
-        Check.initialize([{'solution': '...'}])
+        Check.initialize([{"solution": "..."}])
         Check.part()
         self.assertTrue(Check.approx("np.array([1, 2, 3], dtype='float')", a))
         self.assertFalse(Check.approx("[1, 2, 3]", a))
-        self.assertEquals(Check.current_part['feedback'][-1],
-                          "Rezultat ima napačen tip. Pričakovan tip: ndarray, dobljen tip: list.")
+        self.assertEquals(
+            Check.current_part["feedback"][-1],
+            "Rezultat ima napačen tip. Pričakovan tip: ndarray, dobljen tip: list.",
+        )
         self.assertFalse(Check.approx("np.zeros((2, 3))", a))
-        self.assertEquals(Check.current_part['feedback'][-1],
-                          "Obliki se ne ujemata. Pričakovana oblika: (3,), dobljena oblika: (2, 3).")
+        self.assertEquals(
+            Check.current_part["feedback"][-1],
+            "Obliki se ne ujemata. Pričakovana oblika: (3,), dobljena oblika: (2, 3).",
+        )
         self.assertFalse(Check.approx("np.array([1, 2, 3.1])", a))
-        self.assertRegexpMatches(Check.current_part['feedback'][-1], r"Rezultat ni pravilen\..*")
+        self.assertRegexpMatches(
+            Check.current_part["feedback"][-1], r"Rezultat ni pravilen\..*"
+        )

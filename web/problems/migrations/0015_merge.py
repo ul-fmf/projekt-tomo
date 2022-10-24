@@ -8,9 +8,8 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0014_add_verify_attempt_tokens'),
-        ('problems', '0014_auto_20170509_0919'),
+        ("problems", "0014_add_verify_attempt_tokens"),
+        ("problems", "0014_auto_20170509_0919"),
     ]
 
-    operations = [
-    ]
+    operations = []

@@ -1,14 +1,15 @@
+from copy import deepcopy
+
+from attempts.models import Attempt, HistoricalAttempt
 from django.db import models
 from django.db.models import Count
-from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext_lazy as _
+from problems.models import Part
+from taggit.managers import TaggableManager
 from users.models import User
 from utils.models import OrderWithRespectToMixin
-from taggit.managers import TaggableManager
-from attempts.models import Attempt, HistoricalAttempt
-from problems.models import Part
-from copy import deepcopy
 
 
 class Institution(models.Model):
@@ -21,20 +22,23 @@ class Institution(models.Model):
 class Course(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    students = models.ManyToManyField(User, blank=True, related_name='courses', through='StudentEnrollment')
-    teachers = models.ManyToManyField(User, blank=True, related_name='taught_courses')
-    institution = models.ForeignKey(Institution, related_name='institution')
+    students = models.ManyToManyField(
+        User, blank=True, related_name="courses", through="StudentEnrollment"
+    )
+    teachers = models.ManyToManyField(User, blank=True, related_name="taught_courses")
+    institution = models.ForeignKey(Institution, related_name="institution")
     tags = TaggableManager(blank=True)
 
     class Meta:
-        ordering = ['institution', 'title']
+        ordering = ["institution", "title"]
 
     def __str__(self):
-        return '{} @{{{}}}'.format(self.title, self.institution)
+        return "{} @{{{}}}".format(self.title, self.institution)
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        return reverse('course_detail', args=[str(self.pk)])
+
+        return reverse("course_detail", args=[str(self.pk)])
 
     def recent_problem_sets(self, n=3):
         return self.problem_sets.reverse().filter(visible=True)[:n]
@@ -44,12 +48,14 @@ class Course(models.Model):
         for attempt in user.attempts.filter(part__problem__problem_set__course=self):
             attempts[attempt.part_id] = attempt
         sorted_attempts = []
-        for problem_set in self.problem_sets.all().prefetch_related('problems__parts'):
+        for problem_set in self.problem_sets.all().prefetch_related("problems__parts"):
             problem_set_attempts = []
             prob_set_valid = prob_set_invalid = prob_set_empty = 0
             for problem in problem_set.problems.all():
                 valid = invalid = empty = 0
-                problem_attempts = [attempts.get(part.pk) for part in problem.parts.all()]
+                problem_attempts = [
+                    attempts.get(part.pk) for part in problem.parts.all()
+                ]
                 for attempt in problem_attempts:
                     if attempt is None:
                         empty += 1
@@ -57,11 +63,21 @@ class Course(models.Model):
                         valid += 1
                     else:
                         invalid += 1
-                problem_set_attempts.append((problem, problem_attempts, valid, invalid, empty))
+                problem_set_attempts.append(
+                    (problem, problem_attempts, valid, invalid, empty)
+                )
                 prob_set_valid += valid
                 prob_set_invalid += invalid
                 prob_set_empty += empty
-            sorted_attempts.append((problem_set, problem_set_attempts, prob_set_valid, prob_set_invalid, prob_set_empty))
+            sorted_attempts.append(
+                (
+                    problem_set,
+                    problem_set_attempts,
+                    prob_set_valid,
+                    prob_set_invalid,
+                    prob_set_empty,
+                )
+            )
         return sorted_attempts
 
     def prepare_annotated_problem_sets(self, user):
@@ -89,34 +105,46 @@ class Course(models.Model):
         students = self.observed_students()
         student_count = len(students)
 
-        part_sets = Part.objects.filter(problem__problem_set__in=self.annotated_problem_sets)
-        parts_count = part_sets.values('problem__problem_set_id').annotate(count=Count('problem__problem_set_id')).order_by('count')
+        part_sets = Part.objects.filter(
+            problem__problem_set__in=self.annotated_problem_sets
+        )
+        parts_count = (
+            part_sets.values("problem__problem_set_id")
+            .annotate(count=Count("problem__problem_set_id"))
+            .order_by("count")
+        )
         parts_dict = {}
         for part in parts_count:
-            problem_set_id = part['problem__problem_set_id']
-            parts_dict[problem_set_id] = part['count']
+            problem_set_id = part["problem__problem_set_id"]
+            parts_dict[problem_set_id] = part["count"]
 
-        attempts_full = Attempt.objects.filter(user__in=students,
-                                          part__problem__problem_set__in=self.annotated_problem_sets)
-        attempts = attempts_full.values('valid', 'part__problem__problem_set_id')
+        attempts_full = Attempt.objects.filter(
+            user__in=students,
+            part__problem__problem_set__in=self.annotated_problem_sets,
+        )
+        attempts = attempts_full.values("valid", "part__problem__problem_set_id")
         attempts_dict = {}
         for attempt in attempts:
-            problem_set_id = attempt['part__problem__problem_set_id']
+            problem_set_id = attempt["part__problem__problem_set_id"]
             if problem_set_id in attempts_dict:
-                attempts_dict[problem_set_id]['submitted_count'] += 1
-                attempts_dict[problem_set_id]['valid_count'] += 1 if attempt['valid'] else 0
+                attempts_dict[problem_set_id]["submitted_count"] += 1
+                attempts_dict[problem_set_id]["valid_count"] += (
+                    1 if attempt["valid"] else 0
+                )
             else:
                 attempts_dict[problem_set_id] = {
-                    'submitted_count': 1,
-                    'valid_count': 1 if attempt['valid'] else 0
+                    "submitted_count": 1,
+                    "valid_count": 1 if attempt["valid"] else 0,
                 }
 
         for problem_set in self.annotated_problem_sets:
-            part_count = parts_dict[problem_set.id] if problem_set.id in parts_dict else 0
+            part_count = (
+                parts_dict[problem_set.id] if problem_set.id in parts_dict else 0
+            )
 
             if problem_set.id in attempts_dict:
-                submitted_count = attempts_dict[problem_set.id]['submitted_count']
-                valid_count = attempts_dict[problem_set.id]['valid_count']
+                submitted_count = attempts_dict[problem_set.id]["submitted_count"]
+                valid_count = attempts_dict[problem_set.id]["valid_count"]
             else:
                 submitted_count = 0
                 valid_count = 0
@@ -160,20 +188,26 @@ class Course(models.Model):
         enrollment.save()
 
     def observed_students(self):
-        return User.objects.filter(studentenrollment__course=self, studentenrollment__observed=True).order_by('first_name')
+        return User.objects.filter(
+            studentenrollment__course=self, studentenrollment__observed=True
+        ).order_by("first_name")
 
     def student_success(self):
         students = self.observed_students()
         problem_sets = self.problem_sets.filter(visible=True)
         part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
         attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
-        valid_attempts = attempts.filter(valid=True).values('user').annotate(Count('user'))
-        all_attempts = attempts.values('user').annotate(Count('user'))
+        valid_attempts = (
+            attempts.filter(valid=True).values("user").annotate(Count("user"))
+        )
+        all_attempts = attempts.values("user").annotate(Count("user"))
+
         def to_dict(attempts):
             attempts_dict = {}
             for val in attempts:
-                attempts_dict[val['user']] = val['user__count']
+                attempts_dict[val["user"]] = val["user__count"]
             return attempts_dict
+
         valid_attempts_dict = to_dict(valid_attempts)
         all_attempts_dict = to_dict(all_attempts)
         for student in students:
@@ -185,7 +219,7 @@ class Course(models.Model):
     def duplicate(self):
         new_course = deepcopy(self)
         new_course.id = None
-        new_course.title += ' (copy)'
+        new_course.title += " (copy)"
         new_course.save()
         for problem_set in self.problem_sets.all():
             problem_set.copy_to(new_course)
@@ -210,10 +244,12 @@ class Course(models.Model):
         """
 
         students = self.observed_students()
-        student_success_by_problemset = {student :  {} for student in students}
-        student_solve_rate_by_problemset = {student : {} for student in students}
+        student_success_by_problemset = {student: {} for student in students}
+        student_solve_rate_by_problemset = {student: {} for student in students}
 
-        for problem_set in self.problem_sets.all().prefetch_related('problems', 'problems__parts'):
+        for problem_set in self.problem_sets.all().prefetch_related(
+            "problems", "problems__parts"
+        ):
             different_subtasks = 0
             for problem in problem_set.problems.all():
                 for part in problem.parts.all():
@@ -224,9 +260,14 @@ class Course(models.Model):
                 different_subtasks = 1
 
             for student in students:
-                student_success_by_problemset[student][problem_set] = [0, 0] # Valid, invalid
+                student_success_by_problemset[student][problem_set] = [
+                    0,
+                    0,
+                ]  # Valid, invalid
 
-            attempts = Attempt.objects.filter(part__problem__problem_set=problem_set, user__in=students)
+            attempts = Attempt.objects.filter(
+                part__problem__problem_set=problem_set, user__in=students
+            )
             for attempt in attempts:
                 if attempt.valid:
                     student_success_by_problemset[attempt.user][problem_set][0] += 1
@@ -236,9 +277,9 @@ class Course(models.Model):
             for student in students:
                 valid, invalid = student_success_by_problemset[student][problem_set]
                 student_solve_rate_by_problemset[student][problem_set] = {
-                    'valid' : round(valid/different_subtasks, 2),
-                    'invalid' : round(invalid/different_subtasks, 2),
-                    'empty' : round(1 - (valid + invalid) / different_subtasks, 2)
+                    "valid": round(valid / different_subtasks, 2),
+                    "invalid": round(invalid / different_subtasks, 2),
+                    "empty": round(1 - (valid + invalid) / different_subtasks, 2),
                 }
 
         return student_solve_rate_by_problemset
@@ -283,8 +324,8 @@ class StudentEnrollment(models.Model):
     observed = models.BooleanField(default=True)
 
     class Meta:
-        ordering = ['user', 'course']
-        unique_together = ('course', 'user')
+        ordering = ["user", "course"]
+        unique_together = ("course", "user")
 
 
 class CourseGroup(models.Model):
@@ -294,50 +335,54 @@ class CourseGroup(models.Model):
 
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    course = models.ForeignKey(Course, null=False, related_name='groups')
-    students = models.ManyToManyField(User, blank=True, related_name='course_groups')
+    course = models.ForeignKey(Course, null=False, related_name="groups")
+    students = models.ManyToManyField(User, blank=True, related_name="course_groups")
 
     def __str__(self):
-        return self.title + ' -- ' + str(self.course)
+        return self.title + " -- " + str(self.course)
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        return reverse('course_groups', args=[str(self.course.pk)])
+
+        return reverse("course_groups", args=[str(self.course.pk)])
 
     def list_all_members(self):
-        return self.students.all().order_by('first_name')
+        return self.students.all().order_by("first_name")
 
 
 class ProblemSet(OrderWithRespectToMixin, models.Model):
-    PROBLEM_HIDDEN = 'P'
-    SOLUTION_HIDDEN = 'H'
-    SOLUTION_VISIBLE_WHEN_SOLVED = 'S'
-    SOLUTION_VISIBLE = 'V'
+    PROBLEM_HIDDEN = "P"
+    SOLUTION_HIDDEN = "H"
+    SOLUTION_VISIBLE_WHEN_SOLVED = "S"
+    SOLUTION_VISIBLE = "V"
     SOLUTION_VISIBILITY_CHOICES = (
-        (PROBLEM_HIDDEN, _('Problem descriptions and official solutions are hidden')),
-        (SOLUTION_HIDDEN, _('Official solutions are hidden')),
-        (SOLUTION_VISIBLE_WHEN_SOLVED, _('Official solutions are visible when solved')),
-        (SOLUTION_VISIBLE, _('Official solutions are visible')),
+        (PROBLEM_HIDDEN, _("Problem descriptions and official solutions are hidden")),
+        (SOLUTION_HIDDEN, _("Official solutions are hidden")),
+        (SOLUTION_VISIBLE_WHEN_SOLVED, _("Official solutions are visible when solved")),
+        (SOLUTION_VISIBLE, _("Official solutions are visible")),
     )
-    course = models.ForeignKey(Course, related_name='problem_sets')
-    title = models.CharField(max_length=70, verbose_name=_('Title'))
-    description = models.TextField(blank=True, verbose_name=_('Description'))
-    visible = models.BooleanField(default=False, verbose_name=_('Visible'))
-    solution_visibility = models.CharField(max_length=20,
-                                           verbose_name=_('Solution visibility'),
-                                           choices=SOLUTION_VISIBILITY_CHOICES,
-                                           default=SOLUTION_VISIBLE_WHEN_SOLVED)
+    course = models.ForeignKey(Course, related_name="problem_sets")
+    title = models.CharField(max_length=70, verbose_name=_("Title"))
+    description = models.TextField(blank=True, verbose_name=_("Description"))
+    visible = models.BooleanField(default=False, verbose_name=_("Visible"))
+    solution_visibility = models.CharField(
+        max_length=20,
+        verbose_name=_("Solution visibility"),
+        choices=SOLUTION_VISIBILITY_CHOICES,
+        default=SOLUTION_VISIBLE_WHEN_SOLVED,
+    )
     tags = TaggableManager(blank=True)
 
     class Meta:
-        order_with_respect_to = 'course'
+        order_with_respect_to = "course"
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
-        return reverse('problem_set_detail', args=[str(self.pk)])
+
+        return reverse("problem_set_detail", args=[str(self.pk)])
 
     def attempts_archive(self, user):
         files = [problem.attempt_file(user) for problem in self.problems.all()]
@@ -351,12 +396,12 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def attempt_history(self):
         user_attempts = {}
-        attempts = HistoricalAttempt.objects.filter(
-            part__problem__problem_set=self
-        ).select_related(
-            'part__problem',
-            'user'
-        ).distinct().order_by('history_date')
+        attempts = (
+            HistoricalAttempt.objects.filter(part__problem__problem_set=self)
+            .select_related("part__problem", "user")
+            .distinct()
+            .order_by("history_date")
+        )
         for attempt in attempts:
             user_attempts.setdefault(attempt.user, []).append(attempt)
         return user_attempts
@@ -382,57 +427,58 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             folder = slugify(problem.title)
             for user in users.all():
                 filename, contents = problem.marking_file(user)
-                files.append(('{0}/{1}'.format(folder, filename), contents))
+                files.append(("{0}/{1}".format(folder, filename), contents))
                 filename, contents = problem.bare_file(user)
-                bare_files[filename] = bare_files.get(filename, '') + contents + '\n\n'
+                bare_files[filename] = bare_files.get(filename, "") + contents + "\n\n"
 
         for filename, contents in bare_files.items():
-            files.append(('bare/{0}'.format(filename), contents))
+            files.append(("bare/{0}".format(filename), contents))
 
         for user, history in self.attempt_history().items():
             username = user.get_full_name() or user.username
             problem_slug = slugify(username).replace("-", "_")
-            extension = 'py'
+            extension = "py"
             filename = "{0}.{1}".format(problem_slug, extension)
-            contents = render_to_string("history.py".format(extension), {
-                "history": history,
-            })
-            files.append(('history/{0}'.format(filename), contents))
-
+            contents = render_to_string(
+                "history.py".format(extension),
+                {
+                    "history": history,
+                },
+            )
+            files.append(("history/{0}".format(filename), contents))
 
         users = []
-        for user in User.objects.filter(id__in=user_ids).order_by('last_name'):
+        for user in User.objects.filter(id__in=user_ids).order_by("last_name"):
             user_attempts = []
             for problem in self.problems.all():
                 for part in problem.parts.all():
                     user_attempts.append(attempt_dict[user.id].get(part.id))
             users.append((user, user_attempts))
 
-        spreadsheet_filename = '{0}.csv'.format(self.title)
-        spreadsheet_contents = render_to_string('results.csv', {
-            'problem_set': self,
-            'users': users
-        })
+        spreadsheet_filename = "{0}.csv".format(self.title)
+        spreadsheet_contents = render_to_string(
+            "results.csv", {"problem_set": self, "users": users}
+        )
         files.append((spreadsheet_filename, spreadsheet_contents))
         return archive_name, files
-
 
     def student_statistics(self):
         students = self.course.observed_students()
         student_count = len(students)
 
-        attempts = Attempt.objects.filter(part__problem__problem_set=self,
-                                          user__in=students).values('part_id', 'valid')
+        attempts = Attempt.objects.filter(
+            part__problem__problem_set=self, user__in=students
+        ).values("part_id", "valid")
         attempts_dict = {}
         for attempt in attempts:
-            part_id = attempt['part_id']
+            part_id = attempt["part_id"]
             if part_id in attempts_dict:
-                attempts_dict[part_id]['valid_count'] += 1 if attempt['valid'] else 0
-                attempts_dict[part_id]['submitted_count'] += 1
+                attempts_dict[part_id]["valid_count"] += 1 if attempt["valid"] else 0
+                attempts_dict[part_id]["submitted_count"] += 1
             else:
                 attempts_dict[part_id] = {
-                    'submitted_count': 1,
-                    'valid_count': 1 if attempt['valid'] else 0,
+                    "submitted_count": 1,
+                    "valid_count": 1 if attempt["valid"] else 0,
                 }
 
         statistics = []
@@ -440,8 +486,8 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             parts = []
             for part in problem.parts.all():
                 if part.id in attempts_dict:
-                    submitted_count = attempts_dict[part.id]['submitted_count']
-                    valid_count = attempts_dict[part.id]['valid_count']
+                    submitted_count = attempts_dict[part.id]["submitted_count"]
+                    valid_count = attempts_dict[part.id]["valid_count"]
                 else:
                     submitted_count = 0
                     valid_count = 0
@@ -449,29 +495,34 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                 invalid_count = submitted_count - valid_count
                 empty_count = student_count - valid_count - invalid_count
 
-                parts.append({
-                    'anchor': part.anchor(),
-                    'pk': part.pk,
-                    'valid': valid_count,
-                    'invalid': invalid_count,
-                    'empty': empty_count,
-                })
-            statistics.append({
-                'anchor': problem.anchor(),
-                'title': problem.title,
-                'pk': problem.pk,
-                'parts': parts,
-            })
+                parts.append(
+                    {
+                        "anchor": part.anchor(),
+                        "pk": part.pk,
+                        "valid": valid_count,
+                        "invalid": invalid_count,
+                        "empty": empty_count,
+                    }
+                )
+            statistics.append(
+                {
+                    "anchor": problem.anchor(),
+                    "title": problem.title,
+                    "pk": problem.pk,
+                    "parts": parts,
+                }
+            )
         return statistics
 
-
     def valid_percentage(self, user):
-        '''
+        """
         Returns the percentage of parts (rounded to the nearest integer)
         of parts in this problem set for which the given user has a valid attempt.
-        '''
+        """
         number_of_all_parts = Part.objects.filter(problem__problem_set=self).count()
-        number_of_valid_parts = user.attempts.filter(valid=True, part__problem__problem_set=self).count()
+        number_of_valid_parts = user.attempts.filter(
+            valid=True, part__problem__problem_set=self
+        ).count()
         if number_of_all_parts == 0:
             return None
         else:

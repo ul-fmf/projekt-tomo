@@ -8,21 +8,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('courses', '0011_auto_20160420_1241'),
+        ("courses", "0011_auto_20160420_1241"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='course',
-            options={'ordering': ['institution', 'title']},
+            name="course",
+            options={"ordering": ["institution", "title"]},
         ),
         migrations.AlterModelOptions(
-            name='studentenrollment',
-            options={'ordering': ['user', 'course']},
+            name="studentenrollment",
+            options={"ordering": ["user", "course"]},
         ),
         migrations.AlterField(
-            model_name='problemset',
-            name='solution_visibility',
-            field=models.CharField(choices=[('H', 'Official solutions are hidden'), ('S', 'Official solutions are visible when solved'), ('V', 'Official solutions are visible')], default='S', max_length=20, verbose_name='Solution visibility'),
+            model_name="problemset",
+            name="solution_visibility",
+            field=models.CharField(
+                choices=[
+                    ("H", "Official solutions are hidden"),
+                    ("S", "Official solutions are visible when solved"),
+                    ("V", "Official solutions are visible"),
+                ],
+                default="S",
+                max_length=20,
+                verbose_name="Solution visibility",
+            ),
         ),
     ]

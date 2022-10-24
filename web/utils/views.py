@@ -1,27 +1,29 @@
-from io import BytesIO
 import zipfile
+from io import BytesIO
+
 from django.http import HttpResponse
 from django.shortcuts import render
 
 
 def terms_of_service(request):
-    return render(request, 'terms_of_service.html')
+    return render(request, "terms_of_service.html")
+
 
 def privacy_policy(request):
-    return render(request, 'privacy_policy.html')
+    return render(request, "privacy_policy.html")
 
 
 def help(request, special=None):
-    template = 'help_{}.html'.format(special) if special else 'help.html'
+    template = "help_{}.html".format(special) if special else "help.html"
     return render(request, template)
 
 
-def plain_text(name, contents, content_type='text/plain'):
+def plain_text(name, contents, content_type="text/plain"):
     """
     Downloads a plain text file with the given name and contents.
     """
-    response = HttpResponse(content_type='{0}; charset=utf-8'.format(content_type))
-    response['Content-Disposition'] = 'attachment; filename={0}'.format(name)
+    response = HttpResponse(content_type="{0}; charset=utf-8".format(content_type))
+    response["Content-Disposition"] = "attachment; filename={0}".format(name)
     response.write(contents)
     return response
 
@@ -33,10 +35,12 @@ def zip_archive(archive_name, files):
     gives the filename and the second one gives the contents.
     """
     string_buffer = BytesIO()
-    archive = zipfile.ZipFile(string_buffer, 'w', zipfile.ZIP_DEFLATED)
+    archive = zipfile.ZipFile(string_buffer, "w", zipfile.ZIP_DEFLATED)
     for filename, contents in files:
-        archive.writestr(filename, contents.encode('utf-8'))
+        archive.writestr(filename, contents.encode("utf-8"))
     archive.close()
-    response = HttpResponse(string_buffer.getvalue(), content_type='application/zip')
-    response['Content-Disposition'] = 'attachment; filename={0}.zip'.format(archive_name)
+    response = HttpResponse(string_buffer.getvalue(), content_type="application/zip")
+    response["Content-Disposition"] = "attachment; filename={0}.zip".format(
+        archive_name
+    )
     return response

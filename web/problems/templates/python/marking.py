@@ -162,8 +162,15 @@
 
 
 
-import io, json, os, re, sys, shutil, traceback, urllib.error, urllib.request
-
+import io
+import json
+import os
+import re
+import shutil
+import sys
+import traceback
+import urllib.error
+import urllib.request
 
 {% include 'python/check.py' %}
 

@@ -8,41 +8,41 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('attempts', '0007_auto_20161004_0927'),
+        ("attempts", "0007_auto_20161004_0927"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='attempt',
-            name='submission_date',
+            model_name="attempt",
+            name="submission_date",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='historicalattempt',
-            name='submission_date',
+            model_name="historicalattempt",
+            name="submission_date",
             field=models.DateTimeField(null=True),
         ),
         migrations.RunSQL(
-            'UPDATE attempts_historicalattempt SET submission_date = history_date'
+            "UPDATE attempts_historicalattempt SET submission_date = history_date"
         ),
         migrations.RunSQL(
-            '''UPDATE attempts_attempt
+            """UPDATE attempts_attempt
                   SET submission_date = (
                      SELECT max(history_date)
                       FROM attempts_historicalattempt
                      WHERE attempts_attempt.user_id = user_id
                        AND attempts_attempt.part_id = part_id
                  )
-            '''
+            """
         ),
         migrations.AlterField(
-            model_name='attempt',
-            name='submission_date',
+            model_name="attempt",
+            name="submission_date",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='historicalattempt',
-            name='submission_date',
+            model_name="historicalattempt",
+            name="submission_date",
             field=models.DateTimeField(blank=True, editable=False),
         ),
     ]

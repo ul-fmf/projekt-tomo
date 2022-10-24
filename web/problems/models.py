@@ -1,53 +1,60 @@
-from copy import deepcopy
 import json
+from copy import deepcopy
+
 from django.conf import settings
+from django.core import signing
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
+from taggit.managers import TaggableManager
 from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
-from taggit.managers import TaggableManager
-from django.core import signing
 
 
 class Problem(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    problem_set = models.ForeignKey('courses.ProblemSet', related_name='problems')
+    problem_set = models.ForeignKey("courses.ProblemSet", related_name="problems")
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
-    language = models.CharField(max_length=8, choices=(
-        ('python', 'Python 3'),
-        ('octave', 'Octave/Matlab'),
-        ('r', 'R')), default='python')
-    EXTENSIONS = {'python': 'py', 'octave': 'm', 'r': 'r'}
-    MIMETYPES = {'python': 'text/x-python',
-                 'octave': 'text/x-octave',
-                 'r': 'text/x-R'}
+    language = models.CharField(
+        max_length=8,
+        choices=(("python", "Python 3"), ("octave", "Octave/Matlab"), ("r", "R")),
+        default="python",
+    )
+    EXTENSIONS = {"python": "py", "octave": "m", "r": "r"}
+    MIMETYPES = {"python": "text/x-python", "octave": "text/x-octave", "r": "text/x-R"}
+
     class Meta:
-        order_with_respect_to = 'problem_set'
+        order_with_respect_to = "problem_set"
 
     def __str__(self):
         return self.title
 
     @property
     def guarded_description(self):
-        return 'Navodila so napisana na listu' if self.problem_set.solution_visibility == self.problem_set.PROBLEM_HIDDEN else self.description
+        return (
+            "Navodila so napisana na listu"
+            if self.problem_set.solution_visibility == self.problem_set.PROBLEM_HIDDEN
+            else self.description
+        )
 
     def get_absolute_url(self):
-        return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
+        return "{}#{}".format(self.problem_set.get_absolute_url(), self.anchor())
 
     def anchor(self):
-        return 'problem-{}'.format(self.pk)
+        return "problem-{}".format(self.pk)
 
     def user_attempts(self, user):
         return user.attempts.filter(part__problem=self)
 
     def user_solutions(self, user):
-        return {attempt.part.id: attempt.solution for attempt in self.user_attempts(user)}
+        return {
+            attempt.part.id: attempt.solution for attempt in self.user_attempts(user)
+        }
 
     @property
     def slug(self):
@@ -56,17 +63,23 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
         solutions = self.user_solutions(user)
-        parts = [(part, solutions.get(part.id, part.template), part.attempt_token(user)) for part in self.parts.all()]
-        url = settings.SUBMISSION_URL + reverse('attempts-submit')
+        parts = [
+            (part, solutions.get(part.id, part.template), part.attempt_token(user))
+            for part in self.parts.all()
+        ]
+        url = settings.SUBMISSION_URL + reverse("attempts-submit")
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}.{1}".format(problem_slug, extension)
-        contents = render_to_string("{0}/attempt.{1}".format(self.language, extension), {
-            "problem": self,
-            "parts": parts,
-            "submission_url": url,
-            "authentication_token": authentication_token
-        })
+        contents = render_to_string(
+            "{0}/attempt.{1}".format(self.language, extension),
+            {
+                "problem": self,
+                "parts": parts,
+                "submission_url": url,
+                "authentication_token": authentication_token,
+            },
+        )
         return filename, contents
 
     def marking_file(self, user):
@@ -76,11 +89,14 @@ class Problem(OrderWithRespectToMixin, models.Model):
         problem_slug = slugify(username).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}.{1}".format(problem_slug, extension)
-        contents = render_to_string("{0}/marking.{1}".format(self.language, extension), {
-            "problem": self,
-            "parts": parts,
-            "user": user,
-        })
+        contents = render_to_string(
+            "{0}/marking.{1}".format(self.language, extension),
+            {
+                "problem": self,
+                "parts": parts,
+                "user": user,
+            },
+        )
         return filename, contents
 
     def bare_file(self, user):
@@ -90,28 +106,34 @@ class Problem(OrderWithRespectToMixin, models.Model):
         problem_slug = slugify(username).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}.{1}".format(problem_slug, extension)
-        contents = render_to_string("{0}/bare.{1}".format(self.language, extension), {
-            "problem": self,
-            "parts": parts,
-            "user": user,
-        })
+        contents = render_to_string(
+            "{0}/bare.{1}".format(self.language, extension),
+            {
+                "problem": self,
+                "parts": parts,
+                "user": user,
+            },
+        )
         return filename, contents
 
     def edit_file(self, user):
         authentication_token = Token.objects.get(user=user)
-        url = settings.SUBMISSION_URL + reverse('problems-submit')
+        url = settings.SUBMISSION_URL + reverse("problems-submit")
         problem_slug = slugify(self.title).replace("-", "_")
         filename = "{0}_edit.{1}".format(problem_slug, self.EXTENSIONS[self.language])
-        contents = render_to_string("{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]), {
-            "problem": self,
-            "submission_url": url,
-            "authentication_token": authentication_token
-        })
+        contents = render_to_string(
+            "{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]),
+            {
+                "problem": self,
+                "submission_url": url,
+                "authentication_token": authentication_token,
+            },
+        )
         return filename, contents
 
     def attempts_by_user(self, active_only=True):
         attempts = {}
-        for part in self.parts.all().prefetch_related('attempts', 'attempts__user'):
+        for part in self.parts.all().prefetch_related("attempts", "attempts__user"):
             for attempt in part.attempts.all():
                 if attempt.user in attempts:
                     attempts[attempt.user][part] = attempt
@@ -124,12 +146,16 @@ class Problem(OrderWithRespectToMixin, models.Model):
         observed_students = self.problem_set.course.observed_students()
 
         if active_only:
-            observed_students = observed_students.filter(attempts__part__problem=self).distinct()
+            observed_students = observed_students.filter(
+                attempts__part__problem=self
+            ).distinct()
 
         observed_students = list(observed_students)
         for user in observed_students:
             user.valid = user.invalid = user.empty = 0
-            user.these_attempts = [attempts[user].get(part) for part in self.parts.all()]
+            user.these_attempts = [
+                attempts[user].get(part) for part in self.parts.all()
+            ]
             for attempt in user.these_attempts:
                 if attempt is None:
                     user.empty += 1
@@ -156,7 +182,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
 
 class Part(OrderWithRespectToMixin, models.Model):
-    problem = models.ForeignKey(Problem, related_name='parts')
+    problem = models.ForeignKey(Problem, related_name="parts")
     description = models.TextField(blank=True)
     template = models.TextField(blank=True)
     solution = models.TextField(blank=True)
@@ -165,31 +191,35 @@ class Part(OrderWithRespectToMixin, models.Model):
     history = HistoricalRecords()
 
     class Meta:
-        order_with_respect_to = 'problem'
+        order_with_respect_to = "problem"
 
     def __str__(self):
-        return '@{0:06d} ({1})'.format(self.pk, truncate(self.description))
+        return "@{0:06d} ({1})".format(self.pk, truncate(self.description))
 
     @property
     def guarded_description(self):
-        return 'Navodila so napisana na listu' if self.problem.problem_set.solution_visibility == self.problem.problem_set.PROBLEM_HIDDEN else self.description
+        return (
+            "Navodila so napisana na listu"
+            if self.problem.problem_set.solution_visibility
+            == self.problem.problem_set.PROBLEM_HIDDEN
+            else self.description
+        )
 
     def get_absolute_url(self):
-        return '{}#{}'.format(self.problem_set.get_absolute_url(), self.anchor())
+        return "{}#{}".format(self.problem_set.get_absolute_url(), self.anchor())
 
     def anchor(self):
-        return 'part-{}'.format(self.pk)
-
+        return "part-{}".format(self.pk)
 
     def check_secret(self, secret):
-        '''
+        """
         Checks whether a submitted secret corresponds to the official one.
 
         The function accepts a secret (list of strings) and returns the pair:
         True, None -- if secret matches the official one
         False, None -- if secret has an incorrect length
         False, i -- if secret first differs from the official one at index i
-        '''
+        """
         official_secret = json.loads(self.secret)
         if len(official_secret) != len(secret):
             return False, None
@@ -197,7 +227,6 @@ class Part(OrderWithRespectToMixin, models.Model):
             if secret[i] != official_secret[i]:
                 return False, i
         return True, None
-
 
     def copy_to(self, problem):
         new_part = deepcopy(self)
@@ -207,7 +236,9 @@ class Part(OrderWithRespectToMixin, models.Model):
         return new_part
 
     def attempt_token(self, user):
-        return signing.dumps({
-            'part': self.pk,
-            'user': user.pk,
-        })
+        return signing.dumps(
+            {
+                "part": self.pk,
+                "user": user.pk,
+            }
+        )
