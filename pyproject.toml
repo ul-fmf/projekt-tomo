@@ -1,0 +1,6 @@
+[tool.black]
+extend-exclude = 'web/problems/templates'
+target-version = ['py37']
+[tool.isort]
+profile = "black"
+py_version = 37

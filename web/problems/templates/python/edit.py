@@ -54,7 +54,14 @@ if __name__ == '__main__':
 
 # =L=I=B=R=A=R=Y=@=
 
-import json, os, re, sys, shutil, traceback, urllib.error, urllib.request
+import json
+import os
+import re
+import shutil
+import sys
+import traceback
+import urllib.error
+import urllib.request
 
 {% include 'python/check.py' %}
 

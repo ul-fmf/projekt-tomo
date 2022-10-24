@@ -8,16 +8,16 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0016_auto_20170907_1121'),
+        ("problems", "0016_auto_20170907_1121"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='historicalproblem',
-            name='verify_attempt_tokens',
+            model_name="historicalproblem",
+            name="verify_attempt_tokens",
         ),
         migrations.RemoveField(
-            model_name='problem',
-            name='verify_attempt_tokens',
+            model_name="problem",
+            name="verify_attempt_tokens",
         ),
     ]

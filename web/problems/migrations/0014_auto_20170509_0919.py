@@ -8,18 +8,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0013_auto_20161004_0933'),
+        ("problems", "0013_auto_20161004_0933"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='historicalproblem',
-            name='language',
-            field=models.CharField(choices=[('python', 'Python 3'), ('octave', 'Octave'), ('r', 'R')], default='python', max_length=8),
+            model_name="historicalproblem",
+            name="language",
+            field=models.CharField(
+                choices=[("python", "Python 3"), ("octave", "Octave"), ("r", "R")],
+                default="python",
+                max_length=8,
+            ),
         ),
         migrations.AlterField(
-            model_name='problem',
-            name='language',
-            field=models.CharField(choices=[('python', 'Python 3'), ('octave', 'Octave'), ('r', 'R')], default='python', max_length=8),
+            model_name="problem",
+            name="language",
+            field=models.CharField(
+                choices=[("python", "Python 3"), ("octave", "Octave"), ("r", "R")],
+                default="python",
+                max_length=8,
+            ),
         ),
     ]

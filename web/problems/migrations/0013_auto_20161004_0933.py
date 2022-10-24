@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0012_auto_20161004_0927'),
+        ("problems", "0012_auto_20161004_0927"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='historicalpart',
-            name='template',
+            model_name="historicalpart",
+            name="template",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='part',
-            name='template',
+            model_name="part",
+            name="template",
             field=models.TextField(blank=True),
         ),
     ]

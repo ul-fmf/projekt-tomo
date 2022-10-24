@@ -8,18 +8,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('problems', '0015_merge'),
+        ("problems", "0015_merge"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='historicalproblem',
-            name='verify_attempt_tokens',
+            model_name="historicalproblem",
+            name="verify_attempt_tokens",
             field=models.BooleanField(default=True),
         ),
         migrations.AlterField(
-            model_name='problem',
-            name='verify_attempt_tokens',
+            model_name="problem",
+            name="verify_attempt_tokens",
             field=models.BooleanField(default=True),
         ),
     ]

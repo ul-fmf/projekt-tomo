@@ -1,13 +1,13 @@
-from django.contrib.auth.models import AbstractUser
-from django.dispatch import receiver
-from django.db.models.signals import post_save
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
     class Meta:
-        ordering = ['last_name', 'first_name']
+        ordering = ["last_name", "first_name"]
 
     def __str__(self):
         # In the forms, the __str__ method is used when showing model instances.
@@ -15,8 +15,8 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         try:
-            self.first_name = bytearray(self.first_name, 'latin-1').decode('utf8')
-            self.last_name = bytearray(self.last_name, 'latin-1').decode('utf8')
+            self.first_name = bytearray(self.first_name, "latin-1").decode("utf8")
+            self.last_name = bytearray(self.last_name, "latin-1").decode("utf8")
         except UnicodeEncodeError:
             pass
         except UnicodeDecodeError:
@@ -25,7 +25,7 @@ class User(AbstractUser):
 
     def uses_shibboleth(self):
         try:
-            return self.backend == 'shibboleth.backends.ShibbolethRemoteUserBackend'
+            return self.backend == "shibboleth.backends.ShibbolethRemoteUserBackend"
         except:
             return False
 
@@ -72,15 +72,17 @@ class User(AbstractUser):
         return True
 
     def can_view_problem_set(self, problem_set):
-        return self.can_view_course(problem_set.course) and \
-               (problem_set.visible or self.is_teacher(problem_set.course))
+        return self.can_view_course(problem_set.course) and (
+            problem_set.visible or self.is_teacher(problem_set.course)
+        )
 
     def can_view_problem(self, problem):
         return self.can_view_problem_set(problem.problem_set)
 
     def can_view_problem_solution(self, problem, student):
-        return self.can_view_problem(problem) and \
-               (self == student or self.is_teacher(problem.problem_set.course))
+        return self.can_view_problem(problem) and (
+            self == student or self.is_teacher(problem.problem_set.course)
+        )
 
     def can_view_course_statistics(self, course):
         return self.is_teacher(course)
@@ -91,6 +93,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
-User._meta.get_field('username').max_length = 70
-User._meta.get_field('first_name').max_length = 70
-User._meta.get_field('last_name').max_length = 70
+
+User._meta.get_field("username").max_length = 70
+User._meta.get_field("first_name").max_length = 70
+User._meta.get_field("last_name").max_length = 70

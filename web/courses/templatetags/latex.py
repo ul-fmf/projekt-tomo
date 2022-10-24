@@ -4,7 +4,6 @@ import markdown
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
-
 from utils import MathJaxExtension
 
 register = template.Library()
@@ -18,13 +17,18 @@ ITALIC = re.compile(r"\*([^*`]+)\*")
 URL = re.compile(r"\[([^\]]+)\]\(([^\)]+)\)")
 LIST = re.compile(r"((\n- .*)+)")
 
+
 def itemizer(matchobj):
-    content = ["  \item " + g + "\n" for g in matchobj.group(0).strip('\n- ').split('\n- ')]
-    return "\\begin{itemize}\n%s\\end{itemize}" % ''.join(content)
+    content = [
+        "  \item " + g + "\n" for g in matchobj.group(0).strip("\n- ").split("\n- ")
+    ]
+    return "\\begin{itemize}\n%s\\end{itemize}" % "".join(content)
+
 
 def codeblock(matchobj):
-    code = matchobj.group(0).rstrip('\n') + '\n'
+    code = matchobj.group(0).rstrip("\n") + "\n"
     return "\\begin{minted}{Python}\n%s\\end{minted}" % code
+
 
 @register.filter
 @stringfilter
@@ -38,4 +42,3 @@ def md2tex(md):
     md = LIST.sub(itemizer, md)
     md = md.replace("\nPrimer:", "\n\\Primer")
     return mark_safe(md)
-
