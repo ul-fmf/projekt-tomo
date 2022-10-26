@@ -30,7 +30,7 @@ class Migration(migrations.Migration):
                 (
                     "feedback",
                     models.TextField(
-                        default=b"[]", validators=[utils.is_json_string_list]
+                        default="[]", validators=[utils.is_json_string_list]
                     ),
                 ),
                 ("history_id", models.AutoField(serialize=False, primary_key=True)),

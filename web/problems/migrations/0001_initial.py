@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ("description", models.TextField(blank=True)),
                 ("solution", models.TextField(blank=True)),
                 ("validation", models.TextField(blank=True)),
-                ("secret", models.TextField(default=b"[]")),
+                ("secret", models.TextField(default="[]")),
             ],
             options={},
             bases=(models.Model,),

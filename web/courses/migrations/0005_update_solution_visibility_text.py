@@ -14,13 +14,13 @@ class Migration(migrations.Migration):
             model_name="problemset",
             name="solution_visibility",
             field=models.CharField(
-                default=b"S",
+                default="S",
                 max_length=20,
                 verbose_name="Solution visibility",
                 choices=[
-                    (b"H", "Official solutions are hidden"),
-                    (b"S", "Official solutions are visible when solved"),
-                    (b"V", "Official solutions are visible"),
+                    ("H", "Official solutions are hidden"),
+                    ("S", "Official solutions are visible when solved"),
+                    ("V", "Official solutions are visible"),
                 ],
             ),
         ),
