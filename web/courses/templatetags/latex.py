@@ -1,6 +1,7 @@
 import re
 
 import markdown
+import mdx_math
 from django import template
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
@@ -9,7 +10,9 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-renderer = markdown.Markdown(extensions=[])
+renderer = markdown.Markdown(
+    extensions=[mdx_math.MathExtension(enable_dollar_delimiter=True)]
+)
 
 INLINE_CODE = re.compile(r"`([^`]+)`")
 CODE_BLOCK = re.compile(r"( {4}.*\n?)+")
