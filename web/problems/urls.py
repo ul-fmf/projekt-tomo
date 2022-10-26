@@ -1,7 +1,11 @@
-from django.urls import path
+from django.urls import path, register_converter
 
 from . import views
+from .converters import TrueIntConverter
 from .views import ProblemCreate, ProblemDelete, ProblemUpdate
+
+register_converter(TrueIntConverter, "trueint")
+
 
 urlpatterns = [
     path(
@@ -20,7 +24,7 @@ urlpatterns = [
         name="problem_edit_file",
     ),
     path(
-        "<int:problem_pk>/move/<shift>/",
+        "<int:problem_pk>/move/<trueint:shift>/",
         views.problem_move,
         name="problem_move",
     ),

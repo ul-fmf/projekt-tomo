@@ -30,7 +30,6 @@ def problem_edit_file(request, problem_pk):
 
 @login_required
 def problem_move(request, problem_pk, shift):
-    shift = int(shift)
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem_set(problem.problem_set))
     problem.move(shift)
