@@ -29,12 +29,18 @@ class Migration(migrations.Migration):
                 ("feedback", models.TextField(blank=True)),
                 (
                     "part",
-                    models.ForeignKey(related_name="attempts", to="problems.Part"),
+                    models.ForeignKey(
+                        related_name="attempts",
+                        on_delete=models.PROTECT,
+                        to="problems.Part",
+                    ),
                 ),
                 (
                     "user",
                     models.ForeignKey(
-                        related_name="attempts", to=settings.AUTH_USER_MODEL
+                        related_name="attempts",
+                        on_delete=models.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
                     ),
                 ),
             ],

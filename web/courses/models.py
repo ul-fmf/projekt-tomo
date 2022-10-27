@@ -5,7 +5,7 @@ from django.db import models
 from django.db.models import Count
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from problems.models import Part
 from taggit.managers import TaggableManager
 from users.models import User
@@ -26,7 +26,9 @@ class Course(models.Model):
         User, blank=True, related_name="courses", through="StudentEnrollment"
     )
     teachers = models.ManyToManyField(User, blank=True, related_name="taught_courses")
-    institution = models.ForeignKey(Institution, related_name="institution")
+    institution = models.ForeignKey(
+        Institution, on_delete=models.PROTECT, related_name="institution"
+    )
     tags = TaggableManager(blank=True)
 
     class Meta:
@@ -36,7 +38,7 @@ class Course(models.Model):
         return "{} @{{{}}}".format(self.title, self.institution)
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
 
         return reverse("course_detail", args=[str(self.pk)])
 
@@ -335,14 +337,16 @@ class CourseGroup(models.Model):
 
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
-    course = models.ForeignKey(Course, null=False, related_name="groups")
+    course = models.ForeignKey(
+        Course, null=False, on_delete=models.CASCADE, related_name="groups"
+    )
     students = models.ManyToManyField(User, blank=True, related_name="course_groups")
 
     def __str__(self):
         return self.title + " -- " + str(self.course)
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
 
         return reverse("course_groups", args=[str(self.course.pk)])
 
@@ -361,7 +365,9 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         (SOLUTION_VISIBLE_WHEN_SOLVED, _("Official solutions are visible when solved")),
         (SOLUTION_VISIBLE, _("Official solutions are visible")),
     )
-    course = models.ForeignKey(Course, related_name="problem_sets")
+    course = models.ForeignKey(
+        Course, on_delete=models.PROTECT, related_name="problem_sets"
+    )
     title = models.CharField(max_length=70, verbose_name=_("Title"))
     description = models.TextField(blank=True, verbose_name=_("Description"))
     visible = models.BooleanField(default=False, verbose_name=_("Visible"))
@@ -380,7 +386,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         return self.title
 
     def get_absolute_url(self):
-        from django.core.urlresolvers import reverse
+        from django.urls import reverse
 
         return reverse("problem_set_detail", args=[str(self.pk)])
 

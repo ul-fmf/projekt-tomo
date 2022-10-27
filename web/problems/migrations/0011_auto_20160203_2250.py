@@ -14,18 +14,18 @@ class Migration(migrations.Migration):
             model_name="historicalproblem",
             name="language",
             field=models.CharField(
-                default=b"python",
+                default="python",
                 max_length=8,
-                choices=[(b"python", b"Python 3"), (b"octave", b"Octave")],
+                choices=[("python", "Python 3"), ("octave", "Octave")],
             ),
         ),
         migrations.AddField(
             model_name="problem",
             name="language",
             field=models.CharField(
-                default=b"python",
+                default="python",
                 max_length=8,
-                choices=[(b"python", b"Python 3"), (b"octave", b"Octave")],
+                choices=[("python", "Python 3"), ("octave", "Octave")],
             ),
         ),
     ]

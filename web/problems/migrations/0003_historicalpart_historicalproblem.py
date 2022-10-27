@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 (
                     "secret",
                     models.TextField(
-                        default=b"[]", validators=[utils.is_json_string_list]
+                        default="[]", validators=[utils.is_json_string_list]
                     ),
                 ),
                 ("_order", models.IntegerField(editable=False)),

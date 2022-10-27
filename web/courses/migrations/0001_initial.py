@@ -63,18 +63,22 @@ class Migration(migrations.Migration):
                 (
                     "solution_visibility",
                     models.CharField(
-                        default=b"S",
+                        default="S",
                         max_length=20,
                         choices=[
-                            (b"H", b"Hidden"),
-                            (b"S", b"Visible when solved"),
-                            (b"V", b"Visible"),
+                            ("H", "Hidden"),
+                            ("S", "Visible when solved"),
+                            ("V", "Visible"),
                         ],
                     ),
                 ),
                 (
                     "course",
-                    models.ForeignKey(related_name="problem_sets", to="courses.Course"),
+                    models.ForeignKey(
+                        related_name="problem_sets",
+                        on_delete=models.PROTECT,
+                        to="courses.Course",
+                    ),
                 ),
             ],
             options={},

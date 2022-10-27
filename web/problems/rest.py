@@ -41,8 +41,8 @@ class ProblemViewSet(GenericViewSet, DownloadMixin):
     serializer_class = ProblemSerializer
     queryset = Problem.objects.all()
 
-    @decorators.list_route(
-        methods=["post"], authentication_classes=[TokenAuthentication]
+    @decorators.action(
+        detail=False, methods=["post"], authentication_classes=[TokenAuthentication]
     )
     @transaction.atomic
     def submit(self, request):

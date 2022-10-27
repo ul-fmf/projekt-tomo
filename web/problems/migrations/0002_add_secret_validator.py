@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             model_name="part",
             name="secret",
             field=models.TextField(
-                default=b"[]", validators=[utils.is_json_string_list]
+                default="[]", validators=[utils.is_json_string_list]
             ),
             preserve_default=True,
         ),

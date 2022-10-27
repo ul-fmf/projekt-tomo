@@ -2,8 +2,8 @@ import json
 
 from django.core import signing
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.urls import reverse
 from rest_framework import decorators, status, validators
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.exceptions import PermissionDenied
@@ -76,8 +76,8 @@ class AttemptViewSet(GenericViewSet):
     serializer_class = AttemptSerializer
     queryset = Attempt.objects.all()
 
-    @decorators.list_route(
-        methods=["post"], authentication_classes=[TokenAuthentication]
+    @decorators.action(
+        detail=False, methods=["post"], authentication_classes=[TokenAuthentication]
     )
     @transaction.atomic
     def submit(self, request):

@@ -1,33 +1,31 @@
-from django.conf.urls import include, url
+from django.urls import path
 
 from . import views
 
 urlpatterns = [
-    url(
-        r"^(?P<course_pk>\d+)$", views.course_statistics, name="statistics_landing_page"
-    ),
-    url(
-        r"^(?P<course_pk>\d+)/submission_history$",
+    path("<int:course_pk>", views.course_statistics, name="statistics_landing_page"),
+    path(
+        "<int:course_pk>/submission_history",
         views.course_submission_history,
         name="statistics_submission_history",
     ),
-    url(
-        r"^(?P<course_pk>\d+)/submission_history/(?P<problemset_pk>\d+)$",
+    path(
+        "<int:course_pk>/submission_history/<int:problemset_pk>",
         views.course_submission_history_problemset,
         name="statistics_submission_history_problemset",
     ),
-    url(
-        r"^(?P<course_pk>\d+)/submission_history/(?P<problemset_pk>\d+)/(?P<student_pk>\d+)$",
+    path(
+        "<int:course_pk>/submission_history/<int:problemset_pk>/<int:student_pk>",
         views.course_user_submission_history_problemset,
         name="statistics_submission_history_problemset_user",
     ),
-    url(
-        r"^historical_attempt/(?P<historical_attempt_pk>\d+)$",
+    path(
+        "historical_attempt/<int:historical_attempt_pk>",
         views.user_problem_solution_at_time,
         name="user_problem_solution_at_time",
     ),
-    url(
-        r"^(?P<student_pk>\d+)/(?P<part_pk>\d+)$",
+    path(
+        "<int:student_pk>/<int:part_pk>",
         views.user_problem_solution_through_time,
         name="user_problem_solution_through_time",
     ),

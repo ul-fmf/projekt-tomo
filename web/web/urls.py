@@ -4,53 +4,57 @@ from attempts.rest import AttemptViewSet
 from courses.rest import CourseViewSet, ProblemSetViewSet
 from courses.views import homepage
 from django.conf import settings
-from django.conf.urls import include, url
 from django.contrib import admin
+from django.urls import include, path
 from problems.rest import ProblemViewSet
 from rest_framework.routers import DefaultRouter
 from users.views import mobile_app_token
 from utils.views import help, privacy_policy, terms_of_service
 
 router = DefaultRouter()
-router.register(r"attempts", AttemptViewSet, base_name="attempts")
-router.register(r"problems", ProblemViewSet, base_name="problems")
-router.register(r"problem_sets", ProblemSetViewSet, base_name="problem_sets")
-router.register(r"courses", CourseViewSet, base_name="courses")
+router.register(r"attempts", AttemptViewSet, basename="attempts")
+router.register(r"problems", ProblemViewSet, basename="problems")
+router.register(r"problem_sets", ProblemSetViewSet, basename="problem_sets")
+router.register(r"courses", CourseViewSet, basename="courses")
 
 
 urlpatterns = [
-    url(r"^$", homepage, name="homepage"),
-    url(r"^terms_of_service$", terms_of_service, name="terms_of_service"),
-    url(r"^privacy_policy$", privacy_policy, name="privacy_policy"),
-    url(r"^help$", help, name="help"),
-    url(r"^help/students$", help, {"special": "students"}, name="help_students"),
-    url(r"^help/teachers$", help, {"special": "teachers"}, name="help_teachers"),
-    url("", include("social_django.urls", namespace="social")),
-    url(
-        r"^accounts/",
+    path("", homepage, name="homepage"),
+    path("terms_of_service", terms_of_service, name="terms_of_service"),
+    path("privacy_policy", privacy_policy, name="privacy_policy"),
+    path("help", help, name="help"),
+    path("help/students", help, {"special": "students"}, name="help_students"),
+    path("help/teachers", help, {"special": "teachers"}, name="help_teachers"),
+    path("", include("social_django.urls", namespace="social")),
+    path(
+        "accounts/",
         include(
             [
-                url(
-                    r"^login/$",
-                    django.contrib.auth.views.login,
+                path(
+                    r"login/",
+                    django.contrib.auth.views.LoginView.as_view(),
                     {"template_name": "login.html"},
                     name="login",
                 ),
-                url(r"^logout/$", django.contrib.auth.views.logout, name="logout"),
+                path(
+                    "logout/",
+                    django.contrib.auth.views.LogoutView.as_view(),
+                    name="logout",
+                ),
             ]
         ),
     ),
-    url(r"^admin/", include(admin.site.urls)),
-    url(r"^api/auth/", include("rest_framework.urls", namespace="rest_framework")),
-    url(r"^api/mobile-app-token/", mobile_app_token, name="mobile_app_token"),
-    url(r"^api/", include(router.urls)),
-    url(r"^problems/", include("problems.urls")),
-    url(r"^statistics/", include("tomo_statistics.urls")),
+    path("admin/", admin.site.urls),
+    path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("api/mobile-app-token/", mobile_app_token, name="mobile_app_token"),
+    path("api/", include(router.urls)),
+    path("problems/", include("problems.urls")),
+    path("statistics/", include("tomo_statistics.urls")),
 ]
 
 urlpatterns += courses.urls.urlpatterns
 
 if "silk" in settings.INSTALLED_APPS:
     urlpatterns += [
-        url(r"^silk/", include("silk.urls", namespace="silk")),
+        path(r"silk/", include("silk.urls", namespace="silk")),
     ]
