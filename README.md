@@ -28,25 +28,25 @@ ali za Windows
 Namestimo vse potrebne pakete vključno z Djangom
 
 ```
-pip install -r web/requirements/sqlite_local.txt
+pip install -r web/requirements/local.txt
 ```
 
-Čeprav za delovni strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic. Če kljub vsemu želite uporabiti *postgres*, lahko namesto `sqlite_local` uporabite  `local`.
+Čeprav za pravi strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic.
 
 Nato nastavimo privzete nastavitve. V okolju Linux:
 
 ```
-export DJANGO_SETTINGS_MODULE=web.settings.sqlite_local
+export DJANGO_SETTINGS_MODULE=web.settings.local
 ```
 V okolju Windows:
 
 ```
-set DJANGO_SETTINGS_MODULE=web.settings.sqlite_local
+set DJANGO_SETTINGS_MODULE=web.settings.local
 ```
 Namesto tega pa lahko neodvisno od okolja po vsakem ukazu dodamo še:
 
 ```
---settings=web.settings.sqlite_local
+--settings=web.settings.local
 ```
 
 Ustvarimo tabele v podatkovni bazi (od tukaj naprej stvari zaganjaš iz directory-ja web/)
