@@ -1,3 +1,4 @@
 -r common.txt
 -e git+https://github.com/rev138/django-shibboleth-remoteuser.git#egg=django-shibboleth-remoteuser
+psycopg2~=2.9.4
 uwsgi

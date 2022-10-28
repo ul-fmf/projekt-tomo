@@ -1,3 +1,2 @@
--r common.txt
-coverage~=3.7.1
-django-silk~=1.0.0
+-r sqlite_local.txt
+psycopg2~=2.9.4
