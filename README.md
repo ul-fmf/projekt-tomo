@@ -1,78 +1,58 @@
 # Projekt Tomo
 
-A web service for teaching programming.
+Projekt Tomo je spletna storitev za učenje programiranja. Deluje tako, da učenec na svoj računalnik prenese datoteke z nalogami in jih začne dopolnjevati s svojimi rešitvami, strežnik pa te rešitve brez kakršnega koli dodatnega dela sproti shranjuje, preverja ter učencu nudi takojšen samodejen odziv o njihovi pravilnosti, učitelju pa pregled nad znanjem učencev.
 
-## Lokalna instanca za testiranje
+Spletna storitev je napisana v [Djangu](https://www.djangoproject.com/), ki je razvojno ogrodje za spletne storitve v [Pythonu](https://www.python.org/). Če želite prispevati k razvoju Projekta Tomo, si najprej poglejte kaj malega o Djangu in Pythonu, nato pa si po spodnjih navodilih storitev namestite na računalnik. Za navodila glede dodajanja funkcionalnosti in popravljanja napak glejte
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
-Za testiranje novih funkcionalnosti, si lahko na lastnem računalniku poženemo lokalno instanco strežnika za projekt-tomo.
+## Navodila za namestitev
 
-Strežnik za Projekt Tomo je aplikacija za [Django](https://www.djangoproject.com/), ki je razvojno ogrodje za spletne aplikacije v [Python-u](https://www.python.org/). Trenutno ne dela na Python-u 3.8 ali novejše. Preden se lotite dela, si poglejte kaj malega o Djangu in Pythonu.
+Na začetku klonirajte repozitorij ter ustvarite virtualno okolje:
 
-### Priprava okolja
+    git clone git@github.com:ul-fmf/projekt-tomo.git
+    cd projekt-tomo
+    python3 -m venv venv
 
-Ustvarimo virtual environment v ukazni vrstici, odprti v mapi projekta. Poskrbeti moramo, da je narejen za Python 3.
+Dobiti bi morali sledečo strukturo datotek:
 
-```
-python -m venv venv
-```
-in ga aktiviramo (okolje Linux)
+    projekt-tomo/
+        web/
+            attempts/
+            courses/
+            ...
+        manage.py
+        ...
+        venv/
+            ...
 
-```
-source venv/bin/activate
-```
-ali za Windows
+Po prvi namestitvi, pa tudi na vsake toliko časa, greste v imenik `projekt-tomo/web/` ter s sledečimi ukazi kodo posodobite, aktivirate virtualno okolje, namestite potrebne pakete in posodobite bazo:
 
-```
-.\venv\Scripts\activate
-```
-Namestimo vse potrebne pakete vključno z Djangom
+    git pull
+    source venv/bin/activate
+    pip install -r requirements/local.txt
+    python manage.py migrate
 
-```
-pip install -r web/requirements/local.txt
-```
+Če uporabljate Windowse, je drugi ukaz drugačen
 
-Čeprav za pravi strežnik priporočamo postgrSQL, je za testni strežnik je najlažje uporabiti kar preprosto podatkovno bazo [SQLite](https://sqlite.org/index.html), za katero ne potrebujemo niti strežnika niti posebnih administratorskih pravic.
+    git pull
+    .\venv\Scripts\activate
+    pip install -r requirements\local.txt
+    python manage.py migrate
 
-Nato nastavimo privzete nastavitve. V okolju Linux:
+Strežnik nato poženete z
 
-```
-export DJANGO_SETTINGS_MODULE=web.settings.local
-```
-V okolju Windows:
+    python manage.py runserver
 
-```
-set DJANGO_SETTINGS_MODULE=web.settings.local
-```
-Namesto tega pa lahko neodvisno od okolja po vsakem ukazu dodamo še:
+Teste poženete z
 
-```
---settings=web.settings.local
-```
+    python manage.py test
 
-Ustvarimo tabele v podatkovni bazi (od tukaj naprej stvari zaganjaš iz directory-ja web/)
+Ker ima spletna storitev zaradi podpore ArnesAAI specifičen način prijave, morate pred prvo uporabo z ukazom
 
-```
-python manage.py migrate
-```
+    python manage.py createsuperuser
 
-Nato ustvarimo administratorski račun
+ustvariti administratorskega uporabnika. Ob prvi in vseh ostalih prijavah pa se morate prijaviti prek [administratorskega vmesnika](http://localhost:8000/admin/), saj je po taki prijavi mogoče dostopati tudi na običajno stran. V administratorskem vmesniku lahko prav tako ustvarjate dodatne uporabnike in predmete.
 
-```
-python manage.py createsuperuser
-```
+### Namestitev v Dev Container
 
-Projekt Tomo je pripravljen na zagon.
-
-### Zagon strežnika
-
-Lokalni strežnik poženemo z ukazom
-
-```
-python manage.py runserver
-```
-
-Ker je zaradi ArnesAAI specifičen login, je edini način za prijavo na [administratorskega vmesnika](http://localhost:8000/admin/), saj je po prijavi v administratorski vmesnik mogoče dostopati tudi na običajno stran.
-
-Predmete in uporabnike ustvarimo kar v [administratorskem vmesniku](http://localhost:8000/admin/), prav tako jim tam lahko dodelimo pravice.
-
-Veselo testiranje!
+Kdor ima nameščen Docker in urejevalnik [VS Code](https://code.visualstudio.com/), lahko za razvoj uporabi tudi [Dev Container](https://code.visualstudio.com/docs/devcontainers/containers). Pred zagonom morate datoteko `example.env` prekopirati v novo datoteko `.env` in po potrebi popraviti nastavitve. Nato poženete ukaz `Dev Containers: Open in Container` (lahko tudi `Build and Open` ali `Rebuild and Reopen`). Navodila za zagon so taka kot zgoraj, le da lahko izpustite vse ukaze za delo z virtualnim okoljem `venv`.
