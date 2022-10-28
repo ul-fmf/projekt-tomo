@@ -1,26 +1,8 @@
-from .common import *
-
-SECRET_KEY = os.environ["SECRET_KEY"]
+from .docker import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = [os.environ["ALLOWED_HOSTS"]]
-
 WSGI_APPLICATION = "web.wsgi.arnes.application"
-
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.environ["POSTGRES_DB"],
-        "USER": os.environ["POSTGRES_USER"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "HOST": "db",
-        "PORT": "",
-    }
-}
-
-STATIC_ROOT = "/var/static/"
-STATIC_URL = "/static/"
 
 MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -40,9 +22,6 @@ SHIBBOLETH_ATTRIBUTE_MAP = {
     "sn": (True, "last_name"),
     "mail": (False, "email"),
 }
-
-LOGIN_REDIRECT_URL = "/"
-SUBMISSION_URL = "https://www.projekt-tomo.si"
 
 AUTHENTICATION_BACKENDS = (
     "social_core.backends.google.GoogleOAuth2",

@@ -3,13 +3,13 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /src
 RUN groupadd -g 1000 tomo && useradd -m -u 1000 -g tomo tomo -s /bin/bash
 COPY requirements /src/requirements
-RUN pip install --no-cache-dir -r requirements/arnes.txt
+RUN pip install --no-cache-dir -r requirements/docker.txt
 COPY . /src/
 RUN mkdir -p /var/static
 RUN chown -R tomo /src /var/static
 USER tomo
 ENV UWSGI_CHDIR=/src
-ENV UWSGI_MODULE=web.wsgi.arnes:application
+ENV UWSGI_MODULE=web.wsgi.docker:application
 ENV UWSGI_MASTER=True
 # Enables us to simply restart UWSGI by deleting /tmp/project-master.pid
 ENV UWSGI_PIDFILE=/tmp/project-master.pid
