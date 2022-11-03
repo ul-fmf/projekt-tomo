@@ -28,14 +28,14 @@ Dobiti bi morali sledečo strukturo datotek:
 Po prvi namestitvi, pa tudi na vsake toliko časa, greste v imenik `projekt-tomo/web/` ter s sledečimi ukazi kodo posodobite, aktivirate virtualno okolje, namestite potrebne pakete in posodobite bazo:
 
     git pull
-    source venv/bin/activate
+    source ../venv/bin/activate
     pip install -r requirements/local.txt
     python manage.py migrate
 
 Če uporabljate Windowse, je drugi ukaz drugačen
 
     git pull
-    .\venv\Scripts\activate
+    ..\venv\Scripts\activate
     pip install -r requirements\local.txt
     python manage.py migrate
 
