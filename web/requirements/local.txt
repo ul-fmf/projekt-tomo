@@ -1,3 +1,4 @@
 -r common.txt
-coverage~=3.7.1
-django-silk~=1.0.0
+coverage~=6.5.0
+django-silk~=5.0.1
+model-bakery~=1.9.0

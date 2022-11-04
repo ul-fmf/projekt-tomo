@@ -10,3 +10,4 @@ debug.log
 venv/
 data
 .env
+.DS_Store
