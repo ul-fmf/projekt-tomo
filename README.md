@@ -53,6 +53,8 @@ Ker ima spletna storitev zaradi podpore ArnesAAI specifičen način prijave, mor
 
 ustvariti administratorskega uporabnika. Ob prvi in vseh ostalih prijavah pa se morate prijaviti prek [administratorskega vmesnika](http://localhost:8000/admin/), saj je po taki prijavi mogoče dostopati tudi na običajno stran. V administratorskem vmesniku lahko prav tako ustvarjate dodatne uporabnike in predmete.
 
+Če želite, lahko uporabite tudi bazo z bolj realnimi (anonimiziranimi) podatki. Prenesite datoteko [db.sqlite3](https://unilj-my.sharepoint.com/:u:/g/personal/matija_pretnar_fmf_uni-lj_si1/EV9O7hBuKDhPuvBjTybIzRwBWrhu2NBW9twoPdun_t-WXQ?e=qXhBdy), ki jo shranite na `projekt-tomo/web/web/db.sqlite3`. Administratorski uporabnik z uporabniškim imenom `admin` in geslom `admin` je že vključen.
+
 ### Namestitev v Dev Container
 
 Kdor ima nameščen Docker in urejevalnik [VS Code](https://code.visualstudio.com/), lahko za razvoj uporabi tudi [Dev Container](https://code.visualstudio.com/docs/devcontainers/containers). Pred zagonom morate datoteko `example.env` prekopirati v novo datoteko `.env` in po potrebi popraviti nastavitve. Nato poženete ukaz `Dev Containers: Open in Container` (lahko tudi `Build and Open` ali `Rebuild and Reopen`). Navodila za zagon so taka kot zgoraj, le da lahko izpustite vse ukaze za delo z virtualnim okoljem `venv`.

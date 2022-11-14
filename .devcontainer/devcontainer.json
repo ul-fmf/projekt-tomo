@@ -21,7 +21,6 @@
 			"/src"
 		],
 		"python.formatting.provider": "black",
-		"editor.formatOnSave": true,
 		"python.linting.enabled": true,
 		"python.linting.pylintEnabled": true,
 		"python.linting.pylintPath": "/usr/local/bin/pylint",
