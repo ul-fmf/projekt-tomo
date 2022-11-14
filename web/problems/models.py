@@ -18,7 +18,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
     problem_set = models.ForeignKey(
-        "courses.ProblemSet", on_delete=models.PROTECT, related_name="problems"
+        "courses.ProblemSet", on_delete=models.CASCADE, related_name="problems"
     )
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
@@ -184,7 +184,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
 
 class Part(OrderWithRespectToMixin, models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.PROTECT, related_name="parts")
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="parts")
     description = models.TextField(blank=True)
     template = models.TextField(blank=True)
     solution = models.TextField(blank=True)
