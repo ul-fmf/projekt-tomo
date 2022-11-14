@@ -1,20 +1,11 @@
 from .docker import *
 
-DEBUG = False
-
-WSGI_APPLICATION = "web.wsgi.arnes.application"
-
-MIDDLEWARE = (
-    "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware",
+MIDDLEWARE.insert(
+    MIDDLEWARE.index("django.contrib.auth.middleware.AuthenticationMiddleware") + 1,
     "shibboleth.middleware.ShibbolethRemoteUserMiddleware",
-    "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "simple_history.middleware.HistoryRequestMiddleware",
 )
+
+DEBUG = False
 
 SHIBBOLETH_ATTRIBUTE_MAP = {
     "mail": (True, "username"),
@@ -37,4 +28,3 @@ SOCIAL_AUTH_FACEBOOK_SECRET = os.environ["SOCIAL_AUTH_FACEBOOK_SECRET"]
 SOCIAL_AUTH_FACEBOOK_SCOPE = ["email"]
 SOCIAL_AUTH_USER_MODEL = "users.User"
 SOCIAL_AUTH_FACEBOOK_API_VERSION = "2.11"
-SUBMISSION_URL = "https://www.projekt-tomo.si"

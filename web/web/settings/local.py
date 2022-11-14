@@ -1,27 +1,25 @@
 from .common import *
 
-INSTALLED_APPS += [
-    "silk",
-]
+INSTALLED_APPS.append("silk")
 MIDDLEWARE.insert(0, "silk.middleware.SilkyMiddleware")
 
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "0vb+-_-52phz@ii^cxr+mlgvmn6fctd+v5qpnv&k+-00#u-==0"
 
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-WSGI_APPLICATION = "web.wsgi.local.application"
+# Database
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "tomo.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
-
-STATIC_URL = "/static/"
-LOGIN_URL = "/accounts/login/"
-LOGOUT_URL = "/accounts/logout/"
-LOGIN_REDIRECT_URL = "/"
-SUBMISSION_URL = "http://127.0.0.1:8000"

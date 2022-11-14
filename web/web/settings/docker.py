@@ -6,8 +6,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [os.environ["ALLOWED_HOSTS"]]
 
-WSGI_APPLICATION = "web.wsgi.docker.application"
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -20,7 +18,3 @@ DATABASES = {
 }
 
 STATIC_ROOT = "/var/static/"
-STATIC_URL = "/static/"
-
-LOGIN_REDIRECT_URL = "/"
-SUBMISSION_URL = "http://127.0.0.1:8000"

@@ -9,14 +9,12 @@ RUN mkdir -p /var/static
 RUN chown -R tomo /src /var/static
 USER tomo
 ENV UWSGI_CHDIR=/src
-ENV UWSGI_MODULE=web.wsgi.docker:application
+ENV UWSGI_MODULE=web.wsgi:application
 ENV UWSGI_MASTER=True
-# Enables us to simply restart UWSGI by deleting /tmp/project-master.pid
-ENV UWSGI_PIDFILE=/tmp/project-master.pid
 ENV UWSGI_VACUUM=True
 ENV UWSGI_MAX_REQUESTS=5000
 ENV UWSGI_UID=tomo
 ENV UWSGI_GID=tomo
-ENV UWSGI_HTTP=:8080
+ENV UWSGI_SOCKET=:8080
 ENV UWSGI_STATIC_MAP=/static=/var/static
-CMD ./manage.py migrate --no-input && ./manage.py collectstatic --no-input && uwsgi
+CMD ./manage.py collectstatic --no-input && uwsgi
