@@ -343,6 +343,9 @@ class CourseGroup(models.Model):
     )
     students = models.ManyToManyField(User, blank=True, related_name="course_groups")
 
+    class Meta:
+        ordering = ["title", "description"]
+
     def __str__(self):
         return self.title + " -- " + str(self.course)
 
