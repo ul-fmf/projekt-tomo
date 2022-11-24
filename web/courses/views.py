@@ -420,7 +420,7 @@ def course_groups_confirm_delete(request, group_pk):
     course = get_object_or_404(Course, id=course_pk)
     verify(request.user.can_delete_course_groups(course))
     return render(
-        request, "courses/coursegroup_confirm_delete.html", {"group_pk": group_pk}
+            request, "courses/coursegroup_confirm_delete.html", {"group_pk": group_pk, "group": group}
     )
 
 
