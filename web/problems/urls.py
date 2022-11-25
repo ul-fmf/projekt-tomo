@@ -34,6 +34,6 @@ urlpatterns = [
         ProblemCreate.as_view(),
         name="problem_create",
     ),
-    path(r"<int:pk>/delete/", ProblemDelete.as_view(), name="problem_delete"),
-    path(r"<int:problem_pk>/copy/", views.copy_form, name="problem_copy"),
+    path("<int:pk>/delete/", ProblemDelete.as_view(), name="problem_delete"),
+    path("<int:problem_pk>/copy/", views.copy_form, name="problem_copy"),
 ]

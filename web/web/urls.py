@@ -56,5 +56,5 @@ urlpatterns += courses.urls.urlpatterns
 
 if "silk" in settings.INSTALLED_APPS:
     urlpatterns += [
-        path(r"silk/", include("silk.urls", namespace="silk")),
+        path("silk/", include("silk.urls", namespace="silk")),
     ]
