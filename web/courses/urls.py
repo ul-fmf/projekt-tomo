@@ -64,7 +64,16 @@ problem_set_urls = [
         views.problem_set_progress_groups,
         name="problem_set_progress_groups",
     ),
-
+    path(
+        "update_problem_set/",
+        ProblemSetUpdate.as_view(),
+        name="problem_set_update",
+    ),
+    path(
+        "delete_problem_set/",
+        ProblemSetDelete.as_view(),
+        name="problem_set_delete",
+    ),
 ]
 
 course_urls = [
@@ -103,16 +112,6 @@ course_urls = [
         "create_problem_set/",
         ProblemSetCreate.as_view(),
         name="problem_set_create",
-    ),
-    path(
-        "update_problem_set/",
-        ProblemSetUpdate.as_view(),
-        name="problem_set_update",
-    ),
-    path(
-        "delete_problem_set/",
-        ProblemSetDelete.as_view(),
-        name="problem_set_delete",
     ),
     path(
         "groups/",

@@ -237,7 +237,6 @@ def problem_set_move(request, problem_set_pk):
 class ProblemSetCreate(CreateView):
     model = ProblemSet
     fields = ["title", "description", "visible", "solution_visibility"]
-    pk_url_kwarg = "course_pk"
 
     def get_context_data(self, **kwargs):
         context = super(ProblemSetCreate, self).get_context_data(**kwargs)
@@ -254,7 +253,7 @@ class ProblemSetCreate(CreateView):
 class ProblemSetUpdate(UpdateView):
     model = ProblemSet
     fields = ["title", "description", "visible", "solution_visibility"]
-    pk_url_kwarg = "course_pk"
+    pk_url_kwarg = "problem_set_pk"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
@@ -264,7 +263,7 @@ class ProblemSetUpdate(UpdateView):
 
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
-    pk_url_kwarg = "course_pk"
+    pk_url_kwarg = "problem_set_pk"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
