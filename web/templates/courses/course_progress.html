@@ -3,7 +3,7 @@
 
 {% block title %}Tomo – {{ course.title }} – {{ observed_user.get_full_name }}{% endblock %}
 
- 
+
 {% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
   <a class="navbar-brand topnav" href="#">{{ observed_user.get_full_name }} <span class="sr-only">(current)</span></a>

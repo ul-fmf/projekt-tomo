@@ -33,7 +33,7 @@ class BasicViewsTestCase(TestCase):
                 ("problem_set_detail", {"problem_set_pk": visible_prob_set.pk}),
                 ("course_detail", {"course_pk": self.course.pk}),
                 ("problem_attempt_file", {"problem_pk": visible_problem.pk}),
-                ("problem_set_attempts", {"problem_set_pk": visible_prob_set.pk}),
+                ("problem_set_attempt", {"problem_set_pk": visible_prob_set.pk}),
                 (
                     "problem_solution",
                     {"problem_pk": visible_problem.pk, "user_pk": self.user.pk},
@@ -49,7 +49,7 @@ class BasicViewsTestCase(TestCase):
                 ("problem_set_edit", {"problem_set_pk": visible_problem.pk}),
                 ("problem_set_detail", {"problem_set_pk": prob_set.pk}),
                 ("problem_attempt_file", {"problem_pk": problem.pk}),
-                ("problem_set_attempts", {"problem_set_pk": prob_set.pk}),
+                ("problem_set_attempt", {"problem_set_pk": prob_set.pk}),
                 (
                     "problem_solution",
                     {"problem_pk": problem.pk, "user_pk": self.user.pk},

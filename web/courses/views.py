@@ -13,7 +13,7 @@ from .models import Course, CourseGroup, ProblemSet
 
 
 @login_required
-def problem_set_attempts(request, problem_set_pk):
+def problem_set_attempt(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set(problem_set))

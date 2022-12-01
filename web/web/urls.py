@@ -12,10 +12,10 @@ from users.views import mobile_app_token
 from utils.views import help, privacy_policy, terms_of_service
 
 router = DefaultRouter()
-router.register(r"attempts", AttemptViewSet, basename="attempts")
-router.register(r"problems", ProblemViewSet, basename="problems")
-router.register(r"problem_sets", ProblemSetViewSet, basename="problem_sets")
-router.register(r"courses", CourseViewSet, basename="courses")
+router.register("attempts", AttemptViewSet, basename="attempts")
+router.register("problems", ProblemViewSet, basename="problems")
+router.register("problem_sets", ProblemSetViewSet, basename="problem_sets")
+router.register("courses", CourseViewSet, basename="courses")
 
 
 urlpatterns = [
@@ -31,7 +31,7 @@ urlpatterns = [
         include(
             [
                 path(
-                    r"login/",
+                    "login/",
                     django.contrib.auth.views.LoginView.as_view(),
                     {"template_name": "login.html"},
                     name="login",

@@ -10,9 +10,9 @@ problem_set_urls = [
         name="problem_set_detail",
     ),
     path(
-        "download/",
-        views.problem_set_attempts,
-        name="problem_set_attempts",
+        "attempt/",
+        views.problem_set_attempt,
+        name="problem_set_attempt",
     ),
     path(
         "static/",
@@ -65,12 +65,12 @@ problem_set_urls = [
         name="problem_set_progress_groups",
     ),
     path(
-        "update_problem_set/",
+        "update/",
         ProblemSetUpdate.as_view(),
         name="problem_set_update",
     ),
     path(
-        "delete_problem_set/",
+        "delete/",
         ProblemSetDelete.as_view(),
         name="problem_set_delete",
     ),
@@ -89,17 +89,17 @@ course_urls = [
         name="unenroll_from_course",
     ),
     path(
-        "<int:teacher_pk>/demote_to_student",
+        "<int:teacher_pk>/demote_to_student/",
         views.demote_to_student,
         name="demote_to_student",
     ),
     path(
-        "<int:student_pk>/promote_to_teacher",
+        "<int:student_pk>/promote_to_teacher/",
         views.promote_to_teacher,
         name="promote_to_teacher",
     ),
     path(
-        "<int:student_pk>/toggle_observed",
+        "<int:student_pk>/toggle_observed/",
         views.toggle_observed,
         name="toggle_observed",
     ),
@@ -109,7 +109,7 @@ course_urls = [
         name="course_progress",
     ),
     path(
-        "create_problem_set/",
+        "problem_set/create/",
         ProblemSetCreate.as_view(),
         name="problem_set_create",
     ),
@@ -132,12 +132,12 @@ groups_urls = [
         name="course_groups_update",
     ),
     path(
-        "delete",
+        "delete/",
         views.course_groups_delete,
         name="course_groups_delete",
     ),
     path(
-        "confirm_delete",
+        "confirm_delete/",
         views.course_groups_confirm_delete,
         name="course_groups_confirm_delete",
     ),
