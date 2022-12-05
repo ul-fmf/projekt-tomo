@@ -63,7 +63,6 @@ urlpatterns = [
     path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("api/mobile-app-token/", mobile_app_token, name="mobile_app_token"),
     path("api/", include(router.urls)),
-    path("problems/", include("problems.urls")),
     path("statistics/", include("tomo_statistics.urls")),
 ]
 

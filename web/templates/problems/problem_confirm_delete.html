@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<form action="{% url 'problem_delete' problem.id %}"  method="post" id='delete_problem_form'>
+<form action="{% url 'problem_delete' problem.problem_set.course.id problem.problem_set.id problem.id %}"  method="post" id='delete_problem_form'>
 	{% csrf_token %}
 
 	<div class="modal-header">

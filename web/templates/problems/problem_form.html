@@ -3,9 +3,9 @@
 
 
 {% if form.instance.pk %}
-	<form action="{% url 'problem_update' problem.id %}"  method="post" id='edit_problem_form'>
+	<form action="{% url 'problem_update' problem.problem_set.course.id problem.problem_set.id problem.id %}"  method="post" id='edit_problem_form'>
 {% else %}
-	<form action="{% url 'problem_create' problem_set.id %}"  method="post" id='add_problem_form'>
+	<form action="{% url 'problem_create' problem_set.course.id problem_set.id %}"  method="post" id='add_problem_form'>
 {% endif %}
 
 	{% csrf_token %}
