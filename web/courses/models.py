@@ -392,7 +392,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def get_absolute_url(self):
         from django.urls import reverse
 
-        return reverse("problem_set_detail", args=[str(self.pk)])
+        return reverse("problem_set_detail", args=[str(self.course.pk), str(self.pk)])
 
     def attempts_archive(self, user):
         files = [problem.attempt_file(user) for problem in self.problems.all()]

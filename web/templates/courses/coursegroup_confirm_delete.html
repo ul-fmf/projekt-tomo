@@ -20,7 +20,7 @@
 
 <script type='text/javascript'>
 function delete_course_group(){
-    var url = '{% url "course_groups_delete" group_pk %}';
+    var url = '{% url "course_groups_delete" course_pk group_pk %}';
     window.location.href = url;
 }
 </script>

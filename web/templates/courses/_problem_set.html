@@ -25,7 +25,7 @@
     <div class="media-right">
 
      <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Visibility">
-       <form action="{% url 'problem_set_toggle_visible' problem_set.pk %}" method="post">
+       <form action="{% url 'problem_set_toggle_visible' problem_set.course.pk problem_set.pk %}" method="post">
         {% csrf_token %}
         <button class="btn btn-default btn-sm" type="submit" aria-label="Show/Hide"
         {% if problem_set.visible %}
@@ -42,7 +42,7 @@
      </div>
 
                  <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Solution Visibility">
-                 <form action="{% url 'problem_set_toggle_solution_visibility' problem_set.pk %}" method="post">
+                 <form action="{% url 'problem_set_toggle_solution_visibility' problem_set.course.pk problem_set.pk %}" method="post">
                     {% csrf_token %}
                         <button class="btn btn-default btn-sm" aria-label="Set Solution Visibility"
                             {% if problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
@@ -72,20 +72,20 @@
                  </div>
 
                                   <div class="btn-group btn-group-sm" role="group" aria-label="Update">
-                    <button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update"
+                    <button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.course.pk problem_set.pk %}" aria-label="Update"
                         data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
                         <i class="fa fa-cog" aria-hidden="true"></i>
                     </button>
                  </div>
                  <div class="btn-group btn-group-sm" role="group" aria-label="Delete">
-                    <button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.pk %}" aria-label="Delete"
+                    <button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_delete' problem_set.course.pk problem_set.pk %}" aria-label="Delete"
                         data-toggle="tooltip" title="{% trans 'Delete' %}" data-container:'body'>
                         <i class="fa fa-trash-o" aria-hidden="true"></i>
                     </button>
                  </div>
 
       <div class="btn-group" role="group" aria-label="{% trans 'Move' %}">
-       <form action="{% url 'problem_set_move' problem_set.pk %}" method="post">
+       <form action="{% url 'problem_set_move' problem_set.course.pk problem_set.pk %}" method="post">
         {% csrf_token %}
          <div class="btn-group" role="group" aria-label="Move">
           <button type="submit" class="btn btn-sm btn-default" aria-label="Move Up" name="move_up">
@@ -119,7 +119,7 @@
       <div class="row">
         <h4 class="media-heading">
           <a style="{% if not problem_set.visible %}color:#bbb{% endif %}"
-             href="{% url 'problem_set_detail' problem_set.pk %}">
+             href="{% url 'problem_set_detail' problem_set.course.pk problem_set.pk %}">
              {{ problem_set.title }}
           </a>
         </h4>

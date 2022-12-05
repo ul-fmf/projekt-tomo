@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import include, path
 
 from . import views
 from .views import ProblemSetCreate, ProblemSetDelete, ProblemSetUpdate
@@ -76,6 +76,24 @@ problem_set_urls = [
     ),
 ]
 
+groups_urls = [
+    path(
+        "update/",
+        views.course_groups_update,
+        name="course_groups_update",
+    ),
+    path(
+        "delete/",
+        views.course_groups_delete,
+        name="course_groups_delete",
+    ),
+    path(
+        "confirm_delete/",
+        views.course_groups_confirm_delete,
+        name="course_groups_confirm_delete",
+    ),
+]
+
 course_urls = [
     path("", views.course_detail, name="course_detail"),
     path(
@@ -113,6 +131,7 @@ course_urls = [
         ProblemSetCreate.as_view(),
         name="problem_set_create",
     ),
+    path("problem_set/<int:problem_set_pk>/", include(problem_set_urls)),
     path(
         "groups/",
         views.course_groups,
@@ -123,28 +142,9 @@ course_urls = [
         views.course_groups_create,
         name="course_groups_create",
     ),
-]
-
-groups_urls = [
-    path(
-        "update/",
-        views.course_groups_update,
-        name="course_groups_update",
-    ),
-    path(
-        "delete/",
-        views.course_groups_delete,
-        name="course_groups_delete",
-    ),
-    path(
-        "confirm_delete/",
-        views.course_groups_confirm_delete,
-        name="course_groups_confirm_delete",
-    ),
+    path("groups/<int:group_pk>/", include(groups_urls)),
 ]
 
 urlpatterns = [
-    path("problem_set/<int:problem_set_pk>/", include(problem_set_urls)),
     path("course/<int:course_pk>/", include(course_urls)),
-    path("groups/<int:group_pk>/", include(groups_urls)),
 ]

@@ -3,7 +3,7 @@
 
 {% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
-  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.course.pk problem_set.pk %}">{{ problem_set.title }}</a>
   <a class="navbar-brand topnav" href="#">
     	{# Translators: Progress of students in a problem set - heading in navigation #}
     	{% trans "Progress" %}
@@ -59,9 +59,9 @@
         <ul class="nav nav-stacked" id="sidebar">
           <br>
           <br>
-          <a href="{% url 'problem_set_progress' problem_set.pk %}"> Celotni pregled </a> <br>
+          <a href="{% url 'problem_set_progress' problem_set.course.pk problem_set.pk %}"> Celotni pregled </a> <br>
           {% for group in problem_set.course.groups.all %}
-            <a href="{% url 'problem_set_progress_groups' problem_set.pk group.pk %}"> {{ group.title }} </a> <br>
+            <a href="{% url 'problem_set_progress_groups' problem_set.course.pk problem_set.pk group.pk %}"> {{ group.title }} </a> <br>
           {% endfor %}
         </ul>
       </div>

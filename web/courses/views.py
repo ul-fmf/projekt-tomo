@@ -13,17 +13,17 @@ from .models import Course, CourseGroup, ProblemSet
 
 
 @login_required
-def problem_set_attempt(request, problem_set_pk):
+def problem_set_attempt(request, course_pk, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_view_problem_set(problem_set))
     archive_name, files = problem_set.attempts_archive(request.user)
     return zip_archive(archive_name, files)
 
 
 @login_required
-def problem_set_progress(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_progress(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(
         request,
@@ -35,9 +35,9 @@ def problem_set_progress(request, problem_set_pk):
 
 
 @login_required
-def problem_set_progress_groups(request, problem_set_pk, group_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    group = get_object_or_404(CourseGroup, pk=group_pk)
+def problem_set_progress_groups(request, course_pk, problem_set_pk, group_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
+    group = get_object_or_404(CourseGroup, pk=group_pk, course__pk=course_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     return render(
         request,
@@ -47,8 +47,8 @@ def problem_set_progress_groups(request, problem_set_pk, group_pk):
 
 
 @login_required
-def problem_set_static(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_static(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     return render(
         request,
@@ -60,8 +60,8 @@ def problem_set_static(request, problem_set_pk):
 
 
 @login_required
-def problem_set_izpit(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_izpit(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     return render(
         request,
@@ -73,8 +73,8 @@ def problem_set_izpit(request, problem_set_pk):
 
 
 @login_required
-def problem_set_tex(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_tex(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     tex = render_to_string(
         "courses/izpit-latex-template.tex", {"problem_set": problem_set}
@@ -88,18 +88,18 @@ def problem_set_tex(request, problem_set_pk):
 
 
 @login_required
-def problem_set_edit(request, problem_set_pk):
+def problem_set_edit(request, course_pk, problem_set_pk):
     """Download an archive of edit files for a given problem set."""
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     archive_name, files = problem_set.edit_archive(request.user)
     return zip_archive(archive_name, files)
 
 
 @login_required
-def problem_set_detail(request, problem_set_pk):
+def problem_set_detail(request, course_pk, problem_set_pk):
     """Show a list of all problems in a problem set."""
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_view_problem_set(problem_set))
 
     user_attempts = request.user.attempts.filter(
@@ -224,8 +224,8 @@ def unenroll_from_course(request, course_pk):
 
 @require_POST
 @login_required
-def problem_set_move(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_move(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_course(problem_set.course))
     if "move_up" in request.POST:
         problem_set.move(-1)
@@ -276,8 +276,8 @@ class ProblemSetDelete(DeleteView):
 
 @require_POST
 @login_required
-def problem_set_toggle_visible(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_toggle_visible(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_visible()
     return redirect(problem_set.course)
@@ -285,8 +285,8 @@ def problem_set_toggle_visible(request, problem_set_pk):
 
 @require_POST
 @login_required
-def problem_set_toggle_solution_visibility(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_toggle_solution_visibility(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     problem_set.toggle_solution_visibility()
     return redirect(problem_set.course)
@@ -309,8 +309,8 @@ def course_progress(request, course_pk, user_pk):
 
 
 @login_required
-def problem_set_results(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+def problem_set_results(request, course_pk, problem_set_pk):
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk, course__pk=course_pk)
     verify(request.user.can_view_problem_set_attempts(problem_set))
     archive_name, files = problem_set.results_archive(request.user)
     return zip_archive(archive_name, files)
@@ -389,13 +389,13 @@ def course_groups_create(request, course_pk):
 
 
 @login_required
-def course_groups_update(request, group_pk):
+def course_groups_update(request, course_pk, group_pk):
     """
     Update view for groups following Projekt Tomo's design.
     """
 
-    group = get_object_or_404(CourseGroup, id=group_pk)
-    course = get_object_or_404(Course, id=group.course.pk)
+    group = get_object_or_404(CourseGroup, pk=group_pk, course__pk=course_pk)
+    course = group.course
 
     if request.method == "POST":
         form = CourseGroupForm(course.pk, request.POST, instance=group)
@@ -411,26 +411,26 @@ def course_groups_update(request, group_pk):
 
 
 @login_required
-def course_groups_confirm_delete(request, group_pk):
+def course_groups_confirm_delete(request, course_pk, group_pk):
     """
     This view will serve a modal window to tell the user if he is sure he wants to
     delete this group.
     """
 
-    group = get_object_or_404(CourseGroup, id=group_pk)
-    course_pk = group.course.pk
-    course = get_object_or_404(Course, id=course_pk)
+    group = get_object_or_404(CourseGroup, id=group_pk, course__pk=course_pk)
+    course = group.course
     verify(request.user.can_delete_course_groups(course))
     return render(
-        request, "courses/coursegroup_confirm_delete.html", {"group_pk": group_pk}
+        request,
+        "courses/coursegroup_confirm_delete.html",
+        {"course_pk": course_pk, "group_pk": group_pk},
     )
 
 
 @login_required
-def course_groups_delete(request, group_pk):
-    group = get_object_or_404(CourseGroup, id=group_pk)
-    course_pk = group.course.pk
-    course = get_object_or_404(Course, id=course_pk)
+def course_groups_delete(request, course_pk, group_pk):
+    group = get_object_or_404(CourseGroup, id=group_pk, course__pk=course_pk)
+    course = group.course
     verify(request.user.can_delete_course_groups(course))
 
     group.delete()
