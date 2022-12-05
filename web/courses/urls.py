@@ -18,10 +18,7 @@ problem_set_urls = [
                     views.problem_set_detail,
                     name="problem_set_detail",
                 ),
-                path(
-                    "problems/",
-                    include("problems.urls")
-                ),
+                path("problems/", include("problems.urls")),
                 path(
                     "attempt/",
                     views.problem_set_attempt,
@@ -160,9 +157,9 @@ course_urls = [
         name="course_progress",
     ),
     path("groups/", include(groups_urls)),
-    path("problem_set/", include(problem_set_urls)),
+    path("problem_sets/", include(problem_set_urls)),
 ]
 
 urlpatterns = [
-    path("course/<int:course_pk>/", include(course_urls)),
+    path("<int:course_pk>/", include(course_urls)),
 ]
