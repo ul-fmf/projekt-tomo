@@ -120,24 +120,24 @@ AUTH_USER_MODEL = "users.User"
 
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
-# LOGGING = {
-#     "version": 1,
-#     "disable_existing_loggers": False,
-#     "handlers": {
-#         "file": {
-#             "level": "WARNING",  # 'DEBUG'
-#             "class": "logging.FileHandler",
-#             "filename": BASE_DIR / "debug.log",
-#         },
-#     },
-#     "loggers": {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "DEBUG",
-#             "propagate": True,
-#         },
-#     },
-# }
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "file": {
+            "level": "WARNING",  # 'DEBUG'
+            "class": "logging.FileHandler",
+            "filename": BASE_DIR / "debug.log",
+        },
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
+    },
+}
 
 SUBMISSION_URL = os.environ.get("SUBMISSION_URL", "http://127.0.0.1:8000")
 LOGIN_REDIRECT_URL = "/"
