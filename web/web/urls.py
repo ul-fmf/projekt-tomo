@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import courses.urls
 import django.contrib.auth.views
 from attempts.rest import AttemptViewSet
 from courses.rest import CourseViewSet, ProblemSetViewSet
@@ -62,10 +63,10 @@ urlpatterns = [
     path("api/auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("api/mobile-app-token/", mobile_app_token, name="mobile_app_token"),
     path("api/", include(router.urls)),
-    path("courses/", include("courses.urls")),
     path("statistics/", include("tomo_statistics.urls")),
 ]
 
+urlpatterns += courses.urls.urlpatterns
 
 if "silk" in settings.INSTALLED_APPS:
     urlpatterns += [
