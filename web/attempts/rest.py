@@ -135,12 +135,7 @@ class AttemptViewSet(GenericViewSet):
                         + "PROSIMO, PRENESITE SI NOVO DATOTEKO S STRANI\n  "
                         + request.build_absolute_uri(
                             reverse(
-                                "problem_attempt_file",
-                                args=[
-                                    attempt.part.problem.problem_set.course.pk,
-                                    attempt.part.problem.problem_set.pk,
-                                    attempt.part.problem.pk,
-                                ],
+                                "problem_attempt_file", args=[attempt.part.problem.pk]
                             )
                         )
                     )

@@ -19,10 +19,6 @@ problem_set_urls = [
                     name="problem_set_detail",
                 ),
                 path(
-                    "problems/",
-                    include("problems.urls")
-                ),
-                path(
                     "attempt/",
                     views.problem_set_attempt,
                     name="problem_set_attempt",

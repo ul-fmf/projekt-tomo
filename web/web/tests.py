@@ -38,14 +38,7 @@ class BasicViewsTestCase(TestCase):
                     },
                 ),
                 ("course_detail", {"course_pk": self.course.pk}),
-                (
-                    "problem_attempt_file",
-                    {
-                        "course_pk": visible_problem.problem_set.course.pk,
-                        "problem_set_pk": visible_problem.problem_set.pk,
-                        "problem_pk": visible_problem.pk,
-                    },
-                ),
+                ("problem_attempt_file", {"problem_pk": visible_problem.pk}),
                 (
                     "problem_set_attempt",
                     {
@@ -55,44 +48,16 @@ class BasicViewsTestCase(TestCase):
                 ),
                 (
                     "problem_solution",
-                    {
-                        "course_pk": visible_problem.problem_set.course.pk,
-                        "problem_set_pk": visible_problem.problem_set.pk,
-                        "problem_pk": visible_problem.pk,
-                        "user_pk": self.user.pk,
-                    },
+                    {"problem_pk": visible_problem.pk, "user_pk": self.user.pk},
                 ),
             ],
             "student": [],
             "teacher_redirect": [
-                (
-                    "problem_move",
-                    {
-                        "course_pk": problem.problem_set.course.pk,
-                        "problem_set_pk": problem.problem_set.pk,
-                        "problem_pk": problem.pk,
-                        "shift": 1,
-                    },
-                ),
-                (
-                    "problem_move",
-                    {
-                        "course_pk": problem.problem_set.course.pk,
-                        "problem_set_pk": problem.problem_set.pk,
-                        "problem_pk": problem.pk,
-                        "shift": -1,
-                    },
-                ),
+                ("problem_move", {"problem_pk": problem.pk, "shift": 1}),
+                ("problem_move", {"problem_pk": problem.pk, "shift": -1}),
             ],
             "teacher": [
-                (
-                    "problem_edit_file",
-                    {
-                        "course_pk": problem.problem_set.course.pk,
-                        "problem_set_pk": problem.problem_set.pk,
-                        "problem_pk": problem.pk,
-                    },
-                ),
+                ("problem_edit_file", {"problem_pk": problem.pk}),
                 (
                     "problem_set_edit",
                     {"course_pk": prob_set.course.pk, "problem_set_pk": prob_set.pk},
@@ -101,54 +66,21 @@ class BasicViewsTestCase(TestCase):
                     "problem_set_detail",
                     {"course_pk": prob_set.course.pk, "problem_set_pk": prob_set.pk},
                 ),
-                (
-                    "problem_attempt_file",
-                    {
-                        "course_pk": problem.problem_set.course.pk,
-                        "problem_set_pk": problem.problem_set.pk,
-                        "problem_pk": problem.pk,
-                    },
-                ),
+                ("problem_attempt_file", {"problem_pk": problem.pk}),
                 (
                     "problem_set_attempt",
                     {"course_pk": prob_set.course.pk, "problem_set_pk": prob_set.pk},
                 ),
                 (
                     "problem_solution",
-                    {
-                        "course_pk": problem.problem_set.course.pk,
-                        "problem_set_pk": problem.problem_set.pk,
-                        "problem_pk": problem.pk,
-                        "user_pk": self.user.pk,
-                    },
+                    {"problem_pk": problem.pk, "user_pk": self.user.pk},
                 ),
                 (
                     "problem_solution",
-                    {
-                        "course_pk": visible_problem.problem_set.course.pk,
-                        "problem_set_pk": visible_problem.problem_set.pk,
-                        "problem_pk": visible_problem.pk,
-                        "user_pk": self.other_user.pk,
-                    },
+                    {"problem_pk": visible_problem.pk, "user_pk": self.other_user.pk},
                 ),
-                (
-                    "problem_move",
-                    {
-                        "course_pk": visible_problem.problem_set.course.pk,
-                        "problem_set_pk": visible_problem.problem_set.pk,
-                        "problem_pk": visible_problem.pk,
-                        "shift": 1,
-                    },
-                ),
-                (
-                    "problem_move",
-                    {
-                        "course_pk": visible_problem.problem_set.course.pk,
-                        "problem_set_pk": visible_problem.problem_set.pk,
-                        "problem_pk": visible_problem.pk,
-                        "shift": -1,
-                    },
-                ),
+                ("problem_move", {"problem_pk": visible_problem.pk, "shift": 1}),
+                ("problem_move", {"problem_pk": visible_problem.pk, "shift": -1}),
                 (
                     "problem_set_progress",
                     {"course_pk": prob_set.course.pk, "problem_set_pk": prob_set.pk},

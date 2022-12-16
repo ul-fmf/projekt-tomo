@@ -12,41 +12,26 @@ from utils.views import plain_text
 
 
 @login_required
-def problem_attempt_file(request, course_pk, problem_set_pk, problem_pk):
+def problem_attempt_file(request, problem_pk):
     """Download an attempt file for a given problem."""
-    problem = get_object_or_404(
-        Problem,
-        pk=problem_pk,
-        problem_set__pk=problem_set_pk,
-        problem_set__course__pk=course_pk,
-    )
+    problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_view_problem(problem))
     filename, contents = problem.attempt_file(user=request.user)
     return plain_text(filename, contents, content_type=problem.content_type())
 
 
 @login_required
-def problem_edit_file(request, course_pk, problem_set_pk, problem_pk):
+def problem_edit_file(request, problem_pk):
     """Download an attempt file for a given problem."""
-    problem = get_object_or_404(
-        Problem,
-        pk=problem_pk,
-        problem_set__pk=problem_set_pk,
-        problem_set__course__pk=course_pk,
-    )
+    problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem(problem))
     filename, contents = problem.edit_file(user=request.user)
     return plain_text(filename, contents, content_type=problem.content_type())
 
 
 @login_required
-def problem_move(request, course_pk, problem_set_pk, problem_pk, shift):
-    problem = get_object_or_404(
-        Problem,
-        pk=problem_pk,
-        problem_set__pk=problem_set_pk,
-        problem_set__course__pk=course_pk,
-    )
+def problem_move(request, problem_pk, shift):
+    problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem_set(problem.problem_set))
     problem.move(shift)
     return redirect(problem)
@@ -62,13 +47,13 @@ class ProblemCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)
-        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_pk"])
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_id"])
         verify(self.request.user.can_edit_problem_set(problem_set))
         context["problem_set"] = problem_set
         return context
 
     def form_valid(self, form):
-        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_pk"])
+        problem_set = get_object_or_404(ProblemSet, id=self.kwargs["problem_set_id"])
         verify(self.request.user.can_edit_problem_set(problem_set))
         form.instance.author = self.request.user
         form.instance.problem_set = problem_set
@@ -82,7 +67,6 @@ class ProblemUpdate(UpdateView):
 
     model = Problem
     fields = "__all__"
-    pk_url_kwarg = "problem_pk"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemUpdate, self).get_object(*args, **kwargs)
@@ -103,7 +87,6 @@ class ProblemDelete(DeleteView):
     """
 
     model = Problem
-    pk_url_kwarg = "problem_pk"
 
     def get_success_url(self):
         return self.object.problem_set.get_absolute_url()
@@ -122,27 +105,21 @@ class CopyProblemForm(Form):
     problem_set_id = IntegerField(label="Problem set id")
 
 
-def copy_form(request, course_pk, problem_set_pk, problem_pk):
+def copy_form(request, problem_pk):
     """
     Show and react to CopyForm.
     """
-    problem = get_object_or_404(
-        Problem,
-        pk=problem_pk,
-        problem_set__pk=problem_set_pk,
-        problem_set__course__pk=course_pk,
-    )
+    problem = Problem.objects.get(pk=problem_pk)
     verify(request.user.can_view_problem(problem))
     if request.method == "POST":
         form = CopyProblemForm(request.POST)
         if form.is_valid():
-            new_problem_set_pk = form.cleaned_data["problem_set_id"]
-            new_problem_set = ProblemSet.objects.get(pk=new_problem_set_pk)
-            verify(request.user.can_edit_problem_set(new_problem_set))
-            problem.copy_to(new_problem_set)
-            return redirect(new_problem_set)
+            problem_set_pk = form.cleaned_data["problem_set_id"]
+            problem_set = ProblemSet.objects.get(pk=problem_set_pk)
+            verify(request.user.can_edit_problem_set(problem_set))
+            problem.copy_to(problem_set)
+            return redirect(problem_set)
         else:
-            print(form.errors)
             # TODO: handle errors
             response = HttpResponse("Please select a problem set.")
             return response
@@ -161,14 +138,9 @@ def copy_form(request, course_pk, problem_set_pk, problem_pk):
 
 
 @login_required
-def problem_solution(request, course_pk, problem_set_pk, problem_pk, user_pk):
+def problem_solution(request, problem_pk, user_pk):
     """Show problem solution."""
-    problem = get_object_or_404(
-        Problem,
-        pk=problem_pk,
-        problem_set__pk=problem_set_pk,
-        problem_set__course__pk=course_pk,
-    )
+    problem = Problem.objects.get(pk=problem_pk)
     student = get_object_or_404(User, pk=user_pk)
     verify(request.user.can_view_problem_solution(problem, student))
     problem_set = problem.problem_set

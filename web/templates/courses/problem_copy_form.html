@@ -9,7 +9,7 @@
 	{# Translators: Text of copy problem modal.#}
 	{% trans "Please choose a problem set to copy this problem to:" %}
 	
-	<form action="{% url 'problem_copy' problem.problem_set.course.id problem.problem_set.id problem.id %}"  method="post" id='copy_problem_form'>
+	<form action="{% url 'problem_copy' problem.id %}"  method="post" id='copy_problem_form'>
 	    {% csrf_token %}
 		<input type="hidden" name="problem_set_id", id="problem_set_id">
 	    <div id='problem_list_tree'></div>
