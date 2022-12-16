@@ -7,7 +7,7 @@
 
 {% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
-  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.course.pk problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
+  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
 {% endblock %}
 
 {% block content %}
@@ -24,11 +24,11 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" role="menu">
-            <li><a href="{% url 'problem_set_attempt' problem_set.course.pk problem_set.pk %}">
+            <li><a href="{% url 'problem_set_attempt' problem_set.pk %}">
                 {# Translators: Datoteke za reševanje #}
                 {% trans "Files for solving" %}
             </a></li>
-            <li><a href="{% url 'problem_set_edit' problem_set.course.pk problem_set.pk %}">
+            <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
                 {# Translators: Datoteke za urejanje #}
                 {% trans "Files for editing" %}
             </a></li>
@@ -37,7 +37,7 @@
         {% else %}
         <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
           {# Translators: Button for downloading all problem files within a problem set. #}
-          <a class="btn btn-default" href="{% url 'problem_set_attempt' problem_set.course.pk problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
+          <a class="btn btn-default" href="{% url 'problem_set_attempt' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
         </div>
         {% endif %}
         <h2 class="section-heading">
@@ -176,7 +176,7 @@
             <div class="subtasks">
               {% for part in problem.parts %}
               {% if show_teacher_forms %}
-                <a href="{% url 'problem_set_progress' problem_set.course.pk problem_set.pk %}#{{problem.anchor}}"
+                <a href="{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}"
                    data-toggle="tooltip"
                    title="{{ part.valid }} {% trans "valid" %} / {{ part.invalid }} {% trans "invalid" %} / {{ part.empty }} {% trans "empty" %} ">
               {% else %}

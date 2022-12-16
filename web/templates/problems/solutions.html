@@ -5,7 +5,7 @@
 
 {% block navigation-left %}
     <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
-    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.course.pk problem_set.pk %}">{{ problem_set.title }}</a>
+    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
     <a class="navbar-brand topnav" href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
     <a class="navbar-brand topnav" href="#">
       {% if user == student %}

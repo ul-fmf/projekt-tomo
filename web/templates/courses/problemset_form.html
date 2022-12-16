@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 {% if form.instance.pk %}
-	<form action="{% url 'problem_set_update' problemset.course.pk problemset.id %}"  method="post" id='edit_problem_set_form'>
+	<form action="{% url 'problem_set_update' problemset.id %}"  method="post" id='edit_problem_set_form'>
 {% else %}
 	<form action="{% url 'problem_set_create' course_pk %}"  method="post" id='add_problem_set_form'>
 {% endif %}
