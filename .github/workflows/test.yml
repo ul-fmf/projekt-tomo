@@ -10,7 +10,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: pip install -r web/requirements/local.txt 
       - run: pip install black isort flake8
-      - run: python3 -m black .
-      - run: python3 -m isort .
+      - run: python3 -m black --check .
+      - run: python3 -m isort --check .
       - run: flake8
       - run: cd web && python3 ./manage.py test --settings=web.settings.local

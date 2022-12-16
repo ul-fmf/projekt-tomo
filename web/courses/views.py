@@ -423,7 +423,7 @@ def course_groups_confirm_delete(request, course_pk, group_pk):
     return render(
         request,
         "courses/coursegroup_confirm_delete.html",
-        {"course_pk": course_pk, "group_pk": group_pk},
+        {"course_pk": course_pk, "group_pk": group_pk, "group": group},
     )
 
 
