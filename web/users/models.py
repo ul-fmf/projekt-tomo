@@ -9,6 +9,19 @@ class User(AbstractUser):
     class Meta:
         ordering = ["last_name", "first_name"]
 
+    def get_full_name(self):
+        # For some reason, names we get from shibboleth are understood as being
+        # in latin-1 rather than utf-8 and thus garbled. This is a temporary
+        # workaround for that.
+        full_name = super().get_full_name()
+        try:
+            return full_name.encode("latin-1").decode("utf-8")
+        # Some names we already tried to fix and haven't been corrupted since
+        # (perhaps the user did not log in after that), thus the workaround will
+        # cause an exception.
+        except (UnicodeDecodeError, UnicodeEncodeError):
+            return full_name
+
     def __str__(self):
         # In the forms, the __str__ method is used when showing model instances.
         return self.get_full_name()
