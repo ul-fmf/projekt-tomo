@@ -13,7 +13,7 @@ from .models import Course, CourseGroup, ProblemSet
 
 
 @login_required
-def problem_set_attempts(request, problem_set_pk):
+def problem_set_attempt(request, problem_set_pk):
     """Download an archive of attempt files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_view_problem_set(problem_set))
@@ -253,6 +253,7 @@ class ProblemSetCreate(CreateView):
 class ProblemSetUpdate(UpdateView):
     model = ProblemSet
     fields = ["title", "description", "visible", "solution_visibility"]
+    pk_url_kwarg = "problem_set_pk"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetUpdate, self).get_object(*args, **kwargs)
@@ -262,6 +263,7 @@ class ProblemSetUpdate(UpdateView):
 
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
+    pk_url_kwarg = "problem_set_pk"
 
     def get_object(self, *args, **kwargs):
         obj = super(ProblemSetDelete, self).get_object(*args, **kwargs)
