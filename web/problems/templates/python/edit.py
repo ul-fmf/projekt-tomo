@@ -71,7 +71,7 @@ def extract_problem(filename):
             return ''
         else:
             lines = description.strip().splitlines()
-            return "\n".join(line[line.index('#')+2:] for line in lines)
+            return "\n".join(line[line.index('#')+2:] for line in lines) + "\n"
 
     with open(filename, encoding='utf-8') as f:
         source = f.read()
