@@ -135,6 +135,9 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
 .tomo-subtasks { font-weight: 300; }
 .tomo-subtasks a { text-decoration: underline; }
+.tomo-subtask-valid { border-left: 3px solid #878F28 !important; }
+.tomo-subtask-invalid { border-left: 3px solid #D7A02C !important; }
+.tomo-subtask-empty { border-left: 3px solid #A92D2D !important; }
 .tomo-col-noleftpadding { padding-left: 0; }
 .tomo-add-task { background-color: #878F28; color: #fff; }
 .tomo-add-task i { margin-right: 10px; }
