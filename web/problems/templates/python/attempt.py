@@ -121,6 +121,7 @@
 
 "Kode od tu naprej NE SPREMINJAJTE!"
 
+# isort: off
 import io
 import json
 import os
