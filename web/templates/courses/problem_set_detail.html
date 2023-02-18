@@ -28,6 +28,10 @@
                 {# Translators: Datoteke za učence #}
                 {% trans "Student files" %}
             </a></li>
+            <li><a href="{% url 'problem_set_solution' problem_set.pk %}">
+                {# Translators: Datoteke z uradnimi rešitvami #}
+                {% trans "Solution files" %}
+            </a></li>
             <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
                 {# Translators: Datoteke za učitelje #}
                 {% trans "Teacher files" %}
@@ -85,6 +89,10 @@
                         <li><a href="{% url 'problem_attempt_file' problem.id %}">
                             {# Translators: Datoteka za reševanje #}
                             {% trans "File for solving" %}
+                        </a></li>
+                        <li><a href="{% url 'problem_solution_file' problem.id %}">
+                            {# Translators: Datoteka z uradnimi rešitvami #}
+                            {% trans "Solution file" %}
                         </a></li>
                         <li><a href="{% url 'problem_edit_file' problem.id %}">
                             {# Translators: Datoteka za urejanje #}

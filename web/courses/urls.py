@@ -15,6 +15,11 @@ problem_set_urls = [
         name="problem_set_attempt",
     ),
     path(
+        "solution/",
+        views.problem_set_solution,
+        name="problem_set_solution",
+    ),
+    path(
         "static/",
         views.problem_set_static,
         name="problem_set_static",
