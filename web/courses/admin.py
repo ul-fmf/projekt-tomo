@@ -5,9 +5,11 @@ from .models import Course, CourseGroup, Institution, ProblemSet, StudentEnrollm
 
 class StudentEnrollmentInline(admin.StackedInline):
     model = StudentEnrollment
+    autocomplete_fields = ("user",)
 
 
 class CourseAdmin(admin.ModelAdmin):
+    save_on_top = True
     filter_horizontal = (
         "teachers",
         "students",
@@ -21,7 +23,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     podvoji.short_description = "Podvoji"
 
-    actions = [podvoji]
+    actions = (podvoji,)
 
 
 class ProblemSetAdmin(admin.ModelAdmin):
