@@ -146,7 +146,13 @@
 
           <ul class="list-group tomo-subtasks">
             {% for part in problem.parts.all %}
-            <li class="list-group-item" id="{{ part.anchor }}">
+              {% if part.pk in valid_parts_ids %}
+              <li class="list-group-item tomo-subtask-valid" id="{{ part.anchor }}">
+              {% elif part.pk in invalid_parts_ids %}
+              <li class="list-group-item tomo-subtask-invalid" id="{{ part.anchor }}">
+              {% else %}
+              <li class="list-group-item tomo-subtask-empty" id="{{ part.anchor }}">
+              {% endif %}
               {# Translators: problem set detail #}
               {% if problem.parts.count > 1 %}
               <h5>{{ forloop.counter }}. {% trans "part" %}</h5>
