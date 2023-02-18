@@ -148,7 +148,9 @@
             {% for part in problem.parts.all %}
             <li class="list-group-item" id="{{ part.anchor }}">
               {# Translators: problem set detail #}
+              {% if problem.parts.count > 1 %}
               <h5>{{ forloop.counter }}. {% trans "part" %}</h5>
+              {% endif %}
               <p>{{ part.guarded_description|latex_markdown }}</p>
             </li>
             {% endfor %}

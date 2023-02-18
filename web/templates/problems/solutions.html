@@ -49,8 +49,13 @@
                       {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
                       {% endif %}
                     </div>
+                    {% if is_teacher %}
+                    {# Translators: Title of user solutions column with student name. #}
+                    {% trans 'Solution of' %} {{ student.get_full_name }}
+                    {% else %}
                     {# Translators: Title of user solutions column. #}
                     {% trans 'Your solution' %}
+                    {% endif %}
                   </div>
                   <div class="tomo-solution-code-user">
                     {% if part.attempt %}
