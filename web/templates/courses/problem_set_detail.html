@@ -44,6 +44,12 @@
                 {# Translators: Datoteke z rezultati #}
                 {% trans "Files with results" %}
             </a></li>
+            <li><a href="{% url 'problem_set_html' problem_set.pk %}">
+                {% trans "HTML without solutions" %}
+            </a></li>
+            <li><a href="{% url 'problem_set_html' problem_set.pk %}?solutions=visible">
+                {% trans "HTML with solutions" %}
+            </a></li>
           </ul>
 			<div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Update' %}">
 				<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update"

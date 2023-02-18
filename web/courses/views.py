@@ -47,27 +47,15 @@ def problem_set_progress_groups(request, problem_set_pk, group_pk):
 
 
 @login_required
-def problem_set_static(request, problem_set_pk):
+def problem_set_html(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     return render(
         request,
-        "courses/problem_set_static.html",
+        "courses/problem_set_html.html",
         {
             "problem_set": problem_set,
-        },
-    )
-
-
-@login_required
-def problem_set_izpit(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    verify(request.user.can_edit_problem_set(problem_set))
-    return render(
-        request,
-        "courses/problem_set_izpit.html",
-        {
-            "problem_set": problem_set,
+            "print_solution": request.GET.get("solutions") == "visible",
         },
     )
 
