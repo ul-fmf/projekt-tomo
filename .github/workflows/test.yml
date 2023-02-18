@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: pip install -r web/requirements/local.txt 
-      - run: pip install black isort flake8
+      - run: pip install black==23.1.0 isort==5.12.0 flake8==6.0.0
       - run: python3 -m black --check .
       - run: python3 -m isort --check .
       - run: flake8
