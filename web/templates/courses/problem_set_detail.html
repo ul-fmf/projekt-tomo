@@ -4,7 +4,6 @@
 
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
 
-
 {% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
   <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
@@ -25,12 +24,12 @@
           </a>
           <ul class="dropdown-menu" role="menu">
             <li><a href="{% url 'problem_set_attempt' problem_set.pk %}">
-                {# Translators: Datoteke za reševanje #}
-                {% trans "Files for solving" %}
+                {# Translators: Datoteke za učence #}
+                {% trans "Student files" %}
             </a></li>
             <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
-                {# Translators: Datoteke za urejanje #}
-                {% trans "Files for editing" %}
+                {# Translators: Datoteke za učitelje #}
+                {% trans "Teacher files" %}
             </a></li>
             <li><a href="{% url 'problem_set_tex' problem_set.pk %}">
                 {# Translators: LaTeX datoteke #}
