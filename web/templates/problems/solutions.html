@@ -70,7 +70,7 @@
                   </div>
                   <div class="tomo-solution-code-official">
                     {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
-                    <div class="tomo-pre">{{ part.solution }}</div>
+                    <div class="tomo-pre tex2jax_ignore">{{ part.solution }}</div>
 
                     {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN or problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
                     {# Translators: in solution comparison table #}
