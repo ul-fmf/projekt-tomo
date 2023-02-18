@@ -118,7 +118,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 AUTH_USER_MODEL = "users.User"
 
-LOCALE_PATHS = [BASE_DIR / "locale"]
+LOCALE_PATHS = [BASE_DIR.parent / "locale"]
 
 LOGGING = {
     "version": 1,
