@@ -19,8 +19,9 @@
               aria-label="{% trans "Remove from my courses" %}"
               data-toggle="tooltip"
               title="{% trans "Remove from my courses" %}">
-        <i class="fa fa-star fa-lg"></i>
-        <i class="fa fa-star-o fa-lg"></i>
+          <i class="fa fa-star fa-lg"></i>
+          <i class="fa fa-star-o fa-lg"></i>
+          {% trans "Leave" %}
       </button>
     </form>
   {% else %}
@@ -35,6 +36,7 @@
               title="{% trans "Add to my courses" %}">
         <i class="fa fa-star fa-lg"></i>
         <i class="fa fa-star-o fa-lg"></i>
+        {% trans "Enroll" %}
       </button>
     </form>
   {% endif %}

@@ -29,13 +29,26 @@
 <div class="content-section-y tomo-other">
   <div class="container tomo-other">
     <h2>Ostale ustanove, ki ponujajo predmete</h2>
-    {% regroup not_user_courses by institution.name as institution_list %}
+    {% regroup all_courses by institution.name as institution_list %}
     {% for institution in institution_list %}
     <a class="hide-courses" data-toggle="collapse" href="#inst-{{ forloop.counter}}" aria-expanded="false" aria-controls="inst-{{ forloop.counter}}">{{ institution.grouper }}</a>
     <div class="row collapse" id="inst-{{ forloop.counter}}">
       {% for course in institution.list %}
       <div class="col-md-4">
         <span class="pull-right">
+          {% if course.is_favourite %}
+          <form action="{% url 'unenroll_from_course' course.pk %}"
+                method="post" id='unenroll_from_course_form'>
+            {% csrf_token %}
+            <button class="tomo-unenroll" type="submit"
+                    aria-label="{% trans "Remove from my courses" %}" data-toggle="tooltip"
+                    title="{% trans "Remove from my courses" %}">
+              <i class="fa fa-star fa-lg"></i>
+              <i class="fa fa-star-o fa-lg"></i>
+              {% trans "Leave" %}
+            </button>
+          </form>
+          {% else %}
           <form action="{% url 'enroll_in_course' course.pk %}"
                 method="post" id='enroll_in_course_form'>
             {% csrf_token %}
@@ -44,8 +57,10 @@
                     title="{% trans "Add to my courses" %}">
               <i class="fa fa-star fa-lg"></i>
               <i class="fa fa-star-o fa-lg"></i>
+              {% trans "Enroll" %}
             </button>
           </form>
+          {% endif %}
         </span>
         <h3>
           <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>

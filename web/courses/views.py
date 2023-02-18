@@ -181,7 +181,7 @@ def demote_to_student(request, course_pk, teacher_pk):
 def homepage(request):
     """Show a list of all problems in a problem set."""
     user_courses = []
-    not_user_courses = []
+    all_courses = []
     for course in (
         Course.objects.order_by("institution__name")
         .select_related("institution")
@@ -189,19 +189,20 @@ def homepage(request):
     ):
         if request.user.is_favourite_course(course):
             user_courses.append(course)
+            all_courses.append(course)
             course.prepare_annotated_problem_sets(request.user)
             course.annotated_problem_sets = [
                 course for course in course.annotated_problem_sets if course.visible
             ][-1:-4:-1]
             course.annotate(request.user)
         else:
-            not_user_courses.append(course)
+            all_courses.append(course)
     return render(
         request,
         "homepage.html",
         {
             "user_courses": user_courses,
-            "not_user_courses": not_user_courses,
+            "all_courses": all_courses,
         },
     )
 
