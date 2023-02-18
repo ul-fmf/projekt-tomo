@@ -22,9 +22,12 @@ class User(AbstractUser):
         except (UnicodeDecodeError, UnicodeEncodeError):
             return full_name
 
+    def get_full_display_name(self) -> str:
+        return f"{self.get_full_name()} ({self.email})"
+
     def __str__(self):
         # In the forms, the __str__ method is used when showing model instances.
-        return self.get_full_name()
+        return self.get_full_display_name()
 
     def save(self, *args, **kwargs):
         try:
