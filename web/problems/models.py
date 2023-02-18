@@ -94,12 +94,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
         extension = self.EXTENSIONS[self.language]
         filename = "{0}_solution.{1}".format(problem_slug, extension)
         contents = render_to_string(
-            "{0}/attempt.{1}".format(self.language, extension),
+            "{0}/solution.{1}".format(self.language, extension),
             {
                 "problem": self,
                 "parts": parts,
-                "submission_url": url,
-                "authentication_token": authentication_token,
             },
         )
         return filename, contents
