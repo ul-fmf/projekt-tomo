@@ -169,8 +169,6 @@ import re
 import shutil
 import sys
 import traceback
-import urllib.error
-import urllib.request
 
 {% include 'python/check.py' %}
 
