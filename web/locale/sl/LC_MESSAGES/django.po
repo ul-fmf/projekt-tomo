@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-18 12:29+0000\n"
+"POT-Creation-Date: 2023-02-18 15:35+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -373,6 +373,194 @@ msgstr "Ste prepričani, da želite pobrisati sklop"
 msgid "Edit problem set"
 msgstr "Uredi sklop"
 
+#: templates/help_students.html:10
+#, fuzzy
+#| msgid "Demote to student"
+msgid "Help for students"
+msgstr "Status študenta"
+
+#: templates/help_students.html:18
+msgid "Using the system"
+msgstr "Delo v sistemu"
+
+#: templates/help_students.html:20
+msgid ""
+"You may sign in with Facebook, Google or Twitter account or with the "
+"assigned username and password."
+msgstr ""
+"V sistem se prijavimo preko Facebook, Google ali Twitter računa oziroma z "
+"uporabniškim  imenom in geslom, ki nam je bilo dodeljeno."
+
+#: templates/help_students.html:22
+msgid ""
+"List of courses appears after successful login. On the top are the pinned "
+"courses, meaning the teacher can examine your submissions. These courses are "
+"marked with"
+msgstr ""
+"Po uspešni prijavi se nam pokaže seznam predmetov, ki so v sistemu. Na vrhu "
+"seznama vidimo predmete, ki smo jih že dodali med priljubljene. To pomeni, "
+"da je naše ime na seznamu udeležencev (učencev) in da učitelj predmeta lahko "
+"pregleduje naše rešitve nalog. Predmeti, ki smo jih dodali na seznam "
+"priljubljenih, so označeni z"
+
+#: templates/help_students.html:22
+msgid "You can pin a course by clicking on "
+msgstr "Predmet dodamo med priljubljene s klikom na "
+
+#: templates/help_students.html:26
+#, fuzzy
+#| msgid ""
+#| "Last three problem sets of each pinned course are shown. Indicators of "
+#| "percentage of accepted submissions stand below the problem sets."
+msgid ""
+"Last three problem sets of each pinned course are shown. Percentage of "
+"accepted submissions is indicated next to the problem sets."
+msgstr ""
+"Pri predmetih, v katere smo že vpisani, vidimo zadnje tri sklope. Poleg "
+"vsakega sklopa je  zabeleženo, kolikšen delež nalog v tem sklopu smo že "
+"rešili tako, da so naše rešitve sprejete."
+
+#: templates/help_students.html:28
+msgid "Courses, problem sets and problems"
+msgstr "Predmeti, sklopi in naloge"
+
+#: templates/help_students.html:30
+msgid ""
+"Opening a course, you are presented with a list of problem sets. A problem "
+"set usually unites similar problems. At the top of each problem set there is "
+"an introductory text about the discussed concepts, followed by the problems. "
+"Problems are independent and contain one or more corellated subproblems "
+"which are generally sorted by difficulty."
+msgstr ""
+"Ko odpremo predmet, vidimo seznam sklopov nalog. Sklopi ponavadi zajemajo "
+"naloge podobne sorte. Ko odpremo sklop, najprej vidimo uvodno besedilo, v "
+"katerem so običajno razloženi osnovni ukazi, obravnavani v sklopu, temu pa "
+"sledijo posamezne naloge. Naloge so med seboj neodvisne, vsaka pa je "
+"sestavljena iz ene ali več podnalog, ki običajno gradijo ena na drugi in so "
+"postopoma težje."
+
+#: templates/help_students.html:34
+msgid "Solving the problems"
+msgstr "Reševanje nalog"
+
+#: templates/help_students.html:36
+msgid "Download the desired problem by clicking on"
+msgstr "Izberemo nalogo, ki jo želimo reševati in s strežnika s klikom na gumb"
+
+#: templates/help_students.html:36
+msgid "You may also download the entire set as a ZIP file with"
+msgstr ""
+"prenesemo Python datoteko na svoj računalnik. Če želimo, lahko s klikom na "
+"gumb prenesemo tudi ZIP datoteko, ki vsebuje datoteke vseh nalog v ustreznem "
+"sklopu:"
+
+#: templates/help_students.html:37
+msgid ""
+"A problem file is an ordinary Python file containing commented instructions. "
+"Instructions are separated with a blank space where you write the solution "
+"code."
+msgstr ""
+"V datoteki je besedilo naloge in podnalog, zapisano kot komentar. Med "
+"besedilom je prazen prostor, v katerega bomo vpisali rešitve."
+
+#: templates/help_students.html:41
+msgid ""
+"After you are finished with the solution run the file (in IDLE this is "
+"achieved by clicking on Run or pressing F5). This fires the tests written by "
+"the teacher and checks whether your solution is correct. Test results are "
+"then displayed in the shell."
+msgstr ""
+"Ko rešitve vpišemo v datoteko, datoteko poženemo (v IDLE s klikom na Run "
+"oziroma s klikom na F5). Ob zagonu se s pomočjo testov, ki jih je v naprej "
+"pripravil učitelj, preveri pravilnost naloge. Rezultati testov se bodo "
+"izpisali v ukazni lupini."
+
+#: templates/help_students.html:45
+msgid ""
+"Each time you run the file the solution is stored on the server, regardless "
+"of its correctness. This means you can continue solving the problem on "
+"another system. Downloaded files will already contain your partial solutions."
+msgstr ""
+"Ko datoteko poženemo, se naše rešitve shranijo na strežnik - ne glede na "
+"pravilnost. To pomeni, da reševanje lahko nadaljujemo kasneje, na drugem "
+"računalniku. Ko se bomo ponovno prijavili v sistem in prenesli datoteko z že "
+"reševano nalogo, bodo v datoteki tudi naše rešitve."
+
+#: templates/help_students.html:47
+msgid "Examining solutions and progress"
+msgstr "Ogled rešitev in napredka"
+
+#: templates/help_students.html:49
+msgid "Clicking"
+msgstr "Svoje rešitve določene naloge vidimo, če kliknemo na gumb"
+
+#: templates/help_students.html:49
+msgid ""
+"next to problem name, your solutions are displayed on the left and official "
+"solutions on the right."
+msgstr ""
+"ob imenu naloge. Odpre se nam nova stran, kjer so na levi strani zaslona "
+"prikazane naše rešitve, na desni pa rešitve tistega, ki je nalogo sestavil."
+
+#: templates/help_students.html:53
+msgid ""
+"Visibility of official solutions is determined by the teacher. Official "
+"solutions may be shown:"
+msgstr ""
+"Vidnost uradnih rešitev določa učitelj predmeta. Skrbnik lahko določi, da "
+"uradne rešitve vidimo:"
+
+#: templates/help_students.html:55
+msgid "always, even when your solution is incorrect (as on the image above),"
+msgstr "tudi, če naša rešitev ni sprejeta (kot na zgornji sliki),"
+
+#: templates/help_students.html:56
+msgid "only after your solution has been accepted (most common option) or"
+msgstr "po tem, ko je naša rešitve sprejeta (najpogosteje) ali"
+
+#: templates/help_students.html:57
+#, fuzzy
+#| msgid "never"
+msgid "never."
+msgstr "v nobenem primeru."
+
+#: templates/help_students.html:61
+msgid ""
+"A green icon appears when your solution is accepted. In case you have tried "
+"to solve a problem without success a red icon appears. This way you can "
+"easily see which subproblems are yet to be solved."
+msgstr ""
+"Ko je naša rešitev podnaloge sprejeta, se ob naslovu podnaloge izriše zelena "
+"ikona. Če smo podnalogo poskusili reševati, vendar rešitev ni pravilna, se "
+"izriše rdeča ikona. Tako na prvi pogled vidimo, katere podnaloge moramo še "
+"rešiti."
+
+#: templates/help_students.html:65
+msgid ""
+"Problem title is coloured based on number of solved subproblems as well:"
+msgstr "Tudi naslov naloge se bo obarval glede na rešenost podnalog:"
+
+#: templates/help_students.html:67
+msgid "Gray untill the first submission."
+msgstr "Dokler nismo oddali nobene podnaloge, bo naslov sive barve."
+
+#: templates/help_students.html:68
+msgid "Red if one of the subproblems is solved wrongly."
+msgstr ""
+"Če je ena od podnalog rešena nepravilno, se ozadje naslova naloge obarva "
+"rdeče (kot na zgornji sliki)."
+
+#: templates/help_students.html:69
+msgid "Yellow if all up to now submitted subproblems are correct."
+msgstr ""
+"Če še nismo rešili vseh podnalog, že rešene pa so sprejete, bo naslov naloge "
+"obarvan rumeno."
+
+#: templates/help_students.html:70
+msgid "Green if all subproblems are correctly solved."
+msgstr ""
+"Ko so sprejete rešitve vseh podnalog, se ozadje naslova naloge obarva zeleno."
+
 #. Translators: Title of problem delete confirmation page. Brisanje naloge
 #: templates/problems/problem_confirm_delete.html:9
 msgid "Delete problem"
@@ -537,11 +725,6 @@ msgstr ""
 
 #~ msgid "Delete course_group"
 #~ msgstr "Briši skupino"
-
-#, fuzzy
-#~| msgid "Copy problem"
-#~ msgid "Move problem"
-#~ msgstr "Kopiraj nalogo"
 
 #, fuzzy
 #~| msgid "Please choose a problem set to copy this problem to:"
