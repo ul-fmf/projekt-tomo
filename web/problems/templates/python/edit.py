@@ -54,6 +54,7 @@ if __name__ == '__main__':
 
 # =L=I=B=R=A=R=Y=@=
 
+import io
 import json
 import os
 import re

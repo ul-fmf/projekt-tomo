@@ -1,5 +1,3 @@
-import io
-import sys
 from contextlib import contextmanager
 
 
@@ -148,7 +146,7 @@ class Check:
         clean = Check.get("clean", clean)
         exec(code, global_env)
         errors = []
-        for (x, v) in expected_state.items():
+        for x, v in expected_state.items():
             if x not in global_env:
                 errors.append(
                     "morajo nastaviti spremenljivko {0}, vendar je ne".format(x)
