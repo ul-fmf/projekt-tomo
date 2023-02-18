@@ -42,7 +42,6 @@ class ProblemSetAdmin(admin.ModelAdmin):
 
 
 class CourseGroupAdmin(admin.ModelAdmin):
-
     filter_horizontal = ("students",)
 
 
