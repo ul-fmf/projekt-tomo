@@ -32,6 +32,14 @@
                 {# Translators: Datoteke za urejanje #}
                 {% trans "Files for editing" %}
             </a></li>
+            <li><a href="{% url 'problem_set_tex' problem_set.pk %}">
+                {# Translators: LaTeX datoteke #}
+                {% trans "LaTeX files" %}
+            </a></li>
+            <li><a href="{% url 'problem_set_results' problem_set.pk %}">
+                {# Translators: Datoteke z rezultati #}
+                {% trans "Files with results" %}
+            </a></li>
           </ul>
         </div>
         {% else %}
