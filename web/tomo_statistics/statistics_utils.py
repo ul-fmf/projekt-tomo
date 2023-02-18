@@ -38,7 +38,6 @@ def problem_timeline(problem, submissions):
 
     index = 0
     while index < len(sorted_attempts):
-
         current_time = sorted_attempts[index][0]
 
         same_time_index = index

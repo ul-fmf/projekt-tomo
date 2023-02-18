@@ -343,7 +343,6 @@ def course_groups(request, course_pk):
 
 class CourseGroupForm(forms.ModelForm):
     class Meta:
-
         students = forms.ModelMultipleChoiceField(queryset=User.objects.all())
 
         model = CourseGroup

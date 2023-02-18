@@ -1,6 +1,6 @@
 [tool.black]
-extend-exclude = 'web/problems/templates'
-target-version = ['py37']
+extend-exclude = 'web/problems/templates|migrations'
+taget-version = 'py310'
 [tool.isort]
 profile = "black"
-py_version = 37
+py_version = 310
