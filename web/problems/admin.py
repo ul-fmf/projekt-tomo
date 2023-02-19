@@ -12,9 +12,9 @@ class PartInline(admin.StackedInline):
 class ProblemAdmin(SimpleHistoryAdmin):
     inlines = (PartInline,)
     list_display = (
+        "title",
         "course",
         "problem_set",
-        "title",
         "description",
     )
     list_display_links = ("title",)
@@ -26,6 +26,13 @@ class ProblemAdmin(SimpleHistoryAdmin):
     search_fields = (
         "title",
         "description",
+    )
+
+    list_filter = (
+        "language",
+        "problem_set__course__institution",
+        "problem_set__course",
+        "problem_set",
     )
 
     def course(self, obj):
