@@ -40,24 +40,18 @@
           <form action="{% url 'unenroll_from_course' course.pk %}"
                 method="post" id='unenroll_from_course_form'>
             {% csrf_token %}
-            <button class="tomo-unenroll" type="submit"
-                    aria-label="{% trans "Remove from my courses" %}" data-toggle="tooltip"
-                    title="{% trans "Remove from my courses" %}">
-              <i class="fa fa-star fa-lg"></i>
-              <i class="fa fa-star-o fa-lg"></i>
-              {% trans "Leave" %}
+            <button class="tomo-unenroll" type="submit">
+              <i class="fa fa-star fa-lg">{% trans "Leave" %}</i>
+              <i class="fa fa-star-o fa-lg">{% trans "Leave" %}</i>
             </button>
           </form>
           {% else %}
           <form action="{% url 'enroll_in_course' course.pk %}"
                 method="post" id='enroll_in_course_form'>
             {% csrf_token %}
-            <button class="tomo-enroll" type="submit"
-                    aria-label="{% trans "Add to my courses" %}" data-toggle="tooltip"
-                    title="{% trans "Add to my courses" %}">
-              <i class="fa fa-star fa-lg"></i>
-              <i class="fa fa-star-o fa-lg"></i>
-              {% trans "Enroll" %}
+            <button class="tomo-enroll" type="submit">
+              <i class="fa fa-star fa-lg">{% trans "Enroll" %}</i>
+              <i class="fa fa-star-o fa-lg">{% trans "Enroll" %}</i>
             </button>
           </form>
           {% endif %}
