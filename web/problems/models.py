@@ -84,12 +84,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
         )
         return filename, contents
 
-    def solution_file(self, user):
-        authentication_token = Token.objects.get(user=user)
-        parts = [
-            (part, part.solution, part.attempt_token(user)) for part in self.parts.all()
-        ]
-        url = settings.SUBMISSION_URL + reverse("attempts-submit")
+    def solution_file(self):
+        parts = [(part, part.solution) for part in self.parts.all()]
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
         filename = "{0}_solution.{1}".format(problem_slug, extension)

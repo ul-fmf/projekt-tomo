@@ -101,7 +101,7 @@ def problem_set_solution(request, problem_set_pk):
     """Download an archive of solution files for a given problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
-    archive_name, files = problem_set.solutions_archive(request.user)
+    archive_name, files = problem_set.solutions_archive()
     return zip_archive(archive_name, files)
 
 

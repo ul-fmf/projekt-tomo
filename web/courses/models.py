@@ -399,8 +399,8 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         archive_name = slugify(self.title)
         return archive_name, files
 
-    def solutions_archive(self, user):
-        files = [problem.solution_file(user) for problem in self.problems.all()]
+    def solutions_archive(self):
+        files = [problem.solution_file() for problem in self.problems.all()]
         archive_name = "{0}-solution".format(slugify(self.title))
         return archive_name, files
 

@@ -1,167 +1,14 @@
 {% load i18n %}# =============================================================================
 # {{ problem.title|safe }}{% if problem.description %}
 #
-# {{ problem.guarded_description|indent:"# "|safe }}{% endif %}{% for part, solution_attempt, _ in parts %}
+# {{ problem.description|indent:"# "|safe }}{% endif %}{% for part, solution in parts %}
 # =====================================================================@{{ part.id|stringformat:'06d'}}=
 # {{ forloop.counter }}. podnaloga
-# {{ part.guarded_description|indent:"# "|safe }}
+# {{ part.description|indent:"# "|safe }}
 # =============================================================================
-{{ solution_attempt|safe }}{% endfor %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{{ solution|safe }}{% endfor %}
 
 # ============================================================================@
-
-'Če vam Python sporoča, da je v tej vrstici sintaktična napaka,'
-'se napaka v resnici skriva v zadnjih vrsticah vaše kode.'
-
-'Kode od tu naprej NE SPREMINJAJTE!'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import json
 import os
@@ -196,9 +43,8 @@ def _validate_current_file():
     filename = os.path.abspath(sys.argv[0])
     file_parts = extract_parts(filename)
     Check.initialize(file_parts)
-{% for part, _, token in parts %}
+{% for part, _ in parts %}
     if Check.part():
-        Check.current_part['token'] = '{{ token }}'
         try:
             {{ part.validation|default:"pass"|indent:"            "|safe }}
         except:
