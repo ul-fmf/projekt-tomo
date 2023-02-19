@@ -2,40 +2,38 @@
 {% load bootstrap3 %}
 
 {% if form.instance.pk %}
-	<form action="{% url 'problem_set_update' problemset.id %}"  method="post" id='edit_problem_set_form'>
+    <form action="{% url 'problem_set_update' problemset.id %}"  method="post" id='edit_problem_set_form'>
 {% else %}
-	<form action="{% url 'problem_set_create' course_pk %}"  method="post" id='add_problem_set_form'>
+    <form action="{% url 'problem_set_create' course_pk %}"  method="post" id='add_problem_set_form'>
 {% endif %}
-	{% csrf_token %}
-    	<input type="hidden" name="problem_set" id="id_problem_set" value="{{ form.instance.problem_set.id }}" />
-		<input type="hidden" name="referrer" id="id_referrer" value="{{referrer}}" />
-    	<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		    <h4 class="modal-title">
-		    	{% if form.instance.pk %}
-		  			{# Translators: Title of editing form for problems sets. #}
-		    		{% trans "Edit problem set" %} <em>{{ form.instance.title }}</em>
-	  			{% else %}
-	  				{# Translators: Title of 'add new problem set' form. #}
-	    			{% trans "Add new problem set" %}
-	  			{% endif %}
-		    </h4>
-		</div>		
-		<div class="modal-body">
-			{% bootstrap_form form %}
-		</div>
-		<div class="modal-footer">
-	    <button type="submit" class="btn btn-primary">
-		{% if form.instance.pk %}
-	    	{# Translators: edit problem form button. #}
-	    	{% trans "Edit" %}
-	    {% else %}
-	    	{# Translators: add new problem form button. #}
-	    	{% trans "Add" %}
-		{% endif %}
-	   	</button>
-		<button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
-	</div>
+    {% csrf_token %}
+        <input type="hidden" name="problem_set" id="id_problem_set" value="{{ form.instance.problem_set.id }}" />
+        <input type="hidden" name="referrer" id="id_referrer" value="{{referrer}}" />
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">
+                {% if form.instance.pk %}
+                      {# Translators: Title of editing form for problems sets. #}
+                    {% trans "Edit problem set" %} <em>{{ form.instance.title }}</em>
+                  {% else %}
+                      {# Translators: Title of 'add new problem set' form. #}
+                    {% trans "Add new problem set" %}
+                  {% endif %}
+            </h4>
+        </div>
+        <div class="modal-body">
+            {% bootstrap_form form %}
+        </div>
+        <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">
+        {% if form.instance.pk %}
+            {# Translators: edit problem form button. #}
+            {% trans "Edit" %}
+        {% else %}
+            {# Translators: add new problem form button. #}
+            {% trans "Add" %}
+        {% endif %}
+           </button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+    </div>
 </form>
-	 
-	
