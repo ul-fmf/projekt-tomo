@@ -1,20 +1,13 @@
 from django.contrib import admin
 
-from .models import Course, CourseGroup, Institution, ProblemSet, StudentEnrollment
-
-
-class StudentEnrollmentInline(admin.StackedInline):
-    model = StudentEnrollment
-    autocomplete_fields = ("user",)
+from .models import Course, CourseGroup, Institution, ProblemSet
 
 
 class CourseAdmin(admin.ModelAdmin):
-    save_on_top = True
     filter_horizontal = (
         "teachers",
         "students",
     )
-    inlines = (StudentEnrollmentInline,)
     list_filter = ("institution__name",)
 
     def podvoji(self, request, queryset):
