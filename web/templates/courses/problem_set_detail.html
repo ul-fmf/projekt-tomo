@@ -45,12 +45,23 @@
                 {% trans "Files with results" %}
             </a></li>
           </ul>
+			<div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Update' %}">
+				<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update"
+						data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
+					<i class="fa fa-cog" aria-hidden="true"></i>
+				</button>
+			</div>
+
         </div>
+
+
         {% else %}
         <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
           {# Translators: Button for downloading all problem files within a problem set. #}
           <a class="btn btn-default" href="{% url 'problem_set_attempt' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
         </div>
+
+
         {% endif %}
         <h2 class="section-heading">
           <hr class="section-heading-spacer">
