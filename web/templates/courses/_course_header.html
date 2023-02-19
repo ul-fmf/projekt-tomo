@@ -9,6 +9,10 @@
             title="{% trans "Taught course" %}">
       <i class="fa fa-graduation-cap fa-lg"></i>
     </button>
+  {% else %}
+    <button class="tomo-taught">
+    <i class="fa fa-star fa-lg"></i>
+    </button>
   {% endif %}
   </span>
 
@@ -19,6 +23,26 @@
       {{ course.title }}
     </a>
   </h2>
+
+  {% if course.is_favourite %}
+  <form action="{% url 'unenroll_from_course' course.pk %}"
+        method="post" id='unenroll_from_course_form'>
+    {% csrf_token %}
+    <button class="btn btn-default btn-lg btn-for-modal tomo-red-button" typer="submit">
+      {% trans "Leave" %}
+    </button>
+  </form>
+  {% else %}
+  <form action="{% url 'enroll_in_course' course.pk %}"
+        method="post" id='enroll_in_course_form'>
+    {% csrf_token %}
+    <button class="btn btn-default btn-lg btn-for-modal tomo-green-button" typer="submit">
+      {% trans "Enroll" %}
+    </button>
+  </form>
+  {% endif %}
+  
+  <p>{% comment %} I'm sorry =( {% endcomment %}</p>
 
 </div>
 

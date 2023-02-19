@@ -30,7 +30,6 @@ body, h1, h2, h3, h4, h5, h6 {
 a { color: #23527c; }
 a.solution-circle { text-decoration: none; }
 .dropdown { position: relative; }
-.content-section-y { background-color: rgba(215, 160, 44, .8); }
 
 .color1 { color: #A92D2D; }
 .color2 { color: #C0672D; }
@@ -98,12 +97,19 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-course-header .tomo-taught { color: #ddd; }
 .tomo-course-header .tomo-taught:focus, .tomo-course-header .tomo-taught:hover { cursor: default; }
 .tomo-course-header .pull-left { margin-top: 5px; }
-.tomo-enroll { color: #A92D2D; }
+.tomo-enroll { color: #23527c; }
 .tomo-unenroll { color: #D7A02C; }
 .tomo-unenroll .fa-star-o, .tomo-unenroll:hover .fa-star { display: none; }
 .tomo-unenroll:hover .fa-star-o { display: inline; color: #A92D2D; }
 .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
 .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
+
+.tomo-course-header .tomo-green-button { background-color: #878F28; color: #fff; }
+.tomo-course-header .tomo-green-button i { margin-right: 10px; }
+.tomo-course-header .tomo-green-button:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
+.tomo-course-header .tomo-red-button { background-color: #A92D2D; color: #fff; }
+.tomo-course-header .tomo-red-button i { margin-right: 10px; }
+.tomo-course-header .tomo-red-button:hover { background-color: rgba(175, 152, 42, .2); color: #AF982A; }
 
 .tomo-courses li { margin: 10px 0; padding: 0; }
 .tomo-courses .indicator { height: 5px; margin: 0 0 12px 0; display: inline-block; border: 0;}
@@ -150,7 +156,7 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-other .tomo-institution { margin: 0; padding: 0; text-align: right; }
 .tomo-other button { border: none; background: none; }
 .tomo-course-header button { border: none; background: none; font-size: 1.2em;}
-.tomo-other .tomo-enroll { margin-top: 10px; color: #fff; }
+.tomo-other .tomo-enroll { margin-top: 10px; }
 .tomo-other .tomo-enroll .fa-star, .tomo-enroll:hover .fa-star-o { display: none; }
 .tomo-other .tomo-enroll:hover .fa-star { display: inline; color: #D7A02C; }
 
