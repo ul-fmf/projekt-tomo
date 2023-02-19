@@ -19,6 +19,7 @@ class PartSerializer(ModelSerializer):
     class Meta:
         model = Part
         exclude = ("_order",)
+        extra_kwargs = {"template": {"trim_whitespace": False}}
 
 
 class ProblemSerializer(ModelSerializer):

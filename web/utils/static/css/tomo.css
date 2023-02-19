@@ -135,6 +135,9 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
 .tomo-subtasks { font-weight: 300; }
 .tomo-subtasks a { text-decoration: underline; }
+.tomo-subtask-valid { border-left: 3px solid #878F28 !important; }
+.tomo-subtask-invalid { border-left: 3px solid #D7A02C !important; }
+.tomo-subtask-empty { border-left: 3px solid #A92D2D !important; }
 .tomo-col-noleftpadding { padding-left: 0; }
 .tomo-add-task { background-color: #878F28; color: #fff; }
 .tomo-add-task i { margin-right: 10px; }
@@ -154,10 +157,14 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-overview-student { margin-top: 3em; }
 .tomo-overview-student h3 { font-size: 1.2em; }
 .tomo-overview-student table { font-weight: 300; margin-top: 1em; }
+.tomo-overview-student .table>thead>tr>th { border-left: none; border-right: none; }
 .tomo-overview-student .table>tbody>tr>td { border: none; border-bottom: 1px solid #e7e7e7; }
-.tomo-overview-student .row { border-top: 3px solid #e7e7e7; margin-bottom: 2em; }
 /* .tomo-overview-student .container .row:nth-child(even) { background-color: #eee; }
 .tomo-overview-student .container .row:nth-child(odd) { background-color: #fff; } */
+.tomo-overview-student-remove-border { border-left: none; border-right: none; }
+/* the padding values are overwitten by bootstrap if !important is removed */
+.tomo-overview-student-thin { padding: 2px !important; }
+.tomo-overview-student-date { text-align: right; padding: 2px !important; padding-right: 16px !important; }
 
 .tomo-task-solutions { margin-top: 2em; }
 .tomo-task-solutions .tomo-pre { white-space: pre-wrap; font-family: monospace; background-color: #f5f5f5;
@@ -221,7 +228,7 @@ footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
 .pln {
   color: #22221b;
 }
- 
+
 @media screen {
   /* string content */
   .str {

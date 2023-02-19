@@ -67,12 +67,13 @@ import urllib.request
 {% include 'python/check.py' %}
 
 def extract_problem(filename):
-    def strip_hashes(description):
+    def strip_hashes(description, add_newline=False):
         if description is None:
             return ""
         else:
             lines = description.strip().splitlines()
-            return "\n".join(line[line.index("#") + 2 :] for line in lines)
+            extracted_lines = "\n".join(line[line.index("#") + 2 :] for line in lines)
+            return extracted_lines + ('\n' if add_newline else '')
 
     with open(filename, encoding="utf-8") as f:
         source = f.read()
@@ -93,7 +94,7 @@ def extract_problem(filename):
             "part": int(match.group("part")),
             "description": strip_hashes(match.group("description")),
             "solution": match.group("solution").strip(),
-            "template": strip_hashes(match.group("template")),
+            "template": strip_hashes(match.group("template"), add_newline=True),
             "validation": match.group("validation").strip(),
             "problem": {{problem.id}},
         }
