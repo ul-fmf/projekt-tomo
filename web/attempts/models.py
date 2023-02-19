@@ -11,6 +11,12 @@ class Attempt(models.Model):
     part = models.ForeignKey(
         "problems.Part", on_delete=models.CASCADE, related_name="attempts"
     )
+    problem_instance = models.ForeignKey(
+        "courses.ProblemInstance",
+        on_delete=models.SET_NULL,
+        related_name="attempts",
+        null=True,
+    )
     solution = models.TextField(blank=True)
     valid = models.BooleanField(default=False)
     feedback = models.TextField(default="[]", validators=[is_json_string_list])

@@ -9,6 +9,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
         "user",
         "part",
         "problem",
+        "problem_instance",
         "solution",
         "valid",
         "feedback",
@@ -17,6 +18,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
     list_display = (
         "user",
         "problem",
+        "problem_instance",
         "part",
         "valid",
     )
@@ -37,6 +39,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
 
     readonly_fields = [
         "problem",
+        "problem_instance",
     ]
 
     def problem(self, obj):

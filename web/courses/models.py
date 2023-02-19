@@ -366,3 +366,17 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         for problem in self.problems.all():
             problem.copy_to(new_problem_set)
         return new_problem_set
+
+
+class ProblemInstance(OrderWithRespectToMixin, models.Model):
+    problem = models.ForeignKey(
+        "problems.Problem", on_delete=models.CASCADE, related_name="instances"
+    )
+    problem_set = models.ForeignKey("courses.ProblemSet", on_delete=models.CASCADE)
+    visible = models.BooleanField(default=False, verbose_name=_("Visible"))
+
+    class Meta:
+        order_with_respect_to = "problem_set"
+
+    def __str__(self):
+        return self.problem.title
