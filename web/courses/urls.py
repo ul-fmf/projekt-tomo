@@ -20,14 +20,9 @@ problem_set_urls = [
         name="problem_set_solution",
     ),
     path(
-        "static/",
-        views.problem_set_static,
-        name="problem_set_static",
-    ),
-    path(
-        "izpit/",
-        views.problem_set_izpit,
-        name="problem_set_izpit",
+        "html/",
+        views.problem_set_html,
+        name="problem_set_html",
     ),
     path(
         "tex/",
