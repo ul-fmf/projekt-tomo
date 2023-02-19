@@ -167,12 +167,19 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-overview-student-date { text-align: right; padding: 2px !important; padding-right: 16px !important; }
 
 .tomo-task-solutions { margin-top: 2em; }
-.tomo-task-solutions .tomo-pre { white-space: pre-wrap; font-family: monospace; background-color: #f5f5f5;
+.tomo-task-solutions .tomo-pre {
+    overflow: auto;
+    white-space: pre;
+    padding: 5px 7px;
+    padding-bottom: 15px; /* space for the scrollbar */
+    font-family: monospace;
+    background-color: #f5f5f5;
     border: 1px solid #ccc;
     height: 100%;
     font-weight: 300;
     font-size: 0.8em;
-    border-radius: 4px; padding: 5px 7px; }
+    border-radius: 4px;
+}
 .tomo-message {
     /*color: #D7A02C;*/
     /*position: absolute;*/
@@ -234,68 +241,68 @@ footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
   .str {
     color: #878F28;
   }
- 
+
   /* a keyword */
   .kwd {
     color: #A92D2D;
     font-weight: 800;
   }
- 
+
   /* a comment */
   .com {
     color: #878573;
   }
- 
+
   /* a type name */
   .typ {
     color: #AF982A;
   }
- 
+
   /* a literal value */
   .lit {
     color: #C0672D;
   }
- 
+
   /* punctuation */
   .pun {
     color: #22221b;
   }
- 
+
   /* lisp open bracket */
   .opn {
     color: #22221b;
   }
- 
+
   /* lisp close bracket */
   .clo {
     color: #22221b;
   }
- 
+
   /* a markup tag name */
   .tag {
     color: #ba6236;
   }
- 
+
   /* a markup attribute name */
   .atn {
     color: #C0672D;
   }
- 
+
   /* a markup attribute value */
   .atv {
     color: #5b9d48;
   }
- 
+
   /* a declaration */
   .dec {
     color: #C0672D;
   }
- 
+
   /* a variable name */
   .var {
     color: #ba6236;
   }
- 
+
   /* a function name */
   .fun {
     color: #AF982A;
