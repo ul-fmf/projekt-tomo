@@ -8,6 +8,7 @@
 {% endif %}
 	{% csrf_token %}
     	<input type="hidden" name="problem_set" id="id_problem_set" value="{{ form.instance.problem_set.id }}" />
+		<input type="hidden" name="referrer" id="id_referrer" value="{{referrer}}" />
     	<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		    <h4 class="modal-title">

@@ -269,6 +269,16 @@ class ProblemSetUpdate(UpdateView):
         verify(self.request.user.can_edit_problem_set(obj))
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetUpdate, self).get_context_data(**kwargs)
+        context["referrer"] = self.request.META.get("HTTP_REFERER")
+        return context
+
+    def get_success_url(self):
+        if "referrer" in self.request.POST:
+            return self.request.POST["referrer"]
+        return self.get_object().get_absolute_url()
+
 
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
