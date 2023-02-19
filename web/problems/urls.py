@@ -19,6 +19,11 @@ urlpatterns = [
         name="problem_attempt_file",
     ),
     path(
+        "<int:problem_pk>/solution/",
+        views.problem_solution_file,
+        name="problem_solution_file",
+    ),
+    path(
         "<int:problem_pk>/edit/",
         views.problem_edit_file,
         name="problem_edit_file",

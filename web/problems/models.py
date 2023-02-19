@@ -84,6 +84,20 @@ class Problem(OrderWithRespectToMixin, models.Model):
         )
         return filename, contents
 
+    def solution_file(self):
+        parts = [(part, part.solution) for part in self.parts.all()]
+        problem_slug = slugify(self.title).replace("-", "_")
+        extension = self.EXTENSIONS[self.language]
+        filename = "{0}_solution.{1}".format(problem_slug, extension)
+        contents = render_to_string(
+            "{0}/solution.{1}".format(self.language, extension),
+            {
+                "problem": self,
+                "parts": parts,
+            },
+        )
+        return filename, contents
+
     def marking_file(self, user):
         attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
         parts = [(part, attempts.get(part.id)) for part in self.parts.all()]

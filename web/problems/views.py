@@ -22,10 +22,19 @@ def problem_attempt_file(request, problem_pk):
 
 @login_required
 def problem_edit_file(request, problem_pk):
-    """Download an attempt file for a given problem."""
+    """Download an edit file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem(problem))
     filename, contents = problem.edit_file(user=request.user)
+    return plain_text(filename, contents, content_type=problem.content_type())
+
+
+@login_required
+def problem_solution_file(request, problem_pk):
+    """Download an attempt file with official solutions for a given problem."""
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    verify(request.user.can_edit_problem(problem))
+    filename, contents = problem.solution_file()
     return plain_text(filename, contents, content_type=problem.content_type())
 
 

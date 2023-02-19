@@ -97,6 +97,15 @@ def problem_set_edit(request, problem_set_pk):
 
 
 @login_required
+def problem_set_solution(request, problem_set_pk):
+    """Download an archive of solution files for a given problem set."""
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    archive_name, files = problem_set.solutions_archive()
+    return zip_archive(archive_name, files)
+
+
+@login_required
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
