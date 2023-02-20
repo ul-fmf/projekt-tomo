@@ -11,7 +11,7 @@ class AttemptSubmitTestCase(TestCase):
     def setUp(self):
         course = baker.make("courses.Course")
         problem_set = baker.make("courses.ProblemSet", course=course, visible=True)
-        problem = baker.make("problems.Problem", problem_set=problem_set)
+        problem = baker.make("problems.Problem", problem_set=problem_set, visible=True)
         self.part1 = baker.make("problems.Part", problem=problem, secret='["1"]')
         self.part2 = baker.make("problems.Part", problem=problem, secret='["1", "2"]')
         self.part3 = baker.make(

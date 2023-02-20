@@ -52,7 +52,7 @@ class ProblemCreate(CreateView):
     """
 
     model = Problem
-    fields = ["title", "description", "language"]
+    fields = ["title", "description", "language", "visible"]
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)

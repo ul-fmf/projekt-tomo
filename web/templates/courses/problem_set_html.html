@@ -8,7 +8,7 @@
     <title>{{ problem_set.title }}</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
     <link href="//fonts.googleapis.com/css?family=Open Sans:300,400,700,300italic,400italic,700italic" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">      
+    <link href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css" rel="stylesheet">
     <link href="{% static 'css/tomo.css' %}" rel="stylesheet">
   </head>
 
@@ -19,7 +19,7 @@
       {{ problem_set.description|latex_markdown }}
     {% endif %}
 
-    {% for problem in problem_set.problems.all %}
+    {% for problem in problem_set.visible_problems %}
       <hr>
       <h2>{{ problem.title }}</h2>
       {% if problem.description and problem.description.strip %}
@@ -29,10 +29,10 @@
       {% for part in problem.parts.all %}
         <h3>{{ forloop.counter }}. podnaloga</h3>
         {{ part.description|latex_markdown }}
-		{% if print_solution %}
-		<h4>Uradna rešitev</h4>
-		<pre>{{ part.solution }}</pre>
-		{% endif %}
+        {% if print_solution %}
+        <h4>Uradna rešitev</h4>
+        <pre>{{ part.solution }}</pre>
+        {% endif %}
       {% endfor %}
     {% endfor %}
 

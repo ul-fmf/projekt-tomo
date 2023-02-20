@@ -102,6 +102,10 @@ def problem_set_detail(request, problem_set_pk):
     user_attempts = request.user.attempts.filter(
         part__problem__problem_set__id=problem_set_pk
     )
+    student_statistics = problem_set.student_statistics()
+    if not request.user.is_teacher(problem_set.course):
+        user_attempts = user_attempts.filter(part__problem__visible=True)
+        student_statistics = filter(lambda p: p["visible"], student_statistics)
     valid_parts_ids = user_attempts.filter(valid=True).values_list("part_id", flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list(
         "part_id", flat=True
@@ -115,14 +119,14 @@ def problem_set_detail(request, problem_set_pk):
             "valid_parts_ids": valid_parts_ids,
             "invalid_parts_ids": invalid_parts_ids,
             "show_teacher_forms": request.user.can_edit_problem_set(problem_set),
-            "student_statistics": problem_set.student_statistics(),
+            "student_statistics": student_statistics,
         },
     )
 
 
 @login_required
 def course_detail(request, course_pk):
-    """Show a list of all problems in a problem set."""
+    """Show a list of all problem sets in a course."""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):

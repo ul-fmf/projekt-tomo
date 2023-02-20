@@ -85,10 +85,12 @@
         {% endif %}
 
         {% for problem in problem_set.problems.all %}
+        {% if problem.visible or show_teacher_forms %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
             <div class="row">
-              <div class="col-md-6">
+				<div class="col-md-6" {% if not problem.visible %}
+					style="color:#bbb" {% endif %}>
                 <h5>{{ problem.title }}</h5>
               </div>
               <div class="col-md-6">
@@ -195,6 +197,7 @@
             {% endfor %}
           </ul>
         </div>
+	    {% endif %}
         {% endfor %}
         {% if show_teacher_forms %}
         <hr>
@@ -211,7 +214,8 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in student_statistics %}
           <li>
-            <a href="#{{ problem.anchor }}">
+			  <a href="#{{ problem.anchor }}"
+				  {% if not problem.visible %} style="color:#bbb"{% endif %}>
               {{ problem.title }}
             </a>
             <div class="subtasks">
