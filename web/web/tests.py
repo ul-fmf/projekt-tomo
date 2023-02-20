@@ -46,7 +46,8 @@ class BasicViewsTestCase(TestCase):
             ],
             "teacher": [
                 ("problem_edit_file", {"problem_pk": problem.pk}),
-                ("problem_set_edit", {"problem_set_pk": visible_problem.pk}),
+                ("problem_set_edit", {"problem_set_pk": prob_set.pk}),
+                ("problem_set_edit", {"problem_set_pk": visible_prob_set.pk}),
                 ("problem_set_detail", {"problem_set_pk": prob_set.pk}),
                 ("problem_attempt_file", {"problem_pk": problem.pk}),
                 ("problem_set_attempt", {"problem_set_pk": prob_set.pk}),
