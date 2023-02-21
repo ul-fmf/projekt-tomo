@@ -23,7 +23,8 @@
       {{ course.title }}
     </a>
   </h2>
-
+  
+  {% if not course.is_taught %}
   {% if course.is_favourite %}
   <form action="{% url 'unenroll_from_course' course.pk %}"
         method="post" id='unenroll_from_course_form'>
@@ -40,6 +41,7 @@
       {% trans "Enroll" %}
     </button>
   </form>
+  {% endif %}
   {% endif %}
   
   <p>{% comment %} I'm sorry =( {% endcomment %}</p>
