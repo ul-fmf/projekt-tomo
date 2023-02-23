@@ -200,12 +200,8 @@ class Course(models.Model):
     def student_success(self):
         students = self.observed_students()
         problem_sets = self.problem_sets.filter(visible=True)
-        part_count = Part.objects.filter(
-            problem__problem_set__in=problem_sets, problem__visible=True
-        ).count()
-        attempts = Attempt.objects.filter(
-            part__problem__problem_set__in=problem_sets, part__problem__visible=True
-        )
+        part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
+        attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
         valid_attempts = (
             attempts.filter(valid=True).values("user").annotate(Count("user"))
         )
@@ -260,7 +256,7 @@ class Course(models.Model):
             "problems", "problems__parts"
         ):
             different_subtasks = 0
-            for problem in problem_set.visible_problems:
+            for problem in problem_set.problems.all():
                 different_subtasks += problem.parts.count()
 
             # In case there are no parts, we do not want to divide by 0
@@ -276,7 +272,6 @@ class Course(models.Model):
             attempts = Attempt.objects.filter(
                 part__problem__problem_set=problem_set,
                 user__in=students,
-                part__problem__visible=True,
             )
             for attempt in attempts:
                 if attempt.valid:
