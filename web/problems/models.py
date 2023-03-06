@@ -207,6 +207,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def content_type(self):
         return self.MIMETYPES[self.language]
 
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
+
 
 class Part(OrderWithRespectToMixin, models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="parts")

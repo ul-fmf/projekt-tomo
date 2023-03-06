@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms import Form, IntegerField
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from problems.models import Problem
 from users.models import User
@@ -43,6 +44,15 @@ def problem_move(request, problem_pk, shift):
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem_set(problem.problem_set))
     problem.move(shift)
+    return redirect(problem)
+
+
+@require_POST
+@login_required
+def problem_toggle_visible(request, problem_pk):
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    verify(request.user.can_edit_problem_set(problem.problem_set))
+    problem.toggle_visible()
     return redirect(problem)
 
 

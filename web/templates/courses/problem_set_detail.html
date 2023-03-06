@@ -122,7 +122,23 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
                       <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
                     </div>
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Visibility">
+                      <form action="{% url 'problem_toggle_visible' problem.pk %}" method="post">
+                       {% csrf_token %}
+                       <button class="btn btn-default btn-sm edit-btn" type="submit" aria-label="Show/Hide"
+                       {% if problem.visible %}
+                                 {# Translators: Naloga je vidna #}
+                                 title = "{% trans 'Problem is visible' %}"
+                             {% else %}
+                                 {# Translators: Naloga je skrna #}
+                                 title = "{% trans 'Problem is hidden' %}"
+                             {% endif %}
+                             >
+                            <i class="fa fa-eye{% if not problem.visible %}-slash{% endif %}"></i>
+                          </button>
+                      </form>
+                    </div>
+                                   <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
                             data-toggle="tooltip" title="{% trans 'Move up' %}" data-container="body">
                           <i class="fa fa-arrow-up" aria-hidden="true"></i>
