@@ -105,7 +105,7 @@ def problem_set_detail(request, problem_set_pk):
     student_statistics = problem_set.student_statistics()
     if not request.user.is_teacher(problem_set.course):
         user_attempts = user_attempts.filter(part__problem__visible=True)
-        student_statistics = filter(lambda p: p["visible"], student_statistics)
+        student_statistics = list(filter(lambda p: p["visible"], student_statistics))
     valid_parts_ids = user_attempts.filter(valid=True).values_list("part_id", flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list(
         "part_id", flat=True
