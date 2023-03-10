@@ -1,6 +1,6 @@
 import io
-from _thread import interrupt_main
 from contextlib import contextmanager
+from signal import SIGINT, raise_signal
 from threading import Timer
 
 
@@ -91,31 +91,25 @@ class Check:
 
     @staticmethod
     def equal(
-        expression,
-        expected_result,
-        clean=None,
-        env=None,
-        update_env=None,
-        time_limit=None,
+            expression,
+            expected_result,
+            clean=None,
+            env=None,
+            update_env=None,
     ):
         global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get("clean", clean)
-        try:
-            with Check.time_limit(Check.get("time_limit", time_limit)):
-                actual_result = eval(expression, global_env)
-            if clean(actual_result) != clean(expected_result):
-                Check.error(
-                    "Izraz {0} vrne {1!r} namesto {2!r}.",
-                    expression,
-                    actual_result,
-                    expected_result,
-                )
-                return False
-            else:
-                return True
-        except TimeoutError:
-            Check.error("Evaluacija izraza {0} je bila prekinjena.", expression)
+        actual_result = eval(expression, global_env)
+        if clean(actual_result) != clean(expected_result):
+            Check.error(
+                "Izraz {0} vrne {1!r} namesto {2!r}.",
+                expression,
+                actual_result,
+                expected_result,
+            )
             return False
+        else:
+            return True
 
     @staticmethod
     def approx(
@@ -123,8 +117,7 @@ class Check:
         expected_result,
         tol=1e-6,
         env=None,
-        update_env=None,
-        time_limit=None,
+        update_env=None
     ):
         try:
             import numpy as np
@@ -138,12 +131,7 @@ class Check:
             env = dict()
         env.update({"np": np})
         global_env = Check.init_environment(env=env, update_env=update_env)
-        try:
-            with Check.time_limit(Check.get("time_limit", time_limit)):
-                actual_result = eval(expression, global_env)
-        except TimeoutError:
-            Check.error("Evaluacija je bila prekinjena.")
-            return False
+        actual_result = eval(expression, global_env)
 
         if type(actual_result) is not type(expected_result):
             Check.error(
@@ -177,18 +165,12 @@ class Check:
         clean=None,
         env=None,
         update_env=None,
-        time_limit=None,
     ):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
         global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get("clean", clean)
-        try:
-            with Check.time_limit(Check.get("time_limit", time_limit)):
-                exec(code, global_env)
-        except TimeoutError:
-            Check.error("Evaluacija je bila prekinjena.")
-            return False
+        exec(code, global_env)
 
         errors = []
         for x, v in expected_state.items():
@@ -267,17 +249,14 @@ class Check:
             return False
 
     @staticmethod
-    def output(expression, content, env=None, update_env=None, time_limit=None):
+    def output(expression, content, env=None, update_env=None):
         global_env = Check.init_environment(env=env, update_env=update_env)
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         too_many_read_requests = False
         timeout = False
         try:
-            with Check.time_limit(Check.get("time_limit", time_limit)):
-                exec(expression, global_env)
-        except TimeoutError:
-            timeout = True
+            exec(expression, global_env)
         except EOFError:
             too_many_read_requests = True
         finally:
@@ -287,8 +266,6 @@ class Check:
         if equal and not too_many_read_requests and not timeout:
             return True
         else:
-            if timeout:
-                Check.error("Evaluacija je bila prekinjena.")
             if too_many_read_requests:
                 Check.error("Program prevečkrat zahteva uporabnikov vnos.")
             if not equal:
@@ -397,7 +374,6 @@ class Check:
             "should_stop": False,
             "stringio": VisibleStringIO,
             "update_env": False,
-            "time_limit": 5,
         }
     ]
 
@@ -448,7 +424,9 @@ class Check:
 
     @staticmethod
     @contextmanager
-    def time_limit(timeout_seconds):
+    def time_limit(timeout_seconds=1):
+        def interrupt_main():
+            raise_signal(SIGINT)
         timer = Timer(timeout_seconds, interrupt_main)
         timer.start()
         try:

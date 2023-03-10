@@ -215,7 +215,9 @@ def _validate_current_file():
         ] = "{{ token }}"
         try:
             {{ part.validation|default:"pass"|indent:"            "|safe }}
-        except:
+        except TimeoutError:
+            Check.error("Dovoljen čas izvajanja presežen")
+        except Exception:
             Check.error(
                 "Testi sprožijo izjemo\n  {0}",
                 "\n  ".join(traceback.format_exc().split("\n"))[:-2],
