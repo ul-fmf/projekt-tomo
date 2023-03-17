@@ -135,6 +135,9 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-task-heading .trash-btn:hover { background-color: rgba(169, 45, 45, .2); color: #A92D2D; }
 .tomo-subtasks { font-weight: 300; }
 .tomo-subtasks a { text-decoration: underline; }
+.tomo-subtask-valid { border-left: 3px solid #878F28 !important; }
+.tomo-subtask-invalid { border-left: 3px solid #D7A02C !important; }
+.tomo-subtask-empty { border-left: 3px solid #A92D2D !important; }
 .tomo-col-noleftpadding { padding-left: 0; }
 .tomo-add-task { background-color: #878F28; color: #fff; }
 .tomo-add-task i { margin-right: 10px; }
@@ -154,18 +157,29 @@ margin-left: 30px; margin-bottom: 5px;}
 .tomo-overview-student { margin-top: 3em; }
 .tomo-overview-student h3 { font-size: 1.2em; }
 .tomo-overview-student table { font-weight: 300; margin-top: 1em; }
+.tomo-overview-student .table>thead>tr>th { border-left: none; border-right: none; }
 .tomo-overview-student .table>tbody>tr>td { border: none; border-bottom: 1px solid #e7e7e7; }
-.tomo-overview-student .row { border-top: 3px solid #e7e7e7; margin-bottom: 2em; }
 /* .tomo-overview-student .container .row:nth-child(even) { background-color: #eee; }
 .tomo-overview-student .container .row:nth-child(odd) { background-color: #fff; } */
+.tomo-overview-student-remove-border { border-left: none; border-right: none; }
+/* the padding values are overwitten by bootstrap if !important is removed */
+.tomo-overview-student-thin { padding: 2px !important; }
+.tomo-overview-student-date { text-align: right; padding: 2px !important; padding-right: 16px !important; }
 
 .tomo-task-solutions { margin-top: 2em; }
-.tomo-task-solutions .tomo-pre { white-space: pre-wrap; font-family: monospace; background-color: #f5f5f5;
+.tomo-task-solutions .tomo-pre {
+    overflow: auto;
+    white-space: pre;
+    padding: 5px 7px;
+    padding-bottom: 15px; /* space for the scrollbar */
+    font-family: monospace;
+    background-color: #f5f5f5;
     border: 1px solid #ccc;
     height: 100%;
     font-weight: 300;
     font-size: 0.8em;
-    border-radius: 4px; padding: 5px 7px; }
+    border-radius: 4px;
+}
 .tomo-message {
     /*color: #D7A02C;*/
     /*position: absolute;*/
@@ -221,74 +235,74 @@ footer img { max-width: 100%; max-height: 6em; margin-bottom: 20px; }
 .pln {
   color: #22221b;
 }
- 
+
 @media screen {
   /* string content */
   .str {
     color: #878F28;
   }
- 
+
   /* a keyword */
   .kwd {
     color: #A92D2D;
     font-weight: 800;
   }
- 
+
   /* a comment */
   .com {
     color: #878573;
   }
- 
+
   /* a type name */
   .typ {
     color: #AF982A;
   }
- 
+
   /* a literal value */
   .lit {
     color: #C0672D;
   }
- 
+
   /* punctuation */
   .pun {
     color: #22221b;
   }
- 
+
   /* lisp open bracket */
   .opn {
     color: #22221b;
   }
- 
+
   /* lisp close bracket */
   .clo {
     color: #22221b;
   }
- 
+
   /* a markup tag name */
   .tag {
     color: #ba6236;
   }
- 
+
   /* a markup attribute name */
   .atn {
     color: #C0672D;
   }
- 
+
   /* a markup attribute value */
   .atv {
     color: #5b9d48;
   }
- 
+
   /* a declaration */
   .dec {
     color: #C0672D;
   }
- 
+
   /* a variable name */
   .var {
     color: #ba6236;
   }
- 
+
   /* a function name */
   .fun {
     color: #AF982A;

@@ -4,6 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.forms import Form, IntegerField
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from problems.models import Problem
 from users.models import User
@@ -22,10 +23,19 @@ def problem_attempt_file(request, problem_pk):
 
 @login_required
 def problem_edit_file(request, problem_pk):
-    """Download an attempt file for a given problem."""
+    """Download an edit file for a given problem."""
     problem = get_object_or_404(Problem, pk=problem_pk)
     verify(request.user.can_edit_problem(problem))
     filename, contents = problem.edit_file(user=request.user)
+    return plain_text(filename, contents, content_type=problem.content_type())
+
+
+@login_required
+def problem_solution_file(request, problem_pk):
+    """Download an attempt file with official solutions for a given problem."""
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    verify(request.user.can_edit_problem(problem))
+    filename, contents = problem.solution_file()
     return plain_text(filename, contents, content_type=problem.content_type())
 
 
@@ -37,13 +47,22 @@ def problem_move(request, problem_pk, shift):
     return redirect(problem)
 
 
+@require_POST
+@login_required
+def problem_toggle_visible(request, problem_pk):
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    verify(request.user.can_edit_problem_set(problem.problem_set))
+    problem.toggle_visible()
+    return redirect(problem)
+
+
 class ProblemCreate(CreateView):
     """
     Create new problem by specifying title and description.
     """
 
     model = Problem
-    fields = ["title", "description", "language"]
+    fields = ["title", "description", "language", "visible"]
 
     def get_context_data(self, **kwargs):
         context = super(ProblemCreate, self).get_context_data(**kwargs)

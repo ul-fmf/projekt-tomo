@@ -41,7 +41,7 @@
                 <p>{{ forloop.counter }}. {% trans 'part' %}</p>
               {% endif %}
               <div class="row">
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-lg-6">
                   <div class="tomo-solution-user">
                     <div class="tomo-solution-valid">
                       {% if part.attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
@@ -49,8 +49,13 @@
                       {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
                       {% endif %}
                     </div>
+                    {% if is_teacher %}
+                    {# Translators: Title of user solutions column with student name. #}
+                    {% trans 'Solution of' %} {{ student.get_full_name }}
+                    {% else %}
                     {# Translators: Title of user solutions column. #}
                     {% trans 'Your solution' %}
+                    {% endif %}
                   </div>
                   <div class="tomo-solution-code-user">
                     {% if part.attempt %}
@@ -63,14 +68,14 @@
                   </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-6">
+                <div class="col-lg-6">
                   <div class="tomo-solution-official">
                     {# Translators: Title of official solutions column. #}
                     {% trans 'Official solution' %}<br>
                   </div>
                   <div class="tomo-solution-code-official">
                     {% if problem_set.solution_visibility == problem_set.SOLUTION_VISIBLE or is_teacher %}
-                    <div class="tomo-pre">{{ part.solution }}</div>
+                    <div class="tomo-pre tex2jax_ignore">{{ part.solution }}</div>
 
                     {% elif problem_set.solution_visibility == problem_set.SOLUTION_HIDDEN or problem_set.solution_visibility == problem_set.PROBLEM_HIDDEN %}
                     {# Translators: in solution comparison table #}

@@ -17,4 +17,4 @@ ENV UWSGI_UID=tomo
 ENV UWSGI_GID=tomo
 ENV UWSGI_SOCKET=:8080
 ENV UWSGI_STATIC_MAP=/static=/var/static
-CMD ./manage.py collectstatic --no-input && uwsgi
+CMD ./manage.py collectstatic --no-input && ./manage.py compilemessages && uwsgi

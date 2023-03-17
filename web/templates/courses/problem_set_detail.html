@@ -27,6 +27,10 @@
                 {# Translators: Datoteke za učence #}
                 {% trans "Student files" %}
             </a></li>
+            <li><a href="{% url 'problem_set_solution' problem_set.pk %}">
+                {# Translators: Datoteke z uradnimi rešitvami #}
+                {% trans "Solution files" %}
+            </a></li>
             <li><a href="{% url 'problem_set_edit' problem_set.pk %}">
                 {# Translators: Datoteke za učitelje #}
                 {% trans "Teacher files" %}
@@ -39,13 +43,30 @@
                 {# Translators: Datoteke z rezultati #}
                 {% trans "Files with results" %}
             </a></li>
+            <li><a href="{% url 'problem_set_html' problem_set.pk %}">
+                {% trans "HTML without solutions" %}
+            </a></li>
+            <li><a href="{% url 'problem_set_html' problem_set.pk %}?solutions=visible">
+                {% trans "HTML with solutions" %}
+            </a></li>
           </ul>
+			<div class="btn-group btn-group-sm" role="group" aria-label="{% trans 'Update' %}">
+				<button class="btn btn-default btn-for-modal" data-url="{% url 'problem_set_update' problem_set.pk %}" aria-label="Update"
+						data-toggle="tooltip" title="{% trans 'Edit' %}" data-container:'body' data-viewport: '#viewport' id="viewport">
+					<i class="fa fa-cog" aria-hidden="true"></i>
+				</button>
+			</div>
+
         </div>
+
+
         {% else %}
         <div class="btn-group btn-group-sm pull-left" role="group" aria-label="{% trans 'Download' %}">
           {# Translators: Button for downloading all problem files within a problem set. #}
           <a class="btn btn-default" href="{% url 'problem_set_attempt' problem_set.pk %}" role="button" data-toggle="tooltip" title="{% trans "Download all problem files" %}"><i class="fa fa-download fa-2x"></i></a>
         </div>
+
+
         {% endif %}
         <h2 class="section-heading">
           <hr class="section-heading-spacer">
@@ -63,10 +84,12 @@
         {% endif %}
 
         {% for problem in problem_set.problems.all %}
+        {% if problem.visible or show_teacher_forms %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
             <div class="row">
-              <div class="col-md-6">
+				<div class="col-md-6" {% if not problem.visible %}
+					style="color:#bbb" {% endif %}>
                 <h5>{{ problem.title }}</h5>
               </div>
               <div class="col-md-6">
@@ -85,6 +108,10 @@
                             {# Translators: Datoteka za reševanje #}
                             {% trans "File for solving" %}
                         </a></li>
+                        <li><a href="{% url 'problem_solution_file' problem.id %}">
+                            {# Translators: Datoteka z uradnimi rešitvami #}
+                            {% trans "Solution file" %}
+                        </a></li>
                         <li><a href="{% url 'problem_edit_file' problem.id %}">
                             {# Translators: Datoteka za urejanje #}
                             {% trans "File for editing" %}
@@ -94,7 +121,23 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
                       <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
                     </div>
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Visibility">
+                      <form action="{% url 'problem_toggle_visible' problem.pk %}" method="post">
+                       {% csrf_token %}
+                       <button class="btn btn-default btn-sm edit-btn" type="submit" aria-label="Show/Hide"
+                       {% if problem.visible %}
+                                 {# Translators: Naloga je vidna #}
+                                 title = "{% trans 'Problem is visible' %}"
+                             {% else %}
+                                 {# Translators: Naloga je skrna #}
+                                 title = "{% trans 'Problem is hidden' %}"
+                             {% endif %}
+                             >
+                            <i class="fa fa-eye{% if not problem.visible %}-slash{% endif %}"></i>
+                          </button>
+                      </form>
+                    </div>
+                                   <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
                             data-toggle="tooltip" title="{% trans 'Move up' %}" data-container="body">
                           <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -153,14 +196,23 @@
 
           <ul class="list-group tomo-subtasks">
             {% for part in problem.parts.all %}
-            <li class="list-group-item" id="{{ part.anchor }}">
+              {% if part.pk in valid_parts_ids %}
+              <li class="list-group-item tomo-subtask-valid" id="{{ part.anchor }}">
+              {% elif part.pk in invalid_parts_ids %}
+              <li class="list-group-item tomo-subtask-invalid" id="{{ part.anchor }}">
+              {% else %}
+              <li class="list-group-item tomo-subtask-empty" id="{{ part.anchor }}">
+              {% endif %}
               {# Translators: problem set detail #}
+              {% if problem.parts.count > 1 %}
               <h5>{{ forloop.counter }}. {% trans "part" %}</h5>
+              {% endif %}
               <p>{{ part.guarded_description|latex_markdown }}</p>
             </li>
             {% endfor %}
           </ul>
         </div>
+	    {% endif %}
         {% endfor %}
         {% if show_teacher_forms %}
         <hr>
@@ -177,7 +229,8 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in student_statistics %}
           <li>
-            <a href="#{{ problem.anchor }}">
+			  <a href="#{{ problem.anchor }}"
+				  {% if not problem.visible %} style="color:#bbb"{% endif %}>
               {{ problem.title }}
             </a>
             <div class="subtasks">

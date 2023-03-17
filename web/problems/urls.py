@@ -19,6 +19,11 @@ urlpatterns = [
         name="problem_attempt_file",
     ),
     path(
+        "<int:problem_pk>/solution/",
+        views.problem_solution_file,
+        name="problem_solution_file",
+    ),
+    path(
         "<int:problem_pk>/edit/",
         views.problem_edit_file,
         name="problem_edit_file",
@@ -27,6 +32,11 @@ urlpatterns = [
         "<int:problem_pk>/move/<trueint:shift>/",
         views.problem_move,
         name="problem_move",
+    ),
+    path(
+        "<int:problem_pk>/toggle_visible/",
+        views.problem_toggle_visible,
+        name="problem_toggle_visible",
     ),
     path("<int:pk>/update/", ProblemUpdate.as_view(), name="problem_update"),
     path(

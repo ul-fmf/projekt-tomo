@@ -47,27 +47,15 @@ def problem_set_progress_groups(request, problem_set_pk, group_pk):
 
 
 @login_required
-def problem_set_static(request, problem_set_pk):
+def problem_set_html(request, problem_set_pk):
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
     verify(request.user.can_edit_problem_set(problem_set))
     return render(
         request,
-        "courses/problem_set_static.html",
+        "courses/problem_set_html.html",
         {
             "problem_set": problem_set,
-        },
-    )
-
-
-@login_required
-def problem_set_izpit(request, problem_set_pk):
-    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
-    verify(request.user.can_edit_problem_set(problem_set))
-    return render(
-        request,
-        "courses/problem_set_izpit.html",
-        {
-            "problem_set": problem_set,
+            "print_solution": request.GET.get("solutions") == "visible",
         },
     )
 
@@ -97,6 +85,15 @@ def problem_set_edit(request, problem_set_pk):
 
 
 @login_required
+def problem_set_solution(request, problem_set_pk):
+    """Download an archive of solution files for a given problem set."""
+    problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
+    verify(request.user.can_edit_problem_set(problem_set))
+    archive_name, files = problem_set.solutions_archive()
+    return zip_archive(archive_name, files)
+
+
+@login_required
 def problem_set_detail(request, problem_set_pk):
     """Show a list of all problems in a problem set."""
     problem_set = get_object_or_404(ProblemSet, pk=problem_set_pk)
@@ -105,6 +102,10 @@ def problem_set_detail(request, problem_set_pk):
     user_attempts = request.user.attempts.filter(
         part__problem__problem_set__id=problem_set_pk
     )
+    student_statistics = problem_set.student_statistics()
+    if not request.user.is_teacher(problem_set.course):
+        user_attempts = user_attempts.filter(part__problem__visible=True)
+        student_statistics = list(filter(lambda p: p["visible"], student_statistics))
     valid_parts_ids = user_attempts.filter(valid=True).values_list("part_id", flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list(
         "part_id", flat=True
@@ -118,14 +119,14 @@ def problem_set_detail(request, problem_set_pk):
             "valid_parts_ids": valid_parts_ids,
             "invalid_parts_ids": invalid_parts_ids,
             "show_teacher_forms": request.user.can_edit_problem_set(problem_set),
-            "student_statistics": problem_set.student_statistics(),
+            "student_statistics": student_statistics,
         },
     )
 
 
 @login_required
 def course_detail(request, course_pk):
-    """Show a list of all problems in a problem set."""
+    """Show a list of all problem sets in a course."""
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
@@ -260,6 +261,16 @@ class ProblemSetUpdate(UpdateView):
         verify(self.request.user.can_edit_problem_set(obj))
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super(ProblemSetUpdate, self).get_context_data(**kwargs)
+        context["referrer"] = self.request.META.get("HTTP_REFERER")
+        return context
+
+    def get_success_url(self):
+        if "referrer" in self.request.POST:
+            return self.request.POST["referrer"]
+        return self.get_object().get_absolute_url()
+
 
 class ProblemSetDelete(DeleteView):
     model = ProblemSet
@@ -343,7 +354,6 @@ def course_groups(request, course_pk):
 
 class CourseGroupForm(forms.ModelForm):
     class Meta:
-
         students = forms.ModelMultipleChoiceField(queryset=User.objects.all())
 
         model = CourseGroup

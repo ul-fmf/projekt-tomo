@@ -46,6 +46,8 @@ class Course(models.Model):
         return self.problem_sets.reverse().filter(visible=True)[:n]
 
     def user_attempts(self, user):
+        """This function ignores problem visibility, because it assumes it is only
+        called from problems/models.py:marking_file() by a teacher user."""
         attempts = {}
         for attempt in user.attempts.filter(part__problem__problem_set__course=self):
             attempts[attempt.part_id] = attempt
@@ -123,6 +125,7 @@ class Course(models.Model):
         attempts_full = Attempt.objects.filter(
             user__in=students,
             part__problem__problem_set__in=self.annotated_problem_sets,
+            part__problem__visible=True,
         )
         attempts = attempts_full.values("valid", "part__problem__problem_set_id")
         attempts_dict = {}
@@ -254,8 +257,7 @@ class Course(models.Model):
         ):
             different_subtasks = 0
             for problem in problem_set.problems.all():
-                for part in problem.parts.all():
-                    different_subtasks += 1
+                different_subtasks += problem.parts.count()
 
             # In case there are no parts, we do not want to divide by 0
             if different_subtasks == 0:
@@ -268,7 +270,8 @@ class Course(models.Model):
                 ]  # Valid, invalid
 
             attempts = Attempt.objects.filter(
-                part__problem__problem_set=problem_set, user__in=students
+                part__problem__problem_set=problem_set,
+                user__in=students,
             )
             for attempt in attempts:
                 if attempt.valid:
@@ -312,13 +315,13 @@ class Course(models.Model):
         groups = self.groups.all()
         student_success = self.student_success_by_problem_set()
 
-        student_sucess_by_groups = {}
+        student_success_by_groups = {}
         for group in groups:
-            student_sucess_by_groups[group] = {}
+            student_success_by_groups[group] = {}
             for student in group.students.all():
-                student_sucess_by_groups[group][student] = student_success[student]
+                student_success_by_groups[group][student] = student_success[student]
 
-        return student_sucess_by_groups
+        return student_success_by_groups
 
 
 class StudentEnrollment(models.Model):
@@ -394,9 +397,21 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
         return reverse("problem_set_detail", args=[str(self.pk)])
 
+    @property
+    def visible_problems(self):
+        return self.problems.filter(visible=True)
+
     def attempts_archive(self, user):
-        files = [problem.attempt_file(user) for problem in self.problems.all()]
+        if user.can_edit_problem_set(self):
+            files = [problem.attempt_file(user) for problem in self.problems.all()]
+        else:
+            files = [problem.attempt_file(user) for problem in self.visible_problems]
         archive_name = slugify(self.title)
+        return archive_name, files
+
+    def solutions_archive(self):
+        files = [problem.solution_file() for problem in self.problems.all()]
+        archive_name = "{0}-solution".format(slugify(self.title))
         return archive_name, files
 
     def edit_archive(self, user):
@@ -428,7 +443,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             attempt_dict[user_id] = user_attempts
         users = User.objects.filter(id__in=user_ids)
 
-        archive_name = "{0}-results".format(slugify(self.title))
+        archive_name = f"{slugify(self.title)}-results"
         files = []
 
         bare_files = {}
@@ -436,25 +451,25 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
             folder = slugify(problem.title)
             for user in users.all():
                 filename, contents = problem.marking_file(user)
-                files.append(("{0}/{1}".format(folder, filename), contents))
+                files.append((f"{folder}/{filename}", contents))
                 filename, contents = problem.bare_file(user)
                 bare_files[filename] = bare_files.get(filename, "") + contents + "\n\n"
 
         for filename, contents in bare_files.items():
-            files.append(("bare/{0}".format(filename), contents))
+            files.append((f"bare/{filename}", contents))
 
         for user, history in self.attempt_history().items():
             username = user.get_full_name() or user.username
             problem_slug = slugify(username).replace("-", "_")
             extension = "py"
-            filename = "{0}.{1}".format(problem_slug, extension)
+            filename = f"{problem_slug}.{extension}"
             contents = render_to_string(
-                "history.{0}".format(extension),
+                f"history.{extension}",
                 {
                     "history": history,
                 },
             )
-            files.append(("history/{0}".format(filename), contents))
+            files.append((f"history/{filename}", contents))
 
         users = []
         for user in User.objects.filter(id__in=user_ids).order_by("last_name"):
@@ -519,6 +534,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                     "title": problem.title,
                     "pk": problem.pk,
                     "parts": parts,
+                    "visible": problem.visible,
                 }
             )
         return statistics
@@ -527,6 +543,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         """
         Returns the percentage of parts (rounded to the nearest integer)
         of parts in this problem set for which the given user has a valid attempt.
+        Counts parts of problems all problems (even if visible is set to false).
         """
         number_of_all_parts = Part.objects.filter(problem__problem_set=self).count()
         number_of_valid_parts = user.attempts.filter(

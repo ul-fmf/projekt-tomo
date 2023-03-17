@@ -1,10 +1,6 @@
 from django.contrib import admin
 
-from .models import Course, CourseGroup, Institution, ProblemSet, StudentEnrollment
-
-
-class StudentEnrollmentInline(admin.StackedInline):
-    model = StudentEnrollment
+from .models import Course, CourseGroup, Institution, ProblemSet
 
 
 class CourseAdmin(admin.ModelAdmin):
@@ -12,7 +8,6 @@ class CourseAdmin(admin.ModelAdmin):
         "teachers",
         "students",
     )
-    inlines = (StudentEnrollmentInline,)
     list_filter = ("institution__name",)
 
     def podvoji(self, request, queryset):
@@ -21,7 +16,7 @@ class CourseAdmin(admin.ModelAdmin):
 
     podvoji.short_description = "Podvoji"
 
-    actions = [podvoji]
+    actions = (podvoji,)
 
 
 class ProblemSetAdmin(admin.ModelAdmin):
@@ -42,7 +37,6 @@ class ProblemSetAdmin(admin.ModelAdmin):
 
 
 class CourseGroupAdmin(admin.ModelAdmin):
-
     filter_horizontal = ("students",)
 
 

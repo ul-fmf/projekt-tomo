@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-17 18:30+0000\n"
+"POT-Creation-Date: 2023-03-17 18:33+0000\n"
 "PO-Revision-Date: 2015-08-18 11:06+0100\n"
 "Last-Translator: Sonja Jerše <sonja.jerse@gmail.com>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -156,7 +156,7 @@ msgstr "Da"
 msgid "No"
 msgstr "Ne"
 
-#. Translators: Title of editing form for problems sets.
+#. Translators: Title of editing form for problem sets.
 msgid "Edit course group"
 msgstr "Uredi skupino"
 
@@ -186,6 +186,12 @@ msgstr "Prenesi"
 msgid "Student files"
 msgstr "Datoteke za učence"
 
+#. Translators: Datoteke z uradnimi rešitvami
+#, fuzzy
+#| msgid "Solutions"
+msgid "Solution files"
+msgstr "Rešitve"
+
 #. Translators: Datoteke za učitelje
 msgid "Teacher files"
 msgstr "Datoteke za učitelje"
@@ -198,6 +204,19 @@ msgstr "LaTeX datoteke"
 msgid "Files with results"
 msgstr "Datoteke z rezultati"
 
+#, fuzzy
+#| msgid "Your solution"
+msgid "HTML without solutions"
+msgstr "HTML brez rešitev"
+
+#, fuzzy
+#| msgid "solutions"
+msgid "HTML with solutions"
+msgstr "HTML z rešitvami"
+
+msgid "Update"
+msgstr "Posodobi"
+
 #. Translators: Button for downloading all problem files within a problem set.
 msgid "Download all problem files"
 msgstr "Prenesi vse datoteke z nalogami"
@@ -206,6 +225,12 @@ msgstr "Prenesi vse datoteke z nalogami"
 msgid "File for solving"
 msgstr "Datoteka za reševanje"
 
+#. Translators: Datoteka z uradnimi rešitvami
+#, fuzzy
+#| msgid "Solutions"
+msgid "Solution file"
+msgstr "Rešitve"
+
 #. Translators: Datoteka za urejanje
 msgid "File for editing"
 msgstr "Datoteka za urejanje"
@@ -213,19 +238,27 @@ msgstr "Datoteka za urejanje"
 msgid "Solutions"
 msgstr "Rešitve"
 
+#. Translators: Naloga je vidna
+#, fuzzy
+#| msgid "Problem set is visible"
+msgid "Problem is visible"
+msgstr "Sklop je viden"
+
+#. Translators: Naloga je skrna
+#, fuzzy
+#| msgid "Problem set is hidden"
+msgid "Problem is hidden"
+msgstr "Sklop je skrit"
+
 msgid "Move up"
 msgstr "Premakni gor"
 
 msgid "Move down"
 msgstr "Premakni dol"
 
-msgid "Update"
-msgstr "Posodobi"
-
 msgid "Download this problem file"
 msgstr "Datoteka z nalogo"
 
-#. Translators: problem set detail
 msgid "part"
 msgstr "podnaloga"
 
@@ -249,6 +282,10 @@ msgstr "Ste prepričani, da želite pobrisati sklop"
 #. Translators: Title of editing form for problems sets.
 msgid "Edit problem set"
 msgstr "Uredi sklop"
+
+#. Translators: edit problem confirmation form button.
+msgid "Save"
+msgstr "Shrani"
 
 msgid "Help (Students)"
 msgstr "Navodila za učence"
@@ -419,6 +456,12 @@ msgstr "Uredi nalogo"
 #. Translators: Title of solutions page.
 msgid "solutions"
 msgstr "rešitve"
+
+#. Translators: Title of user solutions column with student name.
+#, fuzzy
+#| msgid "Solutions"
+msgid "Solution of"
+msgstr "Rešitve"
 
 #. Translators: Title of user solutions column.
 msgid "Your solution"

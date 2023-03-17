@@ -22,9 +22,12 @@ class User(AbstractUser):
         except (UnicodeDecodeError, UnicodeEncodeError):
             return full_name
 
+    def get_full_display_name(self) -> str:
+        return f"{self.get_full_name()} ({self.email})"
+
     def __str__(self):
         # In the forms, the __str__ method is used when showing model instances.
-        return self.get_full_name()
+        return self.get_full_display_name()
 
     def save(self, *args, **kwargs):
         try:
@@ -90,11 +93,14 @@ class User(AbstractUser):
         )
 
     def can_view_problem(self, problem):
-        return self.can_view_problem_set(problem.problem_set)
+        return self.can_view_problem_set(problem.problem_set) and (
+            problem.visible or self.can_edit_problem_set(problem.problem_set)
+        )
 
     def can_view_problem_solution(self, problem, student):
         return self.can_view_problem(problem) and (
-            self == student or self.is_teacher(problem.problem_set.course)
+            (self == student and problem.visible)
+            or self.is_teacher(problem.problem_set.course)
         )
 
     def can_view_course_statistics(self, course):
