@@ -1,7 +1,5 @@
 import io
 from contextlib import contextmanager
-from signal import SIGINT, raise_signal
-from threading import Timer
 
 
 class VisibleStringIO(io.StringIO):
@@ -90,13 +88,7 @@ class Check:
         Check.current_part["secret"].append((str(clean(x)), hint))
 
     @staticmethod
-    def equal(
-            expression,
-            expected_result,
-            clean=None,
-            env=None,
-            update_env=None,
-    ):
+    def equal(expression, expected_result, clean=None, env=None, update_env=None):
         global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get("clean", clean)
         actual_result = eval(expression, global_env)
@@ -112,13 +104,7 @@ class Check:
             return True
 
     @staticmethod
-    def approx(
-        expression,
-        expected_result,
-        tol=1e-6,
-        env=None,
-        update_env=None
-    ):
+    def approx(expression, expected_result, tol=1e-6, env=None, update_env=None):
         try:
             import numpy as np
         except ImportError:
@@ -159,13 +145,7 @@ class Check:
             return False
 
     @staticmethod
-    def run(
-        statements,
-        expected_state,
-        clean=None,
-        env=None,
-        update_env=None,
-    ):
+    def run(statements, expected_state, clean=None, env=None, update_env=None):
         code = "\n".join(statements)
         statements = "  >>> " + "\n  >>> ".join(statements)
         global_env = Check.init_environment(env=env, update_env=update_env)
@@ -254,7 +234,6 @@ class Check:
         old_stdout = sys.stdout
         sys.stdout = io.StringIO()
         too_many_read_requests = False
-        timeout = False
         try:
             exec(expression, global_env)
         except EOFError:
@@ -263,7 +242,7 @@ class Check:
             output = sys.stdout.getvalue().rstrip().splitlines()
             sys.stdout = old_stdout
         equal, diff, line_width = Check.difflines(output, content)
-        if equal and not too_many_read_requests and not timeout:
+        if equal and not too_many_read_requests:
             return True
         else:
             if too_many_read_requests:
@@ -425,8 +404,12 @@ class Check:
     @staticmethod
     @contextmanager
     def time_limit(timeout_seconds=1):
+        from signal import SIGINT, raise_signal
+        from threading import Timer
+
         def interrupt_main():
             raise_signal(SIGINT)
+
         timer = Timer(timeout_seconds, interrupt_main)
         timer.start()
         try:
