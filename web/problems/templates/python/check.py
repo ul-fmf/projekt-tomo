@@ -118,7 +118,6 @@ class Check:
         env.update({"np": np})
         global_env = Check.init_environment(env=env, update_env=update_env)
         actual_result = eval(expression, global_env)
-
         if type(actual_result) is not type(expected_result):
             Check.error(
                 "Rezultat ima napačen tip. Pričakovan tip: {}, dobljen tip: {}.",
@@ -151,7 +150,6 @@ class Check:
         global_env = Check.init_environment(env=env, update_env=update_env)
         clean = Check.get("clean", clean)
         exec(code, global_env)
-
         errors = []
         for x, v in expected_state.items():
             if x not in global_env:
