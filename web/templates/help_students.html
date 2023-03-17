@@ -7,66 +7,67 @@
  
 {% block navigation-left %} 
 <a class="navbar-brand topnav" href="{% url 'help' %}">{% trans 'Help' %}</a>
-<a class="navbar-brand topnav" href="{% url 'help_students' %}">Navodila za učence</a>
+<a class="navbar-brand topnav" href="{% url 'help_students' %}">{% trans 'Help (Students)' %}</a>
 {% endblock %}
 
 
 {% block content %}
 <div class="content-section-a tomo-top-section"><div class="container">
 {% filter latex_markdown %}
-<h1>Delo v sistemu</h1>
 
-<p>V sistem se prijavimo preko Facebook, Google ali Twitter računa oziroma z uporabniškim  imenom in geslom, ki nam je bilo dodeljeno.</p>
+<h1>{% trans 'Using the system' %}</h1>
+
+<p>{% trans 'You may sign in with Facebook, Google or Twitter account, or with the username and password you have received.' %}</p>
  
-<p>Po uspešni prijavi se nam pokaže seznam predmetov, ki so v sistemu. Na vrhu seznama vidimo predmete, ki smo jih že dodali med priljubljene. To pomeni, da je naše ime na seznamu udeležencev (učencev) in da učitelj predmeta lahko pregleduje naše rešitve nalog. Predmeti, ki smo jih dodali na seznam priljubljenih, so označeni z <img style="max-width: 80%" src="{% static 'img_help/ikona_vpisan_v_predmet.png' %}" alt="Ikona Sledimo predmetu.">. Predmet dodamo med priljubljene s klikom na <img style="max-width: 80%" src="{% static 'img_help/ikona_ni_vpisan_v_predmet.png' %}" alt="Ikona Ne sledimo predmetu."></p>
+<p>{% trans 'After successful login a list of courses appears. On the top are the starred courses. This means the teacher can examine your submissions. These courses are marked with' %}<img style="max-width: 80%" src="{% static 'img_help/ikona_vpisan_v_predmet.png' %}" alt="Ikona Sledimo predmetu.">.{% trans 'You can pin a course by pressing ' %}<img style="max-width: 80%" src="{% static 'img_help/ikona_ni_vpisan_v_predmet.png' %}" alt="Ikona Ne sledimo predmetu."></p>
 
 <!-- Slika 1: Predmet, v katerega smo že vpisani in predmet, v katerega še nismo vpisani. -->
 
-<p>Pri predmetih, v katere smo že vpisani, vidimo zadnje tri sklope. Poleg vsakega sklopa je  zabeleženo, kolikšen delež nalog v tem sklopu smo že rešili tako, da so naše rešitve sprejete.</p>
+<p>{% trans 'Shown are the last three problem sets of each starred course. The percentage of accepted submissions is indicated next to the problem sets.' %}</p>
 
-<h2>Predmeti, sklopi in naloge</h2>
+<h2>{% trans 'Courses, problem sets and problems' %}</h2>
 
-<p>Ko odpremo predmet, vidimo seznam sklopov nalog. Sklopi ponavadi zajemajo naloge podobne sorte. Ko odpremo sklop, najprej vidimo uvodno besedilo, v katerem so običajno razloženi osnovni ukazi, obravnavani v sklopu, temu pa sledijo posamezne naloge. Naloge so med seboj neodvisne, vsaka pa je sestavljena iz ene ali več podnalog, ki običajno gradijo ena na drugi in so postopoma težje.</p>
+<p>{% trans 'Upon opening a course, you are presented with a list of problem sets. A problem set usually encompasses similar problems. At the top of each problem set there is an introductory text about the discussed concepts, followed by the problems. Problems are independent and contain one or more corellated subproblems, that usually build upon each other and increase in difficulty.' %}</p>
 
 <!-- Slika 2: Stran posameznega sklopa. -->
 
-<h2>Reševanje nalog</h2>
+<h2>{% trans 'Solving the problems' %}</h2>
 
-<p>Izberemo nalogo, ki jo želimo reševati in s strežnika s klikom na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_datoteko_ucenec.png' %}" alt="Gumb Prenesi datoteko."> prenesemo Python datoteko na svoj računalnik. Če želimo, lahko s klikom na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_vse_datoteke_ucenec.png' %}" alt="Gumb Prenesi vse datoteke."> prenesemo tudi ZIP datoteko, ki vsebuje datoteke vseh nalog v ustreznem sklopu.</p>
-<p>V datoteki je besedilo naloge in podnalog, zapisano kot komentar. Med besedilom je prazen prostor, v katerega bomo vpisali rešitve.</p>
+<p>{% trans 'Download the desired problem by pressing' %} <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_datoteko_ucenec.png' %}" alt="Gumb Prenesi datoteko."> {% trans 'You may also download the entire set as a ZIP file with' %} <img style="max-width: 80%" src="{% static 'img_help/gumb_prenesi_vse_datoteke_ucenec.png' %}" alt="Gumb Prenesi vse datoteke.">.</p>
+<p>{% trans 'A problem file is an ordinary Python file containing commented instructions. Instructions are separated with a blank space where you can write the solution code.' %}</p>
 
 <!-- Slika 3: Primer datoteke z nalogo. -->
 
-<p>Ko rešitve vpišemo v datoteko, datoteko poženemo (v IDLE s klikom na Run oziroma s klikom na F5). Ob zagonu se s pomočjo testov, ki jih je v naprej pripravil učitelj, preveri pravilnost naloge. Rezultati testov se bodo izpisali v ukazni lupini.</p>
+<p>{% trans 'After writing down the solution, run the file (in IDLE this is achieved by pressing Run or pressing F5). This fires the tests written by the teacher and checks whether your solution is correct. Test results are then displayed in the command shell.' %}</p>
 
 <!-- Slika 4: Primer delno izpolnjene rešitve in strežnikovega odziva. -->
 
-<p>Ko datoteko poženemo, se naše rešitve shranijo na strežnik - ne glede na pravilnost. To pomeni, da reševanje lahko nadaljujemo kasneje, na drugem računalniku. Ko se bomo ponovno prijavili v sistem in prenesli datoteko z že reševano nalogo, bodo v datoteki tudi naše rešitve.</p>
+<p>{% trans 'The solution is stored on the server each time you run the file, regardless of its validity. This means you can continue working on the problem on another device. After logging-in and downloading the files, the file will also contain your partial solutions.' %}</p>
 
-<h2>Ogled rešitev in napredka</h2>
+<h2>{% trans 'Displaying solutions and progress' %}</h2>
 
-<p>Svoje rešitve določene naloge vidimo, če kliknemo na gumb <img style="max-width: 80%" src="{% static 'img_help/gumb_prikazi_resitve.png' %}" alt="Gumb Prikaži rešitve."> ob imenu naloge. Odpre se nam nova stran, kjer so na levi strani zaslona prikazane naše rešitve, na desni pa rešitve tistega, ki je nalogo sestavil.</p>
+<p>{% trans 'After pressing' %} <img style="max-width: 80%" src="{% static 'img_help/gumb_prikazi_resitve.png' %}" alt="Gumb Prikaži rešitve."> {% trans 'next to problem title, your solutions are displayed on the left and official solutions on the right.' %}</p>
 
 <!-- Slika 5: Primerjava z uradno rešitvijo. -->
 
-<p>Vidnost uradnih rešitev določa učitelj predmeta. Skrbnik lahko določi, da uradne rešitve vidimo:
+<p>{% trans 'The teacher decides which official solutions are visible. They may also decide that the official solutions are shown:' %}
     <ul>
-        <li>tudi, če naša rešitev ni sprejeta (kot na zgornji sliki),</li>
-        <li>po tem, ko je naša rešitve sprejeta (najpogosteje) ali</li> 
-        <li>v nobenem primeru.</li>
+        <li>{% trans 'always, even if your solution is incorrect (as in the image above),' %}</li>
+        <li>{% trans 'only after your solution has been accepted (most common option) or'%}</li> 
+        <li>{% trans 'never.' %}</li>
     </ul>
 </p>
 
-<p>Ko je naša rešitev podnaloge sprejeta, se ob naslovu podnaloge izriše zelena ikona. Če smo podnalogo poskusili reševati, vendar rešitev ni pravilna, se izriše rdeča ikona. Tako na prvi pogled vidimo, katere podnaloge moramo še rešiti.</p>
+<p>{% trans 'When your solution is accepted a green icon appears. If your attempted solution in invalid, a red icon appears. This way you can easily see which subproblems are yet to be solved.' %}</p>
 
 <!-- Slika 6: Ikone, ki označujejo sprejetost rešitev in obarvanost naslova naloge. -->
 
-<p>Tudi naslov naloge se bo obarval glede na rešenost podnalog:
+<p>{% trans 'The problem title is also coloured based on the number of solved subproblems:' %}
     <ul>
-        <li>Dokler nismo oddali nobene podnaloge, bo naslov sive barve.</li>
-        <li>Če je ena od podnalog rešena nepravilno, se ozadje naslova naloge obarva rdeče (kot na zgornji sliki).</li> 
-        <li>Če še nismo rešili vseh podnalog, že rešene pa so sprejete, bo naslov naloge obarvan rumeno.</li>
-        <li>Ko so sprejete rešitve vseh podnalog, se ozadje naslova naloge obarva zeleno.</li>
+        <li>{% trans 'Gray, untill the first submission.' %}</li>
+        <li>{% trans 'Red, if one of the subproblems is solved incorrectly.' %}</li> 
+        <li>{% trans 'Yellow, if all up to now submitted subproblems are valid.' %}</li>
+        <li>{% trans 'Green, if all subproblem solutions are valid.' %}</li>
     </ul>
 </p>
 {% endfilter %}
