@@ -14,6 +14,10 @@ class VisibleStringIO(io.StringIO):
         return line
 
 
+class TimeoutError(Exception):
+    pass
+
+
 class Check:
     parts = None
     current_part = None
@@ -394,3 +398,21 @@ class Check:
         else:
             with Check.set(stringio=stringio):
                 yield
+
+    @staticmethod
+    @contextmanager
+    def time_limit(timeout_seconds=1):
+        from signal import SIGINT, raise_signal
+        from threading import Timer
+
+        def interrupt_main():
+            raise_signal(SIGINT)
+
+        timer = Timer(timeout_seconds, interrupt_main)
+        timer.start()
+        try:
+            yield
+        except KeyboardInterrupt:
+            raise TimeoutError
+        finally:
+            timer.cancel()
