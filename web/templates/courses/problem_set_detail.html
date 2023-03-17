@@ -4,7 +4,6 @@
 
 {% block title %}Tomo – {{ problem_set.title }}{% endblock %}
 
-
 {% block navigation-left %}
   <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
   <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }} <span class="sr-only">(current)</span></a>
@@ -85,10 +84,12 @@
         {% endif %}
 
         {% for problem in problem_set.problems.all %}
+        {% if problem.visible or show_teacher_forms %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
             <div class="row">
-              <div class="col-md-6">
+				<div class="col-md-6" {% if not problem.visible %}
+					style="color:#bbb" {% endif %}>
                 <h5>{{ problem.title }}</h5>
               </div>
               <div class="col-md-6">
@@ -120,7 +121,23 @@
                     <div class="btn-group btn-group-sm" role="group" aria-label="{% trans "Solutions" %}">
                       <a class="btn btn-default solutions-btn" href="{% url 'problem_solution' problem.id user.id %}" role="button" data-toggle="tooltip" title="{% trans "Solutions" %}"><i class="fa fa-lightbulb-o fa-lg"></i></a>
                     </div>
-                    <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Toggle Visibility">
+                      <form action="{% url 'problem_toggle_visible' problem.pk %}" method="post">
+                       {% csrf_token %}
+                       <button class="btn btn-default btn-sm edit-btn" type="submit" aria-label="Show/Hide"
+                       {% if problem.visible %}
+                                 {# Translators: Naloga je vidna #}
+                                 title = "{% trans 'Problem is visible' %}"
+                             {% else %}
+                                 {# Translators: Naloga je skrna #}
+                                 title = "{% trans 'Problem is hidden' %}"
+                             {% endif %}
+                             >
+                            <i class="fa fa-eye{% if not problem.visible %}-slash{% endif %}"></i>
+                          </button>
+                      </form>
+                    </div>
+                                   <div class="btn-group btn-group-sm" role="group" aria-label="Edit">
                         <a class="btn btn-default edit-btn" href="{% url 'problem_move' problem.id -1 %}" role="button" aria-label="Move Up"
                             data-toggle="tooltip" title="{% trans 'Move up' %}" data-container="body">
                           <i class="fa fa-arrow-up" aria-hidden="true"></i>
@@ -195,6 +212,7 @@
             {% endfor %}
           </ul>
         </div>
+	    {% endif %}
         {% endfor %}
         {% if show_teacher_forms %}
         <hr>
@@ -211,7 +229,8 @@
         <ul class="nav nav-stacked" id="sidebar">
           {% for problem in student_statistics %}
           <li>
-            <a href="#{{ problem.anchor }}">
+			  <a href="#{{ problem.anchor }}"
+				  {% if not problem.visible %} style="color:#bbb"{% endif %}>
               {{ problem.title }}
             </a>
             <div class="subtasks">

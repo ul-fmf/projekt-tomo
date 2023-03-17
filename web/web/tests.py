@@ -18,8 +18,11 @@ class BasicViewsTestCase(TestCase):
         visible_prob_set = baker.make(
             "courses.ProblemSet", course=self.course, visible=True
         )
-        problem = baker.make("problems.Problem", problem_set=prob_set)
-        visible_problem = baker.make("problems.Problem", problem_set=visible_prob_set)
+        invis_set_problem = baker.make("problems.Problem", problem_set=prob_set)
+        invis_problem = baker.make("problems.Problem", problem_set=visible_prob_set)
+        visible_problem = baker.make(
+            "problems.Problem", problem_set=visible_prob_set, visible=True
+        )
         self.views = {
             "public": [
                 ("login", dict()),
@@ -41,18 +44,20 @@ class BasicViewsTestCase(TestCase):
             ],
             "student": [],
             "teacher_redirect": [
-                ("problem_move", {"problem_pk": problem.pk, "shift": 1}),
-                ("problem_move", {"problem_pk": problem.pk, "shift": -1}),
+                ("problem_move", {"problem_pk": invis_set_problem.pk, "shift": 1}),
+                ("problem_move", {"problem_pk": invis_set_problem.pk, "shift": -1}),
             ],
             "teacher": [
-                ("problem_edit_file", {"problem_pk": problem.pk}),
-                ("problem_set_edit", {"problem_set_pk": visible_problem.pk}),
+                ("problem_edit_file", {"problem_pk": invis_set_problem.pk}),
+                ("problem_edit_file", {"problem_pk": invis_problem.pk}),
+                ("problem_set_edit", {"problem_set_pk": prob_set.pk}),
+                ("problem_set_edit", {"problem_set_pk": visible_prob_set.pk}),
                 ("problem_set_detail", {"problem_set_pk": prob_set.pk}),
-                ("problem_attempt_file", {"problem_pk": problem.pk}),
+                ("problem_attempt_file", {"problem_pk": invis_set_problem.pk}),
                 ("problem_set_attempt", {"problem_set_pk": prob_set.pk}),
                 (
                     "problem_solution",
-                    {"problem_pk": problem.pk, "user_pk": self.user.pk},
+                    {"problem_pk": invis_set_problem.pk, "user_pk": self.user.pk},
                 ),
                 (
                     "problem_solution",
@@ -60,6 +65,8 @@ class BasicViewsTestCase(TestCase):
                 ),
                 ("problem_move", {"problem_pk": visible_problem.pk, "shift": 1}),
                 ("problem_move", {"problem_pk": visible_problem.pk, "shift": -1}),
+                ("problem_move", {"problem_pk": invis_problem.pk, "shift": 1}),
+                ("problem_move", {"problem_pk": invis_problem.pk, "shift": -1}),
                 ("problem_set_progress", {"problem_set_pk": prob_set.pk}),
             ],
         }

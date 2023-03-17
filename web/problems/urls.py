@@ -33,6 +33,11 @@ urlpatterns = [
         views.problem_move,
         name="problem_move",
     ),
+    path(
+        "<int:problem_pk>/toggle_visible/",
+        views.problem_toggle_visible,
+        name="problem_toggle_visible",
+    ),
     path("<int:pk>/update/", ProblemUpdate.as_view(), name="problem_update"),
     path(
         "create/<int:problem_set_id>/",

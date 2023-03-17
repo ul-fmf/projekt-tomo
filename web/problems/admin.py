@@ -16,6 +16,7 @@ class ProblemAdmin(SimpleHistoryAdmin):
         "course",
         "problem_set",
         "description",
+        "visible",
     )
     list_display_links = ("title",)
     ordering = (

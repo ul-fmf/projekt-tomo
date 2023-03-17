@@ -93,11 +93,14 @@ class User(AbstractUser):
         )
 
     def can_view_problem(self, problem):
-        return self.can_view_problem_set(problem.problem_set)
+        return self.can_view_problem_set(problem.problem_set) and (
+            problem.visible or self.can_edit_problem_set(problem.problem_set)
+        )
 
     def can_view_problem_solution(self, problem, student):
         return self.can_view_problem(problem) and (
-            self == student or self.is_teacher(problem.problem_set.course)
+            (self == student and problem.visible)
+            or self.is_teacher(problem.problem_set.course)
         )
 
     def can_view_course_statistics(self, course):

@@ -59,7 +59,7 @@
 % - brez vpisne:
 %     Polje za vnos vpisne številke se ne izriše.
 
-\izpit[ucilnica = MFP, naloge = {{ problem_set.problems.all|length }}]
+\izpit[ucilnica = MFP, naloge = {{ problem_set.visible_problems|length }}]
   {FIXME {{ problem_set.course.title }}: {{ problem_set.title }}}{FIXME {% now "j.~n.~Y" %}}{
   Čas pisanja je TODO minut. Možno je doseči TODO točk, od tega TODO za slog kode. Veliko uspeha!
 }
@@ -69,7 +69,7 @@
 % Na voljo vam je ukaz \tocke, ki sprejme število ter na konec doda besedo
 % 'točke' (oz 'marks') s primerno končnico: \tocke{5} zapiše 5 točk,
 % \tocke{102} zapiše 102 točki, ...
-{% for problem in problem_set.problems.all %}
+{% for problem in problem_set.visible_problems %}
 \naloga[{{ problem.title|md2tex }}, \tocke{TODO}]
 {{ problem.description|md2tex }}
 

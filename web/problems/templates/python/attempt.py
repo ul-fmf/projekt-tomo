@@ -8,13 +8,7 @@
 # =============================================================================
 {{ solution_attempt|safe }}{% endfor %}
 
-# Kode od tu naprej NE SPREMINJAJTE!
-# fmt: off
 
-"Če vam Python sporoča, da je v tej vrstici sintaktična napaka,"
-"se napaka v resnici skriva v zadnjih vrsticah vaše kode."
-
-"Kode od tu naprej NE SPREMINJAJTE!"
 
 
 
@@ -115,7 +109,7 @@
 
 
 # ============================================================================@
-
+# fmt: off
 "Če vam Python sporoča, da je v tej vrstici sintaktična napaka,"
 "se napaka v resnici skriva v zadnjih vrsticah vaše kode."
 

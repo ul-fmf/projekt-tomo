@@ -24,6 +24,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
         "part__problem__problem_set__course__institution",
         "part__problem__problem_set__course",
         "part__problem__problem_set",
+        "part__problem__visible",
     )
     search_fields = (
         "part__pk",

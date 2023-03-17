@@ -7,6 +7,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
 from taggit.managers import TaggableManager
@@ -20,6 +21,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
     problem_set = models.ForeignKey(
         "courses.ProblemSet", on_delete=models.CASCADE, related_name="problems"
     )
+    visible = models.BooleanField(default=False, verbose_name=_("Visible"))
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
     language = models.CharField(
@@ -48,7 +50,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return "{}#{}".format(self.problem_set.get_absolute_url(), self.anchor())
 
     def anchor(self):
-        return "problem-{}".format(self.pk)
+        return f"problem-{self.pk}"
 
     def user_attempts(self, user):
         return user.attempts.filter(part__problem=self)
@@ -72,9 +74,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         url = settings.SUBMISSION_URL + reverse("attempts-submit")
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
-        filename = "{0}.{1}".format(problem_slug, extension)
+        filename = f"{problem_slug}.{extension}"
         contents = render_to_string(
-            "{0}/attempt.{1}".format(self.language, extension),
+            f"{self.language}/attempt.{extension}",
             {
                 "problem": self,
                 "parts": parts,
@@ -88,9 +90,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         parts = [(part, part.solution) for part in self.parts.all()]
         problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
-        filename = "{0}_solution.{1}".format(problem_slug, extension)
+        filename = f"{problem_slug}_solution.{extension}"
         contents = render_to_string(
-            "{0}/solution.{1}".format(self.language, extension),
+            f"{self.language}/solution.{extension}",
             {
                 "problem": self,
                 "parts": parts,
@@ -99,6 +101,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return filename, contents
 
     def marking_file(self, user):
+        """This function ignores problem visibility because it assumes its
+        called only from courses/models.py:results_archive() by a teacher user
+        """
         attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
         parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
         username = user.get_full_name() or user.username
@@ -116,6 +121,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return filename, contents
 
     def bare_file(self, user):
+        """This function ignores problem visibility because it assumes its
+        called only from courses/models.py:results_archive() by a teacher user
+        """
         attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
         parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
         username = user.get_full_name() or user.username
@@ -133,12 +141,15 @@ class Problem(OrderWithRespectToMixin, models.Model):
         return filename, contents
 
     def edit_file(self, user):
+        """This function ignores problem visibility because it assumes its
+        called only from courses/models.py:edit_archive() by a teacher user
+        """
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse("problems-submit")
         problem_slug = slugify(self.title).replace("-", "_")
-        filename = "{0}_edit.{1}".format(problem_slug, self.EXTENSIONS[self.language])
+        filename = f"{problem_slug}_edit.{self.EXTENSIONS[self.language]}"
         contents = render_to_string(
-            "{0}/edit.{1}".format(self.language, self.EXTENSIONS[self.language]),
+            f"{self.language}/edit.{self.EXTENSIONS[self.language]}",
             {
                 "problem": self,
                 "submission_url": url,
@@ -195,6 +206,10 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def content_type(self):
         return self.MIMETYPES[self.language]
+
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
 
 
 class Part(OrderWithRespectToMixin, models.Model):
