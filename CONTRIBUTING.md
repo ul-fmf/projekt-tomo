@@ -20,3 +20,13 @@ Te teste lahko poženete tudi lokalno (glejte ukaze v [.github/workflows/](.gith
     python manage.py test
 
 Morebitne napake popravite tako, da uredite svoje commite (ne dodati na koncu enega commita, ki popravi vse napake). Enako velja za spremembe med procesom pregleda.
+
+Za dodajanje prevodov poženite:
+
+    python manage.py makemessages --no-location --no-obsolete -l sl
+
+ki datoteko `web/locale/sl/LC_MESSAGES/django.po` razširi z novimi neprevedenimi izrazi. Možnost `--no-location` v datoteki odstrani vrstice lokacije nizov (ker se to spreminja z vsakim commitom), možnost `--no-obsolete` pa odstrani neuporabljene prevode. Če želite prevode preizkusiti, morate pognati še:
+
+    python manage.py compilemessages
+
+ki datoteko `django.po` prevede v učinkovitejšo binarno različico `django.mo`.
