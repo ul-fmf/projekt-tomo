@@ -130,7 +130,7 @@ def course_detail(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
-        students = course.student_success()
+        students = course.student_outcome()
     else:
         students = []
 

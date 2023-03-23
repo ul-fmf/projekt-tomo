@@ -55,6 +55,12 @@ class Outcome:
         empty = f'{self.empty} { _("empty") }'
         return f"{valid} / {invalid} / {empty}"
 
+    def percentage_summary(self):
+        valid = f'{self.valid_percentage}% { _("valid") }'
+        invalid = f'{self.invalid_percentage}% { _("invalid") }'
+        empty = f'{self.empty_percentage}% { _("empty") }'
+        return f"{valid} / {invalid} / {empty}"
+
     @classmethod
     def group_dict(cls, parts, users, parts_group_by, users_group_by):
         part_group_sizes = _group_sizes(parts, *parts_group_by)

@@ -126,9 +126,9 @@
       $(function() {
         {% for student in students %}
         $("#student{{student.pk}}").drawPieChart([
-          { value : {{ student.empty }},  color: "#A92D2D" },
-          { value:  {{ student.invalid }},   color: "#D7A02C" },
-          { value : {{ student.valid }},   color: "#878F28" }
+          { value: {{ student.outcome.empty }}, color: "#A92D2D" },
+          { value: {{ student.outcome.invalid }}, color: "#D7A02C" },
+          { value: {{ student.outcome.valid }}, color: "#878F28" }
         ]);
         {% endfor %}
       });

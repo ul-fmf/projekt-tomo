@@ -35,7 +35,7 @@
                       <td>
                         <a href="{% url 'course_progress' problem.problem_set.course.pk observed_user.pk %}"
                           data-toggle="tooltip"
-                          title="{{ observed_user.valid }} {% trans "valid" %} / {{ observed_user.invalid }} {% trans "invalid" %} / {{ observed_user.empty }} {% trans "empty" %} ">
+                          title="{{ observed_user.outcome.summary }} ">
                           {{ observed_user.get_full_name }}</a>
                       </td>
                       <td width='60%'>

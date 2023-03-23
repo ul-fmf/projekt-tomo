@@ -238,7 +238,7 @@
               {% if show_teacher_forms %}
                 <a href="{% url 'problem_set_progress' problem_set.pk %}#{{problem.anchor}}"
                    data-toggle="tooltip"
-                   title="{{ part.valid }} {% trans "valid" %} / {{ part.invalid }} {% trans "invalid" %} / {{ part.empty }} {% trans "empty" %} ">
+                   title="{{ part.outcome.summary }} ">
               {% else %}
                 <a href="#{{part.anchor}}">
               {% endif %}
@@ -265,9 +265,9 @@ $(function() {
   {% for part in problem.parts %}
   {% if show_teacher_forms %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
-    {value: {{ part.valid }}, color: "#878F28"},
-    {value: {{ part.invalid }}, color: "#D7A02C"},
-    {value: {{ part.empty }}, color: "#A92D2D"},
+    {value: {{ part.outcome.valid }}, color: "#878F28"},
+    {value: {{ part.outcome.invalid }}, color: "#D7A02C"},
+    {value: {{ part.outcome.empty }}, color: "#A92D2D"},
   ]);
   {% else %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([

@@ -1,8 +1,8 @@
 from copy import deepcopy
 
 from attempts.models import Attempt, HistoricalAttempt
+from attempts.outcome import Outcome
 from django.db import models
-from django.db.models import Count
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
@@ -48,40 +48,24 @@ class Course(models.Model):
     def user_attempts(self, user):
         """This function ignores problem visibility, because it assumes it is only
         called from problems/models.py:marking_file() by a teacher user."""
+        parts = Part.objects.filter(problem__problem_set__course=self)
+        users = User.objects.filter(id=user.id)
+        outcomes = Outcome.group_dict(parts, users, ("problem",), ())
         attempts = {}
         for attempt in user.attempts.filter(part__problem__problem_set__course=self):
             attempts[attempt.part_id] = attempt
         sorted_attempts = []
-        for problem_set in self.problem_sets.all().prefetch_related("problems__parts"):
-            problem_set_attempts = []
-            prob_set_valid = prob_set_invalid = prob_set_empty = 0
+        for problem_set in self.problem_sets.all().prefetch_related("problems"):
+            problem_set.outcome = Outcome()
+            problem_set.attempts = []
             for problem in problem_set.problems.all():
-                valid = invalid = empty = 0
-                problem_attempts = [
+                problem.outcome = outcomes[(problem.id,)]
+                problem.attempts = [
                     attempts.get(part.pk) for part in problem.parts.all()
                 ]
-                for attempt in problem_attempts:
-                    if attempt is None:
-                        empty += 1
-                    elif attempt.valid:
-                        valid += 1
-                    else:
-                        invalid += 1
-                problem_set_attempts.append(
-                    (problem, problem_attempts, valid, invalid, empty)
-                )
-                prob_set_valid += valid
-                prob_set_invalid += invalid
-                prob_set_empty += empty
-            sorted_attempts.append(
-                (
-                    problem_set,
-                    problem_set_attempts,
-                    prob_set_valid,
-                    prob_set_invalid,
-                    prob_set_empty,
-                )
-            )
+                problem_set.attempts.append(problem)
+                problem_set.outcome += problem.outcome
+            sorted_attempts.append(problem_set)
         return sorted_attempts
 
     def prepare_annotated_problem_sets(self, user):
@@ -99,77 +83,22 @@ class Course(models.Model):
             self.annotate_for_user(user)
 
     def annotate_for_user(self, user):
+        parts = Part.objects.filter(
+            problem__problem_set__course=self, problem__visible=True
+        )
+        users = User.objects.filter(id=user.id)
+        outcomes = Outcome.group_dict(parts, users, ("problem__problem_set",), ())
         for problem_set in self.annotated_problem_sets:
-            problem_set.percentage = problem_set.valid_percentage(user)
-            if problem_set.percentage is None:
-                problem_set.percentage = 0
-            problem_set.grade = min(5, int(problem_set.percentage / 20) + 1)
+            problem_set.outcome = outcomes.get((problem_set.id,), Outcome(0, 0, 1))
 
     def annotate_for_teacher(self):
-        students = self.observed_students()
-        student_count = len(students)
-
-        part_sets = Part.objects.filter(
-            problem__problem_set__in=self.annotated_problem_sets
+        parts = Part.objects.filter(
+            problem__problem_set__course=self, problem__visible=True
         )
-        parts_count = (
-            part_sets.values("problem__problem_set_id")
-            .annotate(count=Count("problem__problem_set_id"))
-            .order_by("count")
-        )
-        parts_dict = {}
-        for part in parts_count:
-            problem_set_id = part["problem__problem_set_id"]
-            parts_dict[problem_set_id] = part["count"]
-
-        attempts_full = Attempt.objects.filter(
-            user__in=students,
-            part__problem__problem_set__in=self.annotated_problem_sets,
-            part__problem__visible=True,
-        )
-        attempts = attempts_full.values("valid", "part__problem__problem_set_id")
-        attempts_dict = {}
-        for attempt in attempts:
-            problem_set_id = attempt["part__problem__problem_set_id"]
-            if problem_set_id in attempts_dict:
-                attempts_dict[problem_set_id]["submitted_count"] += 1
-                attempts_dict[problem_set_id]["valid_count"] += (
-                    1 if attempt["valid"] else 0
-                )
-            else:
-                attempts_dict[problem_set_id] = {
-                    "submitted_count": 1,
-                    "valid_count": 1 if attempt["valid"] else 0,
-                }
-
+        users = self.observed_students()
+        outcomes = Outcome.group_dict(parts, users, ("problem__problem_set",), ())
         for problem_set in self.annotated_problem_sets:
-            part_count = (
-                parts_dict[problem_set.id] if problem_set.id in parts_dict else 0
-            )
-
-            if problem_set.id in attempts_dict:
-                submitted_count = attempts_dict[problem_set.id]["submitted_count"]
-                valid_count = attempts_dict[problem_set.id]["valid_count"]
-            else:
-                submitted_count = 0
-                valid_count = 0
-
-            invalid_count = submitted_count - valid_count
-            total_count = student_count * part_count
-
-            if total_count:
-                valid_percentage = int(100.0 * valid_count / total_count)
-                invalid_percentage = int(100.0 * invalid_count / total_count)
-            else:
-                valid_percentage = 0
-                invalid_percentage = 0
-
-            empty_percentage = 100 - valid_percentage - invalid_percentage
-
-            problem_set.valid = valid_percentage
-            problem_set.invalid = invalid_percentage
-            problem_set.empty = empty_percentage
-            problem_set.grade = min(5, int(valid_percentage / 20) + 1)
+            problem_set.outcome = outcomes.get((problem_set.id,), Outcome(0, 0, 1))
 
     def enroll_student(self, user):
         enrollment = StudentEnrollment(course=self, user=user)
@@ -197,29 +126,16 @@ class Course(models.Model):
             studentenrollment__course=self, studentenrollment__observed=True
         ).order_by("first_name")
 
-    def student_success(self):
-        students = self.observed_students()
-        problem_sets = self.problem_sets.filter(visible=True)
-        part_count = Part.objects.filter(problem__problem_set__in=problem_sets).count()
-        attempts = Attempt.objects.filter(part__problem__problem_set__in=problem_sets)
-        valid_attempts = (
-            attempts.filter(valid=True).values("user").annotate(Count("user"))
+    def student_outcome(self):
+        parts = Part.objects.filter(
+            problem__problem_set__course=self, problem__problem_set__visible=True
         )
-        all_attempts = attempts.values("user").annotate(Count("user"))
-
-        def to_dict(attempts):
-            attempts_dict = {}
-            for val in attempts:
-                attempts_dict[val["user"]] = val["user__count"]
-            return attempts_dict
-
-        valid_attempts_dict = to_dict(valid_attempts)
-        all_attempts_dict = to_dict(all_attempts)
-        for student in students:
-            student.valid = valid_attempts_dict.get(student.pk, 0)
-            student.invalid = all_attempts_dict.get(student.pk, 0) - student.valid
-            student.empty = part_count - student.valid - student.invalid
-        return students
+        users = self.observed_students()
+        outcomes = Outcome.group_dict(parts, users, (), ("id",))
+        annotated_users = list(users)
+        for user in annotated_users:
+            user.outcome = outcomes[(user.id,)]
+        return annotated_users
 
     def duplicate(self):
         new_course = deepcopy(self)
@@ -248,44 +164,18 @@ class Course(models.Model):
         }
         """
 
-        students = self.observed_students()
-        student_success_by_problemset = {student: {} for student in students}
-        student_solve_rate_by_problemset = {student: {} for student in students}
+        parts = Part.objects.filter(
+            problem__problem_set__course=self, problem__problem_set__visible=True
+        )
+        users = self.observed_students()
+        outcomes = Outcome.group_dict(parts, users, ("problem__problem_set"), ("id",))
+        student_solve_rate_by_problemset = {}
 
-        for problem_set in self.problem_sets.all().prefetch_related(
-            "problems", "problems__parts"
-        ):
-            different_subtasks = 0
-            for problem in problem_set.problems.all():
-                different_subtasks += problem.parts.count()
-
-            # In case there are no parts, we do not want to divide by 0
-            if different_subtasks == 0:
-                different_subtasks = 1
-
-            for student in students:
-                student_success_by_problemset[student][problem_set] = [
-                    0,
-                    0,
-                ]  # Valid, invalid
-
-            attempts = Attempt.objects.filter(
-                part__problem__problem_set=problem_set,
-                user__in=students,
-            )
-            for attempt in attempts:
-                if attempt.valid:
-                    student_success_by_problemset[attempt.user][problem_set][0] += 1
-                else:
-                    student_success_by_problemset[attempt.user][problem_set][1] += 1
-
-            for student in students:
-                valid, invalid = student_success_by_problemset[student][problem_set]
-                student_solve_rate_by_problemset[student][problem_set] = {
-                    "valid": round(valid / different_subtasks, 2),
-                    "invalid": round(invalid / different_subtasks, 2),
-                    "empty": round(1 - (valid + invalid) / different_subtasks, 2),
-                }
+        for problem_set in self.problem_sets.all():
+            for student in users:
+                student_solve_rate_by_problemset[student][problem_set] = outcomes[
+                    (problem_set.id, student.id)
+                ]
 
         return student_solve_rate_by_problemset
 
@@ -488,44 +378,17 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def student_statistics(self):
         students = self.course.observed_students()
-        student_count = len(students)
-
-        attempts = Attempt.objects.filter(
-            part__problem__problem_set=self, user__in=students
-        ).values("part_id", "valid")
-        attempts_dict = {}
-        for attempt in attempts:
-            part_id = attempt["part_id"]
-            if part_id in attempts_dict:
-                attempts_dict[part_id]["valid_count"] += 1 if attempt["valid"] else 0
-                attempts_dict[part_id]["submitted_count"] += 1
-            else:
-                attempts_dict[part_id] = {
-                    "submitted_count": 1,
-                    "valid_count": 1 if attempt["valid"] else 0,
-                }
-
+        parts = Part.objects.filter(problem__problem_set=self)
+        outcomes = Outcome.group_dict(parts, students, ("id",), ())
         statistics = []
         for problem in self.problems.all():
             parts = []
             for part in problem.parts.all():
-                if part.id in attempts_dict:
-                    submitted_count = attempts_dict[part.id]["submitted_count"]
-                    valid_count = attempts_dict[part.id]["valid_count"]
-                else:
-                    submitted_count = 0
-                    valid_count = 0
-
-                invalid_count = submitted_count - valid_count
-                empty_count = student_count - valid_count - invalid_count
-
                 parts.append(
                     {
                         "anchor": part.anchor(),
                         "pk": part.pk,
-                        "valid": valid_count,
-                        "invalid": invalid_count,
-                        "empty": empty_count,
+                        "outcome": outcomes[(part.pk,)],
                     }
                 )
             statistics.append(
@@ -538,21 +401,6 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                 }
             )
         return statistics
-
-    def valid_percentage(self, user):
-        """
-        Returns the percentage of parts (rounded to the nearest integer)
-        of parts in this problem set for which the given user has a valid attempt.
-        Counts parts of problems all problems (even if visible is set to false).
-        """
-        number_of_all_parts = Part.objects.filter(problem__problem_set=self).count()
-        number_of_valid_parts = user.attempts.filter(
-            valid=True, part__problem__problem_set=self
-        ).count()
-        if number_of_all_parts == 0:
-            return None
-        else:
-            return int(round(100.0 * number_of_valid_parts / number_of_all_parts))
 
     def toggle_visible(self):
         self.visible = not self.visible
