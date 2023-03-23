@@ -376,10 +376,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         files.append((spreadsheet_filename, spreadsheet_contents))
         return archive_name, files
 
-    def student_statistics(self):
-        students = self.course.observed_students()
-        parts = Part.objects.filter(problem__problem_set=self)
-        outcomes = Outcome.group_dict(parts, students, ("id",), ())
+    def outcomes_statistics(self, outcomes):
         statistics = []
         for problem in self.problems.all():
             parts = []
@@ -401,6 +398,18 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                 }
             )
         return statistics
+
+    def single_student_statistics(self, student):
+        students = User.objects.filter(id=student.id)
+        parts = Part.objects.filter(problem__problem_set=self, problem__visible=True)
+        outcomes = Outcome.group_dict(parts, students, ("id",), ())
+        return self.outcomes_statistics(outcomes)
+
+    def all_students_statistics(self):
+        students = self.course.observed_students()
+        parts = Part.objects.filter(problem__problem_set=self)
+        outcomes = Outcome.group_dict(parts, students, ("id",), ())
+        return self.outcomes_statistics(outcomes)
 
     def toggle_visible(self):
         self.visible = not self.visible
