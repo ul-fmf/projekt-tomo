@@ -55,7 +55,7 @@ class Course(models.Model):
         for attempt in user.attempts.filter(part__problem__problem_set__course=self):
             attempts[attempt.part_id] = attempt
         sorted_attempts = []
-        for problem_set in self.problem_sets.all().prefetch_related("problems"):
+        for problem_set in self.problem_sets.all().prefetch_related("problems__parts"):
             problem_set.outcome = Outcome()
             problem_set.attempts = []
             for problem in problem_set.problems.all():
@@ -145,73 +145,6 @@ class Course(models.Model):
         for problem_set in self.problem_sets.all():
             problem_set.copy_to(new_course)
         return new_course
-
-    def student_success_by_problem_set(self):
-        """
-        Function that will for each user calculate the solve rate for each problemset in
-        the course. For example if the user has solved 3 problem parts out of 10 problem
-        parts in the problemset, then his solve rate for that problemset would be 30%.
-
-        Returns the dictionary of this form:
-        {
-            student : {
-                problem_set : {
-                    'valid' : float,
-                    'invalid' : float,
-                    'empty' : float
-                }
-            }
-        }
-        """
-
-        parts = Part.objects.filter(
-            problem__problem_set__course=self, problem__problem_set__visible=True
-        )
-        users = self.observed_students()
-        outcomes = Outcome.group_dict(parts, users, ("problem__problem_set"), ("id",))
-        student_solve_rate_by_problemset = {}
-
-        for problem_set in self.problem_sets.all():
-            for student in users:
-                student_solve_rate_by_problemset[student][problem_set] = outcomes[
-                    (problem_set.id, student.id)
-                ]
-
-        return student_solve_rate_by_problemset
-
-    def student_success_by_problemset_grouped_by_groups(self):
-        """
-        Function does the same as student_success_by_problem_set except that it groups
-        students that are in the same group. Therefore we get a dictionary that will be
-        easier to use inside a django template. An alternative would be to create django
-        templatetags app and define filters with which we could access dictionary keys
-        inside django templates.
-
-        Returns a dictionary of the following form:
-
-        {
-            group : {
-                student : {
-                    problem_set : {
-                        'valid' : float,
-                        'invalid' : float,
-                        'empty' : float
-                    }
-                }
-            ]
-        }
-        """
-
-        groups = self.groups.all()
-        student_success = self.student_success_by_problem_set()
-
-        student_success_by_groups = {}
-        for group in groups:
-            student_success_by_groups[group] = {}
-            for student in group.students.all():
-                student_success_by_groups[group][student] = student_success[student]
-
-        return student_success_by_groups
 
 
 class StudentEnrollment(models.Model):
@@ -378,7 +311,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def outcomes_statistics(self, outcomes):
         statistics = []
-        for problem in self.problems.all():
+        for problem in self.problems.prefetch_related("parts"):
             parts = []
             for part in problem.parts.all():
                 parts.append(

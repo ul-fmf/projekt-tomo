@@ -83,7 +83,7 @@
           <hr>
         {% endif %}
 
-        {% for problem in problem_set.problems.all %}
+        {% for problem in problems %}
         {% if problem.visible or show_teacher_forms %}
         <div id="{{ problem.anchor }}" class="panel panel-default">
           <div id="{{ problem.anchor }}" class="panel-heading">
@@ -195,7 +195,8 @@
           {% endif %}
 
           <ul class="list-group tomo-subtasks">
-            {% for part in problem.parts.all %}
+            {% with problem.parts.all as parts %}
+            {% for part in parts %}
               {% if part.pk in valid_parts_ids %}
               <li class="list-group-item tomo-subtask-valid" id="{{ part.anchor }}">
               {% elif part.pk in invalid_parts_ids %}
@@ -204,12 +205,13 @@
               <li class="list-group-item tomo-subtask-empty" id="{{ part.anchor }}">
               {% endif %}
               {# Translators: problem set detail #}
-              {% if problem.parts.count > 1 %}
+              {% if parts|length > 1 %}
               <h5>{{ forloop.counter }}. {% trans "part" %}</h5>
               {% endif %}
               <p>{{ part.guarded_description|latex_markdown }}</p>
             </li>
             {% endfor %}
+            {% endwith %}
           </ul>
         </div>
 	    {% endif %}
@@ -263,23 +265,11 @@
 $(function() {
   {% for problem in student_statistics %}
   {% for part in problem.parts %}
-  {% if show_teacher_forms %}
   $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
     {value: {{ part.outcome.valid }}, color: "#878F28"},
     {value: {{ part.outcome.invalid }}, color: "#D7A02C"},
     {value: {{ part.outcome.empty }}, color: "#A92D2D"},
   ]);
-  {% else %}
-  $("#pieChart-{{ problem.pk }}-{{ part.pk }}").drawPieChart([
-    {% if part.pk in valid_parts_ids %}
-    {value: 1, color: "#878F28"},
-    {% elif part.pk in invalid_parts_ids %}
-    {value: 1, color: "#D7A02C"},
-    {% else %}
-    {value: 1, color: "#A92D2D"},
-    {% endif %}
-  ]);
-  {% endif %}
   {% endfor %}
   {% endfor %}
 });

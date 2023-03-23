@@ -116,6 +116,7 @@ def problem_set_detail(request, problem_set_pk):
         "courses/problem_set_detail.html",
         {
             "problem_set": problem_set,
+            "problems": problem_set.problems.prefetch_related("parts"),
             "valid_parts_ids": valid_parts_ids,
             "invalid_parts_ids": invalid_parts_ids,
             "show_teacher_forms": request.user.can_edit_problem_set(problem_set),
@@ -347,7 +348,6 @@ def course_groups(request, course_pk):
         {
             "course": course,
             "show_teacher_forms": request.user.can_create_course_groups(course),
-            # 'success' : course.student_success_by_problemset_grouped_by_groups()
         },
     )
 

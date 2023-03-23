@@ -101,19 +101,11 @@
     </div>
     {% endif %}
 
-    {% if course.is_taught %}
     <div class="media-left">
       <p class="success text-danger color{{ problem_set.outcome.grade }}">
         {{ problem_set.outcome.valid_percentage }}<small>%</small>
       </p>
     </div>
-    {% else %}
-    <div class="media-left">
-      <p class="success text-danger color{{ problem_set.outcome.grade }}">
-        {{ problem_set.outcome.valid_percentage }}<small>%</small>
-      </p>
-    </div>
-    {% endif %}
 
     <div class="media-body media-middle">
       <div class="row">
