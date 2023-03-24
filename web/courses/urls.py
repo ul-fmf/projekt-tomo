@@ -145,6 +145,11 @@ groups_urls = [
 
 urlpatterns = [
     path("problem_set/<int:problem_set_pk>/", include(problem_set_urls)),
+    path(
+        "problem_set/<int:problem_set_pk>/problem/<int:problem_pk>",
+        views.solution_timeline,
+        name="solution_timeline",
+    ),
     path("course/<int:course_pk>/", include(course_urls)),
     path("groups/<int:group_pk>/", include(groups_urls)),
 ]

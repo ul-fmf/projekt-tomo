@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}               
+{% load staticfiles %}
+
+{% block title %}Tomo – {% trans 'Statistika' %}{% endblock %}
+
+
+{% block content %}
+
+<script>
+	var podatki2 = {{json_data|safe}};
+</script>
+
+<div class="content-section-a tomo-top-section"><div class="container">
+
+	<h3>Število učencev, ki so rešili vsaj n podnalog. </h3>
+	
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+		var data = google.visualization.arrayToDataTable(podatki2);
+
+        var options = {
+          title: 'Uspešnost reševanja',
+          curveType: 'none',
+          legend: { position: 'bottom' },
+		  colors:['red','#004411'],
+		  axes: {
+          x: {
+            0: {side: 'top'}
+          }},
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+<div id="curve_chart" style="width: 900px; height: 500px"></div>
+{% endblock content %}

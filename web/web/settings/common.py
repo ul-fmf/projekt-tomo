@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "courses",
     "taggit",
     "social_django",
+    "tomo_statistics",
 ]
 
 MIDDLEWARE = [

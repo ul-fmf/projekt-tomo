@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_POST
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from problems.models import Problem
 from users.models import User
 from utils import verify
 from utils.views import zip_archive
@@ -448,3 +449,15 @@ def course_groups_delete(request, group_pk):
     group.delete()
 
     return redirect("course_groups", course_pk=course_pk)
+
+
+@login_required
+def solution_timeline(request, problem_set_pk, problem_pk):
+    problem = get_object_or_404(Problem, pk=problem_pk)
+    problem_set = problem.problem_set
+    data = problem.timeline()
+    return render(
+        request,
+        "courses/problem_timeline.html",
+        {"students": data, "problem": problem, "problem_set": problem_set},
+    )

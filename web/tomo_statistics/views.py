@@ -1,5 +1,7 @@
+import json
+
 from attempts.models import Attempt, HistoricalAttempt
-from courses.models import Course, ProblemSet
+from courses.models import ProblemSet
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
@@ -11,6 +13,8 @@ from tomo_statistics.statistics_utils import (
 )
 from users.models import User
 from utils import verify
+
+from .models import Course
 
 
 @login_required
@@ -192,3 +196,40 @@ def compare_solutions(request, course_pk):
                 "cmp_type": "problems",
             },
         )
+
+
+def main_view(request):
+    return render(request, "tomo_statistics/statistika_test.html")
+
+
+def course_graphs(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    return render(
+        request,
+        "tomo_statistics/statistika_course.html",
+        {
+            "annotated_problem_sets": course.problem_success_2(),
+            "course": course,
+        },
+    )
+
+
+def user_success(request, course_pk):
+    course = get_object_or_404(Course, pk=course_pk)
+    json_data = json.dumps(course.statistika()["solved_atleast"])
+    return render(
+        request, "tomo_statistics/user_success.html", {"json_data": json_data}
+    )
+
+
+def course_graphs_active(request, course_pk, days):
+    course = get_object_or_404(Course, pk=course_pk)
+    return render(
+        request,
+        "tomo_statistics/statistika_course.html",
+        {
+            "annotated_problem_sets": course.active(days=days),
+            "course": course,
+            "days": days,
+        },
+    )

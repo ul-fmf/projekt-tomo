@@ -14,6 +14,11 @@ urlpatterns = [
         name="problem_solution",
     ),
     path(
+        "<int:problem_pk>/solutions/<int:user_pk>/<int:hist_attempt_pk>",
+        views.problem_solution_at_time,
+        name="problem_solution_at_time",
+    ),
+    path(
         "<int:problem_pk>/download/",
         views.problem_attempt_file,
         name="problem_attempt_file",
@@ -46,4 +51,9 @@ urlpatterns = [
     ),
     path("<int:pk>/delete/", ProblemDelete.as_view(), name="problem_delete"),
     path("<int:problem_pk>/copy/", views.copy_form, name="problem_copy"),
+    path(
+        "view_all/<int:part_pk>",
+        views.all_solutions_to_part,
+        name="all_solutions_to_part",
+    ),
 ]

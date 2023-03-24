@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{# Translators: Title of solutions page. #}
+{% block title %}Tomo - {{ problem.title }}: {% trans 'solutions' %}{% endblock %}
+
+{% block navigation-left %}
+    <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+    <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+    <a class="navbar-brand topnav" href="{{ problem.get_absolute_url }}">{{ problem.title }}</a>
+    <a class="navbar-brand topnav" href="#">
+      {% if user == student %}
+        {% trans 'Solutions' %}
+      {% else %}
+        {% trans 'Solutions' %}
+      {% endif %}
+      <span class="sr-only">
+        {# Translators: current page in navigation #}
+        {% trans '(current)' %}
+      </span>
+    </a>
+{% endblock %}
+
+{% block content %}
+<div class="content-section-a tomo-top-section">
+  <div class="container tomo-task-solutions">
+    <div class="tomo-task">
+      <h3>{{ problem.title }} - {{part_number}}. Podnaloga</h3>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="list-group">
+		  
+			<li class="list-group-item">
+              <p> Opis podnaloge </p>
+              <div class="row">
+                <div class="row-height">
+                  <div class="col-xs-12 col-sm-6 col-sm-height">
+                    <div class="tomo-solution-user">
+                    </div>
+                    <div class="inside inside-full-height">
+                      <div class="content">
+                        <div class="tomo-solution-code-user">
+                          <div class="tomo-pre">{{ part.description }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="col-xs-12 col-sm-6 col-sm-height">
+                  <div class="tomo-solution-official">
+				  <h5>Uradna rešitev</h5>
+                  </div>
+                  <div class="inside inside-full-height">
+                    <div class="content">
+                      <div class="tomo-solution-code-official">
+						<div class="tomo-pre">{{ part.solution|linebreaksbr }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </li>
+		  
+            {% for attempt in attempts %}
+
+            <li class="list-group-item">
+              {# Translators: in solution comparison table #}
+              <p>{{ forloop.counter }}. {{attempt.user.first_name}} {{attempt.user.last_name}} </p>
+              <div class="row">
+                <div class="row-height">
+                  <div class="col-xs-12 col-sm-6 col-sm-height">
+                    <div class="tomo-solution-user">
+                      <div class="tomo-solution-valid">
+                        {% if attempt.valid %}<i class="color5 fa fa-circle fa-lg"></i>
+                        {% else %}<i class="color3 fa fa-circle fa-lg"></i>
+                        {% endif %}
+                      </div>
+                      {# Translators: Title of user solutions column. #}
+                    </div>
+                    <div class="inside inside-full-height">
+                      <div class="content">
+                        <div class="tomo-solution-code-user">
+						Čas oddaje: {{attempt.submission_date}}
+                          <div class="tomo-pre">{{ attempt.solution }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <div class="col-xs-12 col-sm-6 col-sm-height">
+                  <div class="tomo-solution-official">
+				  <h5>Odziv</h5>
+                  </div>
+                  <div class="inside inside-full-height">
+                    <div class="content">
+                      <div class="tomo-solution-code-official">
+					  {% if attempt.feedback == '"[]"'%}
+					  <div class="tomo-message">Naloga je pravilna rešena.</div>
+					  {% else %}
+							{{attempt.feedback}}
+					  {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block navigation-left %} 
+  <a class="navbar-brand topnav" href="{% url 'course_detail' problem_set.course.pk %}">{{ problem_set.course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'problem_set_detail' problem_set.pk %}">{{ problem_set.title }}</a>
+  <a class="navbar-brand topnav" href="#">
+    	{# Translators: Progress of students in a problem set - heading in navigation #}
+    	{% trans "Progress" %}
+    	<span class="sr-only">
+    		{# Translators: current page in navigation #}
+    		{% trans "(current)" %}
+   		</span>
+  </a>
+{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-overview-student">
+  <div class="container">
+    <h2>{{ problem_set.title }} - {{problem.title}}</h2>
+    <div class="row">
+      {% for student, times in students.items %}
+      <div class="col-md-4">
+        <h3> <a href="{% url 'course_progress' problem.problem_set.course.pk student.pk %}"> {{ student.get_full_name }}</a></h3>
+      </div>
+      <div class="col-md-8">
+        <table class="table table-condensed">
+          <tbody>
+            {% for latest, attempts in times %}
+            <tr>
+              <td>
+                  {{ latest.submission_date }}
+              </td>
+              <td width='60%'>
+                {% for attempt in attempts %}
+				{% if not attempt %}
+					<i class="color1 fa fa-circle fa-lg"></i>
+				{% else %}
+                <a href="{% url 'problem_solution_at_time' problem.pk student.pk latest.pk %}">
+                  {% if attempt.valid %}<i class="color5 fa fa-circle fa-lg"></i>
+                  {% else %}<i class="color3 fa fa-circle fa-lg"></i>
+                  {% endif %}
+				 {% endif %}
+                </a>
+                {% endfor %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %} {# content #}

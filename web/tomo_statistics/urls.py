@@ -30,4 +30,15 @@ urlpatterns = [
         name="user_problem_solution_through_time",
     ),
     path("<int:course_pk>/compare", views.compare_solutions, name="compare_solutions"),
+    path("", views.main_view, name="main_view"),
+    path("<int:course_pk>/", views.test_view, name="test_view"),
+    path("graf_test/<int:course_pk>/", views.graph, name="graph"),
+    path("<int:course_pk>/", views.course_graphs, name="course_graphs"),
+    path("<int:course_pk>/users", views.user_success, name="user_success"),
+    path("<int:course_pk>/js", views.graph_json, name="graph_json"),
+    path(
+        "<int:course_pk>/active/<int:days>",
+        views.course_graphs_active,
+        name="course_graphs_active",
+    ),
 ]

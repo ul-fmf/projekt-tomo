@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load i18n %}               
+{% load staticfiles %}
+
+{% block title %}Tomo – {% trans 'Statistika' %}{% endblock %}
+
+
+{% block content %}
+<div class="content-section-a tomo-top-section"><div class="container">
+{% filter latex_markdown %}
+
+
+<h2> {{course.title}} </h2>
+<p><h5> Število pravilnih/napačnih oddaj za posamezno podnalogo </h5></p>
+{% endfilter %}
+
+<h3> Izberi skupino, glede na katero bi želel imeti izrisane grafe </h3>
+
+{% for group in course.groups.all %}
+<li><a href='#'> {{group.title}} </a> <br>
+{% endfor %}
+<li><a href='{% url "course_graphs_active" course.pk 7 %}'> Aktivni zadnji teden </a> <br>
+<li><a href='{% url "course_graphs_active" course.pk 30%}'> Aktivni zadnji mesec </a> <br>
+<li><a href='{% url "course_graphs_active" course.pk 180%}'> Aktivni zadnjih 6 mesecev </a> <br>
+<li><a href='{% url "course_graphs_active" course.pk 365%}'> Aktivni zadnje leto </a> <br>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+{% if annotated_problem_sets %}
+{% for problem_set in annotated_problem_sets %}
+
+<h3>{{problem_set.title}}</h3>
+
+
+<script type="text/javascript">
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart{{problem_set.id}});
+    function drawChart{{problem_set.id}}() {
+      var data = google.visualization.arrayToDataTable({{problem_set.json|safe}});
+
+      var options = {
+        title: "Pravilnost oddanih rešitev za posamezno nalogo",
+        width: 1200,
+        height: 600,
+        bar: {groupWidth: "95%"},
+        legend: { position: "top" },
+		colors:['#878F28','#D7A02C'],
+		isStacked: true,
+      };
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values{{problem_set.id}}"));
+      chart.draw(data, options);
+  }
+  </script>
+<div id="columnchart_values{{problem_set.id}}" style="width: 1100px; height: 600px;"></div>
+
+{% endfor %}
+{% else %}
+	<h4><i class="color1">  V zadnjih {{days}} dneh ni bil aktiven noben učenec iz razreda </h4></i> 
+{% endif %}
+</div></div>
+
+{% endblock content %}

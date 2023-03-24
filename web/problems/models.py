@@ -1,12 +1,15 @@
 import json
+from collections import defaultdict
 from copy import deepcopy
 
+from attempts.models import HistoricalAttempt
 from django.conf import settings
 from django.core import signing
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.template.loader import render_to_string
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token
 from simple_history.models import HistoricalRecords
@@ -210,6 +213,35 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def toggle_visible(self):
         self.visible = not self.visible
         self.save()
+
+    def timeline(self):
+        def get_index(part, part_list):
+            for st, p in enumerate(part_list):
+                if p.id == part.id:
+                    return st
+            return None
+
+        course = self.problem_set.course
+        students = course.observed_students()
+        parts = self.parts.all()
+        historic_attempts = HistoricalAttempt.objects.filter(part__id__in=parts).filter(
+            user__id__in=students
+        )
+        student_data = defaultdict()
+        for student in students:
+            check_times = []
+            attempts = historic_attempts.filter(user__id=student.id).order_by(
+                "submission_date"
+            )
+            stanje = [False] * len(parts)
+            for attempt in attempts:
+                indeks = get_index(attempt.part, parts)
+                stanje[indeks] = attempt
+                check_times.append((attempt, stanje[:]))
+            if len(check_times) == 0:
+                check_times.append((timezone.now, stanje[:]))
+            student_data[student] = check_times
+        return student_data
 
 
 class Part(OrderWithRespectToMixin, models.Model):
