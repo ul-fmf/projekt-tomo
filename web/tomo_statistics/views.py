@@ -1,6 +1,7 @@
 from attempts.models import Attempt, HistoricalAttempt
 from courses.models import Course, ProblemSet
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
 from problems.models import Part
 from tomo_statistics.statistics_utils import (
@@ -170,13 +171,13 @@ def compare_solutions(request, course_pk):
                         part.attempt_student1 = attempts.get(
                             user=first_student, part=part
                         )
-                    except:
+                    except ObjectDoesNotExist:
                         part.attempt_student1 = None
                     try:
                         part.attempt_student2 = attempts.get(
                             user=second_student, part=part
                         )
-                    except:
+                    except ObjectDoesNotExist:
                         part.attempt_student2 = None
 
         return render(
