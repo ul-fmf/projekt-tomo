@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block navigation-left %}
+  <a class="navbar-brand topnav" href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+  <a class="navbar-brand topnav" href="{% url 'statistics_landing_page' course.pk %}"> Pregled </a>
+{% endblock %}
+
+{% block content %}
+<div class="content-section-a tomo-top-section">
+  <div class="container">
+    <div class='row'>
+        <h3>Primerjava rešitev</h3>
+        <form action="{% url 'compare_solutions' course.pk %}" method='post'>
+        	{% csrf_token %}
+            <div class='form-group'>
+                <br>
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="problemSetSelect">Sklop nalog:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="problemSetSelect" id="problemSetSelect">
+                        {% for problemset in course.problem_sets.all %}
+                            {% if problem_set == problemset %}
+                                <option selected value="{{ problemset.pk }}"> {{ problemset.title }} </option>
+                            {% else %}
+                                <option value="{{ problemset.pk }}"> {{ problemset.title }} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class='form-group'>
+                <br>
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="firstStudentSelect">Prvi učenec:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="firstStudentSelect" id="firstStudentSelect">
+                        {% for student in course.observed_students %}
+                            {% if student == first_student %}
+                                <option selected value="{{ student.pk }}"> {{ student.get_full_name }} </option>
+                            {% else %}
+                                <option value="{{ student.pk }}"> {{ student.get_full_name }} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class='form-group'>
+                <br>
+                <label class="col-sm-2 col-form-label col-form-label-sm" for="secondStudentSelect">Drugi učenec:</label>
+                <div class="col-sm-10">
+                    <select class="form-control" name="secondStudentSelect" id="secondStudentSelect">
+                        {% for student in course.observed_students %}
+                            {% if student == second_student %}
+                                <option selected value="{{ student.pk }}"> {{ student.get_full_name }} </option>
+                            {% else %}
+                                <option value="{{ student.pk }}"> {{ student.get_full_name }} </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <br> <br>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <div class="form-check col-sm-5">
+                    {% if cmp_type == "timeline" %}
+                        <input class="form-check-input" type="radio" name="compare_type" id="gridRadios1" value="timeline" checked>
+                    {% else %}
+                        <input class="form-check-input" type="radio" name="compare_type" id="gridRadios1" value="timeline">
+                    {% endif %}
+                    <label class="form-check-label" for="gridRadios1">
+                        Zaporedje oddaj
+                    </label>
+                    </div>
+                    <div class="form-check col-sm-5">
+                    {% if cmp_type == "problems" %}
+                        <input class="form-check-input" type="radio" name="compare_type" id="gridRadios2" value="problems" checked>
+                    {% else %}
+                        <input class="form-check-input" type="radio" name="compare_type" id="gridRadios2" value="problems">
+                    {% endif %}
+                    <label class="form-check-label" for="gridRadios2">
+                        Primerjava rešitev ena ob drugi
+                    </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2 col-sm-2">Preglej</button>
+            </div>
+            <br> <br>
+        </form>
+    </div>
+    <div class="container tomo-task-solutions">
+        <div class="tomo-task">
+            <span style="text-align:left; font-size:20px;" class="color2">
+                &nbsp;&nbsp;&nbsp; {{ first_student.get_full_name }}
+                <span style="float:right;">
+                    {{ second_student.get_full_name }} &nbsp;&nbsp;&nbsp;
+                </span>
+            </span>
+            <div class="row">
+                <div class="col-md-12">
+                <ul class="list-group">
+                    {% for attempt in attempts %}
+                        {% if attempt.valid %}
+                            <li class="list-group-item" style="background-color:#e6ffe6;">
+                        {% else %}
+                            <li class="list-group-item" style="background-color:#ffffe6;">
+                        {% endif %}
+                        <div class="row">
+                            <br>
+                            <div class="col-xs-12 col-sm-6">
+                                {% if attempt.user == first_student %}
+                                    <div class="tomo-solution-user">
+                                        <div class="tomo-solution-valid">
+                                        {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                                        {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                                        {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="tomo-solution-code-user">
+                                        <span class="color1"> {{ attempt.part.problem.title }} </span> &nbsp;&nbsp;&nbsp; {{ attempt.submission_date }}
+                                        <div class="tomo-pre">{{ attempt.solution }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-xs-12 col-sm-6">
+                                {% if attempt.user == second_student %}
+                                    <div class="tomo-solution-user">
+                                        <div class="tomo-solution-valid">
+                                        {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
+                                        {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>
+                                        {% else %}<i class="color1 fa fa-times-circle fa-lg"></i>
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="tomo-solution-code-user">
+                                        <span class="color1"> {{ attempt.part.problem.title }} </span> &nbsp;&nbsp;&nbsp; {{ attempt.submission_date }}
+                                        <div class="tomo-pre">{{ attempt.solution }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div><!-- row -->
+                        </li>
+                    {% endfor %}
+                </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
