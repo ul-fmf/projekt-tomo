@@ -14,27 +14,27 @@
 <div class="content-section-a tomo-overview-student">
   <div class="container">
     <h2>{{ observed_user.title }}</h2>
-      {% for problem_set, problem_set_attempts, ps_valid, ps_invalid, ps_empty in course_attempts %}
+      {% for problem_set in course_attempts %}
       <div class="row">
       <div class="col-md-4">
         <h3><a href="{{ problem_set.get_absolute_url }}"
                    data-toggle="tooltip"
-                   title="{{ ps_valid }} {% trans "valid" %} / {{ ps_invalid }} {% trans "invalid" %} / {{ ps_empty }} {% trans "empty" %} ">
+                   title="{{ problem_set.outcome.summary }} ">
 {{ problem_set.title }}</a></h3>
       </div>
       <div class="col-md-8">
         <table class="table table-condensed">
           <tbody>
-            {% for problem, problem_attempts, valid, invalid, empty in problem_set_attempts %}
+            {% for problem in problem_set.attempts %}
             <tr>
               <td>
                 <a href="{{ problem.get_absolute_url }}"
                    data-toggle="tooltip"
-                   title="{{ valid }} {% trans "valid" %} / {{ invalid }} {% trans "invalid" %} / {{ empty }} {% trans "empty" %} ">
+                   title="{{ problem.outcome.summary }} ">
               {{ problem.title }}</a>
               </td>
               <td width='60%'>
-                {% for attempt in problem_attempts %}
+                {% for attempt in problem.attempts %}
                 <a href="{% url 'problem_solution' problem.pk observed_user.pk %}" class="solution-circle">
                   {% if attempt.valid %}<i class="color5 fa fa-check-circle fa-lg"></i>
                   {% elif attempt %}<i class="color3 fa fa-question-circle fa-lg"></i>

@@ -4,20 +4,20 @@
   {% if course.is_taught %}
   {% spaceless %}
   <div data-toggle="tooltip"
-       title="{{ problem_set.valid }}% {% trans "valid" %} / {{ problem_set.invalid }}% {% trans "invalid" %} / {{ problem_set.empty }}% {% trans "empty" %} ">
-  {% if problem_set.valid %}
-  <hr class="indicator background5" width="{{ problem_set.valid }}%">
+       title="{{ problem_set.outcome.percentage_summary }} ">
+  {% if problem_set.outcome.valid_percentage %}
+  <hr class="indicator background5" width="{{ problem_set.outcome.valid_percentage }}%">
   {% endif %}
-  {% if problem_set.invalid %}
-  <hr class="indicator background3" width="{{ problem_set.invalid }}%">
+  {% if problem_set.outcome.invalid_percentage %}
+  <hr class="indicator background3" width="{{ problem_set.outcome.invalid_percentage }}%">
   {% endif %}
-  {% if problem_set.empty %}
-  <hr class="indicator background1" width="{{ problem_set.empty }}%">
+  {% if problem_set.outcome.empty_percentage %}
+  <hr class="indicator background1" width="{{ problem_set.outcome.empty_percentage }}%">
   {% endif %}
   </div>
   {% endspaceless %}
   {% else %}
-  <hr class="indicator background{{problem_set.grade}}" width="{{ problem_set.percentage }}%">
+  <hr class="indicator background{{problem_set.outcome.grade}}" width="{{ problem_set.outcome.valid_percentage }}%">
   {% endif %}
 
   <div class="media">
@@ -101,19 +101,11 @@
     </div>
     {% endif %}
 
-    {% if course.is_taught %}
     <div class="media-left">
-      <p class="success text-danger color{{ problem_set.grade }}">
-        {{ problem_set.valid }}<small>%</small>
+      <p class="success text-danger color{{ problem_set.outcome.grade }}">
+        {{ problem_set.outcome.valid_percentage }}<small>%</small>
       </p>
     </div>
-    {% else %}
-    <div class="media-left">
-      <p class="success text-danger color{{ problem_set.grade }}">
-        {{ problem_set.percentage }}<small>%</small>
-      </p>
-    </div>
-    {% endif %}
 
     <div class="media-body media-middle">
       <div class="row">

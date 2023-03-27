@@ -100,12 +100,12 @@ def problem_set_detail(request, problem_set_pk):
     verify(request.user.can_view_problem_set(problem_set))
 
     user_attempts = request.user.attempts.filter(
-        part__problem__problem_set__id=problem_set_pk
+        part__problem__problem_set=problem_set, part__problem__visible=True
     )
-    student_statistics = problem_set.student_statistics()
-    if not request.user.is_teacher(problem_set.course):
-        user_attempts = user_attempts.filter(part__problem__visible=True)
-        student_statistics = list(filter(lambda p: p["visible"], student_statistics))
+    if request.user.is_teacher(problem_set.course):
+        student_statistics = problem_set.all_students_statistics()
+    else:
+        student_statistics = problem_set.single_student_statistics(request.user)
     valid_parts_ids = user_attempts.filter(valid=True).values_list("part_id", flat=True)
     invalid_parts_ids = user_attempts.filter(valid=False).values_list(
         "part_id", flat=True
@@ -116,6 +116,7 @@ def problem_set_detail(request, problem_set_pk):
         "courses/problem_set_detail.html",
         {
             "problem_set": problem_set,
+            "problems": problem_set.problems.prefetch_related("parts"),
             "valid_parts_ids": valid_parts_ids,
             "invalid_parts_ids": invalid_parts_ids,
             "show_teacher_forms": request.user.can_edit_problem_set(problem_set),
@@ -130,7 +131,7 @@ def course_detail(request, course_pk):
     course = get_object_or_404(Course, pk=course_pk)
     verify(request.user.can_view_course(course))
     if request.user.can_edit_course(course):
-        students = course.student_success()
+        students = course.student_outcome()
     else:
         students = []
 
@@ -347,7 +348,6 @@ def course_groups(request, course_pk):
         {
             "course": course,
             "show_teacher_forms": request.user.can_create_course_groups(course),
-            # 'success' : course.student_success_by_problemset_grouped_by_groups()
         },
     )
 

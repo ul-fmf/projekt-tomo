@@ -1,6 +1,7 @@
 import json
 from copy import deepcopy
 
+from attempts.outcome import Outcome
 from django.conf import settings
 from django.core import signing
 from django.db import models
@@ -160,36 +161,21 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def attempts_by_user(self, active_only=True):
         attempts = {}
-        for part in self.parts.all().prefetch_related("attempts", "attempts__user"):
+        parts = self.parts.all().prefetch_related("attempts", "attempts__user")
+        for part in parts:
             for attempt in part.attempts.all():
                 if attempt.user in attempts:
                     attempts[attempt.user][part] = attempt
                 else:
                     attempts[attempt.user] = {part: attempt}
-        for student in self.problem_set.course.students.all():
-            if student not in attempts:
-                attempts[student] = {}
-
-        observed_students = self.problem_set.course.observed_students()
-
+        users = self.problem_set.course.observed_students()
         if active_only:
-            observed_students = observed_students.filter(
-                attempts__part__problem=self
-            ).distinct()
-
-        observed_students = list(observed_students)
+            users = users.filter(attempts__part__problem=self).distinct()
+        outcomes = Outcome.group_dict(parts, users, (), ("id",))
+        observed_students = list(users)
         for user in observed_students:
-            user.valid = user.invalid = user.empty = 0
-            user.these_attempts = [
-                attempts[user].get(part) for part in self.parts.all()
-            ]
-            for attempt in user.these_attempts:
-                if attempt is None:
-                    user.empty += 1
-                elif attempt.valid:
-                    user.valid += 1
-                else:
-                    user.invalid += 1
+            user.these_attempts = [attempts.get(user, {}).get(part) for part in parts]
+            user.outcome = outcomes[(user.id,)]
         return observed_students
 
     def attempts_by_user_all(self):
