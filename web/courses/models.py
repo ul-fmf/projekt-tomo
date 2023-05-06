@@ -47,7 +47,7 @@ class Course(models.Model):
 
     def user_attempts(self, user):
         """This function ignores problem visibility, because it assumes it is only
-        called from problems/models.py:marking_file() by a teacher user."""
+        called from courses/views.py:course_progress() by a teacher user."""
         parts = Part.objects.filter(problem__problem_set__course=self)
         users = User.objects.filter(id=user.id)
         outcomes = Outcome.group_dict(parts, users, ("problem",), ())
