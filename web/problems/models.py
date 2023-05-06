@@ -16,13 +16,9 @@ from utils import is_json_string_list, truncate
 from utils.models import OrderWithRespectToMixin
 
 
-class Problem(OrderWithRespectToMixin, models.Model):
+class Problem(models.Model):
     title = models.CharField(max_length=70)
     description = models.TextField(blank=True)
-    problem_set = models.ForeignKey(
-        "courses.ProblemSet", on_delete=models.CASCADE, related_name="problems"
-    )
-    visible = models.BooleanField(default=False, verbose_name=_("Visible"))
     history = HistoricalRecords()
     tags = TaggableManager(blank=True)
     language = models.CharField(
@@ -32,9 +28,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
     )
     EXTENSIONS = {"python": "py", "octave": "m", "r": "r"}
     MIMETYPES = {"python": "text/x-python", "octave": "text/x-octave", "r": "text/x-R"}
-
-    class Meta:
-        order_with_respect_to = "problem_set"
 
     def __str__(self):
         return self.title
@@ -53,39 +46,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
     def anchor(self):
         return f"problem-{self.pk}"
 
-    def user_attempts(self, user):
-        return user.attempts.filter(part__problem=self)
-
-    def user_solutions(self, user):
-        return {
-            attempt.part.id: attempt.solution for attempt in self.user_attempts(user)
-        }
-
     @property
     def slug(self):
         return slugify(self.title).replace("-", "_")
-
-    def attempt_file(self, user):
-        authentication_token = Token.objects.get(user=user)
-        solutions = self.user_solutions(user)
-        parts = [
-            (part, solutions.get(part.id, part.template), part.attempt_token(user))
-            for part in self.parts.all()
-        ]
-        url = settings.SUBMISSION_URL + reverse("attempts-submit")
-        problem_slug = slugify(self.title).replace("-", "_")
-        extension = self.EXTENSIONS[self.language]
-        filename = f"{problem_slug}.{extension}"
-        contents = render_to_string(
-            f"{self.language}/attempt.{extension}",
-            {
-                "problem": self,
-                "parts": parts,
-                "submission_url": url,
-                "authentication_token": authentication_token,
-            },
-        )
-        return filename, contents
 
     def solution_file(self):
         parts = [(part, part.solution) for part in self.parts.all()]
@@ -101,45 +64,6 @@ class Problem(OrderWithRespectToMixin, models.Model):
         )
         return filename, contents
 
-    def marking_file(self, user):
-        """This function ignores problem visibility because it assumes its
-        called only from courses/models.py:results_archive() by a teacher user
-        """
-        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
-        parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
-        username = user.get_full_name() or user.username
-        problem_slug = slugify(username).replace("-", "_")
-        extension = self.EXTENSIONS[self.language]
-        filename = "{0}.{1}".format(problem_slug, extension)
-        contents = render_to_string(
-            "{0}/marking.{1}".format(self.language, extension),
-            {
-                "problem": self,
-                "parts": parts,
-                "user": user,
-            },
-        )
-        return filename, contents
-
-    def bare_file(self, user):
-        """This function ignores problem visibility because it assumes its
-        called only from courses/models.py:results_archive() by a teacher user
-        """
-        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
-        parts = [(part, attempts.get(part.id)) for part in self.parts.all()]
-        username = user.get_full_name() or user.username
-        problem_slug = slugify(username).replace("-", "_")
-        extension = self.EXTENSIONS[self.language]
-        filename = "{0}.{1}".format(problem_slug, extension)
-        contents = render_to_string(
-            "{0}/bare.{1}".format(self.language, extension),
-            {
-                "problem": self,
-                "parts": parts,
-                "user": user,
-            },
-        )
-        return filename, contents
 
     def edit_file(self, user):
         """This function ignores problem visibility because it assumes its
@@ -159,32 +83,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
         )
         return filename, contents
 
-    def attempts_by_user(self, active_only=True):
-        attempts = {}
-        parts = self.parts.all().prefetch_related("attempts", "attempts__user")
-        for part in parts:
-            for attempt in part.attempts.all():
-                if attempt.user in attempts:
-                    attempts[attempt.user][part] = attempt
-                else:
-                    attempts[attempt.user] = {part: attempt}
-        users = self.problem_set.course.observed_students()
-        if active_only:
-            users = users.filter(attempts__part__problem=self).distinct()
-        outcomes = Outcome.group_dict(parts, users, (), ("id",))
-        observed_students = list(users)
-        for user in observed_students:
-            user.these_attempts = [attempts.get(user, {}).get(part) for part in parts]
-            user.outcome = outcomes[(user.id,)]
-        return observed_students
-
-    def attempts_by_user_all(self):
-        return self.attempts_by_user(active_only=False)
-
-    def copy_to(self, problem_set):
+    def duplicate(self):
         new_problem = deepcopy(self)
         new_problem.pk = None
-        new_problem.problem_set = problem_set
         new_problem.save()
         for part in self.parts.all():
             part.copy_to(new_problem)
@@ -192,10 +93,9 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def content_type(self):
         return self.MIMETYPES[self.language]
-
-    def toggle_visible(self):
-        self.visible = not self.visible
-        self.save()
+    
+    def extension(self):
+        return self.EXTENSIONS[self.language]
 
 
 class Part(OrderWithRespectToMixin, models.Model):

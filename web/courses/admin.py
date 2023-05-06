@@ -46,6 +46,37 @@ class InstitutionAdmin(admin.ModelAdmin):
     search_fields = ("name",)
 
 
+class ProblemInstanceAdmin(admin.ModelAdmin):
+    list_display = (
+        "problem",
+        "course",
+        "problem_set",
+        "visible",
+    )
+    list_display_links = ("title",)
+    list_filter = (
+        "problem_set__course__institution",
+        "problem_set__course",
+        "problem_set",
+    )
+    ordering = (
+        "problem_set__course",
+        "problem_set",
+        "_order",
+    )
+    search_fields = (
+        "title",
+        "description",
+    )
+
+    def title(self, obj):
+        return obj.problem.title
+
+    def course(self, obj):
+        return obj.problem_set.course
+
+    course.admin_order_field = "problem_set__course"
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(ProblemSet, ProblemSetAdmin)
 admin.site.register(CourseGroup, CourseGroupAdmin)
