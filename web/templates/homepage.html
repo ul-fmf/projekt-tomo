@@ -8,7 +8,32 @@
     <div class="row">
       {% for course in user_courses %}
         <div class="col-md-6">
-          {% include 'courses/_course_header.html' %}
+          <div class="tomo-course-header">
+
+            <span class="pull-left">
+            {% if course.is_taught %}
+              <button class="tomo-taught"
+                      aria-label="{% trans "Taught course" %}"
+                      data-toggle="tooltip"
+                      title="{% trans "Taught course" %}">
+                <i class="fa fa-graduation-cap fa-lg"></i>
+              </button>
+            {% else %}
+              <button class="tomo-taught">
+              <i class="fa fa-star fa-lg"></i>
+              </button>
+            {% endif %}
+            </span>
+          
+            <h2 class="section-heading">
+              <hr class="section-heading-spacer">
+              <div class="clearfix"></div>
+              <a href="{% url 'course_detail' course.pk %}">
+                {{ course.title }}
+              </a>
+            </h2>
+          
+          </div>
           <ul class="list-group tomo-courses">
           {% for problem_set in course.annotated_problem_sets %}
           {% include 'courses/_problem_set.html' %}
@@ -26,26 +51,35 @@
 </div>
 
 
-<div class="content-section-y tomo-other">
+<div class="tomo-other">
   <div class="container tomo-other">
-    <h2>Ostale ustanove, ki ponujajo predmete</h2>
-    {% regroup not_user_courses by institution.name as institution_list %}
+    <h2>Vsi predmeti</h2>
+    {% regroup all_courses by institution.name as institution_list %}
     {% for institution in institution_list %}
     <a class="hide-courses" data-toggle="collapse" href="#inst-{{ forloop.counter}}" aria-expanded="false" aria-controls="inst-{{ forloop.counter}}">{{ institution.grouper }}</a>
     <div class="row collapse" id="inst-{{ forloop.counter}}">
       {% for course in institution.list %}
       <div class="col-md-4">
         <span class="pull-right">
-          <form action="{% url 'enroll_in_course' course.pk %}"
-                method="post" id='enroll_in_course_form'>
+          {% if course.is_favourite %}
+          <form action="{% url 'unenroll_from_course' course.pk %}"
+                method="post" id='unenroll_from_course_form'>
             {% csrf_token %}
-            <button class="tomo-enroll" type="submit"
-                    aria-label="{% trans "Add to my courses" %}" data-toggle="tooltip"
-                    title="{% trans "Add to my courses" %}">
+            <button class="tomo-unenroll" type="submit">
               <i class="fa fa-star fa-lg"></i>
               <i class="fa fa-star-o fa-lg"></i>
             </button>
           </form>
+          {% else %}
+          <form action="{% url 'enroll_in_course' course.pk %}"
+                method="post" id='enroll_in_course_form'>
+            {% csrf_token %}
+            <button class="tomo-enroll" type="submit">
+              <i class="fa fa-star fa-lg"></i>
+              <i class="fa fa-star-o fa-lg"></i>
+            </button>
+          </form>
+          {% endif %}
         </span>
         <h3>
           <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
@@ -54,9 +88,6 @@
           {% for lecturer in course.teachers.all %}
           {{ lecturer.get_full_name }}{% if not forloop.last %}, {% endif %}
           {% endfor %}
-        </p>
-        <p class="tomo-institution">
-          @{% templatetag openbrace %}{{ course.institution }}{% templatetag closebrace %}
         </p>
       </div>
       {% endfor %}
