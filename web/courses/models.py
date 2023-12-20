@@ -29,6 +29,7 @@ class Course(models.Model):
     institution = models.ForeignKey(
         Institution, on_delete=models.PROTECT, related_name="institution"
     )
+    library = models.BooleanField(default=False)
     tags = TaggableManager(blank=True)
 
     class Meta:

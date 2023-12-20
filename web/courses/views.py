@@ -184,6 +184,7 @@ def homepage(request):
     """Show a list of all problems in a problem set."""
     user_courses = []
     not_user_courses = []
+    library_courses = []
     for course in (
         Course.objects.order_by("institution__name")
         .select_related("institution")
@@ -198,12 +199,15 @@ def homepage(request):
             course.annotate(request.user)
         else:
             not_user_courses.append(course)
+        if course.library:
+            library_courses.append(course)
     return render(
         request,
         "homepage.html",
         {
             "user_courses": user_courses,
             "not_user_courses": not_user_courses,
+            "library_courses": library_courses,
         },
     )
 

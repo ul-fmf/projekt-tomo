@@ -28,7 +28,28 @@
 
 <div class="content-section-y tomo-other">
   <div class="container tomo-other">
-    <h2>Ostale ustanove, ki ponujajo predmete</h2>
+    <h2>Zbirke nalog</h2>
+    {% for course in library_courses %}
+    <div class="col-md-4">
+      <span class="pull-right">
+        <i class="fa fa-university fa-lg"></i>
+      </span>
+      <h3>
+        <a href="{% url 'course_detail' course.pk %}">{{ course.title }}</a>
+      </h3>
+      <p class="tomo-lecturer">
+        {% for lecturer in course.teachers.all %}
+        {{ lecturer.get_full_name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+      <p class="tomo-institution">
+        @{% templatetag openbrace %}{{ course.institution }}{% templatetag closebrace %}
+      </p>
+    </div>
+  {% endfor %}
+  </div>
+  <div class="container tomo-other">
+    <h2>Predmeti po ustanovah</h2>
     {% regroup not_user_courses by institution.name as institution_list %}
     {% for institution in institution_list %}
     <a class="hide-courses" data-toggle="collapse" href="#inst-{{ forloop.counter}}" aria-expanded="false" aria-controls="inst-{{ forloop.counter}}">{{ institution.grouper }}</a>
