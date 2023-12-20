@@ -8,6 +8,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
       - run: pip install -r web/requirements/local.txt 
       - run: pip install black==23.1.0 isort==5.12.0 flake8==6.0.0
       - run: python3 -m black --check .
