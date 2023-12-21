@@ -35,11 +35,11 @@ class Outcome:
 
     @property
     def valid_percentage(self):
-        return int(100 * self.valid / self.total)
+        return int(100 * self.valid / self.total) if self.total else 0
 
     @property
     def invalid_percentage(self):
-        return int(100 * self.invalid / self.total)
+        return int(100 * self.invalid / self.total) if self.total else 0
 
     @property
     def empty_percentage(self):
@@ -47,7 +47,7 @@ class Outcome:
 
     @property
     def grade(self):
-        return min(5, int(5 * self.valid / self.total) + 1)
+        return min(5, int(5 * self.valid / self.total) + 1) if self.total else 0
 
     def summary(self):
         valid = f'{self.valid} { _("valid") }'
