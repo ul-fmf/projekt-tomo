@@ -53,7 +53,7 @@ class Course(models.Model):
         users = User.objects.filter(id=user.id)
         outcomes = Outcome.group_dict(parts, users, ("problem",), ())
         attempts = {}
-        for attempt in user.attempts.filter(part__problem__problem_set__course=self):
+        for attempt in user.attempts.filter(problem_set__course=self):
             attempts[attempt.part_id] = attempt
         sorted_attempts = []
         for problem_set in self.problem_sets.all().prefetch_related("problems__parts"):
@@ -94,7 +94,7 @@ class Course(models.Model):
 
     def annotate_for_teacher(self):
         parts = Part.objects.filter(
-            problem__problem_set__course=self, problem__visible=True
+            problem_instance__problem_set__course=self, problem_instance__visible=True
         )
         users = self.observed_students()
         outcomes = Outcome.group_dict(parts, users, ("problem__problem_set",), ())
@@ -129,7 +129,7 @@ class Course(models.Model):
 
     def student_outcome(self):
         parts = Part.objects.filter(
-            problem__problem_set__course=self, problem__problem_set__visible=True
+            problem_instance__problem_set__course=self, problem_instance__visible=True, problem_instance__problem_set__visible=True
         )
         users = self.observed_students()
         outcomes = Outcome.group_dict(parts, users, (), ("id",))
@@ -221,15 +221,22 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
         return reverse("problem_set_detail", args=[str(self.pk)])
 
-    @property
+    def visible_problem_instances(self):
+        return self.problem_instances.filter(visible=True)
+
     def visible_problems(self):
-        return self.problems.filter(visible=True)
+        for instance in self.visible_problem_instances().prefetch_related("problem__part"):
+            yield instance.problem
+    
+    def all_problems(self):
+        for instance in self.problem_instances().prefetch_related("problem__part"):
+            yield instance.problem
 
     def attempts_archive(self, user):
         if user.can_edit_problem_set(self):
-            files = [problem.attempt_file(user) for problem in self.problems.all()]
+            files = [problem.attempt_file(user) for problem in self.all_problems()]
         else:
-            files = [problem.attempt_file(user) for problem in self.visible_problems]
+            files = [problem.attempt_file(user) for problem in self.visible_problems()]
         archive_name = slugify(self.title)
         return archive_name, files
 
@@ -246,7 +253,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def attempt_history(self):
         user_attempts = {}
         attempts = (
-            HistoricalAttempt.objects.filter(part__problem__problem_set=self)
+            HistoricalAttempt.objects.filter(problem_set=self)
             .select_related("part__problem", "user")
             .distinct()
             .order_by("history_date")
@@ -258,7 +265,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
     def results_archive(self, user):
         user_ids = set()
         attempt_dict = {}
-        attempts = Attempt.objects.filter(part__problem__problem_set=self)
+        attempts = Attempt.objects.filter(problem_set=self)
         for attempt in attempts:
             user_id = attempt.user_id
             user_ids.add(user_id)
@@ -335,13 +342,13 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
 
     def single_student_statistics(self, student):
         students = User.objects.filter(id=student.id)
-        parts = Part.objects.filter(problem__problem_set=self, problem__visible=True)
+        parts = Part.objects.filter(problem_instance__problem_set=self, problem_instance__visible=True)
         outcomes = Outcome.group_dict(parts, students, ("id",), ())
         return self.outcomes_statistics(outcomes)
 
     def all_students_statistics(self):
         students = self.course.observed_students()
-        parts = Part.objects.filter(problem__problem_set=self)
+        parts = Part.objects.filter(problem_instance__problem_set=self)
         outcomes = Outcome.group_dict(parts, students, ("id",), ())
         return self.outcomes_statistics(outcomes)
 
@@ -367,3 +374,126 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
         for problem in self.problems.all():
             problem.copy_to(new_problem_set)
         return new_problem_set
+
+
+class ProblemInstance(OrderWithRespectToMixin, models.Model):
+    problem = models.ForeignKey(
+        "problems.Problem", on_delete=models.CASCADE, related_name="instances"
+    )
+    problem_set = models.ForeignKey("courses.ProblemSet", on_delete=models.CASCADE, related_name="problem_instances")
+    visible = models.BooleanField(default=False, verbose_name=_("Visible"))
+
+    class Meta:
+        order_with_respect_to = "problem_set"
+
+    def __str__(self):
+        return self.problem.title
+
+    def user_attempts(self, user):
+        return user.attempts.filter(problem_instance=self)
+
+    def user_solutions(self, user):
+        return {
+            attempt.part.id: attempt.solution for attempt in self.user_attempts(user)
+        }
+
+    def attempt_file(self, user):
+        authentication_token = Token.objects.get(user=user)
+        solutions = self.user_solutions(user)
+        parts = [
+            (part, solutions.get(part.id, part.template), part.attempt_token(user))
+            for part in self.parts.all()
+        ]
+        url = settings.SUBMISSION_URL + reverse("attempts-submit")
+        problem_slug = slugify(self.title).replace("-", "_")
+        extension = self.EXTENSIONS[self.language]
+        filename = f"{problem_slug}.{extension}"
+        contents = render_to_string(
+            f"{self.language}/attempt.{extension}",
+            {
+                "problem_instance": self,
+                "problem": self.problem,
+                "parts": parts,
+                "submission_url": url,
+                "authentication_token": authentication_token,
+            },
+        )
+        return filename, contents
+
+
+    def solution_file(self):
+        return self.problem.solution_file()
+
+    def marking_file(self, user):
+        """This function ignores problem visibility because it assumes its
+        called only from courses/models.py:results_archive() by a teacher user
+        """
+        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
+        parts = [(part, attempts.get(part.id)) for part in self.problem.parts.all()]
+        username = user.get_full_name() or user.username
+        problem_slug = slugify(username).replace("-", "_")
+        extension = self.problem.extension()
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string(
+            "{0}/marking.{1}".format(self.language, extension),
+            {
+                "problem": self.problem,
+                "parts": parts,
+                "user": user,
+            },
+        )
+        return filename, contents
+
+    def bare_file(self, user):
+        """This function ignores problem visibility because it assumes its
+        called only from courses/models.py:results_archive() by a teacher user
+        """
+        attempts = {attempt.part.id: attempt for attempt in self.user_attempts(user)}
+        parts = [(part, attempts.get(part.id)) for part in self.problem.parts.all()]
+        username = user.get_full_name() or user.username
+        problem_slug = slugify(username).replace("-", "_")
+        extension = self.problem.extension()
+        filename = "{0}.{1}".format(problem_slug, extension)
+        contents = render_to_string(
+            "{0}/bare.{1}".format(self.problem.language, extension),
+            {
+                "problem": self,
+                "parts": parts,
+                "user": user,
+            },
+        )
+        return filename, contents
+
+    def attempts_by_user(self, active_only=True):
+        attempts = {}
+        parts = self.problem.parts.all().prefetch_related("attempts", "attempts__user")
+        for attempt in self.attempts.select_related("user", "part"):
+            if attempt.user in attempts:
+                attempts[attempt.user][attempt.part] = attempt
+            else:
+                attempts[attempt.user] = {attempt.part: attempt}
+        users = self.problem_set.course.observed_students()
+        if active_only:
+            users = users.filter(attempts__problem_instance=self).distinct()
+        outcomes = Outcome.group_dict(parts, users, (), ("id",))
+        observed_students = list(users)
+        for user in observed_students:
+            user.these_attempts = [attempts.get(user, {}).get(part) for part in parts]
+            user.outcome = outcomes[(user.id,)]
+        return observed_students
+
+    def attempts_by_user_all(self):
+        return self.attempts_by_user(active_only=False)
+
+    def toggle_visible(self):
+        self.visible = not self.visible
+        self.save()
+
+    def copy_to(self, problem_set, duplicate_problem):
+        new_instance = deepcopy(self)
+        new_instance.pk = None
+        if duplicate_problem:
+            new_instance.problem = self.problem.duplicate()
+        new_instance.problem_set = problem_set
+        new_instance.save()
+        return new_instance

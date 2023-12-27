@@ -13,16 +13,11 @@ class ProblemAdmin(SimpleHistoryAdmin):
     inlines = (PartInline,)
     list_display = (
         "title",
-        "course",
-        "problem_set",
         "description",
-        "visible",
     )
     list_display_links = ("title",)
     ordering = (
-        "problem_set__course",
-        "problem_set",
-        "_order",
+        "title",
     )
     search_fields = (
         "title",
@@ -31,15 +26,7 @@ class ProblemAdmin(SimpleHistoryAdmin):
 
     list_filter = (
         "language",
-        "problem_set__course__institution",
-        "problem_set__course",
-        "problem_set",
     )
-
-    def course(self, obj):
-        return obj.problem_set.course
-
-    course.admin_order_field = "problem_set__course"
 
 
 admin.site.register(Problem, ProblemAdmin)

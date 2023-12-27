@@ -166,6 +166,7 @@ def _validate_current_file():
                     "valid": part["valid"],
                     "secret": [x for (x, _) in part["secret"]],
                     "feedback": json.dumps(part["feedback"]),
+                    "problem_instance": {{ problem_instance.pk }},
                 }
                 if "token" in part:
                     submitted_part["token"] = part["token"]

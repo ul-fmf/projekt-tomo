@@ -8,7 +8,7 @@ class AttemptAdmin(SimpleHistoryAdmin):
     fields = [
         "user",
         "part",
-        "problem",
+        "problem_instance",
         "solution",
         "valid",
         "feedback",
@@ -16,27 +16,27 @@ class AttemptAdmin(SimpleHistoryAdmin):
 
     list_display = (
         "user",
-        "problem",
+        "problem_instance",
         "part",
         "valid",
     )
     list_filter = (
-        "part__problem__problem_set__course__institution",
-        "part__problem__problem_set__course",
-        "part__problem__problem_set",
-        "part__problem__visible",
+        "problem_instance__problem_set__course__institution",
+        "problem_instance__problem_set__course",
+        "problem_instance__problem_set",
+        "problem_instance__visible",
     )
     search_fields = (
         "part__pk",
-        "problem__problem_set__title",
-        "problem__title",
+        "problem_instance__problem_set__title",
+        "problem_instance__problem__title",
         "user__username",
         "part__description",
     )
     date_hierarchy = "submission_date"
 
     readonly_fields = [
-        "problem",
+        "problem_instance",
     ]
 
     def problem(self, obj):
