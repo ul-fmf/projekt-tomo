@@ -1,3 +1,4 @@
+from collections import defaultdict
 from dataclasses import dataclass
 
 from django.db.models import Count
@@ -65,7 +66,10 @@ class Outcome:
     def group_dict(cls, parts, users, parts_group_by, users_group_by):
         part_group_sizes = _group_sizes(parts, *parts_group_by)
         user_group_sizes = _group_sizes(users, *users_group_by)
-        outcomes = {}
+        # If the group does not have any parts (for example if a problem
+        # contains only an explanation text in the description), then it
+        # does not appear in the results, and we return an empty outcome for it.
+        outcomes = defaultdict(cls)
         for part_group, part_group_size in part_group_sizes.items():
             for user_group, user_group_size in user_group_sizes.items():
                 outcomes[part_group + user_group] = cls(
