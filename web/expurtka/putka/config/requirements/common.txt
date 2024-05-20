@@ -1,0 +1,25 @@
+# don't install this file directly; use either local.txt or production.txt
+Django~=5.0.2
+channels~=4.0
+daphne~=4.0
+git+https://github.com/neutronX/django-markdownx.git@adcaa9e#egg=django-markdownx
+django-recaptcha~=4.0
+django-registration~=3.3
+django-debug-toolbar
+django-debug-toolbar-template-profiler
+django-silk
+django-stubs
+# silk depends on autopep without a version specifier;
+# CI transitively depends on autopep, but on an older one due to
+# flake8<5.0.0; once we can upgrade to flake8,
+# this autopep dependency can be dropped again
+autopep8~=1.6.0  # silk depends on this; CI
+gprof2dot
+ipwhois
+pillow
+psycopg[binary]
+requests
+service_identity
+unidecode
+pyICU
+pygments  # Used from tex, see `minted` package.

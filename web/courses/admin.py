@@ -6,7 +6,7 @@ from .models import Course, CourseGroup, Institution, ProblemSet
 class CourseAdmin(admin.ModelAdmin):
     filter_horizontal = (
         "teachers",
-        "students",
+        # "students",# BUG: commented out
     )
     list_filter = ("institution__name",)
 
