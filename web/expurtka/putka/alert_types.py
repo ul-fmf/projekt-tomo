@@ -13,108 +13,110 @@ from dataclasses import dataclass
 
 from django.urls import reverse
 from django.utils.translation import gettext as _
-
 from expurtka.putka.helpers import preferred_lang
 
 
 @dataclass(slots=True, frozen=True)
 class AlertRenderInfo:
-	title: str
-	url_title: str
+    title: str
+    url_title: str
 
 
 @dataclass(slots=True, frozen=True)
 class AlertPermissionCheckResult:
-	has_permission: bool
-	should_update: bool
+    has_permission: bool
+    should_update: bool
 
 
 class AlertBase(ABC):
-	"""Defines the interface all alerts are required to implement."""
+    """Defines the interface all alerts are required to implement."""
 
-	def __init__(self, alert):
-		self.alert = alert
+    def __init__(self, alert):
+        self.alert = alert
 
-	def validate_perms_or_delete(self) -> AlertPermissionCheckResult:
-		"""Return True if permission check passed."""
-		return AlertPermissionCheckResult(has_permission=self.alert.perms_checked, should_update=False)
+    def validate_perms_or_delete(self) -> AlertPermissionCheckResult:
+        """Return True if permission check passed."""
+        return AlertPermissionCheckResult(
+            has_permission=self.alert.perms_checked, should_update=False
+        )
 
-	def delete_on_click(self) -> bool:
-		"""Delete the alert when it's clicked or not."""
-		return True
+    def delete_on_click(self) -> bool:
+        """Delete the alert when it's clicked or not."""
+        return True
 
-	@abstractmethod
-	def redirect_url(self) -> str:
-		return NotImplemented
+    @abstractmethod
+    def redirect_url(self) -> str:
+        return NotImplemented
 
-	def render(self) -> AlertRenderInfo:
-		return AlertRenderInfo(
-			title=self._title(),
-			url_title=self._url_title()
-		)
+    def render(self) -> AlertRenderInfo:
+        return AlertRenderInfo(title=self._title(), url_title=self._url_title())
 
-	@abstractmethod
-	def _title(self) -> str:
-		return NotImplemented
+    @abstractmethod
+    def _title(self) -> str:
+        return NotImplemented
 
-	@abstractmethod
-	def _url_title(self) -> str:
-		return NotImplemented
+    @abstractmethod
+    def _url_title(self) -> str:
+        return NotImplemented
 
 
 class _ThreadActivityAlert(AlertBase):
-	def _title(self):
-		return _("Forum: new message")
+    def _title(self):
+        return _("Forum: new message")
 
-	def _url_title(self):
-		thread = self.alert.related_object
-		return thread.best_title(preferred_lang(self.alert.user))
+    def _url_title(self):
+        thread = self.alert.related_object
+        return thread.best_title(preferred_lang(self.alert.user))
 
-	def validate_perms_or_delete(self):
-		"""
-		Return True if permission check passed.
+    def validate_perms_or_delete(self):
+        """
+        Return True if permission check passed.
 
-		Otherwise, the alert is deleted, and False is returned.
-		"""
-		if self.alert.perms_checked:
-			return AlertPermissionCheckResult(has_permission=True, should_update=False)
-		thread = self.alert.related_object
-		if not self.alert.user.has_perm('view', thread):
-			return AlertPermissionCheckResult(has_permission=False, should_update=False)
+        Otherwise, the alert is deleted, and False is returned.
+        """
+        if self.alert.perms_checked:
+            return AlertPermissionCheckResult(has_permission=True, should_update=False)
+        thread = self.alert.related_object
+        if not self.alert.user.has_perm("view", thread):
+            return AlertPermissionCheckResult(has_permission=False, should_update=False)
 
-		self.alert.perms_checked = True
-		return AlertPermissionCheckResult(has_permission=True, should_update=True)
+        self.alert.perms_checked = True
+        return AlertPermissionCheckResult(has_permission=True, should_update=True)
 
-	def redirect_url(self):
-		thread = self.alert.related_object
-		return reverse('forums:show-thread', args=(thread.type(), thread.forum_url(), thread.uid()))
+    def redirect_url(self):
+        thread = self.alert.related_object
+        return reverse(
+            "forums:show-thread", args=(thread.type(), thread.forum_url(), thread.uid())
+        )
 
 
 class _UploadAlert(AlertBase):
-	def _url_title(self):
-		upload = self.alert.related_object
-		return _("Upload #{id} by {username}").format(id=upload.id, username=upload.user.username)
+    def _url_title(self):
+        upload = self.alert.related_object
+        return _("Upload #{id} by {username}").format(
+            id=upload.id, username=upload.user.username
+        )
 
-	def redirect_url(self):
-		return reverse('results:detail', args=(self.alert.object_id,))
+    def redirect_url(self):
+        return reverse("results:detail", args=(self.alert.object_id,))
 
-	def delete_on_click(self) -> bool:
-		return False
+    def delete_on_click(self) -> bool:
+        return False
 
 
 class _ManualGradingAlert(_UploadAlert):
-	def _title(self):
-		return _("Manual grading")
+    def _title(self):
+        return _("Manual grading")
 
 
 class _SuspiciousUploadAlert(_UploadAlert):
-	def _title(self):
-		return _("Suspicious upload")
+    def _title(self):
+        return _("Suspicious upload")
 
-	def delete_on_click(self) -> bool:
-		return True
+    def delete_on_click(self) -> bool:
+        return True
 
 
 class _InternalErrorAlert(_UploadAlert):
-	def _title(self):
-		return _("Internal error")
+    def _title(self):
+        return _("Internal error")

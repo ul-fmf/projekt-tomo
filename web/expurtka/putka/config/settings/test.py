@@ -10,82 +10,88 @@ import os
 from typing import TYPE_CHECKING, Iterable, Tuple
 
 if TYPE_CHECKING:
-	import pathlib
+    import pathlib
 
 
-def _iter_personality_modules() -> Iterable['pathlib.Path']:
-	import pathlib
+def _iter_personality_modules() -> Iterable["pathlib.Path"]:
+    import pathlib
 
-	for mdl in pathlib.Path(__file__).parent.iterdir():
-		if not mdl.is_file() or any(map(mdl.name.startswith, ('.', '_'))) or mdl.suffix != '.py':
-			continue
-		# Some whitelisted files are not personalities per se, just supporting
-		# modules that aren't immediately imported by other configs.
-		if mdl.stem in ('dynamic', 'test'):
-			continue
-		yield mdl
+    for mdl in pathlib.Path(__file__).parent.iterdir():
+        if (
+            not mdl.is_file()
+            or any(map(mdl.name.startswith, (".", "_")))
+            or mdl.suffix != ".py"
+        ):
+            continue
+        # Some whitelisted files are not personalities per se, just supporting
+        # modules that aren't immediately imported by other configs.
+        if mdl.stem in ("dynamic", "test"):
+            continue
+        yield mdl
 
 
-def _decorate_xformed_module_path(paths: Iterable['pathlib.Path']) -> Iterable[Tuple['pathlib.Path', str]]:
-	base_package_path, _, _ = __name__.rpartition('.')
-	for mdl in paths:
-		yield mdl, f'{base_package_path}.{mdl.stem}'
+def _decorate_xformed_module_path(
+    paths: Iterable["pathlib.Path"],
+) -> Iterable[Tuple["pathlib.Path", str]]:
+    base_package_path, _, _ = __name__.rpartition(".")
+    for mdl in paths:
+        yield mdl, f"{base_package_path}.{mdl.stem}"
 
 
 def _fake_secrets(postgres):
-	import sys
-	import types
+    import sys
+    import types
 
-	# Synthesize secrets module.
-	secrets_name = 'ui.config.settings.secrets.secrets'
-	secrets = types.ModuleType(secrets_name)
-	secrets.SECRET_KEY = 'itteh bitteh sekrit committeh'
-	secrets.DATABASE_NAME = 'putka5'
-	secrets.RECAPTCHA_PRIVATE_KEY = ''
-	secrets.RECAPTCHA_PUBLIC_KEY = ''
-	secrets.EMAIL_HOST = ''
-	secrets.EMAIL_HOST_USER = ''
-	secrets.EMAIL_HOST_PASSWORD = ''
-	secrets.EMAIL_PORT = 0
-	secrets.EMAIL_USE_TLS = True
-	secrets.DATABASE_USER = 'putka' if postgres else ''
-	secrets.DATABASE_PASSWORD = ''
-	sys.modules[secrets_name] = secrets
+    # Synthesize secrets module.
+    secrets_name = "ui.config.settings.secrets.secrets"
+    secrets = types.ModuleType(secrets_name)
+    secrets.SECRET_KEY = "itteh bitteh sekrit committeh"
+    secrets.DATABASE_NAME = "putka5"
+    secrets.RECAPTCHA_PRIVATE_KEY = ""
+    secrets.RECAPTCHA_PUBLIC_KEY = ""
+    secrets.EMAIL_HOST = ""
+    secrets.EMAIL_HOST_USER = ""
+    secrets.EMAIL_HOST_PASSWORD = ""
+    secrets.EMAIL_PORT = 0
+    secrets.EMAIL_USE_TLS = True
+    secrets.DATABASE_USER = "putka" if postgres else ""
+    secrets.DATABASE_PASSWORD = ""
+    sys.modules[secrets_name] = secrets
 
 
 # Do everything in a function, so it doesn't pollute the global namespace.
 def _load(postgres):
-	import importlib
-	import pathlib
-	import sys
+    import importlib
+    import pathlib
+    import sys
 
-	_fake_secrets(postgres)
+    _fake_secrets(postgres)
 
-	# Import the target personality module.
-	target_personality = os.environ['PUTKA_PERSONALITY']
-	base_package_path, _, _ = __name__.rpartition('.')
-	personality_module_name = f'{base_package_path}.{target_personality}'
-	personality_module = importlib.import_module(personality_module_name)
+    # Import the target personality module.
+    target_personality = os.environ["PUTKA_PERSONALITY"]
+    base_package_path, _, _ = __name__.rpartition(".")
+    personality_module_name = f"{base_package_path}.{target_personality}"
+    personality_module = importlib.import_module(personality_module_name)
 
-	# Patch all other personality modules into existence without importing,
-	# all linking to the same physical module. This will effectively override
-	# the "from .personality import *" statement in _local.py.
-	for _, mdl_name in _decorate_xformed_module_path(_iter_personality_modules()):
-		if mdl_name not in sys.modules:
-			sys.modules[mdl_name] = personality_module
+    # Patch all other personality modules into existence without importing,
+    # all linking to the same physical module. This will effectively override
+    # the "from .personality import *" statement in _local.py.
+    for _, mdl_name in _decorate_xformed_module_path(_iter_personality_modules()):
+        if mdl_name not in sys.modules:
+            sys.modules[mdl_name] = personality_module
 
 
 def _load_specific_db(name):
-	# Load a specific config module temporarily, get its database config, then delete it.
-	import importlib
-	import sys
+    # Load a specific config module temporarily, get its database config, then delete it.
+    import importlib
+    import sys
 
-	prior_modules = set(sys.modules.keys())
-	module = importlib.import_module(name)
-	for m in set(sys.modules.keys()) - prior_modules:
-		del sys.modules[m]
+    prior_modules = set(sys.modules.keys())
+    module = importlib.import_module(name)
+    for m in set(sys.modules.keys()) - prior_modules:
+        del sys.modules[m]
 
-	return module.DATABASES
+    return module.DATABASES
 
 
 # if os.environ['PUTKA_PERSONALITY'] == 'mypy' or TYPE_CHECKING:
