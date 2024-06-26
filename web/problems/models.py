@@ -63,7 +63,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     @property
     def slug(self):
-        return slugify(self.title).replace("-", "_")
+        return f'{self._order + 1:0>2}_{slugify(self.title).replace("-", "_")}'
 
     def attempt_file(self, user):
         authentication_token = Token.objects.get(user=user)
@@ -73,9 +73,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
             for part in self.parts.all()
         ]
         url = settings.SUBMISSION_URL + reverse("attempts-submit")
-        problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
-        filename = f"{problem_slug}.{extension}"
+        filename = f"{self.slug}.{extension}"
         contents = render_to_string(
             f"{self.language}/attempt.{extension}",
             {
@@ -89,9 +88,8 @@ class Problem(OrderWithRespectToMixin, models.Model):
 
     def solution_file(self):
         parts = [(part, part.solution) for part in self.parts.all()]
-        problem_slug = slugify(self.title).replace("-", "_")
         extension = self.EXTENSIONS[self.language]
-        filename = f"{problem_slug}_solution.{extension}"
+        filename = f"{self.slug}_solution.{extension}"
         contents = render_to_string(
             f"{self.language}/solution.{extension}",
             {
@@ -147,8 +145,7 @@ class Problem(OrderWithRespectToMixin, models.Model):
         """
         authentication_token = Token.objects.get(user=user)
         url = settings.SUBMISSION_URL + reverse("problems-submit")
-        problem_slug = slugify(self.title).replace("-", "_")
-        filename = f"{problem_slug}_edit.{self.EXTENSIONS[self.language]}"
+        filename = f"{self.slug}_edit.{self.EXTENSIONS[self.language]}"
         contents = render_to_string(
             f"{self.language}/edit.{self.EXTENSIONS[self.language]}",
             {

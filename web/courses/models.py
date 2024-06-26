@@ -303,7 +303,7 @@ class ProblemSet(OrderWithRespectToMixin, models.Model):
                     user_attempts.append(attempt_dict[user.id].get(part.id))
             users.append((user, user_attempts))
 
-        spreadsheet_filename = "{0}.csv".format(self.title)
+        spreadsheet_filename = f"{slugify(self.title)}.csv"
         spreadsheet_contents = render_to_string(
             "results.csv", {"problem_set": self, "users": users}
         )
