@@ -4,13 +4,13 @@
 
 Pretvorbo Tomo objektov na Putkine poženemo z ukazom:
 
-```
+```[bash]
 python projekt-tomo/web/manage.py expurtka
 ```
 
 ## Struktura direktorija
 
-```
+```[bash]
 expurtka/
 ├── admin.py
 ├── apps.py
@@ -37,7 +37,22 @@ Bistveni del migracije je prepis Tomo modelov v Putkine. To storimo tako, da v m
 
 Za vsako aplikacijo `web/ime_aplikacije/` in za vsak model v `web/ime_aplikacije/models.py` moramo v datoteko `ime_aplikacije.py` dodati funkcijo:
 
-```
+```[python]
 def export_imemodela(...):
     ...
 ```
+
+## Modeli za pretvorbo/pretvorjeni modeli
+
+- [] ProblemSet
+- [X] Institution
+- [] Problem
+- [X] Part
+- [] Attempt
+- [] Course
+- [] CourseGroup
+- [] StudentEnrollment
+- [] File
+- [] TestCase
+- [] JobStatus
+- [X] User
