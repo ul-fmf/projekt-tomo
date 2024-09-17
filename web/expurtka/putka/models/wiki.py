@@ -58,6 +58,8 @@ class Content(models.Model):
     class Meta(TypedModelMeta):
         verbose_name = gettext_lazy("Content")
         verbose_name_plural = gettext_lazy("Contents")
+        db_table = "ui_core_wiki_content"
+
 
     def __str__(self):
         return f"{self.title} ({self.lang})"

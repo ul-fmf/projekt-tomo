@@ -110,6 +110,8 @@ class Upload(UploadBase):
 
     class Meta(TypedModelMeta):
         ordering = ["-upload_time"]
+        db_table = "ui_core_results_upload"
+
 
     def is_solved(self) -> bool:
         return (
@@ -216,6 +218,7 @@ class TestCase(Stat):
         ordering = ["id"]
         verbose_name = _("Test case")
         verbose_name_plural = _("Test cases")
+        db_table = "ui_core_results_testcase"
 
     def __str__(self):
         return f"TestCase(id={self.id}, name={self.name}, upload_id={self.upload_id})"
@@ -253,6 +256,7 @@ class UserTest(Stat, UploadBase):
 
     class Meta(TypedModelMeta):
         ordering = ["-upload_time"]
+        db_table = "ui_core_results_usertest"
 
     def is_compile_error(self):
         return (

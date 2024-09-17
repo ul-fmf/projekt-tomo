@@ -7,6 +7,7 @@ def export_institutions() -> dict[str, putka.Set]:
     for institution in tomo.Institution.objects.all():
         new = putka.Set.objects.create(
             title=institution.name,
+            url=institution.name.lower().replace(" ", "_"),
             public=True,
         )
         institution_map[institution.id] = new
@@ -20,6 +21,7 @@ def export_courses(institution_map: dict[str, putka.Set], users_map: dict[str, p
             parent=institution_map[course.institution.id],
             title=course.title,
             description=course.description,
+            url=course.title.lower().replace(" ", "_"),
         )
         course_map[course.id] = new
         # TODO teachers -> perms
@@ -43,9 +45,9 @@ def export_problemsets(course_map: dict[str, putka.Set]) -> dict[str, putka.Set]
             title=set.title,
             description=set.description,
             public=set.visible,
+            url=set.title.lower().replace(" ", "_"),
         )
         problemset_map[set.id] = new
-        # TODO add solution visible
     return problemset_map
 
 
