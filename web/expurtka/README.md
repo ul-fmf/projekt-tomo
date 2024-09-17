@@ -5,7 +5,13 @@
 Pretvorbo Tomo objektov na Putkine poženemo z ukazom:
 
 ```[bash]
-python projekt-tomo/web/manage.py expurtka
+python3 projekt-tomo/web/manage.py expurtka
+```
+
+Tabele nato izvozimo v `.json` obliko z:
+
+```[bash]
+python3 projekt-tomo/web/manage.py dumpdata expurtka --output [filename].json
 ```
 
 ## Struktura direktorija
