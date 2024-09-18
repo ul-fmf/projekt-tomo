@@ -130,8 +130,6 @@ _SUBTASKS_REGEX = re.compile(
 
 
 class Task(ContentManagementMixin, models.Model):
-    secret = models.TextField(default="")
-    solution = models.TextField(default="")
 
     url = models.SlugField(
         max_length=50,

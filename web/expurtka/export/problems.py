@@ -1,6 +1,8 @@
 from django.db.utils import IntegrityError
 import expurtka.putka as putka
 import problems.models as tomo
+import json
+import tqdm
 
 
 def export_problems(
@@ -29,8 +31,6 @@ def export_problems(
             .replace(" ", "_"),  # TODO ouch
             evaluation_type=putka.TASK_EVALUATION_TYPES.local_evaluation,
             testscript="",
-            solution="",
-            secret="",
         )
 
         # Add parent to Task
@@ -52,10 +52,26 @@ def export_problems(
         new_task.content_queryset.add(new_content)
 
         # Create official upload
-        new_upload = putka.Upload(
+        new_upload = putka.Upload.objects.create(
+            user=placeholder_user,
+            lang=putka.PROG_LANGS_.py3,
+            filename=new_task.url + ".py",
+            source="".encode(),
+            status=putka.UPLOAD_STATUS.done,
+            agg_status=putka.JAILRUN_STATUS.OK,
+            preparation_status=putka.JAILRUN_STATUS.OK,
             task=new_task,
+            points=0,
             max_points=0,
             is_official_solution=True,
+        )
+
+        # Create template file
+        template_file = putka.File.objects.create(
+            task=new_task,
+            filename=new_task.url + "_template.py",
+            type=putka.ATT_TYPE.generic_public,
+            data="".encode(),
         )
 
         # Update dictionary
@@ -63,6 +79,8 @@ def export_problems(
             "task": new_task,
             "content": new_content,
             "solution": new_upload,
+            "template_file": template_file,
+            "num_parts": -1,
         }
     return problems_map
 
@@ -74,8 +92,8 @@ def export_parts(
     PARTS_SEPARATOR_TOKEN = "\n\n\{\{\{ PART BREAK \}\}\}\n\n"
     SCRIPT_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
     SOLUTION_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
-    SECRET_SEPARATOR_TOKEN = "\n"
-    for part in tomo.Part.objects.all():
+    TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
+    for part in tqdm.tqdm(tomo.Part.objects.all()):
         # TODO: improve this apend
         content = problems_map[part.problem.id]["content"]
         content.content = content.content + PARTS_SEPARATOR_TOKEN + part.description
@@ -84,14 +102,49 @@ def export_parts(
         task = problems_map[part.problem.id]["task"]
         if task.testscript:
             task.testscript += SCRIPT_SEPARATOR_TOKEN
-        task.testscript +=  part.validation
-        if task.solution:
-            task.solution += SOLUTION_SEPARATOR_TOKEN  
-        task.solution += part.solution
-        if task.secret:
-            task.secret += SECRET_SEPARATOR_TOKEN
-        task.secret += part.secret
-        task.save()
+        task.testscript += part.validation
+
+        i = problems_map[part.problem.id]["num_parts"] + 1
+        problems_map[part.problem.id]["num_parts"] = i
+
+        secret = json.loads(part.secret)
+        if secret:
+            for j, example in enumerate(secret):
+                putka.File.objects.create(
+                    task=task,
+                    filename=f"secret.{i:02d}.{j:02d}.out",
+                    data=str(example).encode(),
+                    type=putka.ATT_TYPE.inout_secret,
+                )
+        
+        # Update template
+        template_file = problems_map[part.problem.id]["template_file"]
+        task_template = template_file.data.decode()
+        if task_template:
+            task_template += TEMPLATE_SEPARATOR_TOKEN
+        task_template += part.template
+        template_file.data = task_template.encode()
+        template_file.save()
+
+        putka.File.objects.create(
+            task=task,
+            filename=task.url + f"_template_{i}.py",
+            type=putka.ATT_TYPE.generic_public,
+            data=part.template.encode(),
+        )
+
+        # Update official solution
+        official_solution = problems_map[part.problem.id]["solution"]
+        # if part.problem.id == 363:
+        #     print(official_solution)
+        task_solution = official_solution.source.decode()
+        if task_solution:
+            task_solution += SOLUTION_SEPARATOR_TOKEN
+        task_solution += part.solution
+        official_solution.source = task_solution.encode()
+        official_solution.max_points = i
+        official_solution.points = i
+        official_solution.save()
         # TODO: template, solution, secret fields
 
 
