@@ -13,3 +13,5 @@ data
 .DS_Store
 *.vim
 django.mo
+
+web/expurtka/migrations/
