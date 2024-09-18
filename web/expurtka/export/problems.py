@@ -22,7 +22,7 @@ def export_problems(
     )
     placeholder_user.save()
     problems_map = {}
-    for problem in tomo.Problem.objects.all():
+    for i, problem in enumerate(tomo.Problem.objects.all()):
         # Turn Problem into Task
         new_task = putka.Task.objects.create(
             id=problem.id,  # TODO this no good
@@ -37,7 +37,7 @@ def export_problems(
         putka.TaskLink.objects.create(
             parent=problemset_map[problem.problem_set.id],
             task=new_task,
-            sort=1,
+            sort=i,
         )
 
         # Turn description and title into separate Content object
@@ -145,8 +145,8 @@ def export_parts(
         official_solution.max_points = i
         official_solution.points = i
         official_solution.save()
+        task.save()
         # TODO: template, solution, secret fields
-
 
 def please(problemset_map: dict[str, putka.Set]):
     problems_map = export_problems(problemset_map)
