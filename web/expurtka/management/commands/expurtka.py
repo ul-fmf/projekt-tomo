@@ -16,7 +16,9 @@ class Command(BaseCommand):
         self.stdout.write("Recreating the current database in Putka format...")
 
         users_map = expurtka.export.users.please()
-        institution_map, course_map, problemset_map = expurtka.export.courses.please(users_map)
+        institution_map, course_map, problemset_map = expurtka.export.courses.please(
+            users_map
+        )
         expurtka.export.problems.please(problemset_map)
 
         self.stdout.write("Done!")

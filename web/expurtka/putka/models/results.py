@@ -112,7 +112,6 @@ class Upload(UploadBase):
         ordering = ["-upload_time"]
         db_table = "ui_core_results_upload"
 
-
     def is_solved(self) -> bool:
         return (
             self.status == settings.UPLOAD_STATUS.done

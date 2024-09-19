@@ -60,7 +60,6 @@ class Content(models.Model):
         verbose_name_plural = gettext_lazy("Contents")
         db_table = "ui_core_wiki_content"
 
-
     def __str__(self):
         return f"{self.title} ({self.lang})"
 

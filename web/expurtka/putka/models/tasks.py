@@ -130,7 +130,6 @@ _SUBTASKS_REGEX = re.compile(
 
 
 class Task(ContentManagementMixin, models.Model):
-
     url = models.SlugField(
         max_length=50,
         unique=True,

@@ -1,5 +1,5 @@
-import expurtka.putka as putka
 import attempts.models as tomo
+import expurtka.putka as putka
 
 
 def export_attempts(
@@ -8,7 +8,7 @@ def export_attempts(
 ):
     for attempt in tomo.Attempt.objects.all():
         for version in attempt.history:
-            new = putka.Upload(
+            putka.Upload(
                 user=users_map[attempt.user.id],
                 task=parts_map[attempt.part.id],  # TODO: glue?
                 source=bytes(attempt.solution, encoding="utf-8"),

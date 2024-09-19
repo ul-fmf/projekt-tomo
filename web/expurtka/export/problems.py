@@ -1,6 +1,7 @@
+import json
+
 import expurtka.putka as putka
 import problems.models as tomo
-import json
 
 
 def export_problems(
@@ -87,9 +88,9 @@ def export_parts(
     problems_map: dict[str, dict[str, putka.Task | putka.Content | putka.Upload]]
 ):
     placeholder_user = putka.User.objects.get(id=0)
-    PARTS_SEPARATOR_TOKEN = "\n\n\{\{\{ PART BREAK \}\}\}\n\n"
-    SCRIPT_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
-    SOLUTION_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
+    PARTS_SEPARATOR_TOKEN = "\n\n{{{ PART BREAK }}}\n\n"
+    SCRIPT_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
+    SOLUTION_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
     TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
     for part in tomo.Part.objects.all():
         # TODO: improve this apend
@@ -114,7 +115,7 @@ def export_parts(
                     data=str(example).encode(),
                     type=putka.ATT_TYPE.inout_secret,
                 )
-        
+
         # Update template
         template_file = problems_map[part.problem.id]["template_file"]
         task_template = template_file.data.decode()
@@ -145,6 +146,7 @@ def export_parts(
         official_solution.save()
         task.save()
         # TODO: template, solution, secret fields
+
 
 def please(problemset_map: dict[str, putka.Set]):
     problems_map = export_problems(problemset_map)
