@@ -1,8 +1,6 @@
-from django.db.utils import IntegrityError
 import expurtka.putka as putka
 import problems.models as tomo
 import json
-import tqdm
 
 
 def export_problems(
@@ -93,7 +91,7 @@ def export_parts(
     SCRIPT_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
     SOLUTION_SEPARATOR_TOKEN = "\n\n# \{\{\{ PART BREAK \}\}\}\n\n"
     TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
-    for part in tqdm.tqdm(tomo.Part.objects.all()):
+    for part in tomo.Part.objects.all():
         # TODO: improve this apend
         content = problems_map[part.problem.id]["content"]
         content.content = content.content + PARTS_SEPARATOR_TOKEN + part.description
