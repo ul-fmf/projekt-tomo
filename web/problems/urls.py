@@ -33,6 +33,7 @@ urlpatterns = [
         views.problem_move,
         name="problem_move",
     ),
+    path("<int:problem_pk>/move_to/", views.move_to_form, name="problem_move_to"),
     path(
         "<int:problem_pk>/toggle_visible/",
         views.problem_toggle_visible,
