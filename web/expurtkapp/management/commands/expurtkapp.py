@@ -22,6 +22,8 @@ class Command(BaseCommand):
 
         obj["institutions"], obj["courses"], obj["problem_sets"] = courses.export_all()
 
+        obj["problems"] = problems.export_all()
+
         self.stdout.write("dumping JSON...")
 
         with open(options["outfile"], "w") as f:

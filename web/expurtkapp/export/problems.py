@@ -3,7 +3,7 @@ import json
 import problems.models as tomo
 
 
-def export_problems(problem_sets):
+def export_problems():
     placeholder_user = {
         "id": 0,
         "username": "expurtka_bot",
@@ -13,7 +13,7 @@ def export_problems(problem_sets):
         "is_staff": True,
         "is_active": True,
     }
-    problems = []
+    problems = {}
     for i, problem in enumerate(tomo.Problem.objects.all()):
         url = (problem.title + "_" + str(problem.id)).lower().replace(" ", "_")
 
@@ -27,7 +27,7 @@ def export_problems(problem_sets):
 
         # Add parent to Task
         task_link = {
-            "parent": problem_sets[problem.problem_set.id],
+            "parent": problem.problem_set.id,
             "task": new_task,
             "sort": i,
         }
@@ -45,7 +45,7 @@ def export_problems(problem_sets):
             "user": placeholder_user,
             "lang": "py3",
             "filename": url + ".py",
-            "source": "".encode(),
+            "source": "",
             "status": "done",
             "agg_status": "OK",
             "preparation_status": "OK",
@@ -60,21 +60,19 @@ def export_problems(problem_sets):
             "task": new_task,
             "filename": url + "_template.py",
             "type": "generic_public",
-            "data": "".encode(),
+            "data": "",
         }
 
         # Update dictionary
-        problems.append(
-            {
-                "task": new_task,
-                "task_link": task_link,
-                "content": new_content,
-                "solution": new_upload,
-                "template_file": template_file,
-                "files": [],
-                "num_parts": -1,
-            }
-        )
+        problems[problem.id] = {
+            "task": new_task,
+            "task_link": task_link,
+            "content": new_content,
+            "solution": new_upload,
+            "template_file": template_file,
+            "files": [],
+            "num_parts": -1,
+        }
     return problems
 
 
@@ -105,41 +103,42 @@ def export_parts(problems):
                     {
                         "task": task,
                         "filename": f"secret.{i:02d}.{j:02d}.out",
-                        "data": str(example).encode(),
+                        "data": str(example),
                         "type": "inout_secret",
                     }
                 )
 
         # Update template
         template_file = problems[part.problem.id]["template_file"]
-        task_template = template_file["data"].decode()
+        task_template = template_file["data"]
         if task_template:
             task_template += TEMPLATE_SEPARATOR_TOKEN
         task_template += part.template
-        template_file["data"] = task_template.encode()
+        template_file["data"] = task_template
 
         problems[part.problem.id]["files"].append(
             {
                 "task": task,
                 "filename": task["url"] + f"_template_{i}.py",
                 "type": "generic_public",
-                "data": part.template.encode(),
+                "data": part.template,
             }
         )
 
         # Update official solution
         official_solution = problems[part.problem.id]["solution"]
-        task_solution = official_solution["source"].decode()
+        task_solution = official_solution["source"]
         if task_solution:
             task_solution += SOLUTION_SEPARATOR_TOKEN
         task_solution += part.solution
-        official_solution["source"] = task_solution.encode()
+        official_solution["source"] = task_solution
         official_solution["max_points"] = i
         official_solution["points"] = i
         # TODO: template, solution, secret fields
 
+    return problems
 
-def export_all(problem_sets):
-    # problems = export_problems(problem_sets)
-    # export_parts(problems)
-    pass
+
+def export_all():
+    problems = export_problems()
+    return export_parts(problems)
