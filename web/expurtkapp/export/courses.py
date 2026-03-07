@@ -4,6 +4,7 @@ import courses.models as tomo
 def export_institutions():
     return [
         {
+            "pk": institution.pk,
             "title": institution.name,
             "url": institution.name.lower().replace(" ", "_"),
             "public": True,
@@ -15,6 +16,7 @@ def export_institutions():
 def export_courses():
     return [
         {
+            "pk": course.pk,
             "parent": course.institution.id,
             "title": course.title,
             "description": course.description,
@@ -37,6 +39,7 @@ def export_coursegroups():
 def export_problemsets():  # -> list[dict[str, Any]]:
     return [
         {
+            "pk": problem_set.pk,
             "parent": problem_set.course.id,
             "title": problem_set.title,
             "description": problem_set.description,

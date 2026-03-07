@@ -5,9 +5,7 @@ Export to Putka
 import json
 
 from django.core.management import BaseCommand
-from expurtkapp.export import problems
-from expurtkapp.export import users
-from expurtkapp.export import courses
+from expurtkapp.export import courses, problems, users
 
 
 class Command(BaseCommand):
