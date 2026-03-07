@@ -1,12 +1,12 @@
 import attempts.models as tomo
 
 
-def export_attempts(users_map, parts_map):
+def export_attempts(users, parts):
     for attempt in tomo.Attempt.objects.all():
         for version in attempt.history:
             {
-                "user": users_map[attempt.user.id],
-                "task": parts_map[attempt.part.id],  # TODO: glue?
+                "user": users[attempt.user.id],
+                "task": parts[attempt.part.id],  # TODO: glue?
                 "source": bytes(attempt.solution, encoding="utf-8"),
                 "upload_time": attempt.submission_date,
             }

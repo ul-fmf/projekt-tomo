@@ -2,28 +2,28 @@ import courses.models as tomo
 
 
 def export_institutions():
-    institution_map = {}
-    for institution in tomo.Institution.objects.all():
-        institution_map[institution.id] = {
+    return [
+        {
             "title": institution.name,
             "url": institution.name.lower().replace(" ", "_"),
             "public": True,
         }
-    return institution_map
+        for institution in tomo.Institution.objects.all()
+    ]
 
 
-def export_courses(institution_map, users_map):
-    course_map = {}
-    for course in tomo.Course.objects.all():
-        course_map[course.id] = {
-            "parent": institution_map[course.institution.id],
+def export_courses(institutions, users):
+    return [
+        {
+            "parent": institutions[course.institution.id],
             "title": course.title,
             "description": course.description,
             "url": course.title.lower().replace(" ", "_"),
+            # TODO teachers -> perms
+            # TODO export users, institutions first
         }
-        # TODO teachers -> perms
-        # TODO export users, institutions first
-    return course_map
+        for course in tomo.Course.objects.all()
+    ]
 
 
 def export_studentenrollments():
@@ -34,23 +34,23 @@ def export_coursegroups():
     pass
 
 
-def export_problemsets(course_map):
-    problemset_map = {}
-    for set in tomo.ProblemSet.objects.all():
-        problemset_map[set.id] = {
-            "parent": course_map[set.course.id],
-            "title": set.title,
-            "description": set.description,
-            "public": set.visible,
-            "url": set.title.lower().replace(" ", "_"),
+def export_problemsets(courses):
+    return [
+        {
+            "parent": courses[problem_set.course.id],
+            "title": problem_set.title,
+            "description": problem_set.description,
+            "public": problem_set.visible,
+            "url": problem_set.title.lower().replace(" ", "_"),
         }
-    return problemset_map
+        for problem_set in tomo.ProblemSet.objects.all()
+    ]
 
 
-def please(users_map):
-    institution_map = export_institutions()
-    course_map = export_courses(institution_map, users_map)
+def please(users):
+    institutions = export_institutions()
+    courses = export_courses(institutions, users)
     export_studentenrollments()
     export_coursegroups()
-    problemset_map = export_problemsets(course_map)
-    return institution_map, course_map, problemset_map
+    problem_sets = export_problemsets(courses)
+    return institutions, courses, problem_sets

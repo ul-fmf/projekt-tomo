@@ -3,7 +3,7 @@ import json
 import problems.models as tomo
 
 
-def export_problems(problemset_map):
+def export_problems(problem_sets):
     placeholder_user = {
         "id": 0,
         "username": "expurtka_bot",
@@ -13,13 +13,9 @@ def export_problems(problemset_map):
         "is_staff": True,
         "is_active": True,
     }
-    problems_map = {}
+    problems = []
     for i, problem in enumerate(tomo.Problem.objects.all()):
-        url = (
-            (problem.title + "_" + str(problem.id))
-            .lower()
-            .replace(" ", "_")
-        )
+        url = (problem.title + "_" + str(problem.id)).lower().replace(" ", "_")
 
         # Turn Problem into Task
         new_task = {
@@ -31,7 +27,7 @@ def export_problems(problemset_map):
 
         # Add parent to Task
         task_link = {
-            "parent": problemset_map[problem.problem_set.id],
+            "parent": problem_sets[problem.problem_set.id],
             "task": new_task,
             "sort": i,
         }
@@ -68,63 +64,71 @@ def export_problems(problemset_map):
         }
 
         # Update dictionary
-        problems_map[problem.id] = {
-            "task": new_task,
-            "task_link": task_link,
-            "content": new_content,
-            "solution": new_upload,
-            "template_file": template_file,
-            "files": [],
-            "num_parts": -1,
-        }
-    return problems_map
+        problems.append(
+            {
+                "task": new_task,
+                "task_link": task_link,
+                "content": new_content,
+                "solution": new_upload,
+                "template_file": template_file,
+                "files": [],
+                "num_parts": -1,
+            }
+        )
+    return problems
 
 
-def export_parts(problems_map):
+def export_parts(problems):
     PARTS_SEPARATOR_TOKEN = "\n\n{{{ PART BREAK }}}\n\n"
     SCRIPT_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
     SOLUTION_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
     TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
     for part in tomo.Part.objects.all():
         # TODO: improve this apend
-        content = problems_map[part.problem.id]["content"]
-        content["content"] = content["content"] + PARTS_SEPARATOR_TOKEN + part.description
+        content = problems[part.problem.id]["content"]
+        content["content"] = (
+            content["content"] + PARTS_SEPARATOR_TOKEN + part.description
+        )
 
-        task = problems_map[part.problem.id]["task"]
+        task = problems[part.problem.id]["task"]
         if task["testscript"]:
             task["testscript"] += SCRIPT_SEPARATOR_TOKEN
         task["testscript"] += part.validation
 
-        i = problems_map[part.problem.id]["num_parts"] + 1
-        problems_map[part.problem.id]["num_parts"] = i
+        i = problems[part.problem.id]["num_parts"] + 1
+        problems[part.problem.id]["num_parts"] = i
 
         secret = json.loads(part.secret)
         if secret:
             for j, example in enumerate(secret):
-                problems_map[part.problem.id]["files"].append({
-                    "task": task,
-                    "filename": f"secret.{i:02d}.{j:02d}.out",
-                    "data": str(example).encode(),
-                    "type": "inout_secret",
-                })
+                problems[part.problem.id]["files"].append(
+                    {
+                        "task": task,
+                        "filename": f"secret.{i:02d}.{j:02d}.out",
+                        "data": str(example).encode(),
+                        "type": "inout_secret",
+                    }
+                )
 
         # Update template
-        template_file = problems_map[part.problem.id]["template_file"]
+        template_file = problems[part.problem.id]["template_file"]
         task_template = template_file["data"].decode()
         if task_template:
             task_template += TEMPLATE_SEPARATOR_TOKEN
         task_template += part.template
         template_file["data"] = task_template.encode()
 
-        problems_map[part.problem.id]["files"].append({
-            "task": task,
-            "filename": task["url"] + f"_template_{i}.py",
-            "type": "generic_public",
-            "data": part.template.encode(),
-        })
+        problems[part.problem.id]["files"].append(
+            {
+                "task": task,
+                "filename": task["url"] + f"_template_{i}.py",
+                "type": "generic_public",
+                "data": part.template.encode(),
+            }
+        )
 
         # Update official solution
-        official_solution = problems_map[part.problem.id]["solution"]
+        official_solution = problems[part.problem.id]["solution"]
         task_solution = official_solution["source"].decode()
         if task_solution:
             task_solution += SOLUTION_SEPARATOR_TOKEN
@@ -135,6 +139,6 @@ def export_parts(problems_map):
         # TODO: template, solution, secret fields
 
 
-def please(problemset_map):
-    problems_map = export_problems(problemset_map)
-    export_parts(problems_map)
+def please(problem_sets):
+    problems = export_problems(problem_sets)
+    export_parts(problems)

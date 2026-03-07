@@ -2,9 +2,8 @@ import users.models as tomo
 
 
 def export_users():
-    users_map = {}
-    for user in tomo.User.objects.all():
-        users_map[user.id] = {
+    return [
+        {
             "username": user.username,
             "first_name": user.first_name,
             "last_name": user.last_name,
@@ -13,7 +12,8 @@ def export_users():
             "is_active": user.is_active,
             "date_joined": user.date_joined,
         }
-    return users_map
+        for user in tomo.User.objects.all()
+    ]
 
 
 def please():
