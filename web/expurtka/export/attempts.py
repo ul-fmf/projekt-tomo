@@ -1,19 +1,15 @@
 import attempts.models as tomo
-import expurtka.putka as putka
 
 
-def export_attempts(
-    users_map: dict[str, putka.User],
-    parts_map: dict[str, putka.Task],
-):
+def export_attempts(users_map, parts_map):
     for attempt in tomo.Attempt.objects.all():
         for version in attempt.history:
-            putka.Upload(
-                user=users_map[attempt.user.id],
-                task=parts_map[attempt.part.id],  # TODO: glue?
-                source=bytes(attempt.solution, encoding="utf-8"),
-                upload_time=attempt.submission_date,
-            )
+            {
+                "user": users_map[attempt.user.id],
+                "task": parts_map[attempt.part.id],  # TODO: glue?
+                "source": bytes(attempt.solution, encoding="utf-8"),
+                "upload_time": attempt.submission_date,
+            }
     # TODO this is incomplete
     # TODO missing fields: part, valid, feedback
     # TODO valid -> max points

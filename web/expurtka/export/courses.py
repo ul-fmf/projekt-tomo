@@ -1,31 +1,26 @@
 import courses.models as tomo
-import expurtka.putka as putka
 
 
-def export_institutions() -> dict[str, putka.Set]:
+def export_institutions():
     institution_map = {}
     for institution in tomo.Institution.objects.all():
-        new = putka.Set.objects.create(
-            title=institution.name,
-            url=institution.name.lower().replace(" ", "_"),
-            public=True,
-        )
-        institution_map[institution.id] = new
+        institution_map[institution.id] = {
+            "title": institution.name,
+            "url": institution.name.lower().replace(" ", "_"),
+            "public": True,
+        }
     return institution_map
 
 
-def export_courses(
-    institution_map: dict[str, putka.Set], users_map: dict[str, putka.User]
-) -> dict[str, putka.Set]:
+def export_courses(institution_map, users_map):
     course_map = {}
     for course in tomo.Course.objects.all():
-        new = putka.Set.objects.create(
-            parent=institution_map[course.institution.id],
-            title=course.title,
-            description=course.description,
-            url=course.title.lower().replace(" ", "_"),
-        )
-        course_map[course.id] = new
+        course_map[course.id] = {
+            "parent": institution_map[course.institution.id],
+            "title": course.title,
+            "description": course.description,
+            "url": course.title.lower().replace(" ", "_"),
+        }
         # TODO teachers -> perms
         # TODO export users, institutions first
     return course_map
@@ -39,21 +34,20 @@ def export_coursegroups():
     pass
 
 
-def export_problemsets(course_map: dict[str, putka.Set]) -> dict[str, putka.Set]:
+def export_problemsets(course_map):
     problemset_map = {}
     for set in tomo.ProblemSet.objects.all():
-        new = putka.Set.objects.create(
-            parent=course_map[set.course.id],
-            title=set.title,
-            description=set.description,
-            public=set.visible,
-            url=set.title.lower().replace(" ", "_"),
-        )
-        problemset_map[set.id] = new
+        problemset_map[set.id] = {
+            "parent": course_map[set.course.id],
+            "title": set.title,
+            "description": set.description,
+            "public": set.visible,
+            "url": set.title.lower().replace(" ", "_"),
+        }
     return problemset_map
 
 
-def please(users_map: dict[str, putka.User]):
+def please(users_map):
     institution_map = export_institutions()
     course_map = export_courses(institution_map, users_map)
     export_studentenrollments()
