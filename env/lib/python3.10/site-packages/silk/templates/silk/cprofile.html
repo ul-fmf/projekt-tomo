@@ -1,0 +1,46 @@
+{% extends "silk/base/detail_base.html" %}
+{% load silk_filters %}
+{% load silk_nav %}
+{% load silk_inclusion %}
+{% load static %}
+
+{% block pagetitle %}Silky - CProfile - {{ silk_request.path }}{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{% static 'silk/lib/viz-lite.js' %}"></script>
+    <script type="text/javascript" src="{% static 'silk/lib/svg-pan-zoom.min.js' %}"></script>
+    {{ block.super }}
+{% endblock %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'silk/css/components/summary.css' %}">
+    <link rel="stylesheet" href="{% static 'silk/css/pages/cprofile.css' %}">
+{% endblock %}
+
+{% block menu %}
+    {% request_menu request silk_request %}
+{% endblock %}
+
+
+{% block data %}
+    <div class="wrapper">
+        <div id="query-div">
+            {% if silk_request.pyprofile %}
+            <div id="pyprofile-div">
+                <div class="heading">
+                    <div class="inner-heading">CProfile</div>
+                </div>
+                <div class="description">
+                    The below is a dump from the cPython profiler.
+                </div>
+                {% if silk_request.prof_file %}
+                Click <a href="{% url 'silk:request_profile_download' request_id=silk_request.pk %}">here</a> to download profile.
+                {% endif %}
+                <pre class="pyprofile">{{ silk_request.pyprofile }}</pre>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

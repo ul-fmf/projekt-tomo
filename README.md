@@ -32,6 +32,8 @@ Po prvi namestitvi, pa tudi na vsake toliko časa, greste v imenik `projekt-tomo
     pip install -r requirements/local.txt
     python manage.py migrate
 
+Za namene expurtke zamenjajte `pip install -r requirements/local.txt` z `pip install -r requirements/expurtka.txt`. Uporabljajte python 3.10. Pred ukazom migrate uporabi še `touch expurtka/putka/config/settings/local.py` v `web` folderju.
+
 Če uporabljate Windowse, je drugi ukaz drugačen
 
     git pull

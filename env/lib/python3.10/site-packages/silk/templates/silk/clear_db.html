@@ -1,0 +1,49 @@
+{% extends 'silk/base/root_base.html' %}
+{% load silk_inclusion %}
+{% load static %}
+{% block pagetitle %}Silky - Clear DB{% endblock %}
+
+{% block menu %}
+    {% root_menu request %}
+{% endblock %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'silk/css/pages/clear_db.css' %}"/>
+{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'silk/js/pages/clear_db.js' %}"></script>
+{% endblock %}
+{% block data %}
+    <div class="wrapper">
+        <div class="inner">
+            <h2>Silk Clear DB</h2>
+            <form class="cleardb-form" action="." method="post">
+                {% csrf_token %}
+                <div class="cleardb-form-wrapper">
+                    <label>
+                        <input type="checkbox" name="clear_requests" disabled="disabled"/>
+                        Requests
+                    </label>
+                    <label>
+                        <input type="checkbox" name="clear_profiling" disabled="disabled"/>
+                        Profiling
+                    </label>
+                    <label>
+                        <input type="checkbox" name="clear_all"/>
+                        All
+                    </label>
+                </div>
+                <button class="btn">Clear</button>
+            </form>
+            <div class="msg">{{ msg }}</div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{# Hide filter hamburger menu #}
+{% block top %}{% endblock %}
+{% block filter %}{% endblock %}

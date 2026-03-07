@@ -1,0 +1,93 @@
+{% extends "silk/base/detail_base.html" %}
+{% load static %}
+{% load silk_filters %}
+{% load silk_nav %}
+{% load silk_inclusion %}
+
+{% block pagetitle %}Silky - SQL Detail - {{ silk_request.path }}{% endblock %}
+
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'silk/js/pages/sql_detail.js' %}"></script>
+{% endblock %}
+
+{% block style %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'silk/css/pages/sql_detail.css' %}"/>
+{% endblock %}
+
+{% block menu %}
+
+    <a href="
+        {% if silk_request and profile %}
+            {% url "silk:request_and_profile_sql" silk_request.id profile.id %}
+        {% elif silk_request %}
+            {% url "silk:request_sql" silk_request.pk %}
+        {% elif profile %}
+            {% url "silk:profile_sql" profile.pk %}
+        {% endif %}
+    ">
+        <div class="menu-item selectable-menu-item">
+            <div class="menu-item-outer">
+                <div class="menu-item-inner">&larr;</div>
+            </div>
+        </div>
+    </a>
+
+    <div class="menu-item menu-item-selected">
+        <div class="menu-item-outer ">
+            <div class="menu-item-inner">SQL Query</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block data %}
+    <div class="wrapper">
+        <div id="query-div">
+            <pre id="query"><code>{{ sql_query.formatted_query|spacify|linebreaksbr }}</code></pre>
+            <div id="query-info-div">
+                <div id="time-taken-div">
+                    <span class="numeric">{{ sql_query.time_taken }}<span class="unit">ms</span></span>
+                </div>
+                <div id="num-joins-div">
+                    <span class="numeric">{{ sql_query.num_joins }}</span> joins
+                </div>
+            </div>
+
+        </div>
+        {% if analysis %}
+        <div id="query-plan-div">
+            <div class="heading">
+                <div class="inner-heading">
+                    Query Plan
+                </div>
+            </div>
+            <code id="plan">{{ analysis | spacify | linebreaksbr }}</code>
+        </div>
+        {% endif %}
+        <div id="traceback">
+            <div class="heading">
+                <div class="inner-heading">
+                    Traceback
+                </div>
+            </div>
+            <div class="description">
+                The below is the Python stacktrace that leads up the execution of the above SQL query.
+                Use it to figure out where and why this SQL query is being executed and whether or not
+                it's actually neccessary.
+            </div>
+            {% for ln in traceback %}
+                {% if ln %}
+                    <div class="file-path {% if virtualenv_path not in ln %}not-{% else %}is-{% endif %}third-party">
+                        {{ ln }}
+                    </div>
+                    {% if forloop.counter == pos %}
+                        {% code code actual_line %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}

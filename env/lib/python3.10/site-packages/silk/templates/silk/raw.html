@@ -1,0 +1,16 @@
+{% load static %}
+<html>
+<head>
+    <link rel="stylesheet" href="{% static 'silk/css/components/fonts.css' %}"/>
+    <link rel="stylesheet" href="{% static 'silk/lib/highlight/foundation.css' %}"/>
+
+    <link rel="stylesheet" href="{% static 'silk/css/pages/raw.css' %}"/>
+    <script src="{% static 'silk/lib/highlight/highlight.pack.js' %}"></script>
+    <script src="{% static 'silk/js/pages/raw.js' %}"></script>
+
+</head>
+<body>
+<pre><code>{{ body }}</code></pre>
+
+</body>
+</html>

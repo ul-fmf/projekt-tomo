@@ -1,0 +1,50 @@
+"""
+Lyft OAuth2 backend. Read more about the
+    API at https://developer.lyft.com/docs
+"""
+
+from typing import Any
+
+from .oauth import BaseOAuth2
+
+
+class LyftOAuth2(BaseOAuth2):
+    name = "lyft"
+    ID_KEY = "id"
+    SCOPE_SEPARATOR = " "
+    AUTHORIZATION_URL = "https://api.lyft.com/oauth/authorize"
+    ACCESS_TOKEN_URL = "https://api.lyft.com/oauth/token"
+    REFRESH_TOKEN_URL = "https://api.lyft.com/oauth/token"
+    USER_DATA_URL = "https://api.lyft.com/v1/profile"
+    DEFAULT_SCOPE = ["public", "profile", "rides.read", "rides.request"]
+    RESPONSE_TYPE = "code"
+    STATE_PARAMETER = True
+    EXTRA_DATA = [
+        ("id", "id"),
+        ("username", "username"),
+        ("access_token", "access_token"),
+        ("refresh_token", "refresh_token"),
+        ("token_type", "token_type"),
+        ("expires_in", "expires_in"),
+        ("scope", "scope"),
+    ]
+
+    def get_user_details(self, response):
+        """Return user details from Lyft account"""
+        return {"id": response["id"], "username": response["id"]}
+
+    def user_data(self, access_token: str, *args, **kwargs) -> dict[str, Any] | None:
+        """Loads user data from service"""
+        return self.get_json(
+            self.USER_DATA_URL, headers={"Authorization": f"Bearer {access_token}"}
+        )
+
+    def auth_complete_params(self, state=None):
+        _client_id, _client_secret = self.get_key_and_secret()
+        return {"grant_type": "authorization_code", "code": self.data["code"]}
+
+    def auth_complete_credentials(self):
+        return self.get_key_and_secret()
+
+    def refresh_token_params(self, token: str, *args, **kwargs) -> dict[str, str]:
+        return {"refresh_token": token, "grant_type": "refresh_token"}
