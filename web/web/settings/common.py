@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "courses",
     "taggit",
     "social_django",
-    "exppurtka",
+    "expurtkapp",
 ]
 
 MIDDLEWARE = [

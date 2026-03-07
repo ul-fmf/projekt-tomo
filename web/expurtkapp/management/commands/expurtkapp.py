@@ -5,7 +5,7 @@ Export to Putka
 import json
 
 from django.core.management import BaseCommand
-from exppurtka.export import problems
+from expurtkapp.export import problems
 
 
 class Command(BaseCommand):

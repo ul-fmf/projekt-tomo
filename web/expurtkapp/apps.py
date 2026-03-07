@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ExppurtkaConfig(AppConfig):
+class ExpurtkappConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "exppurtka"
+    name = "expurtkapp"
