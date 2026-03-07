@@ -17,6 +17,12 @@ class User(AbstractUser):
         related_name="users",  # type: ignore[arg-type]
         help_text=_("The groups this user belongs to."),
     )
+    user_permissions = models.ManyToManyField(
+        "auth.Permission",
+        verbose_name=_("user permissions"),
+        blank=True,
+        related_name="expurtka_user_set",
+    )
 
 
 class Profile(models.Model):
