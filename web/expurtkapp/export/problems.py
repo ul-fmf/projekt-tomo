@@ -44,6 +44,7 @@ def export_problems():
             "testscript": PARTS_SEPARATOR_TOKEN.join(
                 [part.validation for part in parts]
             ),
+            "sort" : problem._order,
         }
         # NOTE:(Nik) Turn description and title into separate Content object
         content = {
