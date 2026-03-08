@@ -1,6 +1,7 @@
 import json
 
-import problems.models as tomo
+import problems.models as tomo_problems
+import attempts.models as tomo_attempts
 
 # Putka integer choices (from putka Task model)
 EVALUATION_TYPE_LOCAL = 2
@@ -38,9 +39,11 @@ def export_problems():
     tasks = []
     contents = []
     files = []
+    uploads = []
+    solution_uploads = []
 
     for i, problem in enumerate(
-        tomo.Problem.objects.all()
+        tomo_problems.Problem.objects.all()
         .prefetch_related("parts")
         .prefetch_related("parts__attempts")
     ):
@@ -63,25 +66,70 @@ def export_problems():
             "version": 1,
         }
 
-        # for part in parts:
-        #     print(part)
-        # print(list(part.attempts.all()))
+        problem_uploads = {}
+        # TODO: query all attempts with parts list and ordered by submission date
+        attempts = tomo_attempts.Attempt.objects.filter(part__in=parts).order_by(
+            "submission_date"
+        )
+        for attempt in attempts:
+            upload = problem_uploads.get(
+                attempt.user.id, {part.id: "" for part in parts}
+            )
+            current_part = upload[attempt.part.id]
+            if current_part:
+                uploads.append(
+                    {
+                        "user": attempt.user.id,
+                        "lang": LANG_PY3,
+                        "filename": url + ".py",
+                        "source": PARTS_SEPARATOR_TOKEN.join(upload.values()),
+                        "upload_time": None,
+                        "status": UPLOAD_STATUS_DONE,
+                        "agg_status": JAILRUN_STATUS_OK,
+                        "preparation_status": JAILRUN_STATUS_OK,
+                        "task": task["id"],
+                        "points": 0,
+                        "max_points": len(parts),
+                        "is_official_solution": False,
+                    }
+                )
 
-        # # Create official upload
-        # new_upload = {
-        #     "user": placeholder_user,
-        #     "lang": LANG_PY3,
-        #     "filename": url + ".py",
-        #     "source": "",
-        #     "upload_time": None,
-        #     "status": UPLOAD_STATUS_DONE,
-        #     "agg_status": JAILRUN_STATUS_OK,
-        #     "preparation_status": JAILRUN_STATUS_OK,
-        #     "task": new_task,
-        #     "points": 0,
-        #     "max_points": 0,
-        #     "is_official_solution": True,
-        # }
+            upload[attempt.part.id] = attempt.solution
+            problem_uploads[attempt.user.id] = upload
+        uploads.extend(
+            {
+                "user": user_id,
+                "lang": LANG_PY3,
+                "filename": url + ".py",
+                "source": PARTS_SEPARATOR_TOKEN.join(upload.values()),
+                "upload_time": None,
+                "status": UPLOAD_STATUS_DONE,
+                "agg_status": JAILRUN_STATUS_OK,
+                "preparation_status": JAILRUN_STATUS_OK,
+                "task": task["id"],
+                "points": 0,
+                "max_points": len(parts),
+                "is_official_solution": False,
+            }
+            for user_id, upload in problem_uploads.items()
+        )
+
+        # Create official upload
+        solution_uploads.append(
+            {
+                "lang": LANG_PY3,
+                "filename": url + ".py",
+                "source": PARTS_SEPARATOR_TOKEN.join([part.solution for part in parts]),
+                "upload_time": None,
+                "status": UPLOAD_STATUS_DONE,
+                "agg_status": JAILRUN_STATUS_OK,
+                "preparation_status": JAILRUN_STATUS_OK,
+                "task": task["id"],
+                "points": len(parts),
+                "max_points": len(parts),
+                "is_official_solution": True,
+            }
+        )
 
         # Create template file
         file = {
@@ -95,77 +143,8 @@ def export_problems():
         contents.append(content)
         files.append(file)
 
-        # # Update dictionary
-        # problems[problem.id] = {
-        #     "task": new_task,
-        #     "task_link": task_link,
-        #     "content": new_content,
-        #     "solution": new_upload,
-        #     "template_file": template_file,
-        #     "files": [],
-        #     "num_parts": -1,
-        # }
-    return tasks, contents, files
-
-
-def export_parts(problems):
-    for part in tomo.Part.objects.all():
-        # TODO: improve this apend
-        content = problems[part.problem.id]["content"]
-        content["content"] = (
-            content["content"] + PARTS_SEPARATOR_TOKEN + part.description
-        )
-
-        task = problems[part.problem.id]["task"]
-        if task["testscript"]:
-            task["testscript"] += SCRIPT_SEPARATOR_TOKEN
-        task["testscript"] += part.validation
-
-        i = problems[part.problem.id]["num_parts"] + 1
-        problems[part.problem.id]["num_parts"] = i
-
-        secret = json.loads(part.secret)
-        if secret:
-            for j, example in enumerate(secret):
-                problems[part.problem.id]["files"].append(
-                    {
-                        "task": task,
-                        "filename": f"secret.{i:02d}.{j:02d}.out",
-                        "data": str(example),
-                        "type": ATT_TYPE_INOUT_SECRET,
-                    }
-                )
-
-        # Update template
-        template_file = problems[part.problem.id]["template_file"]
-        task_template = template_file["data"]
-        if task_template:
-            task_template += TEMPLATE_SEPARATOR_TOKEN
-        task_template += part.template
-        template_file["data"] = task_template
-
-        problems[part.problem.id]["files"].append(
-            {
-                "task": task,
-                "filename": task["url"] + f"_template_{i}.py",
-                "type": ATT_TYPE_GENERIC_PUBLIC,
-                "data": part.template,
-            }
-        )
-
-        # Update official solution
-        official_solution = problems[part.problem.id]["solution"]
-        task_solution = official_solution["source"]
-        if task_solution:
-            task_solution += SOLUTION_SEPARATOR_TOKEN
-        task_solution += part.solution
-        official_solution["source"] = task_solution
-        official_solution["max_points"] = i
-        official_solution["points"] = i
-
-    return problems
+    return tasks, contents, files, uploads, solution_uploads
 
 
 def export_all():
     return export_problems()
-    # return export_parts(problems)
