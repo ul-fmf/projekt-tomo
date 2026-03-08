@@ -45,6 +45,7 @@ def export_problemsets():  # -> list[dict[str, Any]]:
             "description": problem_set.description,
             "public": problem_set.visible,
             "url": problem_set.title.lower().replace(" ", "_"),
+            "sort" : problem_set._order,
         }
         for problem_set in tomo.ProblemSet.objects.all()
     ]
