@@ -1,5 +1,3 @@
-import json
-
 import problems.models as tomo_problems
 import attempts.models as tomo_attempts
 
@@ -26,16 +24,6 @@ TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
 
 
 def export_problems():
-    placeholder_user = {
-        "id": 0,
-        "username": "expurtka_bot",
-        "first_name": "Export",
-        "last_name": "to Putka",
-        "email": "",
-        "is_staff": True,
-        "is_active": True,
-    }
-
     tasks = []
     contents = []
     files = []
@@ -57,7 +45,7 @@ def export_problems():
                 [part.validation for part in parts]
             ),
         }
-        # Turn description and title into separate Content object
+        # NOTE:(Nik) Turn description and title into separate Content object
         content = {
             "task": task["id"],
             "lang": "sl",
@@ -67,11 +55,15 @@ def export_problems():
         }
 
         problem_uploads = {}
-        # TODO: query all attempts with parts list and ordered by submission date
         attempts = tomo_attempts.Attempt.objects.filter(part__in=parts).order_by(
             "submission_date"
         )
         for attempt in attempts:
+            # NOTE:(Nik) In Tomo, attempts are tied to problem parts. We construct upload (Putka equivalent of attempt)
+            # by starting with a list of empty strings. We iterate over attempts sorted by date and update uploads. We
+            # replace empty strings with attempts outright, but if a previous attempt would be overwritten, we fist
+            # concatenate the current problem user attempts and create a new upload for that user with the concatenated
+            # attempts as the source. Finally, we also construct uploads from the most recent attempt list.
             upload = problem_uploads.get(
                 attempt.user.id, {part.id: "" for part in parts}
             )
@@ -96,6 +88,7 @@ def export_problems():
 
             upload[attempt.part.id] = attempt.solution
             problem_uploads[attempt.user.id] = upload
+
         uploads.extend(
             {
                 "user": user_id,
@@ -114,7 +107,7 @@ def export_problems():
             for user_id, upload in problem_uploads.items()
         )
 
-        # Create official upload
+        # NOTE:(Nik) Create official upload
         solution_uploads.append(
             {
                 "lang": LANG_PY3,
@@ -131,7 +124,7 @@ def export_problems():
             }
         )
 
-        # Create template file
+        # NOTE:(Nik) Create template file
         file = {
             "task": task["id"],
             "filename": url + "_template.py",
