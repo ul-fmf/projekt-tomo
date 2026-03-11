@@ -1,5 +1,5 @@
-import problems.models as tomo_problems
 import attempts.models as tomo_attempts
+import problems.models as tomo_problems
 
 # Putka integer choices (from putka Task model)
 EVALUATION_TYPE_LOCAL = 2
@@ -28,7 +28,6 @@ def export_problems():
     contents = []
     files = []
     uploads = []
-    solution_uploads = []
 
     for i, problem in enumerate(
         tomo_problems.Problem.objects.all()
@@ -65,6 +64,8 @@ def export_problems():
             # replace empty strings with attempts outright, but if a previous attempt would be overwritten, we fist
             # concatenate the current problem user attempts and create a new upload for that user with the concatenated
             # attempts as the source. Finally, we also construct uploads from the most recent attempt list.
+
+            # NOTE:(Jakob) Putka doesn't accept R or matlab/octave, and therefore py3 is assumed as the upload's language.
             upload = problem_uploads.get(
                 attempt.user.id, {part.id: "" for part in parts}
             )
@@ -109,7 +110,7 @@ def export_problems():
         )
 
         # NOTE:(Nik) Create official upload
-        solution_uploads.append(
+        uploads.append(
             {
                 "lang": LANG_PY3,
                 "filename": url + ".py",
@@ -137,7 +138,7 @@ def export_problems():
         contents.append(content)
         files.append(file)
 
-    return tasks, contents, files, uploads, solution_uploads
+    return tasks, contents, files, uploads
 
 
 def export_all():

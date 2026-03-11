@@ -24,7 +24,6 @@ class Command(BaseCommand):
             obj["contents"],
             obj["files"],
             obj["uploads"],
-            obj["solution_uploads"],
         ) = problems.export_all()
 
         self.stdout.write("Dumping JSON...")
