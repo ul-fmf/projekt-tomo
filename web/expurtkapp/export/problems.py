@@ -29,7 +29,7 @@ def export_problems():
     files = []
     uploads = []
 
-    for i, problem in enumerate(
+    for problem in (
         tomo_problems.Problem.objects.all()
         .prefetch_related("parts")
         .prefetch_related("parts__attempts")
@@ -43,7 +43,7 @@ def export_problems():
             "testscript": PARTS_SEPARATOR_TOKEN.join(
                 [part.validation for part in parts]
             ),
-            "sort" : problem._order,
+            "sort": problem._order,
         }
         # NOTE:(Nik) Turn description and title into separate Content object
         content = {
@@ -77,7 +77,9 @@ def export_problems():
                         "lang": LANG_PY3,
                         "filename": url + ".py",
                         "source": PARTS_SEPARATOR_TOKEN.join(upload.values()),
-                        "upload_time": None,
+                        "upload_time": attempt.submission_date.isoformat()
+                        if attempt.submission_date
+                        else None,
                         "status": UPLOAD_STATUS_DONE,
                         "agg_status": JAILRUN_STATUS_OK,
                         "preparation_status": JAILRUN_STATUS_OK,
