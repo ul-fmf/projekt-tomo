@@ -48,7 +48,7 @@ def export_problems(courses, include_attempts):
             "task": task["id"],
             "lang": "sl",
             "title": problem.title,
-            "content": problem.description,
+            "content": PARTS_SEPARATOR_TOKEN.join([problem.description] + [part.description for part in parts]),
             "version": 1,
         }
 
@@ -135,7 +135,7 @@ def export_problems(courses, include_attempts):
             "task": task["id"],
             "filename": url + "_template.py",
             "type": ATT_TYPE_GENERIC_PUBLIC,
-            "data": PARTS_SEPARATOR_TOKEN.join([part.description for part in parts]),
+            "data": PARTS_SEPARATOR_TOKEN.join([part.template for part in parts]),
         }
 
         tasks.append(task)
