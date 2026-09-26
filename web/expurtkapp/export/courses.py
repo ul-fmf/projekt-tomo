@@ -1,7 +1,7 @@
 import courses.models as tomo
 
 
-def export_institutions():
+def export_institutions(courses):
     return [
         {
             "pk": institution.pk,
@@ -9,11 +9,13 @@ def export_institutions():
             "url": institution.name.lower().replace(" ", "_"),
             "public": True,
         }
-        for institution in tomo.Institution.objects.all()
+        for institution in tomo.Institution.objects.filter(
+            pk__in=courses.values("institution")
+        )
     ]
 
 
-def export_courses():
+def export_courses(courses):
     return [
         {
             "pk": course.pk,
@@ -24,7 +26,7 @@ def export_courses():
             # TODO teachers -> perms
             # TODO export users, institutions first
         }
-        for course in tomo.Course.objects.all()
+        for course in courses
     ]
 
 
@@ -36,7 +38,7 @@ def export_coursegroups():
     pass
 
 
-def export_problemsets():  # -> list[dict[str, Any]]:
+def export_problemsets(courses):  # -> list[dict[str, Any]]:
     return [
         {
             "pk": problem_set.pk,
@@ -47,14 +49,14 @@ def export_problemsets():  # -> list[dict[str, Any]]:
             "url": problem_set.title.lower().replace(" ", "_"),
             "sort" : problem_set._order,
         }
-        for problem_set in tomo.ProblemSet.objects.all()
+        for problem_set in tomo.ProblemSet.objects.filter(course__in=courses)
     ]
 
 
-def export_all():
-    institutions = export_institutions()
-    courses = export_courses()
+def export_all(courses):
+    institutions = export_institutions(courses)
+    exported_courses = export_courses(courses)
     export_studentenrollments()
     export_coursegroups()
-    problem_sets = export_problemsets()
-    return institutions, courses, problem_sets
+    problem_sets = export_problemsets(courses)
+    return institutions, exported_courses, problem_sets

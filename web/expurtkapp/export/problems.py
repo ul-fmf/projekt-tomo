@@ -23,17 +23,15 @@ SOLUTION_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
 TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
 
 
-def export_problems():
+def export_problems(courses, include_attempts):
     tasks = []
     contents = []
     files = []
     uploads = []
 
-    for problem in (
-        tomo_problems.Problem.objects.all()
-        .prefetch_related("parts")
-        .prefetch_related("parts__attempts")
-    ):
+    for problem in tomo_problems.Problem.objects.filter(
+        problem_set__course__in=courses
+    ).prefetch_related("parts"):
         parts = problem.parts.all()
         url = (problem.title + "_" + str(problem.id)).lower().replace(" ", "_")
         task = {
@@ -55,8 +53,12 @@ def export_problems():
         }
 
         problem_uploads = {}
-        attempts = tomo_attempts.Attempt.objects.filter(part__in=parts).order_by(
-            "submission_date"
+        attempts = (
+            tomo_attempts.Attempt.objects.filter(part__in=parts).order_by(
+                "submission_date"
+            )
+            if include_attempts
+            else []
         )
         for attempt in attempts:
             # NOTE:(Nik) In Tomo, attempts are tied to problem parts. We construct upload (Putka equivalent of attempt)
@@ -143,5 +145,5 @@ def export_problems():
     return tasks, contents, files, uploads
 
 
-def export_all():
-    return export_problems()
+def export_all(courses, include_attempts):
+    return export_problems(courses, include_attempts)
