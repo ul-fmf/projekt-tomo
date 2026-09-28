@@ -17,10 +17,10 @@ JAILRUN_STATUS_OK = 1
 ATT_TYPE_INOUT_SECRET = -2
 ATT_TYPE_GENERIC_PUBLIC = 4
 
-PARTS_SEPARATOR_TOKEN = "\n\n{{{ PART BREAK }}}\n\n"
-SCRIPT_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
-SOLUTION_SEPARATOR_TOKEN = "\n\n# {{{ PART BREAK }}}\n\n"
-TEMPLATE_SEPARATOR_TOKEN = "\n\n\n\n\n"
+PARTS_SEPARATOR_TOKEN = "\n{{PART_BREAK}}\n"
+SCRIPT_SEPARATOR_TOKEN = PARTS_SEPARATOR_TOKEN
+SOLUTION_SEPARATOR_TOKEN = PARTS_SEPARATOR_TOKEN
+TEMPLATE_SEPARATOR_TOKEN = PARTS_SEPARATOR_TOKEN
 
 
 def export_problems(courses, include_attempts):
@@ -131,6 +131,8 @@ def export_problems(courses, include_attempts):
         )
 
         # NOTE:(Nik) Create template file
+        if any(part.template.strip() for part in parts):
+            print(task)
         file = {
             "task": task["id"],
             "filename": url + "_template.py",
